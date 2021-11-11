@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:uikit/form/viewhelper.dart';
 
+typedef DataChild = Widget Function();
+
 class FormContainer extends StatefulWidget {
+  final DataChild childWidget;
 
   const FormContainer({
     Key? key,
-
-
+    required this.childWidget,
   }) : super(key: key);
 
   @override
@@ -15,16 +17,13 @@ class FormContainer extends StatefulWidget {
 
 class _FormContainWidgetState extends State<FormContainer> {
 
-  GlobalKey _formKey = GlobalKey<FormState>();
-
-
   TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: buildInput(),
-
+    return Form(
+      key: ViewHelper.getGloblkey(),
+      child: widget.childWidget(),
     );
   }
 }

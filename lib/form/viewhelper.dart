@@ -1,26 +1,36 @@
 import 'package:flutter/material.dart';
 
-Widget buildInput(
-    {String hintText = "请填写",
-    String errorText = "请输入信息",
-    TextInputType keyboardType = TextInputType.text}) {
+import 'datamode.dart';
+import 'form_model.dart';
 
-  return TextFormField(
-      autofocus: false,
-      initialValue: '',
-      obscureText: false,
-      validator: (value) {},
-      decoration: InputDecoration(
-        hintText: '密码',
-        contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-        suffixIcon: IconButton(
-            icon: const Icon(
-              Icons.remove_red_eye,
-              color: Colors.amber,
-            ),
-            onPressed: () {
+class ViewHelper {
 
-            }),
-      ));
+ static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> getGloblkey(){
+    return _formKey;
+  }
+
+  static final List<DataMode> _dataModes = [];
+
+  static List<DataMode> getDataModes(){
+    return _dataModes;
+  }
+
+  static void validate({Function(List<DataMode> datas,bool status)? callBack}){
+    bool hasError = true;
+    if( _formKey.currentState?.validate()??false){
+      hasError = true;
+      callBack?.call(getDataModes(),hasError);
+    }else{
+      hasError=false;
+      callBack?.call(getDataModes(),hasError);
+    }
+  }
+
+  static void clear(){
+    getDataModes().forEach((element) {
+      element.clear();
+    });
+  }
+
 }
