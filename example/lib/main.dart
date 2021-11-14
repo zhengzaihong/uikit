@@ -6,6 +6,9 @@ import 'package:uikit/form/viewhelper.dart';
 
 import 'expression.dart';
 import 'item_model.dart';
+import 'package:uikit/form/uiform/form_kit_widget.dart';
+import 'package:uikit/form/uiform/laybel_widget.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +27,16 @@ class _MyAppState extends State<MyApp> {
     super.reassemble();
     ViewHelper.getDataModes().clear();
   }
+
+  OutlineInputBorder _outlineInputBorder =  OutlineInputBorder(
+      gapPadding: 0,
+      borderSide: const BorderSide(
+        color: Colors.white,
+      ),
+      borderRadius: BorderRadius.circular(10.0)
+  );
+
+
 
   List<ItemModel> itemModes = [];
 
@@ -91,9 +104,45 @@ class _MyAppState extends State<MyApp> {
 
                     })),
                   ]),
+              SizedBox(height: 30),
+              Container(
+                  child: FormKitWidget(
+                    margin: EdgeInsets.all(10),
+                    laybelWidget:TempWidget(),
+                    decoration: const BoxDecoration(
+                    color: Color(0xffFFEDE5),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+
+               weights: [1,0,1],
+               formFields: [
+                 Container(width: 200,height: 40,decoration: const BoxDecoration(
+                    color: Color(0xffFFEDE5),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),),
+                 Container(width: 1,height: 40,color: Colors.black,),
+                 Container(width: 200,height: 40,color: Colors.yellow,)
+               ],
+                // textFormField: TextField(
+                //     autofocus: false,
+                //     obscureText: false,
+                //     decoration: InputDecoration(
+                //       hintText: "ssss",
+                //       filled: true,
+                //       fillColor: Colors.white,
+                //       isCollapsed: true,
+                //       contentPadding:
+                //           const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                //       enabledBorder: _outlineInputBorder,
+                //       border: _outlineInputBorder,
+                //       disabledBorder: _outlineInputBorder,
+                //       focusedErrorBorder: _outlineInputBorder,
+                //       errorBorder: _outlineInputBorder,
+                //     )),
+              )),
 
 
-                  InkWell(child: Text("  新增加   "),
+
+
+              InkWell(child: Text("  新增加   "),
                     onTap: (){
                      itemModes.add( ItemModel());
                      setState(() {
@@ -101,6 +150,10 @@ class _MyAppState extends State<MyApp> {
                      });
                     },
                   ),
+
+
+
+
 
                   ListView.builder(
                     itemCount:itemModes.length,
@@ -118,4 +171,12 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+class TempWidget extends LaybelWidget {
+  @override
+  Widget createLabel() {
+    return const Text("测试标签》》》》》》》》》《《《《《");
+  }
+
 }

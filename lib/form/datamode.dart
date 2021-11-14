@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class DataMode{
-
   dynamic tag;
   String value;
   TextEditingController? controller;
