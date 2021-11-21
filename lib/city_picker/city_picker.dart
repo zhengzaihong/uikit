@@ -175,14 +175,14 @@ class _CityPickerViewState extends State<CityPickerView> {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            FlatButton(
-              child: Text('取消'),
+            TextButton(
+              child: const Text('取消'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            FlatButton(
-              child: Text('确定'),
+            TextButton(
+              child: const Text('确定'),
               onPressed: () {
                 if (widget.onResult != null) {
                   widget.onResult!(result);
