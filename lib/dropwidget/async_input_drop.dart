@@ -10,66 +10,59 @@ import 'package:flutter/services.dart';
 /// describe: 支持异步加载的选择下拉框
 ///
 
-typedef GestureTapCallback = void Function();
-
-typedef ItemWidget<T> = List<DropdownMenuItem> Function(List<T> list);
+typedef ItemWidget<T> = List<DropdownMenuItem> Function(T list);
 
 typedef AsyncLoad<T> = Future<T> Function(Completer completer);
 
+typedef InitialData<T> = T Function();
+
 class AsyncInputDrop<T> extends StatelessWidget {
-  final TextEditingController controller;
-
-  //下拉框数组
-  final List? contentList;
-
-  // 输入框是否只读 默认 false
+  /// 输入框是否只读 默认 false
   final bool? readOnly;
 
-  //文字显示的位置
-  final TextAlign? textAlign;
-
-  //输入框键盘样式
-  final TextInputType? keyboardType;
-
-  //输入框右边显示的widget
+  ///输入框右边显示的widget
   final Widget? suffixIcon;
 
-  // 下拉框点击事件
+  ///下拉框点击事件
   final ValueChanged<Object?>? onChanged;
 
-  // 输入框输入的类型限制，只能输入数字、汉字等
-  final List<TextInputFormatter>? inputFormatters;
+  ///填充数据回调
+  final ItemWidget<T>? itemWidget;
 
-  final ItemWidget? itemWidget;
+  ///异步加载的回调
   final AsyncLoad<T>? asyncLoad;
 
   final BoxDecoration decoration;
-
   final EdgeInsetsGeometry padding;
   final AlignmentGeometry alignment;
-
   final EdgeInsetsGeometry margin;
 
   final InputDecoration inputdecoration;
 
+  ///加载中显示的组件
+  final Widget? loadingWidget;
+
+  ///加载错误显示的组件
+  final Widget? errorWidget;
+
+  ///监听加载状态
+  final Function(AsyncSnapshot state)? loadStatus;
+
   const AsyncInputDrop(
-      {this.decoration = const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      required this.controller,
-        required this.itemWidget,
-        required  this.asyncLoad,
-      this.contentList,
+      {required this.itemWidget,
+      required this.asyncLoad,
+      this.loadingWidget,
+      this.errorWidget,
+      this.loadStatus,
       this.readOnly = false,
-      this.textAlign,
-      this.keyboardType,
       this.suffixIcon,
       this.onChanged,
-      this.inputFormatters,
-
       this.padding = const EdgeInsets.all(0),
       this.margin = const EdgeInsets.all(0),
       this.alignment = Alignment.center,
+      this.decoration = const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       this.inputdecoration = const InputDecoration(
         border: InputBorder.none,
         hintText: "请输入",
@@ -81,7 +74,6 @@ class AsyncInputDrop<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       padding: padding,
       margin: margin,
@@ -90,25 +82,39 @@ class AsyncInputDrop<T> extends StatelessWidget {
         future: asyncLoad!(Completer()),
         builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return loadStatusWidget(loadingWidget, snapshot);
           }
           if (snapshot.hasError) {
-            return const Text('加载出错');
+            return loadStatusWidget(errorWidget, snapshot);
           }
+
+          var contentList = snapshot.data;
           return DropdownButtonFormField<dynamic>(
               decoration: inputdecoration,
               icon: suffixIcon,
-              // value: controller.text == '' ? null : controller.text,
+
+              ///子item 不允许两个相同对象。
               items: itemWidget!(contentList!),
-              onChanged: (title) {
-                print("----------选择打印${title.toString()}-->");
-                controller.text = title.toString();
+              onChanged: (item) {
+                print("----------选择打印${item.toString()}-->");
                 if (onChanged != null) {
-                  onChanged!(title);
+                  onChanged!(item);
                 }
               });
         },
       ),
     );
+  }
+
+  Widget loadStatusWidget(Widget? child, AsyncSnapshot snapshot) {
+    return readOnly!
+        ? Container(
+            child: child,
+          )
+        : GestureDetector(
+            onTap: () {
+              loadStatus?.call(snapshot);
+            },
+            child: Container(child: child));
   }
 }

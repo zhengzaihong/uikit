@@ -147,7 +147,7 @@ class _CityPickerViewState extends State<CityPickerView> {
 
   Future _loadCitys() async {
     var cityStr =
-        await rootBundle.loadString('assets/city.json');
+        await rootBundle.loadString('packages/uikit/assets/citys.json');
     datas = json.decode(cityStr) as List;
     //result默认取第一组值
     return Future.value(true);

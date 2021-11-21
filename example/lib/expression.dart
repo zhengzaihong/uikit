@@ -70,16 +70,16 @@ Widget buildRadioButton({
         width: 100,
         padding: const EdgeInsets.only(left: 5),
         checkedTextStyle: const TextStyle(
-            color: ColorRes.color_fff1f2f6,
+            color: ColorRes.black,
             fontSize: 14,
             fontWeight: FontWeight.w600),
         unCheckTextStyle: const TextStyle(
-            color: ColorRes.color_333333,
+            color: ColorRes.black,
             fontSize: 14,
             fontWeight: FontWeight.w600),
-        checkedIconWidget: Image.asset(findAssetImage("choose_icon_13@2x.png"),
+        checkedIconWidget: Image.asset(findAssetImage("单选选中.png"),
             width: 15, height: 15),
-        unCheckedWidget: Image.asset(findAssetImage("close_icon@2x.png"),
+        unCheckedWidget: Image.asset(findAssetImage("单选未选中_o.png"),
             width: 15, height: 15),
       ),
       index!=labers.length?
@@ -170,6 +170,7 @@ Widget buildSelect(
     required List<String> contents,
     FormFieldValidator<String>? validator,
     TextInputType keyboardType = TextInputType.text}) {
+
 
   return Container(
     height: 80,
