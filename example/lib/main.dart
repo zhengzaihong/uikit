@@ -4,6 +4,7 @@ import 'package:uikit/form/form_container.dart';
 import 'package:uikit/form/form_model.dart';
 import 'package:uikit/form/viewhelper.dart';
 
+import 'async_drop_example.dart';
 import 'expression.dart';
 import 'item_model.dart';
 import 'package:uikit/form/uiform/form_kit_widget.dart';
@@ -11,7 +12,8 @@ import 'package:uikit/form/uiform/laybel_widget.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AsyncDropExample());
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -77,6 +79,9 @@ class _MyAppState extends State<MyApp> {
           childWidget: () {
             return SingleChildScrollView(child: Column(
                 children: [
+
+
+
                   //第一行
                   createLine([
                     FormModel("姓名", 1, buildInput(validator: (value) {
