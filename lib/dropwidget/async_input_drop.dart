@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
 /// create_date: 2021-11-21
@@ -48,8 +47,30 @@ class AsyncInputDrop<T> extends StatelessWidget {
   ///监听加载状态
   final Function(AsyncSnapshot state)? loadStatus;
 
+  final Widget? hint;
+  final Widget? disabledHint;
+  final Color? iconDisabledColor;
+  final Color? iconEnabledColor;
+  final double iconSize = 24.0;
+  final bool isDense = true;
+  final bool isExpanded = false;
+  final double? itemHeight;
+  final Color? focusColor;
+  final FocusNode? focusNode;
+
+  final bool autofocus = false;
+  final Color? dropdownColor;
+  final FormFieldSetter<dynamic>? onSaved;
+  final FormFieldValidator<dynamic>? validator;
+
+  final bool autovalidate = false;
+  final AutovalidateMode? autovalidateMode;
+  final double? menuMaxHeight;
+  final bool? enableFeedback;
+
   const AsyncInputDrop(
-      {required this.itemWidget,
+      {Key? key,
+      required this.itemWidget,
       required this.asyncLoad,
       this.loadingWidget,
       this.errorWidget,
@@ -69,7 +90,19 @@ class AsyncInputDrop<T> extends StatelessWidget {
         hintStyle: TextStyle(fontSize: 14),
         contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       ),
-      Key? key})
+      this.iconDisabledColor,
+      this.iconEnabledColor,
+      this.itemHeight,
+      this.focusColor,
+      this.focusNode,
+      this.dropdownColor,
+      this.onSaved,
+      this.validator,
+      this.autovalidateMode,
+      this.menuMaxHeight,
+      this.enableFeedback,
+        this.hint,
+        this.disabledHint})
       : super(key: key);
 
   @override
@@ -91,8 +124,20 @@ class AsyncInputDrop<T> extends StatelessWidget {
           var contentList = snapshot.data;
           return DropdownButtonFormField<dynamic>(
               decoration: inputdecoration,
+              iconEnabledColor: iconEnabledColor,
+              iconDisabledColor: iconDisabledColor,
+              itemHeight: itemHeight,
+              focusColor: focusColor,
+              focusNode: focusNode,
+              dropdownColor: dropdownColor,
+              onSaved: onSaved,
+              validator: validator,
+              autovalidateMode: autovalidateMode,
+              menuMaxHeight: menuMaxHeight,
+              enableFeedback: enableFeedback,
               icon: suffixIcon,
-
+              hint: hint,
+              disabledHint: disabledHint,
               ///子item 不允许两个相同对象。
               items: itemWidget!(contentList!),
               onChanged: (item) {
