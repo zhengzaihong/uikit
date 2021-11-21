@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'datamode.dart';
-import 'form_model.dart';
 
-class ViewHelper {
+class FormHelper {
 
  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static GlobalKey<FormState> getGloblkey(){
@@ -33,4 +32,7 @@ class ViewHelper {
     });
   }
 
+ static void dispose(){
+   _dataModes.clear();
+ }
 }

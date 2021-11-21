@@ -6,6 +6,8 @@ import 'package:uikit/city_picker/city_result.dart';
 import 'package:uikit/city_picker/picker_helper.dart';
 
 class CityPickerExample extends StatelessWidget {
+  const CityPickerExample({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,8 +24,8 @@ class CityPickerExample extends StatelessWidget {
                   "${res.areaCode}");
             },
             child: Container(
-              padding: EdgeInsets.all(30),
-              child: Text("城市选择"),
+              padding: const EdgeInsets.all(30),
+              child: const Text("城市选择"),
             ))
       ]),
     ));

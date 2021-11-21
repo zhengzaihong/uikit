@@ -25,8 +25,6 @@ class AsyncDropExample extends StatelessWidget {
     return MaterialApp(home: Scaffold(
       body: ListView(children: [
 
-        SizedBox(height: 30),
-
         AsyncInputDrop(
           margin: EdgeInsets.all(30),
           suffixIcon: IconButton(
@@ -34,14 +32,14 @@ class AsyncDropExample extends StatelessWidget {
             onPressed: (){
 
           },),
-          padding: EdgeInsets.only(top: 30,bottom: 30),
+          padding: const EdgeInsets.only(top: 30,bottom: 30),
           loadingWidget: DropdownButtonFormField<dynamic>(
             icon: IconButton(
               icon: const Icon(Icons.android),
               onPressed: (){
 
               }),
-             decoration:  InputDecoration(
+             decoration:  const InputDecoration(
                border: InputBorder.none,
                hintText: "请输入",
                hintStyle: TextStyle(fontSize: 14),
@@ -50,7 +48,7 @@ class AsyncDropExample extends StatelessWidget {
               items: []) ,
 
           errorWidget: DropdownButtonFormField<dynamic>(
-              decoration:  InputDecoration(
+              decoration:  const InputDecoration(
                 border: InputBorder.none,
                 hintText: "请输入",
                 hintStyle: TextStyle(fontSize: 14),
@@ -99,20 +97,20 @@ class AsyncDropExample extends StatelessWidget {
           },
         ),
         AsyncInputDrop(
-          margin: EdgeInsets.all(30),
+          margin: const EdgeInsets.all(30),
           suffixIcon: IconButton(
             icon: const Icon(Icons.android),
             onPressed: (){
 
           },),
-          padding: EdgeInsets.only(top: 30,bottom: 30),
+          padding: const EdgeInsets.only(top: 30,bottom: 30),
           loadingWidget: DropdownButtonFormField<dynamic>(
             icon: IconButton(
               icon: const Icon(Icons.android),
               onPressed: (){
 
               }),
-             decoration:  InputDecoration(
+             decoration:  const InputDecoration(
                border: InputBorder.none,
                hintText: "请输入",
                hintStyle: TextStyle(fontSize: 14),
@@ -121,7 +119,7 @@ class AsyncDropExample extends StatelessWidget {
               items: []) ,
 
           errorWidget: DropdownButtonFormField<dynamic>(
-              decoration:  InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "请输入",
                 hintStyle: TextStyle(fontSize: 14),
@@ -137,7 +135,7 @@ class AsyncDropExample extends StatelessWidget {
             }
           },
           asyncLoad: (c) {
-            Future.delayed(Duration(seconds: 4),(){
+            Future.delayed(const Duration(seconds: 1),(){
               List<Object> data = [];
               data.add("111");
               data.add("222");

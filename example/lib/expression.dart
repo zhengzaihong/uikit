@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uikit/form/datamode.dart';
 import 'package:uikit/form/form_model.dart';
-import 'package:uikit/form/viewhelper.dart';
+import 'package:uikit/form/formhelper.dart';
 import 'package:uikit/functionbutton/function_container.dart';
 import 'package:uikit/functionbutton/function_radiobutton.dart';
 import 'package:uikit/res/color_res.dart';
@@ -23,8 +23,8 @@ Widget buildInput(
     TextInputType keyboardType = TextInputType.text}) {
   var controller = TextEditingController();
 
-  DataMode dataMode = DataMode(tag, "", controller: controller);
-  ViewHelper.getDataModes().add(dataMode);
+  DataMode dataMode = DataMode(tag:tag, controller: controller);
+  FormHelper.getDataModes().add(dataMode);
 
   return Container(
       height: 80,
@@ -52,11 +52,11 @@ Widget buildRadioButton({
   int defaultCheck = 0,
   required List<String> labers,
 }) {
-  DataMode dataMode = DataMode(tag, "");
-  ViewHelper.getDataModes().add(dataMode);
+  DataMode dataMode = DataMode(tag: tag);
+  FormHelper.getDataModes().add(dataMode);
    var index = 0;
   return Container(
-    height: 80,
+    height: 50,
     child:  FunctionContainer(
     defaultCheck: defaultCheck,
     singleCheckedChange: (checkid) {
@@ -67,7 +67,7 @@ Widget buildRadioButton({
       FunctionRadioButton(
         title: labers[index],
         index: index++,
-        width: 100,
+        width: 50,
         padding: const EdgeInsets.only(left: 5),
         checkedTextStyle: const TextStyle(
             color: ColorRes.black,
@@ -84,7 +84,7 @@ Widget buildRadioButton({
       ),
       index!=labers.length?
       Container(height: 30,
-        width:10,color: Colors.red,):const SizedBox()
+        width:1,color: Colors.red,):const SizedBox()
     ])).toList()),
 
   ));
@@ -104,10 +104,10 @@ Widget buildSelectAndEditText(
   var controller = TextEditingController();
   var controller1 = TextEditingController();
 
-  DataMode dataMode = DataMode(tag, "", controller: controller);
-  DataMode dataMode1 = DataMode(tag, "", controller: controller1);
-  ViewHelper.getDataModes().add(dataMode);
-  ViewHelper.getDataModes().add(dataMode1);
+  DataMode dataMode = DataMode(tag:tag,controller: controller);
+  DataMode dataMode1 = DataMode(tag:tag, controller: controller1);
+  FormHelper.getDataModes().add(dataMode);
+  FormHelper.getDataModes().add(dataMode1);
 
   return Container(
       height: 80,
@@ -161,38 +161,6 @@ Widget buildSelectAndEditText(
 
 
 
-
-//创建下拉框
-Widget buildSelect(
-    {dynamic tag = "--",
-    String text = "请填写",
-      String? value,
-    required List<String> contents,
-    FormFieldValidator<String>? validator,
-    TextInputType keyboardType = TextInputType.text}) {
-
-
-  return Container(
-    height: 80,
-    child:  DropdownButton(
-        icon: const Icon(Icons.arrow_drop_down_rounded),
-        iconSize: 40,
-        value: value,
-        iconEnabledColor: Colors.green.withOpacity(0.7),
-        hint: Text(text),
-        isExpanded: true,
-        underline: Container(),
-        items: contents.map((e) =>  DropdownMenuItem(
-            child: Row(children: [
-
-              Text(e),
-            ]),
-            value: 1)).toList(),
-        onChanged: (value) {
-
-
-        }));
-}
 
 //创建一行信息
 Widget createLine(List<FormModel> formModes) {

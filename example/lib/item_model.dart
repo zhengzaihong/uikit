@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:uikit/dropwidget/async_input_drop.dart';
 import 'package:uikit_example/expression.dart';
 
 class ItemModel extends ChangeNotifier{
@@ -18,19 +20,74 @@ class ItemModel extends ChangeNotifier{
 
   ItemModel(){
     widget = Row(children: [
-    Expanded(child: buildSelect(
-        value: value,
-        contents: ["非洲","南美洲","北极洲"])),
 
+      Expanded(child: AsyncInputDrop(
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.android),
+          onPressed: (){
 
-      SizedBox(width: 10),
-      Expanded(child: buildSelect(contents: ["非洲","南美洲","北极洲"])),
-      SizedBox(width: 10),
+          },),
+        loadingWidget: DropdownButtonFormField<dynamic>(
+            icon: IconButton(
+                icon: const Icon(Icons.android),
+                onPressed: (){
 
-      Expanded(child: buildSelect(contents: ["非洲","南美洲","北极洲"])),
+                }),
+            decoration:  const InputDecoration(
+              border: InputBorder.none,
+              hintText: "请输入",
+              hintStyle: TextStyle(fontSize: 14),
+              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            ),
+            items: []) ,
 
-      SizedBox(width: 10),
-      Expanded(child: buildSelect(contents: ["非洲","南美洲","北极洲"])),
+        errorWidget: DropdownButtonFormField<dynamic>(
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              hintText: "请输入",
+              hintStyle: TextStyle(fontSize: 14),
+              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            ),
+            items:[]) ,
+        loadStatus: (status){
+          if(status.connectionState == ConnectionState.waiting){
+            print("请稍等，加载中");
+          }
+          if(status.hasError){
+            print("加载错误");
+          }
+        },
+        asyncLoad: (c) {
+          Future.delayed(const Duration(seconds: 1),(){
+            List<Object> data = [];
+            data.add("111");
+            data.add("222");
+            data.add("333");
+            data.add("4");
+            data.add(2243434);
+            data.add("asfasgafga");
+            return c.complete(Future.value(data));
+          });
+          return c.future;
+        },
+        itemWidget: (list) {
+          List<DropdownMenuItem> items = [];
+
+          if(null != list  && list is List){
+            list.forEach((element) {
+              var bean = element as Object;
+              items.add(
+                  DropdownMenuItem(
+                    onTap: (){
+                    },
+                    child: Text(bean.toString(),style: TextStyle(fontSize: 14),),
+                    value: bean.toString(),
+                  ));
+            });
+          }
+          return items;
+        },
+      ),),
     ]);
   }
 }

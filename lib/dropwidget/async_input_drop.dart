@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -96,7 +96,6 @@ class AsyncInputDrop<T> extends StatelessWidget {
               ///子item 不允许两个相同对象。
               items: itemWidget!(contentList!),
               onChanged: (item) {
-                print("----------选择打印${item.toString()}-->");
                 if (onChanged != null) {
                   onChanged!(item);
                 }

@@ -1,17 +1,12 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:uikit/city_picker/city_result.dart';
-import 'package:uikit/city_picker/picker_helper.dart';
 import 'package:uikit/form/form_container.dart';
 import 'package:uikit/form/form_model.dart';
 import 'package:uikit/form/uiform/form_kit_widget.dart';
-import 'package:uikit/form/viewhelper.dart';
+import 'package:uikit/form/formhelper.dart';
 import 'package:uikit_example/expression.dart';
 
 import 'item_model.dart';
-import 'main.dart';
 
 class FormExample extends StatefulWidget {
   @override
@@ -26,8 +21,15 @@ class _FormExampleState extends State<FormExample> {
   @override
   void reassemble() {
     super.reassemble();
-    ViewHelper.getDataModes().clear();
+    FormHelper.dispose();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    FormHelper.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class _FormExampleState extends State<FormExample> {
               InkWell(
                 onTap: () {
 
-                  ViewHelper.validate(callBack: (datas,status){
+                  FormHelper.validate(callBack: (datas,status){
                     print("-------->${status.toString()}");
                     datas.forEach((element) {
                       print("-------->${element.toString()}");
@@ -52,7 +54,7 @@ class _FormExampleState extends State<FormExample> {
 
               InkWell(
                 onTap: () {
-                  ViewHelper.clear();
+                  FormHelper.clear();
                 },
                 child: Container(
                     color: Colors.red, width: 100, height: 50, child: Text("清空")),
@@ -77,24 +79,23 @@ class _FormExampleState extends State<FormExample> {
                   FormModel("性别", 1, buildInput()),
                 ]),
 
-                SizedBox(height: 30),
                 createLine([
                   FormModel("相间的", 1, buildRadioButton(labers: ["男","女"])),
                 ]),
 
-                SizedBox(height: 30),
-                createLine([
-                  FormModel("下拉框", 1, buildSelectAndEditText(tag: "select",
-                      selectClickCallBack: (controller){
-                        print("-----------?下拉框${controller.text}");
-
-                      })),
-                ]),
+                // createLine([
+                //   FormModel("下拉框", 1, buildSelectAndEditText(
+                //       tag: "select",
+                //       selectClickCallBack: (controller){
+                //         print("-----------?下拉框${controller.text}");
+                //
+                //       })),
+                // ]),
                 SizedBox(height: 30),
                 Container(
                     child: FormKitWidget(
                       margin: EdgeInsets.all(10),
-                      laybelWidget:TempWidget(),
+
                       decoration: const BoxDecoration(
                           color: Color(0xffFFEDE5),
                           borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -141,13 +142,15 @@ class _FormExampleState extends State<FormExample> {
 
 
 
-                ListView.builder(
+                ListView.separated(
                   itemCount:itemModes.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return itemModes[index].widget??Container();
-                  },
+                  }, separatorBuilder: (BuildContext context, int index) {
+                    return Divider();
+                },
                 )
 
 
