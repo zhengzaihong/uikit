@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:uikit/dropwidget/drop_wapper.dart';
 
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -9,11 +10,14 @@ import 'package:flutter/material.dart';
 /// describe: 支持异步加载的选择下拉框
 ///
 
-typedef ItemWidget<T> = List<DropdownMenuItem> Function(T list);
+///下拉框的默认选中项，初始值，切必须是 itemWidget 中的某项
+typedef InitialData<T> = T Function();
+
+///填充下拉框集合的回调
+typedef ItemWidget<T> = DropWapper Function(T list);
 
 typedef AsyncLoad<T> = Future<T> Function(Completer completer);
 
-typedef InitialData<T> = T Function();
 
 class AsyncInputDrop<T> extends StatelessWidget {
   /// 输入框是否只读 默认 false
@@ -26,10 +30,11 @@ class AsyncInputDrop<T> extends StatelessWidget {
   final ValueChanged<Object?>? onChanged;
 
   ///填充数据回调
-  final ItemWidget<T>? itemWidget;
+  final ItemWidget<T?>? itemWidget;
 
   ///异步加载的回调
   final AsyncLoad<T>? asyncLoad;
+
 
   final BoxDecoration decoration;
   final EdgeInsetsGeometry padding;
@@ -102,17 +107,21 @@ class AsyncInputDrop<T> extends StatelessWidget {
       this.menuMaxHeight,
       this.enableFeedback,
         this.hint,
-        this.disabledHint})
+        this.disabledHint,
+      })
       : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    Completer<T> completer = Completer();
     return Container(
       padding: padding,
       margin: margin,
       decoration: decoration,
       child: FutureBuilder<T>(
-        future: asyncLoad!(Completer()),
+        future: asyncLoad!(completer),
+
         builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return loadStatusWidget(loadingWidget, snapshot);
@@ -122,6 +131,13 @@ class AsyncInputDrop<T> extends StatelessWidget {
           }
 
           var contentList = snapshot.data;
+
+         DropWapper wapper =  itemWidget!(contentList);
+
+
+          dynamic value = wapper.initValue;
+            print("----------value:${value}---");
+
           return DropdownButtonFormField<dynamic>(
               decoration: inputdecoration,
               iconEnabledColor: iconEnabledColor,
@@ -137,9 +153,10 @@ class AsyncInputDrop<T> extends StatelessWidget {
               enableFeedback: enableFeedback,
               icon: suffixIcon,
               hint: hint,
+              value: value,
               disabledHint: disabledHint,
               ///子item 不允许两个相同对象。
-              items: itemWidget!(contentList!),
+              items: wapper.drops,
               onChanged: (item) {
                 if (onChanged != null) {
                   onChanged!(item);
