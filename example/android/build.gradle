@@ -1,12 +1,7 @@
 buildscript {
-    ext {
-        kotlin_version = '1.3.72'
-    }
+    ext.kotlin_version = '1.3.50'
     repositories {
-        maven { url 'https://jitpack.io' }
-
         google()
-        jcenter()
         mavenCentral()
     }
 
@@ -18,20 +13,14 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://jitpack.io' }
-
         google()
         mavenCentral()
-        jcenter()
-        maven { url 'https://jitpack.io' }
     }
 }
 
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(':app')
 }
 

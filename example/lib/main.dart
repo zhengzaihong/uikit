@@ -1,16 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:uikit/form/form_container.dart';
-import 'package:uikit/form/form_model.dart';
-import 'package:uikit/form/FormHelper.dart';
+import 'package:uikit/calendar/calendar_helper.dart';
+import 'package:uikit/form/uiform/laybel_widget.dart';
 
 import 'async_drop_example.dart';
 import 'city_picker_example.dart';
-import 'expression.dart';
 import 'form_example.dart';
-import 'item_model.dart';
-import 'package:uikit/form/uiform/form_kit_widget.dart';
-import 'package:uikit/form/uiform/laybel_widget.dart';
 
 
 void main() {
@@ -70,6 +65,35 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.lightBlue,
                   padding: EdgeInsets.all(30),
                   child: Text("表单"),
+                )),
+
+
+            InkWell(
+                onTap: ()  {
+
+                var config =  CalendarHelper.getConfig();
+                config.sureButtonWidth = 200;
+                var checkedText = const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 16,
+                  );
+
+                    config.checkedEndTimeStyle=checkedText;
+                    config.checkedStartTimeStyle = checkedText;
+
+                  CalendarHelper.showDateDialog(
+                      context,
+                      callBack: (startTime,endTime){
+                        print("---${startTime.year}--${startTime.month}--${startTime.day}->");
+                        print("---${endTime.year}--${endTime.month}--${endTime.day}->");
+                  });
+
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 20),
+                  color: Colors.lightBlue,
+                  padding: EdgeInsets.all(30),
+                  child: Text("日历"),
                 )),
 
 

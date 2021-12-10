@@ -8,21 +8,6 @@ class AsyncDropExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    List<DropdownMenuItem> temp =[];
-    temp.add(
-        const DropdownMenuItem(
-      child: Text("加载中",style: TextStyle(fontSize: 14),),
-      value: "加载中",
-    )
-    );
-
-    temp.add(
-        const DropdownMenuItem(
-          child: Text("加载中2434",style: TextStyle(fontSize: 14),),
-          value: "加载中3434",
-        )
-    );
-
     return MaterialApp(home: Scaffold(
       body: ListView(
           children: [
@@ -43,7 +28,7 @@ class AsyncDropExample extends StatelessWidget {
               }),
              decoration:  const InputDecoration(
                border: InputBorder.none,
-               hintText: "请输入",
+               hintText: "加载中...",
                hintStyle: TextStyle(fontSize: 14),
                contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
              ),
@@ -52,7 +37,7 @@ class AsyncDropExample extends StatelessWidget {
           errorWidget: DropdownButtonFormField<dynamic>(
               decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: "请输入",
+                hintText: "加载错误",
                 hintStyle: TextStyle(fontSize: 14),
                 contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               ),
