@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class CalendarConfig{
 
   ///日历宽高
-  double calendarWidth=400;
+  double calendarWidth=600;
   double calendarHeight=800;
 
   ///日历的起 始时间

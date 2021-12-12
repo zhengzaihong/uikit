@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/functionbutton/function_inheritedwidget.dart';
+
+import 'function_inheritedwidget.dart';
 
 
 ///

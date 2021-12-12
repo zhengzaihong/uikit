@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:uikit/calendar/calendar_helper.dart';
-import 'package:uikit/form/uiform/laybel_widget.dart';
+import 'package:uikit_example/pop_window_example.dart';
 
 import 'async_drop_example.dart';
 import 'city_picker_example.dart';
@@ -23,9 +23,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-
   @override
   Widget build(BuildContext context) {
+
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.purple,
@@ -97,6 +98,17 @@ class _MyAppState extends State<MyApp> {
                 )),
 
 
+            InkWell(
+                onTap: ()  {
+                  pushPage(context,PopWindowExample());
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 20),
+                  color: Colors.lightBlue,
+                  padding: EdgeInsets.all(30),
+                  child: Text("popwindow"),
+                )),
+
 
           ]));
         }),
@@ -106,7 +118,6 @@ class _MyAppState extends State<MyApp> {
 
 
   void pushPage(context,page){
-
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
@@ -114,16 +125,5 @@ class _MyAppState extends State<MyApp> {
       }),
     );
   }
-
 }
 
-
-
-
-class TempWidget extends LaybelWidget {
-  @override
-  Widget createLabel() {
-    return const Text("测试标签》》》》》》》》》《《《《《");
-  }
-
-}
