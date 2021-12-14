@@ -13,27 +13,31 @@ import 'function_inheritedwidget.dart';
 class FunctionContainer extends StatefulWidget {
 
   Widget child;
-
-  List<int> defaultCheckeds;
+  List<int>? defaultCheckeds;
   int defaultCheck;
-
   bool allowMultipleChoice;
 
   ///单选的回调
-  final void Function(int checkedId)? singleCheckedChange;
+  Function(int checkedId)? singleCheckedChange;
   ///多选的回调
-  final void Function(List checkeds)? multipleCheckedChange;
+  Function(List checkeds)? multipleCheckedChange;
   bool enableFirstdefaultCheck;
+
+  bool enable;
+
+  Function()? enableCallBack;
 
   FunctionContainer({
     Key? key,
-    this.defaultCheckeds = const [],
+    this.defaultCheckeds,
     this.defaultCheck=0,
     required this.child,
     this.singleCheckedChange,
     this.allowMultipleChoice=false,
     this.multipleCheckedChange,
     this.enableFirstdefaultCheck = false,
+    this.enable = true,
+    this.enableCallBack,
   }) : super(key: key);
 
 
@@ -55,7 +59,7 @@ class FunctionContainerState extends State<FunctionContainer> {
   Widget build(BuildContext context) {
 
     if(widget.enableFirstdefaultCheck){
-      Future.delayed(Duration(milliseconds: 100),(){
+      Future.delayed(const Duration(milliseconds: 100),(){
         updateChange(widget.defaultCheck);
       });
     }
@@ -72,22 +76,31 @@ class FunctionContainerState extends State<FunctionContainer> {
 
   ///提供一个方法修改数据，并通知子组件 刷新
   void updateChange(int value) {
-    setState(() {
-      if(widget.allowMultipleChoice){
-        List<int> temp=[];
-        widget.defaultCheckeds.contains(value)?
-        widget.defaultCheckeds.remove(value):
-        widget.defaultCheckeds.add(value);
 
-        widget.defaultCheckeds.forEach((element) {
-          temp.add(element);
-        });
-        widget.defaultCheckeds = temp;
-        widget.multipleCheckedChange!(temp);
-      }else{
-        widget.defaultCheck = value;
-        widget.singleCheckedChange!(value);
-      }
-    });
+
+    if(widget.enable){
+      setState(() {
+        if(widget.allowMultipleChoice && null!=widget.defaultCheckeds){
+
+          List<int> temp=[];
+          widget.defaultCheckeds!.contains(value)?
+          widget.defaultCheckeds!.remove(value):
+          widget.defaultCheckeds!.add(value);
+
+          for (var element in widget.defaultCheckeds!) {
+            temp.add(element);
+          }
+          widget.defaultCheckeds = temp;
+          widget.multipleCheckedChange!(temp);
+        }else{
+          widget.defaultCheck = value;
+          if(null!= widget.singleCheckedChange){
+            widget.singleCheckedChange!(value);
+          }
+        }
+      });
+    }else{
+      widget.enableCallBack?.call();
+    }
   }
 }

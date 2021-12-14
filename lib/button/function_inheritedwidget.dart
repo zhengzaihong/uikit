@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'function_container.dart';
 
+
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -14,7 +15,7 @@ import 'function_container.dart';
 class FunctionInheritedWidget extends InheritedWidget {
 
   ///多选选中id
-  List<int> defaultCheckeds;
+  List<int>? defaultCheckeds;
 
   ///单选
   int defaultCheck;
@@ -27,10 +28,10 @@ class FunctionInheritedWidget extends InheritedWidget {
   FunctionInheritedWidget({
     Key? key,
     required Widget child,
-     this.defaultCheckeds=const [],
-     this.defaultCheck=0,
-     this.allowMultipleChoice= false ,
-     this.mangerState
+    this.defaultCheckeds=const [],
+    this.defaultCheck=0,
+    this.allowMultipleChoice= false ,
+    this.mangerState
   }) : super(key: key, child: child);
 
 
