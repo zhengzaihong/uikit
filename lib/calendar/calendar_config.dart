@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-
+import 'function_type.dart';
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -11,12 +11,18 @@ import 'package:flutter/material.dart';
 class CalendarConfig{
 
   ///日历宽高
-  double calendarWidth=600;
-  double calendarHeight=800;
+  double calendarWidth=400;
+  double calendarHeight=600;
 
   ///日历的起 始时间
   DateTime? minimumDate;
   DateTime? maximumDate;
+
+
+  ///顶部选中后显示的时间样式组件，外部自定义
+  CallBackWidget? callBackStartTime;
+  CallBackWidget? callBackEndTime;
+
 
   ///当天日期下面的小圆点颜色
   Color currentDayDotColor = Colors.lightBlue.withAlpha(100);
@@ -68,17 +74,6 @@ class CalendarConfig{
         Colors.lightBlue.withOpacity(0.8)),
   );
 
-
-
-  ///顶部选中日期后显示的样式
-  TextStyle checkedStartTimeStyle =  const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 16,
-  );
-  TextStyle checkedEndTimeStyle =  const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 16,
-  );
 
 
   ///确定按钮文本样式

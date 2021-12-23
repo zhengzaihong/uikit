@@ -1,15 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:uikit/calendar/calendar_helper.dart';
 import 'package:uikit_example/pop_window_example.dart';
+import 'package:uikit_example/toast_example.dart';
+import 'package:uikit/toast/toast_utils.dart';
 
 import 'async_drop_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
 import 'form_example.dart';
 import 'package:uikit/often/time_view.dart';
-import 'package:uikit/input_extend/input_extend.dart';
 
 import 'input_extentd_example.dart';
 
@@ -27,15 +27,36 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.purple,
         resizeToAvoidBottomInset: false,
         body: LayoutBuilder(
           builder:(context,_){
+
+
+            ///全局配置
+            Toast.getToastConfig.buildToastWidget = (context,msg){
+              return  Container(
+                  width: MediaQuery.of(context).size.width/3,
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.red.withAlpha(200),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: Text(msg,style: const TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Colors.white,fontSize: 12)));
+            };
+
+
+
             return SingleChildScrollView(
                 child: Column(children: [
                   SizedBox(height: 60),
+                  createMenue("toast", context,const ToastExample()),
                   createMenue("城市选择", context,const CityPickerExample()),
                   createMenue("异步加载下拉框",context, const AsyncDropExample()),
                   createMenue("表单", context, FormExample()),
@@ -86,7 +107,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget createMenue(String title,BuildContext context,dynamic page){
 
-    return    InkWell(
+    return InkWell(
         onTap: () {
           pushPage(context, page);
         },

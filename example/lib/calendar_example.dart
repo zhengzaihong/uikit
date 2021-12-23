@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:uikit/calendar/calendar_helper.dart';
 
@@ -12,25 +11,27 @@ class CalendarExample extends StatefulWidget {
 class _CalendarExampleState extends State<CalendarExample> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(
-      body:   InkWell(
+    return MaterialApp(
+        home: Scaffold(
+      body: InkWell(
           onTap: () {
             var config = CalendarHelper.getConfig();
             config.sureButtonWidth = 200;
-            var checkedText = const TextStyle(
-              color: Colors.black54,
-              fontSize: 16,
-            );
 
-            config.checkedEndTimeStyle = checkedText;
-            config.checkedStartTimeStyle = checkedText;
+            config.callBackStartTime = (dateTime) {
+              return createDateWidget(dateTime);
+            };
+
+            config.callBackEndTime = (dateTime) {
+              return createDateWidget(dateTime);
+            };
+
             CalendarHelper.showDateDialog(context,
                 callBack: (startTime, endTime) {
-                  print(
-                      "---${startTime.year}--${startTime.month}--${startTime.day}->");
-                  print(
-                      "---${endTime.year}--${endTime.month}--${endTime.day}->");
-                });
+              print(
+                  "---${startTime.year}--${startTime.month}--${startTime.day}->");
+              print("---${endTime.year}--${endTime.month}--${endTime.day}->");
+            });
           },
           child: Container(
             margin: EdgeInsets.only(top: 20),
@@ -39,5 +40,18 @@ class _CalendarExampleState extends State<CalendarExample> {
             child: Text("日历"),
           )),
     ));
+  }
+
+  Widget createDateWidget(DateTime? dateTime){
+    var checkedText = const TextStyle(
+      color: Colors.black54,
+      fontSize: 16,
+    );
+    return Text(
+      dateTime == null
+          ? "--/--"
+          : "${dateTime.year}年${dateTime.month}月${dateTime.day}日",
+      style: checkedText,
+    );
   }
 }

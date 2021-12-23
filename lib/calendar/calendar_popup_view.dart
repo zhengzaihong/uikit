@@ -122,14 +122,9 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                                   crossAxisAlignment:
                                   CrossAxisAlignment.center,
                                   children: <Widget>[
-
                                     calendarConfig.startText,
+                                    calendarConfig.callBackStartTime?.call(startDate)??const SizedBox(),
 
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      startDate==null?"--/--":"${startDate?.year}年${startDate?.month}月${startDate?.day}日",
-                                      style: calendarConfig.checkedStartTimeStyle,
-                                    ),
                                   ],
                                 ),
                               ),
@@ -144,13 +139,8 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                                   crossAxisAlignment:
                                   CrossAxisAlignment.center,
                                   children: <Widget>[
-
                                     calendarConfig.endText,
-                                    const SizedBox(height: 4),
-                                    Text(
-                                        endDate==null?"--/--":
-                                        "${endDate?.year}年${endDate?.month}月${endDate?.day}日",
-                                          style:calendarConfig.checkedEndTimeStyle),
+                                    calendarConfig.callBackEndTime?.call(endDate)??const SizedBox(),
                                   ],
                                 ),
                               )

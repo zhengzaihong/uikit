@@ -62,12 +62,14 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
     dateList.clear();
     final DateTime newDate = DateTime(monthDate.year, monthDate.month, 0);
     int previousMothDay = 0;
+    ///如果是上月周末则会多占用一行
     if (newDate.weekday < 7) {
       previousMothDay = newDate.weekday;
       for (int i = 1; i <= previousMothDay; i++) {
         dateList.add(newDate.subtract(Duration(days: previousMothDay - i)));
       }
     }
+    ///7*6 最大需要6行
     for (int i = 0; i < (42 - previousMothDay); i++) {
       dateList.add(newDate.add(Duration(days: i + 1)));
     }
