@@ -56,25 +56,29 @@ class TimeViewState extends State<TimeView> {
     _seconds = widget.countdown;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_seconds == 0) {
-        setState(() {
-          cancelTimer();
-        });
+        cancelTimer();
+        notyChange();
         return;
       }
-      setState(() {
-        _seconds--;
-      });
+      _seconds--;
+     notyChange();
     });
   }
 
   /// 取消倒计时的计时器。
   void cancelTimer() {
     _timer?.cancel();
-    setState(() {
-      _seconds = 0;
-    });
+    _seconds = 0;
+    notyChange();
   }
 
+  void notyChange(){
+   if(mounted){
+     setState(() {
+
+     });
+   }
+  }
   @override
   Widget build(BuildContext context) {
     return widget.child!.call(context, _controller, _seconds);

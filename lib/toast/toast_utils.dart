@@ -20,7 +20,7 @@ class Toast {
   static bool _showing=false;
 
   ///一个默认的样式,外部可自定义
-  static final ToastConfig _toastConfig= ToastConfig(buildToastWidget: (context,msg){
+  static  ToastConfig _toastConfig= ToastConfig(buildToastWidget: (context,msg){
     return  Container(
         width: MediaQuery.of(context).size.width/3,
         height: 40,
@@ -35,7 +35,11 @@ class Toast {
   });
 
 
+
   static ToastConfig get getToastConfig =>_toastConfig;
+
+  ///外部设置一个弹出样式
+  static set setToastConfig(ToastConfig config)=>_toastConfig=config;
 
 
   ///显示一个吐司
@@ -64,11 +68,11 @@ class Toast {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: AnimatedOpacity(
-                  opacity: _showing ? 1.0 : 0.0, //目标透明度
+                  opacity: _showing ? 1.0 : 0.0,
                   duration: _showing
                       ? const Duration(milliseconds: 100)
                       : const Duration(milliseconds: 400),
-                  child: _toastConfig.buildToastWidget(context,msg),
+                  child: _showing?_toastConfig.buildToastWidget(context,msg):const SizedBox(),
                 ),
               )),
         ));
@@ -79,11 +83,12 @@ class Toast {
     ///移除浮层
     if (DateTime.now().difference(_startedTime!).inMilliseconds >= _toastConfig.showTime) {
       _showing = false;
-      _overlayEntry?.markNeedsBuild();
-      await Future.delayed(const Duration(milliseconds: 400));
-      _overlayEntry?.remove();
+      if(null!=_overlayEntry && _overlayEntry!.mounted){
+        _overlayEntry?.markNeedsBuild();
+        await Future.delayed(const Duration(milliseconds: 400));
+        _overlayEntry?.remove();
+      }
     }
-
   }
 
   ///设置toast位置
@@ -98,6 +103,14 @@ class Toast {
       backResult = MediaQuery.of(context).size.height * 3 / 4;
     }
     return backResult;
+  }
+
+  ///取消toast 显示
+  static void cancle() async{
+    _showing = false;
+    // _overlayEntry?.markNeedsBuild();
+    await Future.delayed(const Duration(milliseconds: 400));
+    _overlayEntry?.remove();
   }
 }
 

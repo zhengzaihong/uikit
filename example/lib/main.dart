@@ -36,23 +36,6 @@ class _MyAppState extends State<MyApp> {
           builder:(context,_){
 
 
-            ///全局配置
-            Toast.getToastConfig.buildToastWidget = (context,msg){
-              return  Container(
-                  width: MediaQuery.of(context).size.width/3,
-                  height: 40,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.red.withAlpha(200),
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  ),
-                  child: Text(msg,style: const TextStyle(
-                      decoration: TextDecoration.none,
-                      color: Colors.white,fontSize: 12)));
-            };
-
-
-
             return SingleChildScrollView(
                 child: Column(children: [
                   SizedBox(height: 60),
