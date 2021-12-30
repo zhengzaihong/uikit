@@ -11,6 +11,8 @@ import 'package:uikit/toast/toast_config.dart';
 ///
 class Toast {
 
+  Toast._();
+
   /// 弹出浮层
   static OverlayEntry? _overlayEntry;
 
@@ -20,7 +22,9 @@ class Toast {
   static bool _showing=false;
 
   ///一个默认的样式,外部可自定义
-  static  ToastConfig _toastConfig= ToastConfig(buildToastWidget: (context,msg){
+  static ToastConfig _toastConfig= ToastConfig(
+      buildToastWidget: (context,msg){
+
     return  Container(
         width: MediaQuery.of(context).size.width/3,
         height: 40,
@@ -40,7 +44,6 @@ class Toast {
 
   ///外部设置一个弹出样式
   static set setToastConfig(ToastConfig config)=>_toastConfig=config;
-
 
   ///显示一个吐司
   static void show({

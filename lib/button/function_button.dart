@@ -29,14 +29,14 @@ class FunctionButton extends StatefulWidget {
     this.title,
     this.index, {
     this.checkedTextStyle =
-        const TextStyle(color: ColorRes.color_ff4ecdf5, fontSize: 20),
+        const TextStyle(color: Colors.lightBlue, fontSize: 20),
     this.unCheckTextStyle =
         const TextStyle(color: ColorRes.black, fontSize: 20),
     this.checkedBoxDecoration = const BoxDecoration(
-        color: ColorRes.color_ff4ecdf5,
+        color: Colors.deepPurple,
         borderRadius: BorderRadius.all(Radius.circular(10))),
     this.unCheckedBoxDecoration = const BoxDecoration(
-        color:  ColorRes.color_fff1f2f6,
+        color: Colors.grey,
         borderRadius: BorderRadius.all(Radius.circular(10))),
     this.width = 20,
     this.height = 20,

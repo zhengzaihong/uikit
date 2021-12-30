@@ -35,6 +35,7 @@ class CustomCheckBox extends StatefulWidget {
 }
 
 class _CustomCheckBoxState extends State<CustomCheckBox> {
+
   late Text checkedText;
   late Text unCheckedText;
   late Widget checkIcon;

@@ -35,7 +35,7 @@ class RatingBarWidget extends StatefulWidget {
   /// 点击回调
   final ValueChanged<String>? onRatingUpdate;
 
-  RatingBarWidget(
+  const RatingBarWidget(
       {this.maxRating = 10.0,
       this.count = 5,
       this.value = 0,
@@ -44,9 +44,7 @@ class RatingBarWidget extends StatefulWidget {
       this.selectImage="",
       this.padding = 3,
       this.selectAble = false,
-      @required this.onRatingUpdate})
-      : assert(nomalImage != null),
-        assert(selectImage != null);
+      required this.onRatingUpdate,Key? key}):super(key: key);
 
   @override
   _RatingBarWidgetState createState() => _RatingBarWidgetState();

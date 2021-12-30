@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:uikit_example/pop_window_example.dart';
+import 'package:uikit_example/progressbar_example.dart';
 import 'package:uikit_example/toast_example.dart';
-import 'package:uikit/toast/toast_utils.dart';
-
 import 'async_drop_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
@@ -25,6 +22,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -37,8 +35,13 @@ class _MyAppState extends State<MyApp> {
 
 
             return SingleChildScrollView(
-                child: Column(children: [
-                  SizedBox(height: 60),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                    children: [
+                  Row(children: const [Expanded(child: SizedBox(height: 60))]),
+
+
+                  createMenue("进度条", context,const ProgressBarExample()),
                   createMenue("toast", context,const ToastExample()),
                   createMenue("城市选择", context,const CityPickerExample()),
                   createMenue("异步加载下拉框",context, const AsyncDropExample()),
@@ -46,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                   createMenue("popwindow",context, const PopWindowExample()),
                   createMenue("日历",context, const CalendarExample()),
                   createMenue("输入框拓展",context, const InputExtentdExample()),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TimeView(
                     countdown: 10,
                     child: (context, controller, time) {
@@ -64,7 +67,7 @@ class _MyAppState extends State<MyApp> {
                                     color: Colors.lightBlueAccent,
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                                child: Text("获取验证码")));
+                                child: const Text("获取验证码")));
                       } else {
                         print("--------请$time秒后再试");
                       }
