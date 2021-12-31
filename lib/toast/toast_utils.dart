@@ -22,7 +22,7 @@ class Toast {
   static bool _showing=false;
 
   ///一个默认的样式,外部可自定义
-  static ToastConfig _toastConfig= ToastConfig(
+  static ToastConfig _globalToastConfig= ToastConfig(
       buildToastWidget: (context,msg){
 
     return  Container(
@@ -40,20 +40,25 @@ class Toast {
 
 
 
-  static ToastConfig get getToastConfig =>_toastConfig;
+  static ToastConfig get getGlobalToastConfig =>_globalToastConfig;
 
   ///外部设置一个弹出样式
-  static set setToastConfig(ToastConfig config)=>_toastConfig=config;
+  static set setGlobalToastConfig(ToastConfig config)=>_globalToastConfig=config;
 
+
+  static ToastConfig? _toastConfig;
   ///显示一个吐司
   static void show({
     required BuildContext context,
     required String msg,
+    ToastConfig? tempConfig,
   }) async {
 
+    ///如果有非全局的显示样式则优先使用动态的样式
+     _toastConfig =tempConfig??getGlobalToastConfig;
     ///防止多次弹出，外部设置间隔时间 默认2秒
     if(_startedTime!=null &&
-        DateTime.now().difference(_startedTime!).inMilliseconds<_toastConfig.intervalTime){
+        DateTime.now().difference(_startedTime!).inMilliseconds<_toastConfig!.intervalTime){
       return;
     }
 
@@ -75,16 +80,16 @@ class Toast {
                   duration: _showing
                       ? const Duration(milliseconds: 100)
                       : const Duration(milliseconds: 400),
-                  child: _showing?_toastConfig.buildToastWidget(context,msg):const SizedBox(),
+                  child: _showing?_toastConfig?.buildToastWidget(context,msg):const SizedBox(),
                 ),
               )),
         ));
     overlayState!.insert(_overlayEntry!);
 
-    await Future.delayed(Duration(milliseconds: _toastConfig.showTime));
+    await Future.delayed(Duration(milliseconds: _toastConfig!.showTime));
 
     ///移除浮层
-    if (DateTime.now().difference(_startedTime!).inMilliseconds >= _toastConfig.showTime) {
+    if (DateTime.now().difference(_startedTime!).inMilliseconds >= ((_toastConfig ==null )?1000:_toastConfig!.showTime)) {
       _showing = false;
       if(null!=_overlayEntry && _overlayEntry!.mounted){
         _overlayEntry?.markNeedsBuild();
@@ -97,7 +102,7 @@ class Toast {
   ///设置toast位置
   static double _calToastPosition(context) {
     double backResult;
-    ToastPosition position = _toastConfig.position;
+    ToastPosition position = _toastConfig!.position;
     if (position == ToastPosition.top) {
       backResult = MediaQuery.of(context).size.height * 1 / 4;
     } else if (position == ToastPosition.center) {
@@ -113,6 +118,7 @@ class Toast {
     _showing = false;
     // _overlayEntry?.markNeedsBuild();
     await Future.delayed(const Duration(milliseconds: 400));
+    _toastConfig=null;
     _overlayEntry?.remove();
   }
 }

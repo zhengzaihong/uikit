@@ -8,7 +8,7 @@ import 'package:uikit/toast/toast_config.dart';
 import 'package:uikit/toast/toast_utils.dart';
 
 
-/// 动态的会替换 全局的,尽量全局统一格式，Toast.setToastConfig 支持
+/// 动态的会替换 全局的,尽量全局统一格式，Toast.show(...tempConfig) 支持
 class ToastExample extends StatelessWidget {
 
   const ToastExample({Key? key}) : super(key: key);
@@ -17,36 +17,6 @@ class ToastExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext  baseContext) {
-
-    ///常规
-    ToastConfig config = Toast.getToastConfig;
-
-    ///自定义样式toast
-    ToastConfig config1 = ToastConfig(
-        intervalTime: 2000,
-        buildToastWidget: (context,msg){
-          return  Container(
-              margin: const EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width/3,
-              height: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.deepOrangeAccent.withAlpha(200),
-                borderRadius: const BorderRadius.all(Radius.circular(15)),
-              ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.ac_unit_rounded,size: 20,color: Colors.deepPurple),
-                    const SizedBox(width: 5),
-                    Text(msg,style: const TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colors.white,fontSize: 12)),
-                    const SizedBox(width: 5),
-                  ]));
-        });
-
-
 
     return MaterialApp(home: Scaffold(
         backgroundColor: Colors.brown,
@@ -64,7 +34,6 @@ class ToastExample extends StatelessWidget {
 
                 InkWell(
                     onTap: (){
-                      Toast.setToastConfig = config;
                       Toast.show(context: baseContext, msg: "常规Toast");
                     }, child: Container(
                     width: 200,
@@ -81,8 +50,33 @@ class ToastExample extends StatelessWidget {
 
                 InkWell(
                     onTap: (){
-                      Toast.setToastConfig = config1;
-                      Toast.show(context: baseContext, msg: "自定义样式toast");
+
+                      ///自定义样式toast
+                      ToastConfig config1 = ToastConfig(
+                          intervalTime: 2000,
+                          buildToastWidget: (context,msg){
+                            return  Container(
+                                margin: const EdgeInsets.all(20),
+                                width: MediaQuery.of(context).size.width/3,
+                                height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.deepOrangeAccent.withAlpha(200),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                ),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.ac_unit_rounded,size: 20,color: Colors.deepPurple),
+                                      const SizedBox(width: 5),
+                                      Text(msg,style: const TextStyle(
+                                          decoration: TextDecoration.none,
+                                          color: Colors.white,fontSize: 12)),
+                                      const SizedBox(width: 5),
+                                    ]));
+                          });
+
+                      Toast.show(context: baseContext, msg: "自定义样式toast",tempConfig: config1);
                     },
                     child: Container(
                         width: 200,
@@ -129,8 +123,7 @@ class ToastExample extends StatelessWidget {
                                           ]))),);
                           });
 
-                      Toast.setToastConfig = config2;
-                      Toast.show(context: baseContext, msg: "点我打开侧边栏");
+                      Toast.show(context: baseContext, msg: "点我打开侧边栏",tempConfig: config2);
                     },
                     child: Container(
                         width: 200,
@@ -149,8 +142,9 @@ class ToastExample extends StatelessWidget {
                 InkWell(
                     onTap: (){
 
-                      Toast.getToastConfig.showTime=10*1000;
-                      Toast.getToastConfig.buildToastWidget = (context,msg){
+                      ToastConfig config3 = ToastConfig(
+                          showTime: 11*1000,
+                          buildToastWidget: (_,msg){
                         return Container(
                           width: MediaQuery.of(mContext).size.width/3,
                           height: 300,
@@ -239,15 +233,19 @@ class ToastExample extends StatelessWidget {
                                       width: 1,
                                       color: Colors.grey.withAlpha(100)),
 
-                                  const Expanded(child: Center(child: Text("取消",style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      color: Colors.black54,fontSize: 16)),)),
+                                   Expanded(child: Material(child: InkWell(
+                                       onTap: (){
+                                         Toast.cancle();
+                                       },
+                                       child: const Center(child: Text("取消",style: TextStyle(
+                                           decoration: TextDecoration.none,
+                                           color: Colors.black54,fontSize: 16)),)),)),
                                 ]))
                           ]),
                         );
-                      };
+                      });
 
-                      Toast.show(context: baseContext, msg: "");
+                      Toast.show(context: baseContext, msg: "",tempConfig: config3);
 
                     },
                     child: Container(
