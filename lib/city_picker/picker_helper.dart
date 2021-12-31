@@ -22,7 +22,7 @@ class PickerHelper{
       isScrollControlled: true,
       builder: (ctx) {
         return CityPickerView(
-          key: Key('pickerkey'),
+          key: const Key('pickerkey'),
           params: datas,
           onResult: (res) {
             completer.complete(res);
