@@ -8,7 +8,7 @@ import 'function_inheritedwidget.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021/5/22
 /// create_time: 17:10
-/// describe: FunctionButton 的容器组件，子组件可以为 FunctionButton或者为其他容器包含FunctionButton
+/// describe: 容器组件，子组件可以为 FunctionButton ,FunctionCheckbox,FunctionRadioButton
 ///
 class FunctionContainer extends StatefulWidget {
 
@@ -32,7 +32,7 @@ class FunctionContainer extends StatefulWidget {
   ///是否开启首次选中即回调
   bool enableFirstdefaultCheck;
 
-  ///如果是多个tab 可用于是否启用切换
+  ///如果利用 FunctionContainer做tab 可用于是否启用切换
   bool enable;
   Function()? enableCallBack;
 
@@ -90,12 +90,10 @@ class FunctionContainerState extends State<FunctionContainer> {
     if(widget.enable){
       setState(() {
         if(widget.allowMultipleChoice && null!=widget.defaultCheckeds){
-
           List<int> temp=[];
           widget.defaultCheckeds!.contains(value)?
           widget.defaultCheckeds!.remove(value):
           widget.defaultCheckeds!.add(value);
-
           for (var element in widget.defaultCheckeds!) {
             temp.add(element);
           }

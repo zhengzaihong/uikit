@@ -81,6 +81,7 @@ class _FunctionButtonState extends State<FunctionButton> {
         style = widget.unCheckTextStyle;
       }
     }
+
     return InkWell(
         splashColor: widget.splashColor,
         hoverColor: widget.hoverColor,
