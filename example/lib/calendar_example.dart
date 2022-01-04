@@ -13,6 +13,7 @@ class _CalendarExampleState extends State<CalendarExample> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+          appBar: AppBar(),
       body: InkWell(
           onTap: () {
             var config = CalendarHelper.getConfig();

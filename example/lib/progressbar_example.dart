@@ -12,6 +12,7 @@ class ProgressBarExample extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.deepPurple,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +55,7 @@ class ProgressBarExample extends StatelessWidget {
               animationTime: 6000,
               height: 100,
               width: 100,
-              angle:( 50.0/100.0)*360,
+              angle:( 30.0/100.0)*360,
               strokeWidth: 10,
               progressBgColor: Colors.red,
               cycleBgColor: Colors.grey,

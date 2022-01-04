@@ -43,6 +43,7 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
   late bool iconLeft;
   late bool checked;
   Function(bool checked)? checkedCallBack;
+  bool isFirst = true;
 
 
   @override
@@ -60,7 +61,12 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
 
   void callBack(bool click){
     if(null!=checkedCallBack){
-      checkedCallBack?.call(checked);
+      if(isFirst){
+        checkedCallBack?.call(checked);
+        isFirst = false;
+      }else{
+        checkedCallBack?.call(!checked);
+      }
       if(click){
         checked = !checked;
       }

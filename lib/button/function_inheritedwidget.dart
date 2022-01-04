@@ -20,9 +20,10 @@ class FunctionInheritedWidget extends InheritedWidget {
   ///单选
   int defaultCheck;
 
+  ///是否允许多选
   bool allowMultipleChoice;
 
-
+  ///状态管理
   FunctionContainerState? mangerState;
 
   FunctionInheritedWidget({

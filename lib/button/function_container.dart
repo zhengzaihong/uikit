@@ -12,20 +12,30 @@ import 'function_inheritedwidget.dart';
 ///
 class FunctionContainer extends StatefulWidget {
 
+  /// FunctionContainer 所包裹的子控件
   Widget child;
+
+  ///默认选中的按钮--多选 allowMultipleChoice 启用
   List<int>? defaultCheckeds;
+  ///默认选中的第一项按钮 --单选
   int defaultCheck;
+
+  ///是否允许多选
   bool allowMultipleChoice;
 
   ///单选的回调
   Function(int checkedId)? singleCheckedChange;
+
   ///多选的回调
   Function(List checkeds)? multipleCheckedChange;
+
+  ///是否开启首次选中即回调
   bool enableFirstdefaultCheck;
 
+  ///如果是多个tab 可用于是否启用切换
   bool enable;
-
   Function()? enableCallBack;
+
 
   FunctionContainer({
     Key? key,
@@ -76,7 +86,6 @@ class FunctionContainerState extends State<FunctionContainer> {
 
   ///提供一个方法修改数据，并通知子组件 刷新
   void updateChange(int value) {
-
 
     if(widget.enable){
       setState(() {

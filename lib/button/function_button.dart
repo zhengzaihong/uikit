@@ -3,7 +3,6 @@ import 'package:uikit/res/color_res.dart';
 
 import 'function_container.dart';
 
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -24,6 +23,8 @@ class FunctionButton extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry margin;
+  final Color splashColor;
+  final Color hoverColor;
 
   const FunctionButton(
     this.title,
@@ -43,6 +44,8 @@ class FunctionButton extends StatefulWidget {
     this.padding = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
     this.alignment = Alignment.center,
+    this.splashColor = Colors.transparent,
+    this.hoverColor = Colors.transparent,
     Key? key,
   }) : super(key: key);
 
@@ -79,8 +82,8 @@ class _FunctionButtonState extends State<FunctionButton> {
       }
     }
     return InkWell(
-        highlightColor: Colors.transparent,
-       hoverColor: Colors.transparent,
+        splashColor: widget.splashColor,
+        hoverColor: widget.hoverColor,
         onTap: () {
           containerManger?.mangerState?.updateChange(widget.index);
         },

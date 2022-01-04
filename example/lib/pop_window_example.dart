@@ -67,9 +67,10 @@ class _PopWindowExampleState extends State<PopWindowExample> {
             builder: (popContext, popState) {
               return Bubble(
                 margin: BubbleEdges.only(top: 80,left: 100),
-                nip: BubbleNip.no,
-                nipOffset: 100,
+                nip: BubbleNip.rightTop,
+                nipOffset: 0,
                 nipWidth: 30,
+                alignment: Alignment.topRight,
                 nipHeight: 20,
                 radius: Radius.circular(30),
                 color: Color.fromRGBO(225, 255, 199, 1.0),

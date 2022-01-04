@@ -27,7 +27,7 @@ class Toast {
 
     return  Container(
         width: MediaQuery.of(context).size.width/3,
-        height: 40,
+        height: 45,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.lightBlue.withAlpha(200),
@@ -47,6 +47,7 @@ class Toast {
 
 
   static ToastConfig? _toastConfig;
+
   ///显示一个吐司
   static void show({
     required BuildContext context,
@@ -54,15 +55,19 @@ class Toast {
     ToastConfig? tempConfig,
   }) async {
 
-    ///如果有非全局的显示样式则优先使用动态的样式
-     _toastConfig =tempConfig??getGlobalToastConfig;
+
+    ///全局的间隔时间才生效  动态配置不生效
+    _toastConfig = getGlobalToastConfig;
     ///防止多次弹出，外部设置间隔时间 默认2秒
     if(_startedTime!=null &&
         DateTime.now().difference(_startedTime!).inMilliseconds<_toastConfig!.intervalTime){
       return;
     }
+    ///如果有非全局的显示样式则优先使用动态的样式
+    _toastConfig =tempConfig??getGlobalToastConfig;
 
     _startedTime = DateTime.now();
+
     ///获取OverlayState
     OverlayState? overlayState = Overlay.of(context);
     _showing = true;
@@ -84,8 +89,7 @@ class Toast {
                 ),
               )),
         ));
-    overlayState!.insert(_overlayEntry!);
-
+    overlayState?.insert(_overlayEntry!);
     await Future.delayed(Duration(milliseconds: _toastConfig!.showTime));
 
     ///移除浮层
@@ -93,8 +97,7 @@ class Toast {
       _showing = false;
       if(null!=_overlayEntry && _overlayEntry!.mounted){
         _overlayEntry?.markNeedsBuild();
-        await Future.delayed(const Duration(milliseconds: 400));
-        _overlayEntry?.remove();
+        cancle();
       }
     }
   }
@@ -116,10 +119,12 @@ class Toast {
   ///取消toast 显示
   static void cancle() async{
     _showing = false;
-    // _overlayEntry?.markNeedsBuild();
     await Future.delayed(const Duration(milliseconds: 400));
     _toastConfig=null;
     _overlayEntry?.remove();
   }
+
+
+  bool get isShowIng =>_showing;
 }
 

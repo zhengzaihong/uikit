@@ -7,7 +7,11 @@ import 'package:uikit/dropwidget/drop_wapper.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021-11-21
 /// create_time: 12:31
-/// describe: 支持异步加载的选择下拉框
+/// describe: 支持异步加载的选择下拉框，此组件是对 DropdownButton的封装扩展
+/// 建议使用 本库提供 InputExtentd 组件，可完全高度自定义，切规避了系统DropdownButton的子项
+/// 必须是itemWidget中的某项的问题，不利于实际项目开发，
+///
+///
 ///
 
 ///下拉框的默认选中项，初始值，切必须是 itemWidget 中的某项
@@ -17,7 +21,6 @@ typedef InitialData<T> = T Function();
 typedef ItemWidget<T> = DropWapper Function(T list);
 
 typedef AsyncLoad<T> = Future<T> Function(Completer completer);
-
 
 class AsyncInputDrop<T> extends StatelessWidget {
   /// 输入框是否只读 默认 false
@@ -34,7 +37,6 @@ class AsyncInputDrop<T> extends StatelessWidget {
 
   ///异步加载的回调
   final AsyncLoad<T>? asyncLoad;
-
 
   final BoxDecoration decoration;
   final EdgeInsetsGeometry padding;
@@ -73,44 +75,42 @@ class AsyncInputDrop<T> extends StatelessWidget {
   final double? menuMaxHeight;
   final bool? enableFeedback;
 
-  const AsyncInputDrop(
-      {Key? key,
-      required this.itemWidget,
-      required this.asyncLoad,
-      this.loadingWidget,
-      this.errorWidget,
-      this.loadStatus,
-      this.readOnly = false,
-      this.suffixIcon,
-      this.onChanged,
-      this.padding = const EdgeInsets.all(0),
-      this.margin = const EdgeInsets.all(0),
-      this.alignment = Alignment.center,
-      this.decoration = const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      this.inputdecoration = const InputDecoration(
-        border: InputBorder.none,
-        hintText: "请输入",
-        hintStyle: TextStyle(fontSize: 14),
-        contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      ),
-      this.iconDisabledColor,
-      this.iconEnabledColor,
-      this.itemHeight,
-      this.focusColor,
-      this.focusNode,
-      this.dropdownColor,
-      this.onSaved,
-      this.validator,
-      this.autovalidateMode,
-      this.menuMaxHeight,
-      this.enableFeedback,
-        this.hint,
-        this.disabledHint,
-      })
-      : super(key: key);
-
+  const AsyncInputDrop({
+    Key? key,
+    required this.itemWidget,
+    required this.asyncLoad,
+    this.loadingWidget,
+    this.errorWidget,
+    this.loadStatus,
+    this.readOnly = false,
+    this.suffixIcon,
+    this.onChanged,
+    this.padding = const EdgeInsets.all(0),
+    this.margin = const EdgeInsets.all(0),
+    this.alignment = Alignment.center,
+    this.decoration = const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10))),
+    this.inputdecoration = const InputDecoration(
+      border: InputBorder.none,
+      hintText: "请输入",
+      hintStyle: TextStyle(fontSize: 14),
+      contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+    ),
+    this.iconDisabledColor,
+    this.iconEnabledColor,
+    this.itemHeight,
+    this.focusColor,
+    this.focusNode,
+    this.dropdownColor,
+    this.onSaved,
+    this.validator,
+    this.autovalidateMode,
+    this.menuMaxHeight,
+    this.enableFeedback,
+    this.hint,
+    this.disabledHint,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,6 @@ class AsyncInputDrop<T> extends StatelessWidget {
       decoration: decoration,
       child: FutureBuilder<T>(
         future: asyncLoad!(completer),
-
         builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return loadStatusWidget(loadingWidget, snapshot);
@@ -132,12 +131,8 @@ class AsyncInputDrop<T> extends StatelessWidget {
 
           var contentList = snapshot.data;
 
-         DropWapper wapper =  itemWidget!(contentList);
-
-
+          DropWapper wapper = itemWidget!(contentList);
           dynamic value = wapper.initValue;
-            print("----------value:${value}---");
-
           return DropdownButtonFormField<dynamic>(
               decoration: inputdecoration,
               iconEnabledColor: iconEnabledColor,
@@ -155,6 +150,7 @@ class AsyncInputDrop<T> extends StatelessWidget {
               hint: hint,
               value: value,
               disabledHint: disabledHint,
+
               ///子item 不允许两个相同对象。
               items: wapper.drops,
               onChanged: (item) {

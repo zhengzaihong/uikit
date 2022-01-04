@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 
 import 'city_result.dart';
 
-typedef ResultBlock = void Function(CityResult result);
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -14,15 +12,28 @@ typedef ResultBlock = void Function(CityResult result);
 /// create_time: 20:44
 /// describe: 城市picker
 ///
+
+///选择后的回调
+typedef ResultBlock = void Function(CityResult result);
+
+///自定义顶部按钮的样式，确定和取消
+typedef TopMenueStyle = Widget Function(ResultBlock block,_CityPickerViewState pickerViewState);
+
+
+
+
 class CityPickerView extends StatefulWidget {
-  // json数据可以从外部传入，如果外部有值，取外部值
+
+  /// json数据可以从外部传入，如果外部有值，取外部值
   final List? params;
-  // 结果返回
+  /// 结果返回
   final ResultBlock? onResult;
+  final TopMenueStyle? topMenueStyle;
   const CityPickerView({
     key,
     this.onResult,
     this.params,
+    this.topMenueStyle,
   }) : super(key: key);
 
   @override
@@ -30,6 +41,7 @@ class CityPickerView extends StatefulWidget {
 }
 
 class _CityPickerViewState extends State<CityPickerView> {
+
   List datas = [];
   int? provinceIndex;
   int? cityIndex;
@@ -82,7 +94,7 @@ class _CityPickerViewState extends State<CityPickerView> {
     return [];
   }
 
-  // 保存选择结果
+  /// 保存选择结果
   _saveInfoData() {
     var prs = provinces;
     var cts = citys;
@@ -124,12 +136,11 @@ class _CityPickerViewState extends State<CityPickerView> {
   void initState() {
     super.initState();
 
-    //初始化控制器
     provinceScrollController = FixedExtentScrollController();
     cityScrollController = FixedExtentScrollController();
     areaScrollController = FixedExtentScrollController();
 
-    //读取city.json数据
+    ///读取city.json数据
     if (widget.params == null) {
       _loadCitys().then((value) {
         setState(() {
@@ -149,22 +160,19 @@ class _CityPickerViewState extends State<CityPickerView> {
     var cityStr =
         await rootBundle.loadString('packages/uikit/assets/citys.json');
     datas = json.decode(cityStr) as List;
-    //result默认取第一组值
     return Future.value(true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            _firstView(),
-            _contentView(),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+         widget.topMenueStyle==null? _firstView():widget.topMenueStyle!.call(widget.onResult!,this),
+          _contentView(),
+        ],
       ),
     );
   }
@@ -181,6 +189,7 @@ class _CityPickerViewState extends State<CityPickerView> {
                 Navigator.pop(context);
               },
             ),
+
             TextButton(
               child: const Text('确定'),
               onPressed: () {
@@ -199,8 +208,7 @@ class _CityPickerViewState extends State<CityPickerView> {
   }
 
   Widget _contentView() {
-    return Container(
-      // color: Colors.orange,
+    return SizedBox(
       height: 200,
       child: isShow
           ? Row(
@@ -219,43 +227,41 @@ class _CityPickerViewState extends State<CityPickerView> {
   }
 
   Widget _provincePickerView() {
-    return Container(
-      child: CupertinoPicker(
-        scrollController: provinceScrollController,
-        children: provinces.map((item) {
-          return Center(
-            child: Text(
-              item['label'],
-              style: const TextStyle(color: Colors.black87, fontSize: 16),
-              maxLines: 1,
-            ),
-          );
-        }).toList(),
-        onSelectedItemChanged: (index) {
-          provinceIndex = index;
-          if (cityIndex != null) {
-            cityIndex = 0;
-            if (cityScrollController!.positions.isNotEmpty) {
-              cityScrollController?.jumpTo(0);
-            }
+    return CupertinoPicker(
+      scrollController: provinceScrollController,
+      children: provinces.map((item) {
+        return Center(
+          child: Text(
+            item['label'],
+            style: const TextStyle(color: Colors.black87, fontSize: 16),
+            maxLines: 1,
+          ),
+        );
+      }).toList(),
+      onSelectedItemChanged: (index) {
+        provinceIndex = index;
+        if (cityIndex != null) {
+          cityIndex = 0;
+          if (cityScrollController!.positions.isNotEmpty) {
+            cityScrollController?.jumpTo(0);
           }
-          if (areaIndex != null) {
-            areaIndex = 0;
-            if (areaScrollController!.positions.isNotEmpty) {
-              areaScrollController!.jumpTo(0);
-            }
+        }
+        if (areaIndex != null) {
+          areaIndex = 0;
+          if (areaScrollController!.positions.isNotEmpty) {
+            areaScrollController!.jumpTo(0);
           }
-          _saveInfoData();
-          setState(() {});
-        },
-        itemExtent: 36,
-      ),
+        }
+        _saveInfoData();
+        setState(() {});
+      },
+      itemExtent: 36,
     );
   }
 
   Widget _cityPickerView() {
     return Container(
-      child: citys.length == 0
+      child: citys.isEmpty
           ? Container()
           : CupertinoPicker(
               scrollController: cityScrollController,
@@ -263,7 +269,7 @@ class _CityPickerViewState extends State<CityPickerView> {
                 return Center(
                   child: Text(
                     item['label'],
-                    style: TextStyle(color: Colors.black87, fontSize: 16),
+                    style: const TextStyle(color: Colors.black87, fontSize: 16),
                     maxLines: 1,
                   ),
                 );
@@ -272,7 +278,7 @@ class _CityPickerViewState extends State<CityPickerView> {
                 cityIndex = index;
                 if (areaIndex != null) {
                   areaIndex = 0;
-                  if (areaScrollController!.positions.length > 0) {
+                  if (areaScrollController!.positions.isNotEmpty) {
                     areaScrollController!.jumpTo(0);
                   }
                 }
@@ -285,9 +291,9 @@ class _CityPickerViewState extends State<CityPickerView> {
   }
 
   Widget _areaPickerView() {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      child: areas.length == 0
+      child: areas.isEmpty
           ? Container()
           : CupertinoPicker(
               scrollController: areaScrollController,
@@ -295,7 +301,7 @@ class _CityPickerViewState extends State<CityPickerView> {
                 return Center(
                   child: Text(
                     item['label'],
-                    style: TextStyle(color: Colors.black87, fontSize: 16),
+                    style: const TextStyle(color: Colors.black87, fontSize: 16),
                     maxLines: 1,
                   ),
                 );

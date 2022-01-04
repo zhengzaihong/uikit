@@ -44,4 +44,9 @@ class CityResult {
 
     return datas;
   }
+
+  @override
+  String toString() {
+    return 'CityResult{province: $province, city: $city, area: $area, provinceCode: $provinceCode, cityCode: $cityCode, areaCode: $areaCode}';
+  }
 }

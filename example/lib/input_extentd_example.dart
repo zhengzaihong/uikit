@@ -18,6 +18,7 @@ class _InputExtentdExampleState extends State<InputExtentdExample> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(home: Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.teal,
       body: SingleChildScrollView(child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

@@ -15,7 +15,11 @@ import 'city_result.dart';
 ///
 class PickerHelper{
 
-  static Future<CityResult> showPicker(BuildContext context, {List? datas}) {
+  /// @parm datas 自定义的json数据
+  /// @parm topMenueStyle 自定义顶部按钮样式等
+  static Future<CityResult> showPicker(BuildContext context, {
+    List? datas,
+    TopMenueStyle? topMenueStyle}) {
     Completer<CityResult> completer = Completer();
     showModalBottomSheet(
       context: context,
@@ -24,6 +28,7 @@ class PickerHelper{
         return CityPickerView(
           key: const Key('pickerkey'),
           params: datas,
+          topMenueStyle: topMenueStyle,
           onResult: (res) {
             completer.complete(res);
           },

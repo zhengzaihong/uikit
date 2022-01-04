@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:uikit/drawer/smart_drawer.dart';
@@ -19,6 +17,7 @@ class ToastExample extends StatelessWidget {
   Widget build(BuildContext  baseContext) {
 
     return MaterialApp(home: Scaffold(
+        appBar: AppBar(),
         backgroundColor: Colors.brown,
         endDrawer: SmartDrawer(
           widthPercent: 0.3,

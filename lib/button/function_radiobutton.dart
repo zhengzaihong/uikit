@@ -26,6 +26,8 @@ class FunctionRadioButton extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry margin;
+  final Color splashColor;
+  final Color hoverColor;
 
   const FunctionRadioButton(
       {this.title = "",
@@ -42,6 +44,8 @@ class FunctionRadioButton extends StatefulWidget {
       this.padding = const EdgeInsets.all(0),
       this.margin = const EdgeInsets.all(0),
       this.alignment = Alignment.center,
+      this.splashColor = Colors.transparent,
+      this.hoverColor = Colors.transparent,
       Key? key})
       : super(key: key);
 
@@ -70,6 +74,8 @@ class _FunctionRadioButtonState extends State<FunctionRadioButton> {
         onTap: () {
           containerManger?.mangerState?.updateChange(widget.index);
         },
+        splashColor: widget.splashColor,
+        hoverColor: widget.hoverColor,
         child: Container(
             padding: widget.padding,
             margin: widget.margin,
