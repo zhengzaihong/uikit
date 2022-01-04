@@ -8,7 +8,7 @@ import 'package:uikit/dropwidget/drop_wapper.dart';
 /// create_date: 2021-11-21
 /// create_time: 12:31
 /// describe: 支持异步加载的选择下拉框，此组件是对 DropdownButton的封装扩展
-/// 建议使用 本库提供 InputExtentd 组件，可完全高度自定义，切规避了系统DropdownButton的子项
+/// 建议使用 本库提供 InputExtentd 组件，可完全高度自定义，规避了系统DropdownButton的子项
 /// 必须是itemWidget中的某项的问题，不利于实际项目开发，
 ///
 ///
