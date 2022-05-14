@@ -11,8 +11,6 @@ import 'package:uikit/dropwidget/drop_wapper.dart';
 /// 建议使用 本库提供 InputExtentd 组件，可完全高度自定义，规避了系统DropdownButton的子项
 /// 必须是itemWidget中的某项的问题，不利于实际项目开发，
 ///
-///
-///
 
 ///下拉框的默认选中项，初始值，切必须是 itemWidget 中的某项
 typedef InitialData<T> = T Function();

@@ -40,9 +40,9 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   TextStyle textBlodStyle = const TextStyle(
       fontSize: 14, color: Colors.black54, fontWeight: FontWeight.w600);
 
-  Widget checkedIconWidget = Image.asset("images/单选选中.png", width: 30, height: 30);
+  Widget checkedIconWidget = Image.asset("images/checked2.png", width: 30, height: 30);
 
-  Widget unCheckedWidget = Image.asset("images/单选未选中_o.png", width: 30, height: 30);
+  Widget unCheckedWidget = Image.asset("images/checked1.png", width: 30, height: 30);
 
   List<int> defaultCheckeds = [1,2];
   List<int> defaultCheckboxIds = [1,2];

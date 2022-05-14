@@ -29,11 +29,13 @@ class CityPickerView extends StatefulWidget {
   /// 结果返回
   final ResultBlock? onResult;
   final TopMenueStyle? topMenueStyle;
+  final TextStyle? listTextStyle;
   const CityPickerView({
     key,
     this.onResult,
     this.params,
     this.topMenueStyle,
+    this.listTextStyle = const TextStyle(color: Colors.black87, fontSize: 16),
   }) : super(key: key);
 
   @override
@@ -233,7 +235,7 @@ class _CityPickerViewState extends State<CityPickerView> {
         return Center(
           child: Text(
             item['label'],
-            style: const TextStyle(color: Colors.black87, fontSize: 16),
+            style: widget.listTextStyle,
             maxLines: 1,
           ),
         );
@@ -269,7 +271,7 @@ class _CityPickerViewState extends State<CityPickerView> {
                 return Center(
                   child: Text(
                     item['label'],
-                    style: const TextStyle(color: Colors.black87, fontSize: 16),
+                    style: widget.listTextStyle,
                     maxLines: 1,
                   ),
                 );
@@ -301,7 +303,7 @@ class _CityPickerViewState extends State<CityPickerView> {
                 return Center(
                   child: Text(
                     item['label'],
-                    style: const TextStyle(color: Colors.black87, fontSize: 16),
+                    style: widget.listTextStyle,
                     maxLines: 1,
                   ),
                 );

@@ -1,16 +1,12 @@
-# uikit_example
+# 效果请查看demo
 
-Demonstrates how to use the uikit plugin.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#flutter 常用组件ui库
+ 1. 可高度自定义日历组件
+ 2. 智能输入框拓展搜索弹出效果组件
+ 3. 进度条组件(条形和圆形)
+ 4. 评分组件
+ 5. 吐司提示,可完全自定义
+ 6. 灵活popwindow组件
+ 7. 城市picker
+ 8. 复选框，单选，气泡,抽屉组件等
+ 9. 倒计时控件

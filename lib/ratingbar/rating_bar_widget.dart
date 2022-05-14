@@ -103,21 +103,15 @@ class _RatingBarWidgetState extends State<RatingBarWidget> {
   }
 
   int fullStars() {
-    if (value != null) {
-      return (value / (widget.maxRating / widget.count)).floor();
-    }
-    return 0;
+    return (value / (widget.maxRating / widget.count)).floor();
   }
 
   double star() {
-    if (value != null) {
-      if (widget.count / fullStars() == widget.maxRating / value) {
-        return 0;
-      }
-      return (value % (widget.maxRating / widget.count)) /
-          (widget.maxRating / widget.count);
+    if (widget.count / fullStars() == widget.maxRating / value) {
+      return 0;
     }
-    return 0;
+    return (value % (widget.maxRating / widget.count)) /
+        (widget.maxRating / widget.count);
   }
 
   List<Widget> buildRow() {

@@ -128,7 +128,7 @@ class CurvePainter extends CustomPainter {
         shdowPaint);
 
     final paint =  Paint()
-     ..color = progressBgColor
+      ..color = progressBgColor
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;

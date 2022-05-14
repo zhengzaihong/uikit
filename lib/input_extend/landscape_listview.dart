@@ -49,7 +49,7 @@ class LandscapeListViewState extends State<LandscapeListView> {
   ///记录点击的条目信息，
    Map<int,int> _cascadeItemClick = HashMap();
 
-   Map<int,List<dynamic>> _dataSourceMap = HashMap();
+   final Map<int,List<dynamic>> _dataSourceMap = HashMap();
 
 
    @override

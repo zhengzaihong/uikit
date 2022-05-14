@@ -16,7 +16,7 @@ part 'bubble_nip.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021-12-12
 /// create_time: 20:22
-/// describe: 气泡组件，该库原作者bubble,喜欢原作者的--->https://github.com/vi-k/bubble.git
+/// describe: 气泡组件，基于如下组件拓展而来，该库原作者bubble,喜欢原作者的--->https://github.com/vi-k/bubble.git
 ///
 
 class Bubble extends StatelessWidget {

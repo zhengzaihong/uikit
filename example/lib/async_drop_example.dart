@@ -22,6 +22,9 @@ class AsyncDropExample extends StatelessWidget {
           }),
           padding: const EdgeInsets.only(top: 30,bottom: 30),
           loadingWidget: DropdownButtonFormField<dynamic>(
+            onChanged: (data){
+
+            },
             icon: IconButton(
               icon: const Icon(Icons.android),
               onPressed: (){
@@ -36,6 +39,9 @@ class AsyncDropExample extends StatelessWidget {
               items: []) ,
 
           errorWidget: DropdownButtonFormField<dynamic>(
+              onChanged: (data){
+
+              },
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "加载错误",

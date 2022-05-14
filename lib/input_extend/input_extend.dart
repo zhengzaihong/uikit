@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 ///
@@ -58,25 +60,25 @@ class InputExtentd<T> extends StatefulWidget {
 
   const InputExtentd(
       {required this.builder,
-      required this.onChanged,
-      required this.checkedWidgets,
-      this.checkedItemWidth = 60,
-      this.itemsBoxMaxWidth,
-      this.itemsBoxMixWidth,
-      this.itemsBoxMaxHeight,
-      this.itemsBoxMixHeight,
-      this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
-      this.inputDecoration,
-      this.physics,
-      this.intervalTime = 500,
-      this.initCheckedValue,
-      this.maxChecked = 100,
-      this.enableClickClear = false,
-      this.enableMultipleChoice = false,
-      this.autoClose = false,
-      this.enableHasFocusCallBack = false,
-      this.popConstraintBox,
-      Key? key})
+        required this.onChanged,
+        required this.checkedWidgets,
+        this.checkedItemWidth = 60,
+        this.itemsBoxMaxWidth,
+        this.itemsBoxMixWidth,
+        this.itemsBoxMaxHeight,
+        this.itemsBoxMixHeight,
+        this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
+        this.inputDecoration,
+        this.physics,
+        this.intervalTime = 500,
+        this.initCheckedValue,
+        this.maxChecked = 100,
+        this.enableClickClear = false,
+        this.enableMultipleChoice = false,
+        this.autoClose = false,
+        this.enableHasFocusCallBack = false,
+        this.popConstraintBox,
+        Key? key})
       : super(key: key);
 
   @override
@@ -102,29 +104,30 @@ class InputExtentdState<T> extends State<InputExtentd> {
 
   final TextEditingController _editingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final ScrollController _inputScrollController = ScrollController();
   late final int intervalTime;
+
+  late List<T> initCheckedValue;
+  Timer? _timer;
 
   @override
   void initState() {
+    if (widget.initCheckedValue == null) {
+      initCheckedValue = [];
+    } else {
+      initCheckedValue = widget.initCheckedValue!.cast<T>();
+    }
 
     intervalTime = widget.intervalTime;
-    var initValue = widget.initCheckedValue;
-
-    if (null != initValue && initValue is List<T>) {
-      initValue.forEach((element) {
-        _checkedData.add(element);
-      });
-    }
     _controller = this;
     _buildContext = context;
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         _overlayEntry = _createOverlayEntry();
         Overlay.of(context)?.insert(_overlayEntry!);
-        if(widget.enableHasFocusCallBack){
-          _onTextChangeCallBack(_editingController.text,true);
+        if (widget.enableHasFocusCallBack) {
+          _onTextChangeCallBack(_editingController.text, true);
         }
-
       } else {
         _overlayEntry?.remove();
       }
@@ -144,28 +147,41 @@ class InputExtentdState<T> extends State<InputExtentd> {
     });
   }
 
-  List<T> get getCheckedData => _checkedData;
+  List<T> get getCheckedData {
+    if (mounted) {
+      return initCheckedValue;
+    } else {
+      return [];
+    }
+  }
 
   TextEditingController get getTextController => _editingController;
 
+  ///返回输入框的滑动控制器
+  ScrollController get getInputScrollController => _inputScrollController;
+
   Future<bool> updateCheckedData(T data, Compare compare) {
-    if (widget.maxChecked <= getCheckedData.length) {
+    if (widget.maxChecked <= widget.initCheckedValue!.length) {
       return Future.value(false);
     }
 
-    bool isChecked = compare(getCheckedData);
+    bool isChecked = compare(widget.initCheckedValue!);
+    var initValue = widget.initCheckedValue!;
     if (widget.enableMultipleChoice) {
       if (isChecked) {
-        _checkedData.remove(data);
+        initValue.remove(data);
       } else {
-        _checkedData.add(data);
+        initValue.add(data);
       }
     } else {
-      _checkedData.clear();
       if (!isChecked) {
-        _checkedData.add(data);
+        widget.initCheckedValue!.clear();
+        widget.initCheckedValue!.add(data);
+      } else {
+        initValue.remove(data);
       }
     }
+
     var offset = _checkedData.length * widget.checkedItemWidth +
         widget.checkedItemWidth * 10 +
         _editingController.text.length;
@@ -191,19 +207,32 @@ class InputExtentdState<T> extends State<InputExtentd> {
     return Future.value(true);
   }
 
+  void setText(String text) {
+    // _editingController.text = text;
+    _editingController.selection = TextSelection.collapsed(offset: text.length);
+    if (_inputScrollController.hasClients) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _inputScrollController.animateTo(
+            _inputScrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.decelerate);
+      });
+    }
+  }
 
-
-  List<double?> _setPopSize(){
+  // ignore: unused_element
+  List<double?> _setPopSize() {
     List<double?> sizeInfo = [];
-    if(widget.popConstraintBox!=null){
+    if (widget.popConstraintBox != null) {
       var boxSize = widget.popConstraintBox;
+
       ///允许无线延伸
       bool? isLimit = boxSize?.limitSize;
-      if(null!=isLimit && isLimit){
+      if (null != isLimit && isLimit) {
         ///不限制宽高
         sizeInfo.add(null);
         sizeInfo.add(null);
-      }else{
+      } else {
         ///设置约束条件
         sizeInfo.add(boxSize?.width);
         sizeInfo.add(boxSize?.height);
@@ -220,35 +249,46 @@ class InputExtentdState<T> extends State<InputExtentd> {
     var popBox = widget.popConstraintBox;
     return OverlayEntry(
         builder: (context) => Positioned(
-              width:popBox== null?size.width:popBox.limitSize?null:popBox.width,
-              height: popBox?.height,
-              child: CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: false,
-                offset: Offset(0.0, size.height + 5.0),
-                child: widget.builder.call(_buildContext, _controller),
-              ),
-            ));
+          width: popBox == null
+              ? size.width
+              : popBox.limitSize
+              ? null
+              : popBox.width,
+          height: popBox?.height,
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0.0, size.height + 5.0),
+            child: widget.builder.call(_buildContext, _controller),
+          ),
+        ));
   }
 
   ///外部构建传入选中后的数据样式
   List<Widget> createCheckedWidget() {
-    return widget.checkedWidgets(getCheckedData, _controller);
+    return widget.checkedWidgets(_checkedData, _controller);
   }
 
-  var lastTime = DateTime.now();
 
-  bool intervalSearch() {
-    if (DateTime.now().difference(lastTime) >
-        Duration(milliseconds: intervalTime)) {
-      lastTime = DateTime.now();
-      return true;
+  void _initData() {
+    var initValue = widget.initCheckedValue;
+    _checkedData.clear();
+    if (initValue is List<T>) {
+      for (var element in initValue) {
+        _checkedData.add(element);
+      }
     }
-    return false;
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _initData();
     return CompositedTransformTarget(
       link: _layerLink,
       child: Row(
@@ -261,77 +301,69 @@ class InputExtentdState<T> extends State<InputExtentd> {
                 minWidth: widget.itemsBoxMixWidth ?? 0),
             child: _checkedData.isEmpty
                 ? const SizedBox(
-                    width: 0,
-                    height: 0,
-                  )
+              width: 0,
+              height: 0,
+            )
                 : SingleChildScrollView(
-                    physics: widget.physics,
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: createCheckedWidget(),
-                    ),
-                  ),
+              physics: widget.physics,
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: createCheckedWidget(),
+              ),
+            ),
           ),
           Expanded(
               child: TextFormField(
-            focusNode: _focusNode,
-            controller: _editingController,
-            style: widget.inputTextStyle,
-            onChanged: (text) async {
-              _onTextChangeCallBack(text,false);
-            },
-            decoration: widget.inputDecoration?.call(_controller),
-          ))
+                focusNode: _focusNode,
+                controller: _editingController,
+                style: widget.inputTextStyle,
+                scrollController: _inputScrollController,
+                onChanged: (text) async {
+                  _timer?.cancel();
+                  _timer = Timer( Duration(milliseconds: intervalTime), () {
+                    _onTextChangeCallBack(text, false);
+                  });
+                },
+                decoration: widget.inputDecoration?.call(_controller),
+              ))
         ],
       ),
     );
   }
 
-
-
-  void _onTextChangeCallBack(String text,bool isFirst){
-    _editingController.text = text;
-    _editingController.selection =
-        TextSelection.collapsed(offset: text.length);
+  void _onTextChangeCallBack(String text, bool isFirst) {
+    setText(text);
     if ("" == text && !isFirst) {
       _focusNode.unfocus();
     }
-    if(isFirst){
+    if (isFirst) {
       widget.onChanged.call(text, _controller);
-    }else{
-      bool flag = intervalSearch();
-      if (flag) {
-        widget.onChanged.call(text, _controller);
-      }
+    } else {
+      widget.onChanged.call(text, _controller);
     }
   }
-
-
-
 
   void notyOverlayDataChange() {
     _overlayEntry?.markNeedsBuild();
   }
 
   void notyListUiChange() {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
 
-
 ///约束浮层的条件
-class PopConstraintBox{
-
+class PopConstraintBox {
   double? width;
   double? height;
 
   ///limitSize 为真，则约束宽度无效，可无限延伸
   final bool limitSize;
 
-  PopConstraintBox({this.width,this.height,this.limitSize=false});
-
-
+  PopConstraintBox({this.width, this.height, this.limitSize = false});
 }

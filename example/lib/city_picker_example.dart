@@ -32,7 +32,9 @@ class CityPickerExample extends StatelessWidget {
 
         InkWell(
             onTap: () async {
-              await PickerHelper.showPicker(context,topMenueStyle: (onResult,pickerViewState){
+              await PickerHelper.showPicker(context,
+                  textStyle: const TextStyle(color: Colors.lightBlue, fontSize: 12),
+                  topMenueStyle: (onResult,pickerViewState){
                 return Container(
                   height: 44,
                   child: Row(

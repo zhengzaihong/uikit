@@ -47,6 +47,7 @@ class InputExtendDemo extends StatelessWidget {
         child: InputExtentd<String>(
             checkedItemWidth: 80,
             itemsBoxMaxWidth: 240,
+            enableMultipleChoice: true,
             initCheckedValue: ["item1","item3"], ///真实项目一般都是对象 填充对象即可
             inputDecoration: (c){
               return const InputDecoration(
@@ -106,7 +107,7 @@ class InputExtendDemo extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(element),
-                            Image.asset("images/删除.png",
+                            Image.asset("images/delete.png",
                                 width: 20, height: 20)
                           ]),
                     ));

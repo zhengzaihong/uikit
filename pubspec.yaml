@@ -1,7 +1,7 @@
 name: uikit
-description: A new flutter plugin project.
+description: uikit.
 version: 0.0.1
-homepage:
+homepage: https://github.com/zhengzaihong/uikit
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

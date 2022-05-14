@@ -19,7 +19,9 @@ class PickerHelper{
   /// @parm topMenueStyle 自定义顶部按钮样式等
   static Future<CityResult> showPicker(BuildContext context, {
     List? datas,
-    TopMenueStyle? topMenueStyle}) {
+    TopMenueStyle? topMenueStyle,
+    TextStyle? textStyle,
+  }) {
     Completer<CityResult> completer = Completer();
     showModalBottomSheet(
       context: context,
@@ -28,6 +30,7 @@ class PickerHelper{
         return CityPickerView(
           key: const Key('pickerkey'),
           params: datas,
+          listTextStyle: textStyle,
           topMenueStyle: topMenueStyle,
           onResult: (res) {
             completer.complete(res);

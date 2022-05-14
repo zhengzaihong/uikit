@@ -126,6 +126,7 @@ class BubbleClipper extends CustomClipper<Path> {
 
     if (showNip) {
       switch (nip) {
+
         case BubbleNip.leftTop:
           final path2 = Path()
             ..moveTo(_startOffset + radiusX, nipOffset)
