@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uikit/city_picker/city_result.dart';
-import 'package:uikit/city_picker/picker_helper.dart';
+import 'package:flutter_uikit_forzzh/city_picker/city_result.dart';
+import 'package:flutter_uikit_forzzh/city_picker/picker_helper.dart';
 
 class CityPickerExample extends StatelessWidget {
   const CityPickerExample({Key? key}) : super(key: key);

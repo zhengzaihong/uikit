@@ -2,8 +2,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:uikit/input_extend/input_extend.dart';
-import 'package:uikit/input_extend/landscape_listview.dart';
+import 'package:flutter_uikit_forzzh/input_extend/input_extend.dart';
+import 'package:flutter_uikit_forzzh/input_extend/landscape_listview.dart';
 
 
 class InputExtentdExample extends StatefulWidget {
@@ -264,7 +264,7 @@ class InputSearchNameWidget extends StatelessWidget {
                                     cascadeSize: 3,
                                     lanuchRequestData: (cascade,viewState,completer){
 
-                                      Future.delayed(Duration(seconds: 2),
+                                      Future.delayed(Duration(seconds: 0),
                                               () {
                                             List<String> data = [];
                                             for (int i = 0; i < 30; i++) {

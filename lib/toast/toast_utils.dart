@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:uikit/toast/toast_config.dart';
+import 'package:flutter_uikit_forzzh/toast/toast_config.dart';
 
 ///
 /// create_user: zhengzaihong

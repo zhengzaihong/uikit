@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/pop/pop_lib.dart';
-import 'package:uikit/bubble/bubble_lib.dart';
+import 'package:flutter_uikit_forzzh/pop/pop_lib.dart';
+import 'package:flutter_uikit_forzzh/bubble/bubble_lib.dart';
+
 class PopWindowExample extends StatefulWidget {
   const PopWindowExample({Key? key}) : super(key: key);
 
@@ -14,7 +15,7 @@ class _PopWindowExampleState extends State<PopWindowExample> {
 
   String? itemText;
 
-  late PopupWindow popupWindow;
+ late PopupWindow popupWindow;
   RenderBox? tagbox;
   Offset? offset;
   @override

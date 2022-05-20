@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uikit/uikit.dart';
+import 'package:flutter_uikit_forzzh/uikit.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('uikit');

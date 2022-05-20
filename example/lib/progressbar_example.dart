@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:uikit/progress/cycle_progress_bar.dart';
-import 'package:uikit/progress/linear_progress_bar.dart';
+import 'package:flutter_uikit_forzzh/progress/cycle_progress_bar.dart';
+import 'package:flutter_uikit_forzzh/progress/linear_progress_bar.dart';
 
 
 class ProgressBarExample extends StatelessWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/button/function_button.dart';
-import 'package:uikit/button/function_container.dart';
-import 'package:uikit/button/function_radiobutton.dart';
-import 'package:uikit/checkbox/custom_checkbox.dart';
-import 'package:uikit/button/function_checkbox.dart';
-import 'package:uikit/often/time_view.dart';
-import 'package:uikit/toast/toast_utils.dart';
+import 'package:flutter_uikit_forzzh/button/function_button.dart';
+import 'package:flutter_uikit_forzzh/button/function_container.dart';
+import 'package:flutter_uikit_forzzh/button/function_radiobutton.dart';
+import 'package:flutter_uikit_forzzh/checkbox/custom_checkbox.dart';
+import 'package:flutter_uikit_forzzh/button/function_checkbox.dart';
+import 'package:flutter_uikit_forzzh/often/time_view.dart';
+import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -13,7 +13,7 @@ import 'package:uikit/toast/toast_utils.dart';
 /// create_date: 2022/1/4
 /// create_time: 16:02
 /// describe: 一些常用小组件
-///
+///z
 class OftenWidgetExample extends StatefulWidget {
   const OftenWidgetExample({Key? key}) : super(key: key);
 

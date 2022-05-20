@@ -1,18 +1,12 @@
-# uikit
+# 效果请查看demo
 
-A new flutter plugin project.
-
-## Getting Started
-
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-The plugin project was generated without specifying the `--platforms` flag, no platforms are currently supported.
-To add platforms, run `flutter create -t plugin --platforms <platforms> .` under the same
-directory. You can also find a detailed instruction on how to add platforms in the `pubspec.yaml` at https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
+#flutter 常用组件ui库
+ 1. 可自定义日历组件
+ 2. 智能输入框拓展搜索弹出效果组件
+ 3. 进度条组件(条形和圆形)
+ 4. 评分组件
+ 5. 吐司提示,可完全自定义
+ 6. 灵活popwindow组件
+ 7. 城市picker
+ 8. 复选框，单选，气泡,抽屉组件等
+ 9. 倒计时控件

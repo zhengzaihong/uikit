@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/dropwidget/async_input_drop.dart';
-import 'package:uikit/dropwidget/drop_wapper.dart';
+import 'package:flutter_uikit_forzzh/dropwidget/async_input_drop.dart';
+import 'package:flutter_uikit_forzzh/dropwidget/drop_wapper.dart';
 
 class AsyncDropExample extends StatelessWidget {
   const AsyncDropExample({Key? key}) : super(key: key);

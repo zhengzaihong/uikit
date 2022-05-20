@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:uikit/dropwidget/drop_wapper.dart';
+import 'package:flutter_uikit_forzzh/dropwidget/drop_wapper.dart';
 
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com

@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:uikit/drawer/smart_drawer.dart';
-import 'package:uikit/often/time_view.dart';
-import 'package:uikit/toast/toast_config.dart';
-import 'package:uikit/toast/toast_utils.dart';
+import 'package:flutter_uikit_forzzh/drawer/smart_drawer.dart';
+import 'package:flutter_uikit_forzzh/often/time_view.dart';
+import 'package:flutter_uikit_forzzh/toast/toast_config.dart';
+import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
 
 
 /// 动态的会替换 全局的,尽量全局统一格式，Toast.show(...tempConfig) 支持

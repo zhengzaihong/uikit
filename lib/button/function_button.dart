@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/res/color_res.dart';
-
 import 'function_container.dart';
 
 ///
@@ -32,7 +30,7 @@ class FunctionButton extends StatefulWidget {
     this.checkedTextStyle =
         const TextStyle(color: Colors.lightBlue, fontSize: 20),
     this.unCheckTextStyle =
-        const TextStyle(color: ColorRes.black, fontSize: 20),
+        const TextStyle(color: Colors.black, fontSize: 20),
     this.checkedBoxDecoration = const BoxDecoration(
         color: Colors.deepPurple,
         borderRadius: BorderRadius.all(Radius.circular(10))),

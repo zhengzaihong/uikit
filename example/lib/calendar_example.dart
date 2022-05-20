@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/calendar/calendar_helper.dart';
+import 'package:flutter_uikit_forzzh/calendar/calendar_helper.dart';
 
 class CalendarExample extends StatefulWidget {
   const CalendarExample({Key? key}) : super(key: key);
