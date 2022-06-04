@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/calendar/calendar_config.dart';
-
 import 'custom_calendar.dart';
 
 
@@ -128,11 +125,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                                   ],
                                 ),
                               ),
-                              Container(
-                                  height: 74,
-                                  width: 1,
-                                  color: Colors.black12
-                              ),
+                             calendarConfig.verticalLineWidget ,
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +140,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                             ],
                           ),
 
-                          const Divider(height: 1),
+                          calendarConfig.landscapeLineWidget,
 
                           CustomCalendarView(
                             calendarConfig: calendarConfig,

@@ -8,6 +8,8 @@ import 'function_type.dart';
 /// create_time: 15:21
 /// describe: 日历样式的配置文件
 ///
+/// 待优化
+///
 class CalendarConfig{
 
   ///日历宽高
@@ -35,6 +37,26 @@ class CalendarConfig{
 
   ///选择的起始时间背景的边框颜色
   Color cycleSlidColor = Colors.white;
+  ///边框的宽度
+  double cycleWidth = 2.0;
+
+  ///连续选中的 开始时间和结束时间的 背景阴影效果
+  BoxShadow boxShadow = BoxShadow(
+      color: Colors.grey.withOpacity(0.6),
+      blurRadius: 4,
+      offset: const Offset(0, 0));
+
+  ///选择的起始时间和结束时间的文本颜色
+  Color startAndEndDayTextColor = Colors.white;
+  /// 本月的日期文本颜色
+  Color currentMonthTextColor = Colors.black;
+  /// 非本月的日期颜色
+  Color otherMonthTextColor = Colors.grey.withOpacity(0.6);
+
+  ///日期的字体大小
+  double dayTextSize = 16.0;
+
+
 
   ///日历的浮层的背景色
   Color backgroundColor = Colors.transparent;
@@ -54,8 +76,21 @@ class CalendarConfig{
   ///日历内边距
   EdgeInsets calendarPadding = const EdgeInsets.all(24.0);
 
+  ///日历内的日期内距
+  EdgeInsets daysNoUIPadding = const EdgeInsets.only(right: 8, left: 8);
+
   ///背景圆角
   Radius bgRadius = const Radius.circular(24.0);
+
+
+  ///日历的垂直分割线
+  Widget verticalLineWidget = Container(
+      height: 74,
+      width: 1,
+      color: Colors.black12
+  );
+  ///日历的横向分割线
+  Widget landscapeLineWidget = const Divider(height: 1,color: Colors.black12);
 
 
   ///顶部开始时间文字样式
@@ -74,6 +109,49 @@ class CalendarConfig{
         Colors.lightBlue.withOpacity(0.8)),
   );
 
+
+  ///翻月 行的内距
+  EdgeInsets preNextPadding = const EdgeInsets.only(left: 8.0, right: 8.0, top: 4, bottom: 4);
+
+  Widget preMonthWidget = const Icon(
+    Icons.keyboard_arrow_left,
+    color: Colors.grey,
+  );
+
+  Widget nextMonthWidget = const Icon(
+    Icons.keyboard_arrow_right,
+    color: Colors.grey,
+  );
+
+  ///翻月 按钮的内距 和宽高
+  EdgeInsets monthWidgetPadding = const EdgeInsets.all(8.0);
+  double monthWidgetWidth = 38.0;
+  double monthWidgetHeight =38.0;
+
+  BoxDecoration monthWidgetDecoration= BoxDecoration(
+    borderRadius:
+    const BorderRadius.all(Radius.circular(24.0)),
+    border: Border.all(
+      color:Colors.black12,
+    ),
+  );
+
+
+  TextStyle yearMonthStyle = const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 20,
+      color: Colors.black);
+
+
+  TextStyle currentMonthDayStyle = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: Colors.black12);
+
+  TextStyle notThisMonthDayStyle = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: Colors.black12);
 
 
   ///确定按钮文本样式
@@ -105,5 +183,28 @@ class CalendarConfig{
 
   ///确定按钮的内距
   EdgeInsets sureButtonPadding =  const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8);
+
+
+  ///连续选中的圆角度数
+  Radius successionRadius = const Radius.circular(24.0);
+
+  ///日期点击时的背景效果
+  BorderRadius dayClickBackRadius = const  BorderRadius.all(Radius.circular(32.0));
+
+
+  static String dateFormat = "yyyy-MM-dd";
+  static String dateFormat1 = "yyyy年MM月dd日";
+  static String dateFormat2 = "yyyy/MM/dd";
+
+  String? _currentDateFormat = dateFormat1;
+
+  void setDateFormat(String format){
+      _currentDateFormat = format;
+  }
+
+  int getDateFormat(){
+    return dateFormat==_currentDateFormat?1:dateFormat1==_currentDateFormat?2:3;
+  }
+
 
 }

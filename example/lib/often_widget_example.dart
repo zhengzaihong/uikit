@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/button/function_button.dart';
-import 'package:flutter_uikit_forzzh/button/function_container.dart';
-import 'package:flutter_uikit_forzzh/button/function_radiobutton.dart';
 import 'package:flutter_uikit_forzzh/checkbox/custom_checkbox.dart';
-import 'package:flutter_uikit_forzzh/button/function_checkbox.dart';
 import 'package:flutter_uikit_forzzh/often/time_view.dart';
 import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
+import 'package:flutter_uikit_forzzh/button/button_lib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -13,12 +10,13 @@ import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
 /// create_date: 2022/1/4
 /// create_time: 16:02
 /// describe: 一些常用小组件
-///z
+///
 class OftenWidgetExample extends StatefulWidget {
   const OftenWidgetExample({Key? key}) : super(key: key);
 
   @override
   _OftenWidgetExampleState createState() => _OftenWidgetExampleState();
+
 }
 
 class _OftenWidgetExampleState extends State<OftenWidgetExample> {
@@ -215,6 +213,67 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     ]),
                   )),
 
+
+                  title("图标组件"),
+                  SizedBox(height: 100,child:  FunctionContainer(
+                    defaultCheck: 1,
+                    singleCheckedChange: (id){
+                      Toast.show(context: context, msg: "图标组件下标: ${id.toString()}");
+                    },
+                    child:
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      ClickButton(
+                        title: "测试",
+                        index: 0,
+                        width: 85,
+                        height: 60,
+                        padding: const EdgeInsets.only(left: 5),
+                        checkedTextStyle: textBlodStyle,
+                        unCheckTextStyle: textBlodStyle,
+                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
+                        drawableWidget: const Icon(Icons.call,color: Colors.red),
+                      ),
+                      const SizedBox(width: 10),
+                      ClickButton(
+                        title: "button1",
+                        index: 1,
+                        width: 85,
+                        height: 60,
+                        drawablePositon: PositionEnum.drawableLeft,
+                        padding: const EdgeInsets.only(left: 5),
+                        checkedTextStyle: textBlodStyle,
+                        unCheckTextStyle: textBlodStyle,
+                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
+                        drawableWidget: const Icon(Icons.call,color: Colors.red),
+                      ),
+                      const SizedBox(width: 10),
+                      ClickButton(
+                        title: "button2",
+                        index: 2,
+                        width: 85,
+                        height: 60,
+                        drawablePositon: PositionEnum.drawableTop,
+                        padding: const EdgeInsets.only(left: 5),
+                        checkedTextStyle: textBlodStyle,
+                        unCheckTextStyle: textBlodStyle,
+                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
+                        drawableWidget: const Icon(Icons.call,color: Colors.red),
+                      ),
+                      const SizedBox(width: 10),
+                      ClickButton(
+                        title: "button3",
+                        index: 3,
+                        width: 85,
+                        height: 60,
+                        drawablePositon: PositionEnum.drawableBottom,
+                        padding: const EdgeInsets.only(left: 5),
+                        checkedTextStyle: textBlodStyle,
+                        unCheckTextStyle: textBlodStyle,
+                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
+                        drawableWidget: const Icon(Icons.call,color: Colors.red),
+                      ),
+                    ]),
+                  )),
 
                   title("常规checkbox"),
                   const SizedBox(height: 30),
