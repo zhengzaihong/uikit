@@ -1,4 +1,5 @@
 export 'package:flutter_uikit_forzzh/button/button_lib.dart';
+export 'package:flutter_uikit_forzzh/bubble/bubble_lib.dart';
 export 'package:flutter_uikit_forzzh/calendar/calendar_lib.dart';
 export 'package:flutter_uikit_forzzh/checkbox/custom_checkbox.dart';
 export 'package:flutter_uikit_forzzh/drawer/smart_drawer.dart';
@@ -6,5 +7,6 @@ export 'package:flutter_uikit_forzzh/line/dashedrect.dart';
 export 'package:flutter_uikit_forzzh/often/time_view.dart';
 export 'package:flutter_uikit_forzzh/pop/pop_lib.dart';
 export 'package:flutter_uikit_forzzh/ratingbar/rating_bar_widget.dart';
-export 'package:flutter_uikit_forzzh/progress/progresslib.dart';
-export 'package:flutter_uikit_forzzh/toast/toastlib.dart';
+export 'package:flutter_uikit_forzzh/progress/progress_lib.dart';
+export 'package:flutter_uikit_forzzh/toast/toast_lib.dart';
+export 'package:flutter_uikit_forzzh/city_picker/citypicker_lib.dart';

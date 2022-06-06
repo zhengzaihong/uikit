@@ -17,25 +17,41 @@ import 'city_result.dart';
 typedef ResultBlock = void Function(CityResult result);
 
 ///自定义顶部按钮的样式，确定和取消
-typedef TopMenueStyle = Widget Function(ResultBlock block,_CityPickerViewState pickerViewState);
-
-
-
+typedef TopMenueStyle = Widget Function(
+    ResultBlock block, _CityPickerViewState pickerViewState);
 
 class CityPickerView extends StatefulWidget {
-
   /// json数据可以从外部传入，如果外部有值，取外部值
   final List? params;
+
   /// 结果返回
   final ResultBlock? onResult;
   final TopMenueStyle? topMenueStyle;
   final TextStyle? listTextStyle;
+  final double listHeight;
+
+  final Widget sureWidget;
+  final Widget cancleWidget;
+
+  final double buttonBarHeight;
+  final BoxDecoration buttonBarBoxdec;
+
   const CityPickerView({
     key,
     this.onResult,
     this.params,
     this.topMenueStyle,
+    this.buttonBarHeight = 44,
+    this.listHeight = 200,
+    this.buttonBarBoxdec =  const BoxDecoration(
+      border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
     this.listTextStyle = const TextStyle(color: Colors.black87, fontSize: 16),
+    this.sureWidget = const Text(
+      '确定',
+    ),
+    this.cancleWidget = const Text(
+      '取消',
+    ),
   }) : super(key: key);
 
   @override
@@ -43,7 +59,6 @@ class CityPickerView extends StatefulWidget {
 }
 
 class _CityPickerViewState extends State<CityPickerView> {
-
   List datas = [];
   int? provinceIndex;
   int? cityIndex;
@@ -151,7 +166,7 @@ class _CityPickerViewState extends State<CityPickerView> {
       });
     } else {
       datas = widget.params!;
-       assert(datas.isNotEmpty);
+      assert(datas.isNotEmpty);
       setState(() {
         isShow = true;
       });
@@ -172,7 +187,9 @@ class _CityPickerViewState extends State<CityPickerView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-         widget.topMenueStyle==null? _firstView():widget.topMenueStyle!.call(widget.onResult!,this),
+          widget.topMenueStyle == null
+              ? _firstView()
+              : widget.topMenueStyle!.call(widget.onResult!, this),
           _contentView(),
         ],
       ),
@@ -181,19 +198,18 @@ class _CityPickerViewState extends State<CityPickerView> {
 
   Widget _firstView() {
     return Container(
-      height: 44,
+      height: widget.buttonBarHeight,
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TextButton(
-              child: const Text('取消'),
+              child: widget.cancleWidget,
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-
             TextButton(
-              child: const Text('确定'),
+              child: widget.sureWidget,
               onPressed: () {
                 if (widget.onResult != null) {
                   widget.onResult!(result);
@@ -202,16 +218,13 @@ class _CityPickerViewState extends State<CityPickerView> {
               },
             ),
           ]),
-      decoration: BoxDecoration(
-        border: Border(
-            bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1)),
-      ),
+      decoration: widget.buttonBarBoxdec,
     );
   }
 
   Widget _contentView() {
     return SizedBox(
-      height: 200,
+      height: widget.listHeight,
       child: isShow
           ? Row(
               children: <Widget>[

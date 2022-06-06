@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/calendar/calendar_helper.dart';
+import 'package:flutter_uikit_forzzh/uiktlib.dart';
 
 class CalendarExample extends StatefulWidget {
   const CalendarExample({Key? key}) : super(key: key);
@@ -26,6 +26,20 @@ class _CalendarExampleState extends State<CalendarExample> {
             config.callBackEndTime = (dateTime) {
               return createDateWidget(dateTime);
             };
+            config.dayTextSize = 10;
+            config.sureButton = const Text("sure",style: TextStyle(fontSize: 10));
+            config.sureButtonBgStyle =  BoxDecoration(
+              color: Colors.red,
+              borderRadius: const BorderRadius.all(
+                  Radius.circular(24.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.red.withOpacity(0.6),
+                  blurRadius: 8,
+                  offset: const Offset(4, 4),
+                ),
+              ],
+            );
 
             CalendarHelper.showDateDialog(context,
                 callBack: (startTime, endTime) {

@@ -28,7 +28,9 @@ class CalendarHelper{
         DateTime? endDate,
         bool onClickOutSide = false,
         Function(DateTime startTime,
-        DateTime endTime)? callBack}) {
+        DateTime endTime)? callBack,
+        Function()? closeCallBack,
+      }) {
 
     showDialog<dynamic>(
         context: context,
@@ -58,7 +60,7 @@ class CalendarHelper{
                     }
                   },
                   onCancelClick: () {
-
+                    closeCallBack?.call();
                   },
                 ),
               )),
