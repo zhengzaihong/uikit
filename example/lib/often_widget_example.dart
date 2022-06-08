@@ -3,6 +3,7 @@ import 'package:flutter_uikit_forzzh/checkbox/custom_checkbox.dart';
 import 'package:flutter_uikit_forzzh/often/time_view.dart';
 import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
 import 'package:flutter_uikit_forzzh/button/button_lib.dart';
+import 'package:flutter_uikit_forzzh/uiktlib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -46,6 +47,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   List<int> defaultCheckboxIds = [1,2];
 
 
+  var checked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +61,27 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
+                  PlusSwitch(
+                    value: checked,
+                    activeTrackColor:Color(0xFFF9820E),
+                    activeColor:Colors.white,
+                    inactiveTrackColor: Color(0xFFB3B3B3),
+                    kTrackWidth: 40,
+                    kTrackHeight: 20,
+                    onChanged: (value) {
+                     checked = value;
+                     setState(() {
+
+                     });
+                    },
+                  ),
 
 
                   title("单选button"),
                   SizedBox(height: 60,child:  FunctionContainer(
                     defaultCheck: 0,
                     singleCheckedChange: (checked) {
-                      Toast.show(context: context, msg: checked==1?"已启用":"已禁用");
+                      Toast.show(checked==1?"已启用":"已禁用");
                     },
                     child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -99,6 +115,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   SizedBox(height: 60,child: FunctionContainer(
                     defaultCheckeds: defaultCheckeds,
                     allowMultipleChoice: true, //多选
+                    mutualExclusionIndex: 1,
                     multipleCheckedChange: (list){
                       StringBuffer buffer  = StringBuffer();
                       for (var element in list) {
@@ -108,7 +125,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       defaultCheckeds = list as List<int>;
                       setState(() {
                       });
-                      Toast.show(context: context, msg: "选中的按钮Id: ${buffer.toString()}");
+                      Toast.show("选中的按钮Id: ${buffer.toString()}");
                     },
                     child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                       FunctionButton(
@@ -163,7 +180,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   SizedBox(height: 60,child:  FunctionContainer(
                     defaultCheck: 1,
                     singleCheckedChange: (id){
-                      Toast.show(context: context, msg: "选中的radio: ${id.toString()}");
+                      Toast.show("选中的radio: ${id.toString()}");
                     },
                     child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -218,7 +235,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   SizedBox(height: 100,child:  FunctionContainer(
                     defaultCheck: 1,
                     singleCheckedChange: (id){
-                      Toast.show(context: context, msg: "图标组件下标: ${id.toString()}");
+                      Toast.show("图标组件下标: ${id.toString()}");
                     },
                     child:
                     Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -320,7 +337,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       setState(() {
 
                       });
-                      Toast.show(context: context, msg: "选中的CheckBox: ${list.toString()}");
+                      Toast.show("选中的CheckBox: ${list.toString()}");
                     },
                     child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                       FunctionCheckbox(

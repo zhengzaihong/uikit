@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:uikit_example/often_widget_example.dart';
-import 'package:uikit_example/pop_window_example.dart';
-import 'package:uikit_example/progressbar_example.dart';
-import 'package:uikit_example/toast_example.dart';
 import 'async_drop_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
-
 import 'input_extentd_example.dart';
+import 'often_widget_example.dart';
+import 'pop_window_example.dart';
+import 'progressbar_example.dart';
+import 'toast_example.dart';
+import 'package:flutter_uikit_forzzh/uiktlib.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +33,7 @@ class _MyAppState extends State<MyApp> {
         body: LayoutBuilder(
           builder:(context,_){
 
+            Toast.init(context);
 
             return SingleChildScrollView(
                 child: Column(

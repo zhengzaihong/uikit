@@ -36,12 +36,15 @@ class FunctionContainer extends StatefulWidget {
   bool enable;
   Function()? enableCallBack;
 
+  ///互斥的index 通常用于有全选 和其他选项的的互斥效果
+  int mutualExclusionIndex;
 
   FunctionContainer({
     Key? key,
     this.defaultCheckeds,
     this.defaultCheck=0,
     required this.child,
+    this.mutualExclusionIndex =-1,
     this.singleCheckedChange,
     this.allowMultipleChoice=false,
     this.multipleCheckedChange,
@@ -90,15 +93,35 @@ class FunctionContainerState extends State<FunctionContainer> {
     if(widget.enable){
       setState(() {
         if(widget.allowMultipleChoice && null!=widget.defaultCheckeds){
-          List<int> temp=[];
-          widget.defaultCheckeds!.contains(value)?
-          widget.defaultCheckeds!.remove(value):
-          widget.defaultCheckeds!.add(value);
-          for (var element in widget.defaultCheckeds!) {
-            temp.add(element);
-          }
-          widget.defaultCheckeds = temp;
-          widget.multipleCheckedChange!(temp);
+
+           List<int> temp=[];
+           if(widget.mutualExclusionIndex>=0){
+
+             if(value == widget.mutualExclusionIndex){
+               widget.defaultCheckeds?.clear();
+               widget.defaultCheckeds?.add(value);
+             }else{
+               widget.defaultCheckeds?.remove(widget.mutualExclusionIndex);
+
+               widget.defaultCheckeds!.contains(value)?
+               widget.defaultCheckeds!.remove(value):
+               widget.defaultCheckeds!.add(value);
+             }
+
+             for (var element in widget.defaultCheckeds!) {
+               temp.add(element);
+             }
+
+           }else{
+             widget.defaultCheckeds!.contains(value)?
+             widget.defaultCheckeds!.remove(value):
+             widget.defaultCheckeds!.add(value);
+             for (var element in widget.defaultCheckeds!) {
+               temp.add(element);
+             }
+           }
+           widget.defaultCheckeds = temp;
+           widget.multipleCheckedChange!(temp);
         }else{
           widget.defaultCheck = value;
           if(null!= widget.singleCheckedChange){

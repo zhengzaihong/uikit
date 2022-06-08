@@ -33,7 +33,7 @@ class ToastExample extends StatelessWidget {
 
                 InkWell(
                     onTap: (){
-                      Toast.show(context: baseContext, msg: "常规Toast");
+                      Toast.show("常规Toast");
                     }, child: Container(
                     width: 200,
                     height: 40,
@@ -75,7 +75,7 @@ class ToastExample extends StatelessWidget {
                                     ]));
                           });
 
-                      Toast.show(context: baseContext, msg: "自定义样式toast",tempConfig: config1);
+                      Toast.show( "自定义样式toast",tempConfig: config1);
                     },
                     child: Container(
                         width: 200,
@@ -122,7 +122,7 @@ class ToastExample extends StatelessWidget {
                                           ]))),);
                           });
 
-                      Toast.show(context: baseContext, msg: "点我打开侧边栏",tempConfig: config2);
+                      Toast.show( "点我打开侧边栏",tempConfig: config2);
                     },
                     child: Container(
                         width: 200,
@@ -244,7 +244,7 @@ class ToastExample extends StatelessWidget {
                         );
                       });
 
-                      Toast.show(context: baseContext, msg: "",tempConfig: config3);
+                      Toast.show("",tempConfig: config3);
 
                     },
                     child: Container(
