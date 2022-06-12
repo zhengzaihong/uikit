@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/checkbox/custom_checkbox.dart';
-import 'package:flutter_uikit_forzzh/often/time_view.dart';
-import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
-import 'package:flutter_uikit_forzzh/button/button_lib.dart';
 import 'package:flutter_uikit_forzzh/uiktlib.dart';
 
 ///
@@ -37,7 +33,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
 
   TextStyle textBlodStyle = const TextStyle(
-      fontSize: 14, color: Colors.black54, fontWeight: FontWeight.w600);
+      fontSize: 15, color: Colors.black54, fontWeight: FontWeight.w600);
 
   Widget checkedIconWidget = Image.asset("images/checked2.png", width: 30, height: 30);
 
@@ -60,6 +56,16 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+
+                  TextView(
+                    title: "TextView",
+                    drawablePositon: PositionEnum.drawableRight,
+                    checkedTextStyle: textBlodStyle,
+                    unCheckTextStyle: textBlodStyle,
+                    drawablePressWidget: const Icon(Icons.add_box_rounded,color: Colors.red),
+                    drawableWidget: const Icon(Icons.call,color: Colors.red),
+                  ),
 
                   PlusSwitch(
                     value: checked,
@@ -115,7 +121,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   SizedBox(height: 60,child: FunctionContainer(
                     defaultCheckeds: defaultCheckeds,
                     allowMultipleChoice: true, //多选
-                    mutualExclusionIndex: 1,
+                    // mutualExclusionIndex: 1,
                     multipleCheckedChange: (list){
                       StringBuffer buffer  = StringBuffer();
                       for (var element in list) {
@@ -462,7 +468,10 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                   title("倒计时控件"),
                   TimeView(
-                    countdown: 10,
+                    countdown: 1000,
+                    duration: const Duration(
+                        milliseconds: 100
+                    ),
                     child: (context, controller, time) {
                       if (controller.isAvailable) {
                         return InkWell(

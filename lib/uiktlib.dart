@@ -14,3 +14,5 @@ export 'toast/toast_lib.dart';
 export 'city_picker/citypicker_lib.dart';
 export 'switcher/plus_switch.dart';
 export 'input_extend/inputlib.dart';
+export 'src/position_enum.dart';
+export 'textview/text_view.dart';

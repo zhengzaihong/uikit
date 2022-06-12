@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/button/function_container.dart';
-import 'package:flutter_uikit_forzzh/button/position_enum.dart';
+import 'package:flutter_uikit_forzzh/src/position_enum.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -126,19 +126,23 @@ class _ClickButtonState extends State<ClickButton> {
       switch (widget.drawablePositon) {
         case PositionEnum.drawableLeft:
           {
-            return Row(children: [
-              iconWidget!,
-              SizedBox(width: widget.drawPadding),
-              Text(widget.title, style: style)
-            ]);
+            return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  iconWidget!,
+                  SizedBox(width: widget.drawPadding),
+                  Text(widget.title, style: style)
+                ]);
           }
         case PositionEnum.drawableRight:
           {
-            return Row(children: [
-              Text(widget.title, style: style),
-              SizedBox(width: widget.drawPadding),
-              iconWidget!,
-            ]);
+            return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(widget.title, style: style),
+                  SizedBox(width: widget.drawPadding),
+                  iconWidget!,
+                ]);
           }
         case PositionEnum.drawableTop:
           {
