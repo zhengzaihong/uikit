@@ -47,13 +47,19 @@ class TimeViewState extends State<TimeView> {
   void initState() {
     super.initState();
     _controller = this;
+    _currentTime = widget.countdown;
   }
 
-  get isAvailable => _currentTime <= 0;
+
+  bool isStart(){
+    return _timer!=null;
+  }
 
   /// 启动倒计时的计时器。
   void startTimer() {
-    _currentTime = widget.countdown;
+    if(_timer!=null){
+      return;
+    }
     _timer = Timer.periodic(widget.duration, (timer) {
       if (_currentTime == 0) {
         cancelTimer();
@@ -68,6 +74,7 @@ class TimeViewState extends State<TimeView> {
   /// 取消倒计时的计时器。
   void cancelTimer() {
     _timer?.cancel();
+    _timer = null;
     _currentTime = 0;
     notyChange();
   }

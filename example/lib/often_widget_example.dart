@@ -473,7 +473,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         milliseconds: 100
                     ),
                     child: (context, controller, time) {
-                      if (controller.isAvailable) {
+                      if (!controller.isStart()) {
                         return InkWell(
                             onTap: () {
                               ///todo  request

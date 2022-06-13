@@ -167,7 +167,7 @@ class ToastExample extends StatelessWidget {
                                   child: TimeView(
                                  countdown: 10,
                                 child: (context, controller, time) {
-                                  if (controller.isAvailable) {
+                                  if (!controller.isStart()) {
                                     controller.startTimer();
                                   }
                                   return Text("($time秒)",style: const TextStyle(
