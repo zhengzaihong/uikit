@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uiktlib.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -40,6 +40,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   Widget unCheckedWidget = Image.asset("images/checked1.png", width: 30, height: 30);
 
   List<int> defaultCheckeds = [1,2];
+  List<int> defaultCheckeds2 = [1];
   List<int> defaultCheckboxIds = [1,2];
 
 
@@ -47,11 +48,13 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(
-      appBar: AppBar(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("常用小组件"),
+      ),
       backgroundColor: Colors.brown,
       body:Container(
-        margin: const EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20,top: 20),
         child:  SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,8 +66,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     drawablePositon: PositionEnum.drawableRight,
                     checkedTextStyle: textBlodStyle,
                     unCheckTextStyle: textBlodStyle,
-                    drawablePressWidget: const Icon(Icons.add_box_rounded,color: Colors.red),
-                    drawableWidget: const Icon(Icons.call,color: Colors.red),
+                    drawablePressWidget: const Icon(Icons.alarm_rounded,color: Colors.red),
+                    drawableWidget: const Icon(Icons.airplanemode_active_outlined,color: Colors.red),
                   ),
 
                   PlusSwitch(
@@ -75,10 +78,10 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     kTrackWidth: 40,
                     kTrackHeight: 20,
                     onChanged: (value) {
-                     checked = value;
-                     setState(() {
+                      checked = value;
+                      setState(() {
 
-                     });
+                      });
                     },
                   ),
 
@@ -117,7 +120,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
 
 
-                  title("多选button"),
+                  title("多选button 案例1"),
                   SizedBox(height: 60,child: FunctionContainer(
                     defaultCheckeds: defaultCheckeds,
                     allowMultipleChoice: true, //多选
@@ -169,6 +172,70 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       const SizedBox(width: 20),
                       FunctionButton(
                         "按钮4",
+                        4,
+                        checkedTextStyle: checkedTextStyle,
+                        unCheckTextStyle: unCheckTextStyle,
+                        checkedBoxDecoration: checkedBoxDecoration,
+                        unCheckedBoxDecoration: unCheckedBoxDecoration,
+                        width: 50,
+                        height: 30,
+                      )
+                    ]),
+                  )),
+
+
+                  title("多选button 案例2"),
+                  SizedBox(height: 60,child: FunctionContainer(
+                    defaultCheckeds: defaultCheckeds2,
+                    allowMultipleChoice: true, //多选
+                    mutualExclusionIndex: 1,
+                    multipleCheckedChange: (list){
+                      StringBuffer buffer  = StringBuffer();
+                      for (var element in list) {
+                        buffer.write(element);
+                        buffer.write(",");
+                      }
+                      defaultCheckeds2 = list as List<int>;
+                      setState(() {
+                      });
+                      Toast.show("选中的按钮Id: ${buffer.toString()}");
+                    },
+                    child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      FunctionButton(
+                        "全选",
+                        1,
+                        checkedTextStyle: checkedTextStyle,
+                        unCheckTextStyle: unCheckTextStyle,
+                        checkedBoxDecoration: checkedBoxDecoration,
+                        unCheckedBoxDecoration: unCheckedBoxDecoration,
+                        width: 50,
+                        height: 30,
+                      ),
+                      const SizedBox(width: 20),
+                      FunctionButton(
+                        "CT",
+                        2,
+                        checkedTextStyle: checkedTextStyle,
+                        unCheckTextStyle: unCheckTextStyle,
+                        checkedBoxDecoration: checkedBoxDecoration,
+                        unCheckedBoxDecoration: unCheckedBoxDecoration,
+                        width: 50,
+                        height: 30,
+                      ),
+                      const SizedBox(width: 20),
+                      FunctionButton(
+                        "抽血",
+                        3,
+                        checkedTextStyle: checkedTextStyle,
+                        unCheckTextStyle: unCheckTextStyle,
+                        checkedBoxDecoration: checkedBoxDecoration,
+                        unCheckedBoxDecoration: unCheckedBoxDecoration,
+                        width: 50,
+                        height: 30,
+                      ),
+                      const SizedBox(width: 20),
+                      FunctionButton(
+                        "手术",
                         4,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
@@ -248,7 +315,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       ClickButton(
                         title: "测试",
                         index: 0,
-                        width: 85,
+                        width: 100,
                         height: 60,
                         padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
@@ -260,7 +327,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       ClickButton(
                         title: "button1",
                         index: 1,
-                        width: 85,
+                        width: 100,
                         height: 60,
                         drawablePositon: PositionEnum.drawableLeft,
                         padding: const EdgeInsets.only(left: 5),
@@ -273,7 +340,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       ClickButton(
                         title: "button2",
                         index: 2,
-                        width: 85,
+                        width: 100,
                         height: 60,
                         drawablePositon: PositionEnum.drawableTop,
                         padding: const EdgeInsets.only(left: 5),
@@ -286,7 +353,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       ClickButton(
                         title: "button3",
                         index: 3,
-                        width: 85,
+                        width: 100,
                         height: 60,
                         drawablePositon: PositionEnum.drawableBottom,
                         padding: const EdgeInsets.only(left: 5),
@@ -504,7 +571,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   ),
                 ]
             )),),
-    ));
+    );
   }
 
   Widget title(String title){

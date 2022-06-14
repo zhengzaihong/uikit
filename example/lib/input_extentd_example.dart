@@ -17,18 +17,21 @@ class InputExtentdExample extends StatefulWidget {
 class _InputExtentdExampleState extends State<InputExtentdExample> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(
-      appBar: AppBar(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("输入搜索框扩展"),
+      ),
       backgroundColor: Colors.teal,
       body: SingleChildScrollView(child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
+          SizedBox(height: 20),
           InputExtendDemo() ,
           InputSearchNameWidget(),
         ],
       )),
-    ));
+    );
   }
 }
 
@@ -47,8 +50,10 @@ class InputExtendDemo extends StatelessWidget {
         child: InputExtentd<String>(
             checkedItemWidth: 80,
             itemsBoxMaxWidth: 240,
+            autoClose: true,
             enableMultipleChoice: true,
-            initCheckedValue: ["item1","item3"], ///真实项目一般都是对象 填充对象即可
+            enableClickClear: true,
+            initCheckedValue: ["item1","item3"], ///真实项目一般都是对象(bean) 填充对象即可
             inputDecoration: (c){
               return const InputDecoration(
                 hintText: "请填写",
@@ -165,7 +170,7 @@ class InputExtendDemo extends StatelessWidget {
                                           visible: hasValue,
                                           child: Container(
                                             child: Image.asset(
-                                                "images/选中.png",
+                                                "images/checked.png",
                                                 width: 30,
                                                 height: 30),
                                           ))

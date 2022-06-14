@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uiktlib.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 class CalendarExample extends StatefulWidget {
   const CalendarExample({Key? key}) : super(key: key);
@@ -9,55 +9,11 @@ class CalendarExample extends StatefulWidget {
 }
 
 class _CalendarExampleState extends State<CalendarExample> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(),
-      body: InkWell(
-          onTap: () {
-            var config = CalendarHelper.getConfig();
-            config.sureButtonWidth = 200;
 
-            config.callBackStartTime = (dateTime) {
-              return createDateWidget(dateTime);
-            };
+  var config = CalendarHelper.getConfig();
 
-            config.callBackEndTime = (dateTime) {
-              return createDateWidget(dateTime);
-            };
-            config.dayTextSize = 10;
-            config.sureButton = const Text("sure",style: TextStyle(fontSize: 10));
-            config.sureButtonBgStyle =  BoxDecoration(
-              color: Colors.red,
-              borderRadius: const BorderRadius.all(
-                  Radius.circular(24.0)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Colors.red.withOpacity(0.6),
-                  blurRadius: 8,
-                  offset: const Offset(4, 4),
-                ),
-              ],
-            );
 
-            CalendarHelper.showDateDialog(context,
-                callBack: (startTime, endTime) {
-              print(
-                  "---${startTime.year}--${startTime.month}--${startTime.day}->");
-              print("---${endTime.year}--${endTime.month}--${endTime.day}->");
-            });
-          },
-          child: Container(
-            margin: EdgeInsets.only(top: 20),
-            color: Colors.lightBlue,
-            padding: EdgeInsets.all(30),
-            child: Text("日历"),
-          )),
-    ));
-  }
-
-  Widget createDateWidget(DateTime? dateTime){
+  Widget createDateWidget(DateTime? dateTime) {
     var checkedText = const TextStyle(
       color: Colors.black54,
       fontSize: 16,
@@ -68,5 +24,73 @@ class _CalendarExampleState extends State<CalendarExample> {
           : "${dateTime.year}年${dateTime.month}月${dateTime.day}日",
       style: checkedText,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    var config = CalendarHelper.getConfig();
+    config.sureButtonWidth = 200;
+
+    config.callBackStartTime = (dateTime) {
+      return createDateWidget(dateTime);
+    };
+
+    config.callBackEndTime = (dateTime) {
+      return createDateWidget(dateTime);
+    };
+    config.dayTextSize = 14;
+    config.sureButton =
+    const Text("确定", style: TextStyle(fontSize: 14));
+    config.sureButtonBgStyle = BoxDecoration(
+      color: Colors.lightBlue,
+      borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+      boxShadow: <BoxShadow>[
+        BoxShadow(
+          color: Colors.red.withOpacity(0.6),
+          blurRadius: 8,
+          offset: const Offset(4, 4),
+        ),
+      ],
+    );
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("日历选择器"),
+      ),
+      body: LayoutBuilder(
+        builder: (context,_){
+
+          Future.delayed(const Duration(
+            microseconds: 300
+          ),(){
+            _openCalendar();
+          });
+          return GestureDetector(
+            onTap: (){
+              _openCalendar();
+            },
+            child: Container(color: Colors.white),);
+      }),
+    );
+  }
+
+  void _openCalendar(){
+    CalendarHelper.showDateDialog(context,
+        callBack: (startTime, endTime) {
+          print("---${startTime.year}--${startTime.month}--${startTime.day}->");
+          print("---${endTime.year}--${endTime.month}--${endTime.day}->");
+
+          Toast.show(
+              "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
+                  "结束时间：${endTime.year}--${endTime.month}--${endTime.day}"
+          );
+        });
   }
 }

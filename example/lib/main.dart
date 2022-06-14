@@ -7,7 +7,7 @@ import 'often_widget_example.dart';
 import 'pop_window_example.dart';
 import 'progressbar_example.dart';
 import 'toast_example.dart';
-import 'package:flutter_uikit_forzzh/uiktlib.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 
 void main() {
@@ -22,9 +22,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  List<Widget> funList = [];
 
   @override
   Widget build(BuildContext context) {
+
 
     return MaterialApp(
       home: Scaffold(
@@ -33,31 +35,42 @@ class _MyAppState extends State<MyApp> {
         body: LayoutBuilder(
           builder:(context,_){
 
+            ///全局初始化 toast
             Toast.init(context);
 
-            return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                    children: [
-                  Row(children: const [Expanded(child: SizedBox(height: 60))]),
+            _createMenues(context);
 
-                  createMenue("进度条", context,const ProgressBarExample()),
-                  createMenue("toast", context,const ToastExample()),
-                  createMenue("城市选择", context,const CityPickerExample()),
-                  createMenue("异步加载下拉框",context, const AsyncDropExample()),
-                  createMenue("popwindow",context, const PopWindowExample()),
-                  createMenue("日历",context, const CalendarExample()),
-                  createMenue("输入框拓展",context, const InputExtentdExample()),
-                  createMenue("常用小组件",context, const OftenWidgetExample()),
-                  const SizedBox(height: 20),
+            return GridView.builder(
+              itemCount: funList.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 5,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 3/1
+            ), itemBuilder: (context,index){
 
-
-                ]));
+              return  funList[index];
+            });
           } ,
         ),
       ),
     );
   }
+
+  void _createMenues(BuildContext context){
+
+    funList = [
+      createMenue("进度条", context,const ProgressBarExample()),
+      createMenue("toast", context,const ToastExample()),
+      createMenue("城市选择", context,const CityPickerExample()),
+      createMenue("异步加载下拉框",context, const AsyncDropExample()),
+      createMenue("popwindow",context, const PopWindowExample()),
+      createMenue("日历",context, const CalendarExample()),
+      createMenue("输入框拓展",context, const InputExtentdExample()),
+      createMenue("常用小组件",context, const OftenWidgetExample()),
+    ];
+  }
+
 
 
   Widget createMenue(String title,BuildContext context,dynamic page){
@@ -67,8 +80,7 @@ class _MyAppState extends State<MyApp> {
           pushPage(context, page);
         },
         child: Container(
-          margin: const EdgeInsets.only(top: 20),
-          padding: const EdgeInsets.all(30),
+          alignment: Alignment.center,
           color: Colors.lightBlue,
           child: Text(title),
         ));

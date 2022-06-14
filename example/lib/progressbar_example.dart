@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uiktlib.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 
 class ProgressBarExample extends StatelessWidget {
@@ -11,7 +11,9 @@ class ProgressBarExample extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("ProgressBar"),
+      ),
       backgroundColor: Colors.deepPurple,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -41,9 +41,7 @@ class _PopWindowExampleState extends State<PopWindowExample> {
       needSafeDisplay: true,
       underStatusBar: false,
       underAppBar: false,
-      offsetX:offset==null?50:offset!.dx+50,
-      offsetY: offset==null?50:offset!.dy,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       onShowStart: (pop) {
         print("showStart");
       },
@@ -67,15 +65,15 @@ class _PopWindowExampleState extends State<PopWindowExample> {
             key: GlobalKey(),
             builder: (popContext, popState) {
               return Bubble(
-                margin: BubbleEdges.only(top: 80,left: 100),
+                margin: const BubbleEdges.only(top: 80,left: 100),
                 nip: BubbleNip.rightTop,
                 nipOffset: 0,
                 nipWidth: 30,
                 alignment: Alignment.topRight,
                 nipHeight: 20,
-                radius: Radius.circular(30),
-                color: Color.fromRGBO(225, 255, 199, 1.0),
-                child:Container(
+                radius: const Radius.circular(30),
+                color: const Color.fromRGBO(225, 255, 199, 1.0),
+                child:SizedBox(
                   width: 200,
                   height: 300,
                   child: ListView.builder(
@@ -104,7 +102,7 @@ class _PopWindowExampleState extends State<PopWindowExample> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("popwindow"),
+          title: const Text("popwindow"),
         ),
         body: Column(children: [
 

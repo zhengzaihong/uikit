@@ -12,12 +12,13 @@ class ToastExample extends StatelessWidget {
   const ToastExample({Key? key}) : super(key: key);
 
 
-
   @override
   Widget build(BuildContext  baseContext) {
 
-    return MaterialApp(home: Scaffold(
-        appBar: AppBar(),
+    return  Scaffold(
+        appBar: AppBar(
+          title: const Text("Toast"),
+        ),
         backgroundColor: Colors.brown,
         endDrawer: SmartDrawer(
           widthPercent: 0.3,
@@ -144,105 +145,105 @@ class ToastExample extends StatelessWidget {
                       ToastConfig config3 = ToastConfig(
                           showTime: 11*1000,
                           buildToastWidget: (_,msg){
-                        return Container(
-                          width: MediaQuery.of(mContext).size.width/3,
-                          height: 300,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          child: Column(children: [
-
-                            Expanded(child: Stack(children: [
-                              const Align(
-                                  alignment: Alignment.center,
-                                  child: Text("温馨提示",style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  color: Colors.black45,fontSize: 20))),
-
-                              Positioned(
-                                  right: 0,
-                                  width: 50 ,
-                                  top: 25,
-                                  child: TimeView(
-                                 countdown: 10,
-                                child: (context, controller, time) {
-                                  if (!controller.isStart()) {
-                                    controller.startTimer();
-                                  }
-                                  return Text("($time秒)",style: const TextStyle(
-                                      decoration: TextDecoration.none,
-                                      color: Colors.black45,fontSize: 14));
-                                },
-                              )),
-                            ])),
-
-                            Container(
-                                height: 1,
-                                width:MediaQuery.of(mContext).size.width/3,
-                                color: Colors.grey.withAlpha(80)),
-
-
-                            Expanded(flex: 2,child:Container(
-                                margin: const EdgeInsets.only(top: 30,left: 20,right: 20),
-                                child: RichText(
-                              text: TextSpan(
-                                text: '  请你务必审慎阅读、充分理解服务协议和和隐私政策各条款，包括但不限于：为了向你提供房屋信息等服务，我们需要收集你的设备信息，错误日志，定位，摄像头，通话等个人信息。你可阅读',
-                                style: const TextStyle(color: Colors.black45, fontSize: 14),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '《隐私政策》 ',
-                                      style: const TextStyle(color: Color(0xff4F7CAE),fontSize: 14),
-                                      recognizer: TapGestureRecognizer()..onTap = (){
-
-                                      }
-                                  ),
-
-                                  const TextSpan(
-                                    text: '以及 ',
-                                    style: TextStyle(color: Colors.black45,fontSize: 14),
-                                  ),
-                                  TextSpan(
-                                      text: '《服务协议》 ',
-                                      style: const TextStyle(color: Colors.lightBlue,fontSize: 14),
-                                      recognizer: TapGestureRecognizer()..onTap = (){
-
-                                      }
-                                  ),
-
-                                  const TextSpan(
-                                    text: '如您同意以上协议内容，请点击“确定”，开始使用我们的产品和服务! ',
-                                    style: TextStyle(color: Colors.black45,fontSize: 14),
-                                  ),
-                                ],
+                            return Container(
+                              width: MediaQuery.of(mContext).size.width/3,
+                              height: 300,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(15)),
                               ),
-                            ))),
+                              child: Column(children: [
 
-                            Container(
-                                height: 1,
-                                width:MediaQuery.of(mContext).size.width/3,
-                                color: Colors.grey.withAlpha(80)),
-                            Expanded(child: Row(
-                                children:  [
-                                  const Expanded(child: Center(child: Text("确定",style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      color: Colors.lightBlue,fontSize: 16)),)),
-                                  Container(
-                                      height:  40,
-                                      width: 1,
-                                      color: Colors.grey.withAlpha(100)),
+                                Expanded(child: Stack(children: [
+                                  const Align(
+                                      alignment: Alignment.center,
+                                      child: Text("温馨提示",style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          color: Colors.black45,fontSize: 20))),
 
-                                   Expanded(child: Material(child: InkWell(
-                                       onTap: (){
-                                         Toast.cancle();
-                                       },
-                                       child: const Center(child: Text("取消",style: TextStyle(
-                                           decoration: TextDecoration.none,
-                                           color: Colors.black54,fontSize: 16)),)),)),
-                                ]))
-                          ]),
-                        );
-                      });
+                                  Positioned(
+                                      right: 0,
+                                      width: 50 ,
+                                      top: 25,
+                                      child: TimeView(
+                                        countdown: 10,
+                                        child: (context, controller, time) {
+                                          if (!controller.isStart()) {
+                                            controller.startTimer();
+                                          }
+                                          return Text("($time秒)",style: const TextStyle(
+                                              decoration: TextDecoration.none,
+                                              color: Colors.black45,fontSize: 14));
+                                        },
+                                      )),
+                                ])),
+
+                                Container(
+                                    height: 1,
+                                    width:MediaQuery.of(mContext).size.width/3,
+                                    color: Colors.grey.withAlpha(80)),
+
+
+                                Expanded(flex: 2,child:Container(
+                                    margin: const EdgeInsets.only(top: 30,left: 20,right: 20),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: '  请你务必审慎阅读、充分理解服务协议和和隐私政策各条款，包括但不限于：为了向你提供房屋信息等服务，我们需要收集你的设备信息，错误日志，定位，摄像头，通话等个人信息。你可阅读',
+                                        style: const TextStyle(color: Colors.black45, fontSize: 14),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: '《隐私政策》 ',
+                                              style: const TextStyle(color: Color(0xff4F7CAE),fontSize: 14),
+                                              recognizer: TapGestureRecognizer()..onTap = (){
+
+                                              }
+                                          ),
+
+                                          const TextSpan(
+                                            text: '以及 ',
+                                            style: TextStyle(color: Colors.black45,fontSize: 14),
+                                          ),
+                                          TextSpan(
+                                              text: '《服务协议》 ',
+                                              style: const TextStyle(color: Colors.lightBlue,fontSize: 14),
+                                              recognizer: TapGestureRecognizer()..onTap = (){
+
+                                              }
+                                          ),
+
+                                          const TextSpan(
+                                            text: '如您同意以上协议内容，请点击“确定”，开始使用我们的产品和服务! ',
+                                            style: TextStyle(color: Colors.black45,fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
+
+                                Container(
+                                    height: 1,
+                                    width:MediaQuery.of(mContext).size.width/3,
+                                    color: Colors.grey.withAlpha(80)),
+                                Expanded(child: Row(
+                                    children:  [
+                                      const Expanded(child: Center(child: Text("确定",style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          color: Colors.lightBlue,fontSize: 16)),)),
+                                      Container(
+                                          height:  40,
+                                          width: 1,
+                                          color: Colors.grey.withAlpha(100)),
+
+                                      Expanded(child: Material(child: InkWell(
+                                          onTap: (){
+                                            Toast.cancle();
+                                          },
+                                          child: const Center(child: Text("取消",style: TextStyle(
+                                              decoration: TextDecoration.none,
+                                              color: Colors.black54,fontSize: 16)),)),)),
+                                    ]))
+                              ]),
+                            );
+                          });
 
                       Toast.show("",tempConfig: config3);
 
@@ -259,6 +260,6 @@ class ToastExample extends StatelessWidget {
                         child: const Text("用Toast仿dialog",style: TextStyle(color: Colors.white)))),
               ]
           );
-        })),);
+        }));
   }
 }

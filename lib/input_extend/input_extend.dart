@@ -24,16 +24,24 @@ typedef OnchangeInput<String> = void Function(
 typedef InputDecorationStyle = InputDecoration Function(
     InputExtentdState controller);
 
+
 class InputExtentd<T> extends StatefulWidget {
+
+  ///自定义构建弹出窗样式
   final Builder builder;
 
+  ///数据发生变化时的回调
   final OnchangeInput<String> onChanged;
 
+  ///自定义选中后样式
   final CreateCheckedWidgets checkedWidgets;
 
+  ///已选择的显示项宽度
   final double checkedItemWidth;
+  ///
   final TextStyle inputTextStyle;
 
+  ///输入框的背景样式
   final InputDecorationStyle? inputDecoration;
   final double? itemsBoxMaxWidth;
   final double? itemsBoxMixWidth;
@@ -42,15 +50,22 @@ class InputExtentd<T> extends StatefulWidget {
   final double? itemsBoxMixHeight;
   final ScrollPhysics? physics;
 
+  ///输入框中的初始数据
   final List<T>? initCheckedValue;
 
+  ///触发搜索的间隔时间
   final int intervalTime;
 
+  ///支持的最大选择数量
   final int maxChecked;
 
+  ///是否启用 自动清除输入框中内容（在下拉选择后）
   final bool enableClickClear;
 
+  ///是否允许多选
   final bool enableMultipleChoice;
+
+  ///选中后是否自动关闭下拉
   final bool autoClose;
 
   ///输入框得到焦点即回调。

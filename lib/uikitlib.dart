@@ -1,5 +1,6 @@
 library flutter_uikit_forzzh;
 
+/// UI package  界面组件
 export 'button/button_lib.dart';
 export 'bubble/bubble_lib.dart';
 export 'calendar/calendar_lib.dart';
@@ -16,3 +17,6 @@ export 'switcher/plus_switch.dart';
 export 'input_extend/inputlib.dart';
 export 'src/position_enum.dart';
 export 'textview/text_view.dart';
+
+/// Utils package 工具包
+export 'utils/cache_manager.dart';
