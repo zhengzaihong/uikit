@@ -149,7 +149,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
     });
   }
 
-  void setSearchResultData(List<T>? newData) {
+  void setSearchData(List<T>? newData) {
     _searchResultData = newData ?? [];
     notyOverlayDataChange();
   }

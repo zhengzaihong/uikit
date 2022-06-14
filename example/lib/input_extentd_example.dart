@@ -78,8 +78,8 @@ class InputExtendDemo extends StatelessWidget {
                 datas.add("item$i");
               }
 
-              ///无论是同步还是异步 拿到数据后setSearchResultData填充数据
-              controller.setSearchResultData(datas);
+              ///无论是同步还是异步 拿到数据后setSearchData填充数据
+              controller.setSearchData(datas);
 
             },
 
@@ -230,8 +230,8 @@ class InputSearchNameWidget extends StatelessWidget {
                 for(int i =0;i<10;i++){
                   newData.add("name$i");
                 }
-                ///无论是同步还是异步 拿到数据后setSearchResultData填充数据
-                controller.setSearchResultData(newData);
+                ///无论是同步还是异步 拿到数据后setSearchData填充数据
+                controller.setSearchData(newData);
 
               },
               ///自定义选中后样式
