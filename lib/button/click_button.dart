@@ -38,6 +38,12 @@ class ClickButton extends StatefulWidget {
   ///是否可点击
   final bool enableClick;
 
+
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+
+  final MainAxisSize mainAxisSize;
+
   const ClickButton({
     required this.title,
     required this.index,
@@ -62,6 +68,9 @@ class ClickButton extends StatefulWidget {
     this.drawableWidget,
     this.drawablePressWidget,
     this.enableClick = true,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.mainAxisSize = MainAxisSize.min,
     Key? key,
   }) : super(key: key);
 
@@ -127,7 +136,9 @@ class _ClickButtonState extends State<ClickButton> {
         case PositionEnum.drawableLeft:
           {
             return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: widget.mainAxisSize,
+                crossAxisAlignment: widget.crossAxisAlignment,
+                mainAxisAlignment: widget.mainAxisAlignment,
                 children: [
                   iconWidget!,
                   SizedBox(width: widget.drawPadding),
@@ -137,7 +148,9 @@ class _ClickButtonState extends State<ClickButton> {
         case PositionEnum.drawableRight:
           {
             return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: widget.mainAxisSize,
+                crossAxisAlignment: widget.crossAxisAlignment,
+                mainAxisAlignment: widget.mainAxisAlignment,
                 children: [
                   Text(widget.title, style: style),
                   SizedBox(width: widget.drawPadding),
@@ -147,7 +160,9 @@ class _ClickButtonState extends State<ClickButton> {
         case PositionEnum.drawableTop:
           {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: widget.mainAxisSize,
+              crossAxisAlignment: widget.crossAxisAlignment,
+              mainAxisAlignment: widget.mainAxisAlignment,
               children: [
                 iconWidget!,
                 SizedBox(height: widget.drawPadding),
@@ -158,7 +173,9 @@ class _ClickButtonState extends State<ClickButton> {
         case PositionEnum.drawableBottom:
           {
             return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: widget.mainAxisSize,
+              crossAxisAlignment: widget.crossAxisAlignment,
+              mainAxisAlignment: widget.mainAxisAlignment,
               children: [
                 Text(widget.title, style: style),
                 SizedBox(height: widget.drawPadding),

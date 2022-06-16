@@ -1,3 +1,5 @@
+// ignore_for_file: must_call_super
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -10,19 +12,18 @@ import 'package:flutter/material.dart';
 /// describe: 输入框拓展带自动检索组件
 ///
 
-typedef Builder = Widget Function(
-    BuildContext context, InputExtentdState controller);
+typedef Builder<T>  = Widget Function(
+    BuildContext context,List<T> src, InputExtentdState controller);
 
 typedef Compare<T> = bool Function(List<T> data);
 
-typedef CreateCheckedWidgets<T> = List<Widget> Function(
-    List<T> checkDatas, InputExtentdState controller);
+typedef BuilderCheckedWidget<T> = Widget? Function(
+    T checkDatas, InputExtentdState controller);
 
 typedef OnchangeInput<String> = void Function(
     String value, InputExtentdState controller);
 
-typedef InputDecorationStyle = InputDecoration Function(
-    InputExtentdState controller);
+typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds);
 
 
 class InputExtentd<T> extends StatefulWidget {
@@ -34,7 +35,7 @@ class InputExtentd<T> extends StatefulWidget {
   final OnchangeInput<String> onChanged;
 
   ///自定义选中后样式
-  final CreateCheckedWidgets checkedWidgets;
+  final BuilderCheckedWidget builderChecked;
 
   ///已选择的显示项宽度
   final double checkedItemWidth;
@@ -73,10 +74,16 @@ class InputExtentd<T> extends StatefulWidget {
 
   final PopConstraintBox? popConstraintBox;
 
+
+  final Duration duration;
+  final Curve curve;
+
   const InputExtentd(
-      {required this.builder,
+      { required this.builder,
         required this.onChanged,
-        required this.checkedWidgets,
+        required this.builderChecked,
+        this.duration =const Duration(milliseconds: 300),
+        this.curve = Curves.linear,
         this.checkedItemWidth = 60,
         this.itemsBoxMaxWidth,
         this.itemsBoxMixWidth,
@@ -113,8 +120,10 @@ class InputExtentdState<T> extends State<InputExtentd> {
 
   late final BuildContext _buildContext;
 
+  ///搜索的数据
   List<T> _searchResultData = [];
 
+  ///已选择数据
   List<T> _checkedData = [];
 
   final TextEditingController _editingController = TextEditingController();
@@ -122,15 +131,18 @@ class InputExtentdState<T> extends State<InputExtentd> {
   final ScrollController _inputScrollController = ScrollController();
   late final int intervalTime;
 
-  late List<T> initCheckedValue;
+  int oldSize = 0;
+
   Timer? _timer;
 
   @override
   void initState() {
+    super.initState();
     if (widget.initCheckedValue == null) {
-      initCheckedValue = [];
+      _checkedData = [];
     } else {
-      initCheckedValue = widget.initCheckedValue!.cast<T>();
+      _checkedData = widget.initCheckedValue!.cast<T>();
+      oldSize = _checkedData.length;
     }
 
     intervalTime = widget.intervalTime;
@@ -162,9 +174,9 @@ class InputExtentdState<T> extends State<InputExtentd> {
     });
   }
 
-  List<T> get getCheckedData {
+  List<T> get getCheckedDatas {
     if (mounted) {
-      return initCheckedValue;
+      return _checkedData;
     } else {
       return [];
     }
@@ -175,34 +187,62 @@ class InputExtentdState<T> extends State<InputExtentd> {
   ///返回输入框的滑动控制器
   ScrollController get getInputScrollController => _inputScrollController;
 
-  Future<bool> updateCheckedData(T data, Compare compare) {
-    if (widget.maxChecked <= widget.initCheckedValue!.length) {
+
+
+  ///
+  /// data:需要比较的对象
+  /// compare：比较器
+  /// 说明：当是同一数据源则可以不传比较器，直接比较对象地址。
+  /// 当非同一数据源时(网络接口等)，必须传入比较器，根据数据源字段信息比较(eg:id 等)
+  ///
+  Future<bool> setCheckChange({required T data, Compare? compare}) {
+    final initValue = _checkedData;
+    if (widget.maxChecked <= initValue.length) {
       return Future.value(false);
     }
 
-    bool isChecked = compare(widget.initCheckedValue!);
-    var initValue = widget.initCheckedValue!;
+    bool isChecked=false;
+
+    ///如果外部不传入比较器 则默认比较对象是否一致
+    if(compare==null){
+      isChecked = initValue.contains(data);
+    }else{
+      isChecked = compare(initValue);
+    }
+
+    ///多选
     if (widget.enableMultipleChoice) {
       if (isChecked) {
         initValue.remove(data);
       } else {
         initValue.add(data);
       }
-    } else {
-      if (!isChecked) {
-        widget.initCheckedValue!.clear();
-        widget.initCheckedValue!.add(data);
-      } else {
+    }
+
+    ///单选
+    if(!widget.enableMultipleChoice){
+      if (isChecked) {
         initValue.remove(data);
+      } else {
+        initValue.clear();
+        initValue.add(data);
       }
     }
 
-    var offset = _checkedData.length * widget.checkedItemWidth +
+    final offset = _checkedData.length * widget.checkedItemWidth +
         widget.checkedItemWidth * 10 +
         _editingController.text.length;
 
     if (_scrollController.hasClients) {
-      _scrollController.jumpTo(offset);
+      if(_checkedData.length>oldSize){
+        _scrollController.animateTo(
+            offset,
+            duration: widget.duration,
+            curve: widget.curve);
+      }else{
+        _scrollController.jumpTo(offset);
+      }
+      oldSize = _checkedData.length;
     }
 
     if (widget.enableClickClear) {
@@ -223,16 +263,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
   }
 
   void setText(String text) {
-    // _editingController.text = text;
     _editingController.selection = TextSelection.collapsed(offset: text.length);
-    if (_inputScrollController.hasClients) {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        _inputScrollController.animateTo(
-            _inputScrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.decelerate);
-      });
-    }
   }
 
   // ignore: unused_element
@@ -274,26 +305,24 @@ class InputExtentdState<T> extends State<InputExtentd> {
             link: _layerLink,
             showWhenUnlinked: false,
             offset: Offset(0.0, size.height + 5.0),
-            child: widget.builder.call(_buildContext, _controller),
+            child: widget.builder.call(_buildContext,getSearchData, _controller),
           ),
         ));
   }
 
   ///外部构建传入选中后的数据样式
   List<Widget> createCheckedWidget() {
-    return widget.checkedWidgets(_checkedData, _controller);
-  }
-
-
-  void _initData() {
-    var initValue = widget.initCheckedValue;
-    _checkedData.clear();
-    if (initValue is List<T>) {
-      for (var element in initValue) {
-        _checkedData.add(element);
+    List<Widget> widgets = [];
+    for (var element in _checkedData) {
+      final widgetItem = widget.builderChecked(element, _controller);
+      if(null!=widgetItem){
+        widgets.add(widgetItem);
       }
     }
+    return widgets;
   }
+
+
 
   @override
   void dispose() {
@@ -301,9 +330,14 @@ class InputExtentdState<T> extends State<InputExtentd> {
     super.dispose();
   }
 
+
+  bool isChecked(int index){
+    final bean = getSearchData[index];
+    return getCheckedDatas.contains(bean);
+  }
+
   @override
   Widget build(BuildContext context) {
-    _initData();
     return CompositedTransformTarget(
       link: _layerLink,
       child: Row(
@@ -318,8 +352,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
                 ? const SizedBox(
               width: 0,
               height: 0,
-            )
-                : SingleChildScrollView(
+            ) : SingleChildScrollView(
               physics: widget.physics,
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
@@ -342,7 +375,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
                     _onTextChangeCallBack(text, false);
                   });
                 },
-                decoration: widget.inputDecoration?.call(_controller),
+                decoration: widget.inputDecoration?.call(getCheckedDatas),
               ))
         ],
       ),

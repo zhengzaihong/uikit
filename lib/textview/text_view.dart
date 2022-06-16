@@ -38,7 +38,6 @@ class TextView extends StatefulWidget {
 
   final MainAxisSize mainAxisSize;
 
-
   const TextView({
     required this.title,
     this.checkedTextStyle = const TextStyle(color: Colors.white, fontSize: 20),

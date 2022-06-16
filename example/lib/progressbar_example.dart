@@ -28,7 +28,7 @@ class ProgressBarExample extends StatelessWidget {
           width: 100,
           angle: 200,
           progressBgColor: Colors.red,
-          cycleBgColor: Colors.grey,
+          cycleBgColor: Colors.white,
         ),
         const SizedBox(height: 10),
 
@@ -40,7 +40,7 @@ class ProgressBarExample extends StatelessWidget {
           width: 100,
           progress: 30,
           progressBgColor: Colors.red,
-          bgColor: Colors.grey,
+          bgColor: Colors.lightBlue,
         ),
 
         const SizedBox(height: 10),

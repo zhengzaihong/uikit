@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/pop/pop_lib.dart';
-import 'package:flutter_uikit_forzzh/bubble/bubble_lib.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 class PopWindowExample extends StatefulWidget {
   const PopWindowExample({Key? key}) : super(key: key);
@@ -10,194 +9,118 @@ class PopWindowExample extends StatefulWidget {
 }
 
 class _PopWindowExampleState extends State<PopWindowExample> {
-  GlobalKey btnKey1 = GlobalKey();
-  GlobalKey btnKey2 = GlobalKey();
-
-  String? itemText;
-
- late PopupWindow popupWindow;
-  RenderBox? tagbox;
-  Offset? offset;
-  @override
-  void initState() {
-    super.initState();
-  }
+  
+  GlobalKey btnKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-
-    popupWindow = createPopupWindow(
-      context,
-      // childSize:Size(240, 800),
-      // gravity: PopupGravity.rightBottom,
-      // curve: Curves.elasticOut,
-      bgColor: Colors.transparent,
-      clickOutDismiss: true,
-      clickBackDismiss: true,
-      customAnimation: false,
-      customPop: false,
-      customPage: false,
-      targetRenderBox: tagbox,
-      needSafeDisplay: true,
-      underStatusBar: false,
-      underAppBar: false,
-      duration: const Duration(milliseconds: 300),
-      onShowStart: (pop) {
-        print("showStart");
-      },
-      onShowFinish: (pop) {
-        print("showFinish");
-      },
-      onDismissStart: (pop) {
-        print("dismissStart");
-      },
-      onDismissFinish: (pop) {
-        print("dismissFinish");
-      },
-      onClickOut: (pop) {
-        print("onClickOut");
-      },
-      onClickBack: (pop) {
-        print("onClickBack");
-      },
-      childFun: (pop) {
-        return StatefulBuilder(
-            key: GlobalKey(),
-            builder: (popContext, popState) {
-              return Bubble(
-                margin: const BubbleEdges.only(top: 80,left: 100),
-                nip: BubbleNip.rightTop,
-                nipOffset: 0,
-                nipWidth: 30,
-                alignment: Alignment.topRight,
-                nipHeight: 20,
-                radius: const Radius.circular(30),
-                color: const Color.fromRGBO(225, 255, 199, 1.0),
-                child:SizedBox(
-                  width: 200,
-                  height: 300,
-                  child: ListView.builder(
-                    itemCount: 100,
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            RenderBox box = btnKey1.currentContext?.findRenderObject() as RenderBox;
-                            offset = box.localToGlobal(Offset(0.0, box.size.height));
-                            tagbox = box;
-                            itemText = "item$index";
-                            popupWindow.dismiss(context);
-                          });
-                        },
-                        child: Center(
-                          child: Text("item${index}"),
-                        ),
-                      );
-                    }),),
-              );
-            });
-      },
-    );
-
     return Scaffold(
+      backgroundColor: Colors.deepPurple,
         appBar: AppBar(
           title: const Text("popwindow"),
         ),
-        body: Column(children: [
+        body: Row(children: [
 
-          MaterialButton(
-              key: btnKey1,
-              height: 50,
-              child: Text(itemText ?? "popup1"),
-              color: Colors.redAccent,
-              onPressed: () {
-                RenderBox box = btnKey1.currentContext?.findRenderObject() as RenderBox;
-                 offset = box.localToGlobal(Offset(0.0, box.size.height));
-                tagbox = box;
-                popupWindow.show(context);
-              }),
+          InkWell(
+              key: btnKey,
+              onTap: () {
+                showSelectPop(
+                    context: context,
+                    globalKey: btnKey,
+                    datas: List.generate(100, (index) => index),
+                    buildItem: (data, index) {
+                      return Text("item $index",
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 10));
+                    });
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                width: 236,
+                height: 30,
+                decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border:
+                    Border.all(width: 0.5, color: Colors.white),
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(5))),
+                child: Row(
+                  children: const [
+                    SizedBox(width: 10),
+                    Text("请选择信息",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12)),
+                  ],
+                ),
+              )),
 
-          SizedBox(height: 50),
-          MaterialButton(
-              key: btnKey2,
-              height: 50,
-              child: Text(itemText ?? "popup2"),
-              color: Colors.redAccent,
-              onPressed: () {
-                RenderBox box =
-                    btnKey2.currentContext?.findRenderObject() as RenderBox;
-                var offset = box.localToGlobal(Offset(0.0, box.size.height));
-                // Offset offset = box.localToGlobal(Offset(0,Offset.));
-
-                showPopupWindow(
-                  context,
-                  // childSize:Size(240, 800),
-                  gravity: PopupGravity.rightBottom,
-                  // curve: Curves.elasticOut,
-                  // bgColor: Colors.grey.withOpacity(0.5),
-                  clickOutDismiss: true,
-                  clickBackDismiss: true,
-                  customAnimation: false,
-                  customPop: false,
-                  customPage: false,
-                  targetRenderBox: box,
-                  needSafeDisplay: true,
-                  underStatusBar: false,
-                  underAppBar: false,
-                  // offsetX: offset.dx+50,
-                  // offsetY: offset.dy,
-                  duration: Duration(milliseconds: 300),
-                  onShowStart: (pop) {
-                    print("showStart");
-                  },
-                  onShowFinish: (pop) {
-                    print("showFinish");
-                  },
-                  onDismissStart: (pop) {
-                    print("dismissStart");
-                  },
-                  onDismissFinish: (pop) {
-                    print("dismissFinish");
-                  },
-                  onClickOut: (pop) {
-                    print("onClickOut");
-                  },
-                  onClickBack: (pop) {
-                    print("onClickBack");
-                  },
-                  childFun: (pop) {
-                    return StatefulBuilder(
-                        key: GlobalKey(),
-                        builder: (popContext, popState) {
-                          return Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            alignment: Alignment.center,
-                            child: ListView.builder(
-                                itemCount: 100,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      popState(() {
-                                        itemText = "item$index";
-                                      });
-                                    },
-                                    child: Center(
-                                      child: Text("item${index}"),
-                                    ),
-                                  );
-                                }),
-                          );
-                        });
-                  },
-                );
-              }),
         ]));
   }
+}
+
+
+
+typedef BuildItem = Widget Function(dynamic data, int index);
+/// 通用弹出下拉框
+void showSelectPop({
+  required BuildContext context,
+  required GlobalKey globalKey,
+  required List<dynamic> datas,
+  required BuildItem buildItem,
+  double? width = 0,
+  double? height = 0,
+  Function(dynamic data, int index)? clickCallBack,
+}) {
+  RenderBox box = globalKey.currentContext?.findRenderObject() as RenderBox;
+
+  showPopupWindow(
+    context,
+    bgColor: Colors.transparent,
+    clickOutDismiss: true,
+    gravity: PopupGravity.centerBottom,
+    targetRenderBox: box,
+    duration: const Duration(milliseconds: 300),
+    childFun: (pop) {
+      return StatefulBuilder(
+          key: GlobalKey(),
+          builder: (popContext, popState) {
+            return Bubble(
+                width: 0 == width ? 236.0 : width!,
+                height: 0 == height ? 300 : width!,
+                color:Colors.green.withOpacity(0.7),
+                position:BubbleArrowDirection.top,
+                child:  Container(
+                  margin: const EdgeInsets.only(top: 2),
+                  decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  alignment: Alignment.center,
+                  child: MediaQuery.removePadding(context: context,
+                      removeTop: true,
+                      child: ListView.separated(
+                      itemCount: datas.isNotEmpty ? datas.length : 0,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (null != clickCallBack) {
+                              clickCallBack.call(datas[index], index);
+                            }
+                            pop.dismiss(context);
+                          },
+                          child: Container(
+                              padding: const EdgeInsets.only(
+                                  left: 2, bottom: 20, top: 20, right: 2),
+                              color: Colors.transparent,
+                              child: buildItem(datas[index], index)),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Divider(height: 1, color: Colors.black12);
+                      })),
+                ));
+          });
+    },
+  );
 }

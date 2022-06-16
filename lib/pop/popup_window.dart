@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pop_route.dart';
+import '../route/pop_route.dart';
 import 'popup_gravity.dart';
 
 /// create_user: zhengzaihong

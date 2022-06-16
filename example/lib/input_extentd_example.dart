@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/input_extend/input_extend.dart';
 import 'package:flutter_uikit_forzzh/input_extend/landscape_listview.dart';
+import 'package:flutter_uikit_forzzh/toast/toast_lib.dart';
+import 'package:uikit_example/utils/font_utils.dart';
 
 
 class InputExtentdExample extends StatefulWidget {
@@ -25,10 +27,10 @@ class _InputExtentdExampleState extends State<InputExtentdExample> {
       body: SingleChildScrollView(child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children:  [
           SizedBox(height: 20),
           InputExtendDemo() ,
-          InputSearchNameWidget(),
+          // InputSearchNameWidget(),
         ],
       )),
     );
@@ -36,7 +38,9 @@ class _InputExtentdExampleState extends State<InputExtentdExample> {
 }
 
 class InputExtendDemo extends StatelessWidget {
-  const InputExtendDemo({Key? key}) : super(key: key);
+   InputExtendDemo({Key? key}) : super(key: key);
+
+  List<String> checkeds =  ["item1","item3"];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +57,8 @@ class InputExtendDemo extends StatelessWidget {
             autoClose: true,
             enableMultipleChoice: true,
             enableClickClear: true,
-            initCheckedValue: ["item1","item3"], ///真实项目一般都是对象(bean) 填充对象即可
+            initCheckedValue: checkeds,
+            ///真实项目一般都是对象(bean) 填充对象即可
             inputDecoration: (c){
               return const InputDecoration(
                 hintText: "请填写",
@@ -72,6 +77,8 @@ class InputExtendDemo extends StatelessWidget {
             },
 
             onChanged: (text, controller) {
+
+              ///模拟接口数据
               List<String> datas = [];
               int max = Random().nextInt(15);
               for (int i = 0; i < max; i++) {
@@ -84,102 +91,83 @@ class InputExtendDemo extends StatelessWidget {
             },
 
             ///自定义选中后样式
-            checkedWidgets: (datas,controller) {
-              List<Widget> widgets = [];
-              for (var element in datas) {
-                var itemWidget = Container(
-                    width: 80,
-                    height: 40,
-                    margin: const EdgeInsets.only(left: 5),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.lightBlueAccent,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: InkWell(
-                      onTap: () {
-                        controller.updateCheckedData(element, (list) {
-                          var hasData = false;
-                          for (var i in list) {
-                            if (element == i) {
-                              hasData = true;
-                              break;
-                            }
-                          }
-                          return hasData;
-                        });
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(element),
-                            Image.asset("images/delete.png",
-                                width: 20, height: 20)
-                          ]),
-                    ));
-                widgets.add(itemWidget);
-              }
-              return widgets;
+            builderChecked: (element,controller) {
+
+              return Container(
+                  width: 80,
+                  height: 30,
+                  margin: const EdgeInsets.only(left: 3),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.lightBlue),
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                      ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                      ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                      controller.setCheckChange(data:element);
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(element),
+                          FontIcon(0xe642,size: 20,color: Colors.grey)
+                        ]),
+                  ));
             },
 
             ///自定义构建弹出窗样式
-            builder: (context, controller) {
+            builder: (context,srcs, controller) {
               return Material(
                 color: Colors.transparent,
                 elevation: 20,
                 child: Container(
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10))
                   ),
                   child: ListView.builder(
-                      itemCount: controller.getSearchData.length,
+                      itemCount: srcs.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         var data = controller.getSearchData[index];
-                        var checkeds = controller.getCheckedData;
+                        bool hasValue = controller.isChecked(index);
 
-                        bool hasValue = false;
-                        for (var element in checkeds) {
-                          if (element == data) {
-                            hasValue = true;
-                            break;
-                          }
-                        }
                         return InkWell(
                             onTap: () {
-                              controller.updateCheckedData(data, (list) {
-                                var hasData = false;
-                                for (var element in list) {
-                                  if (data == element) {
-                                    hasData = true;
-                                    break;
-                                  }
-                                }
-                                return hasData;
-                              });
+                              Toast.showToast(context: context,msg: "----${index}");
+                              ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                              ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                              ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                              controller.setCheckChange(data: data);
                             },
                             child: Container(
                                 height: 40,
+                                padding: const EdgeInsets.only(left: 10,right: 10),
                                 child: Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("item${index}"),
+                                      Text("item$index"),
                                       Visibility(
                                           visible: hasValue,
-                                          child: Container(
-                                            child: Image.asset(
-                                                "images/checked.png",
-                                                width: 30,
-                                                height: 30),
-                                          ))
+                                          child:FontIcon(0xe64a,size: 30,color: Colors.lightBlue,))
                                     ])));
                       }),
                 ),);
             }));
   }
 }
+
+
+
+
+
+
 
 
 ///输入框 搜索Pop 扩展 demo
@@ -208,9 +196,9 @@ class InputSearchNameWidget extends StatelessWidget {
               ),
               enableMultipleChoice: false,
               enableHasFocusCallBack: true,
-              inputDecoration: (controller) {
+              inputDecoration: (checkeds) {
                 return InputDecoration(
-                  hintText: controller.getCheckedData.isEmpty ? "请填写" : "",
+                  hintText: checkeds.isEmpty ? "请填写" : "",
                   filled: true,
                   counterText: "",
                   fillColor: Colors.transparent,
@@ -235,19 +223,18 @@ class InputSearchNameWidget extends StatelessWidget {
 
               },
               ///自定义选中后样式
-              checkedWidgets: (datas, controller) {
-                List<Widget> widgets = [];
-                return widgets;
+              builderChecked: (item, controller) {
+
               },
               ///自定义选中后样式
-              builder: (context, controller) {
+              builder: (context, src,controller) {
                 return Material(
                     color: Colors.transparent,
                     child: controller.getSearchData.isEmpty
                         ? const SizedBox()
                         :Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(right: 200),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(right: 200),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -377,7 +364,7 @@ class InputSearchNameWidget extends StatelessWidget {
   void checkDataStatus(InputExtentdState controller, String bean) {
 
     ///这里是字符串直接比较的 内容，如果是对象 且数据来源于网络一定的通过对象 属性id 等来判断
-    controller.updateCheckedData(bean, (list) {
+    controller.setCheckChange(data:bean, compare: (list) {
       for (var i in list) {
         var item = i as String;
         if (bean == item) {

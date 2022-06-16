@@ -73,7 +73,7 @@ class CityPickerExample extends StatelessWidget {
               });
             },
             child: Container(
-              color: Colors.blueGrey,
+              color: Colors.white,
               alignment: Alignment.center,
               padding: const EdgeInsets.all(30),
               child: const Text("自定义样式城市选择"),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/bubble/bubble.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
+import 'package:uikit_example/utils/font_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -35,9 +37,9 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   TextStyle textBlodStyle = const TextStyle(
       fontSize: 15, color: Colors.black54, fontWeight: FontWeight.w600);
 
-  Widget checkedIconWidget = Image.asset("images/checked2.png", width: 30, height: 30);
+  Widget checkedIconWidget = FontIcon(0xe650,size: 30,color: Colors.red,);
 
-  Widget unCheckedWidget = Image.asset("images/checked1.png", width: 30, height: 30);
+  Widget unCheckedWidget =  FontIcon(0xe64f,size: 30,color: Colors.white);
 
   List<int> defaultCheckeds = [1,2];
   List<int> defaultCheckeds2 = [1];
@@ -45,6 +47,13 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
 
   var checked = false;
+
+
+
+  var checkBoxBg = const BoxDecoration(color: Colors.transparent);
+  var checkedIcon =  Image.asset("images/sel_icon_13@2x.png",width: 20,height: 20,);
+  var unCheckedIcon = Image.asset("images/nor_icon_16@2x.png",width: 20,height: 20,);
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +69,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-
+                  title("仿Android TextView"),
                   TextView(
                     title: "TextView",
                     drawablePositon: PositionEnum.drawableRight,
@@ -69,7 +78,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     drawablePressWidget: const Icon(Icons.alarm_rounded,color: Colors.red),
                     drawableWidget: const Icon(Icons.airplanemode_active_outlined,color: Colors.red),
                   ),
-
+                  title("开关按钮"),
                   PlusSwitch(
                     value: checked,
                     activeTrackColor:Color(0xFFF9820E),
@@ -201,47 +210,59 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       Toast.show("选中的按钮Id: ${buffer.toString()}");
                     },
                     child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      FunctionButton(
-                        "全选",
-                        1,
+                      ClickButton(
+                        title: "全选",
+                        index: 1,
+                        checkedBoxDecoration: checkBoxBg,
+                        unCheckedBoxDecoration: checkBoxBg,
+                        drawablePositon: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
+                        drawablePressWidget:checkedIcon,
+                        drawableWidget: unCheckedIcon,
+                        width: 66,
                         height: 30,
                       ),
                       const SizedBox(width: 20),
-                      FunctionButton(
-                        "CT",
-                        2,
+                      ClickButton(
+                        title: "CT",
+                        index: 2,
+                        checkedBoxDecoration: checkBoxBg,
+                        unCheckedBoxDecoration: checkBoxBg,
+                        drawablePositon: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
+                        drawablePressWidget:checkedIcon,
+                        drawableWidget: unCheckedIcon,
+                        width: 66,
                         height: 30,
                       ),
                       const SizedBox(width: 20),
-                      FunctionButton(
-                        "抽血",
-                        3,
+                      ClickButton(
+                        title: "抽血",
+                        index: 3,
+                        checkedBoxDecoration: checkBoxBg,
+                        unCheckedBoxDecoration: checkBoxBg,
+                        drawablePositon: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
+                        drawablePressWidget:checkedIcon,
+                        drawableWidget: unCheckedIcon,
+                        width: 66,
                         height: 30,
                       ),
                       const SizedBox(width: 20),
-                      FunctionButton(
-                        "手术",
-                        4,
+                      ClickButton(
+                        title: "手术",
+                        index: 4,
+                        checkedBoxDecoration: checkBoxBg,
+                        unCheckedBoxDecoration: checkBoxBg,
+                        drawablePositon: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
+                        drawablePressWidget:checkedIcon,
+                        drawableWidget: unCheckedIcon,
+                        width: 66,
                         height: 30,
                       )
                     ]),
@@ -256,12 +277,13 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       Toast.show("选中的radio: ${id.toString()}");
                     },
                     child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start, children: [
                       FunctionRadioButton(
                         title: "无",
                         index: 0,
                         width: 85,
-                        padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,
                         checkedIconWidget: checkedIconWidget,
@@ -272,7 +294,6 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         title: "化学品",
                         index: 1,
                         width: 85,
-                        padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,
                         checkedIconWidget: checkedIconWidget,
@@ -283,7 +304,6 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         title: "毒物",
                         index: 2,
                         width: 85,
-                        padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,
                         checkedIconWidget: checkedIconWidget,
@@ -294,7 +314,6 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         title: "射线",
                         index: 3,
                         width: 85,
-                        padding: EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,
                         checkedIconWidget: checkedIconWidget,
@@ -365,8 +384,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     ]),
                   )),
 
-                  title("常规checkbox"),
-                  const SizedBox(height: 30),
+                  title("复选框"),
                   CustomCheckBox(
                     iconLeft: true,
                     checked: true,

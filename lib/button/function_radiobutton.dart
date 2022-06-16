@@ -28,6 +28,10 @@ class FunctionRadioButton extends StatefulWidget {
   final EdgeInsetsGeometry margin;
   final Color splashColor;
   final Color hoverColor;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+
+  final MainAxisSize mainAxisSize;
 
   const FunctionRadioButton(
       {this.title = "",
@@ -40,12 +44,15 @@ class FunctionRadioButton extends StatefulWidget {
           const TextStyle(color: Color(0xff000000), fontSize: 12),
       this.radioStart = true,
       this.width = 100,
-      this.height = 20,
+      this.height = 40,
       this.padding = const EdgeInsets.all(0),
       this.margin = const EdgeInsets.all(0),
       this.alignment = Alignment.center,
       this.splashColor = Colors.transparent,
       this.hoverColor = Colors.transparent,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.mainAxisSize = MainAxisSize.min,
       Key? key})
       : super(key: key);
 
@@ -84,6 +91,9 @@ class _FunctionRadioButtonState extends State<FunctionRadioButton> {
             height: widget.height,
             child: widget.radioStart
                 ? Row(
+                    mainAxisSize: widget.mainAxisSize,
+                    crossAxisAlignment: widget.crossAxisAlignment,
+                    mainAxisAlignment: widget.mainAxisAlignment,
                     children: [
                       radio,
                       Padding(
@@ -92,6 +102,9 @@ class _FunctionRadioButtonState extends State<FunctionRadioButton> {
                     ],
                   )
                 : Row(
+                    mainAxisSize: widget.mainAxisSize,
+                    crossAxisAlignment: widget.crossAxisAlignment,
+                    mainAxisAlignment: widget.mainAxisAlignment,
                     children: [
                       Padding(
                           padding: widget.padding,
