@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 /// create_time: 14:36
 /// describe: 满意度RatingBar
 ///
-class RatingBarWidget extends StatefulWidget {
+class RatingBar extends StatefulWidget {
+
   /// 星星数量
   final int count;
 
@@ -29,29 +30,35 @@ class RatingBarWidget extends StatefulWidget {
   /// 选中时的图片
   final String selectImage;
 
-  /// 是否能够点击
+  /// 是否能够点击和滑动
   final bool selectAble;
 
   /// 点击回调
-  final ValueChanged<String>? onRatingUpdate;
+  final ValueChanged<double>? onRatingUpdate;
 
-  const RatingBarWidget(
+  /// 是否支持半选模式 true 0-max之间任何值，false 0.5-取整
+  final bool half;
+
+  const RatingBar(
       {this.maxRating = 10.0,
       this.count = 5,
       this.value = 0,
       this.size = 20,
       this.nomalImage = "",
-      this.selectImage="",
+      this.selectImage = "",
       this.padding = 3,
       this.selectAble = false,
-      required this.onRatingUpdate,Key? key}):super(key: key);
+      this.half = false,
+      required this.onRatingUpdate,
+      Key? key})
+      : super(key: key);
 
   @override
-  _RatingBarWidgetState createState() => _RatingBarWidgetState();
+  _RatingBarState createState() => _RatingBarState();
 }
 
-class _RatingBarWidgetState extends State<RatingBarWidget> {
-  double value = 0 ;
+class _RatingBarState extends State<RatingBar> {
+  double value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +102,20 @@ class _RatingBarWidgetState extends State<RatingBarWidget> {
       }
     }
     setState(() {
-      if(widget.onRatingUpdate!=null){
-        widget.onRatingUpdate!(value.toStringAsFixed(1));
+      if(widget.half){
+        double tempValue = value.floorToDouble();
+        if(value<(tempValue+0.5)){
+          value = tempValue+0.5;
+        }else{
+          value = value.roundToDouble();
+        }
+        if(value>widget.maxRating){
+          value = widget.maxRating;
+        }
       }
-
+      if (widget.onRatingUpdate != null) {
+        widget.onRatingUpdate!(value);
+      }
     });
   }
 
@@ -160,17 +177,15 @@ class _RatingBarWidgetState extends State<RatingBarWidget> {
   }
 
   Widget buildRowRating() {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Row(
-            children: buildNomalRow(),
-          ),
-          Row(
-            children: buildRow(),
-          )
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        Row(
+          children: buildNomalRow(),
+        ),
+        Row(
+          children: buildRow(),
+        )
+      ],
     );
   }
 
@@ -182,8 +197,11 @@ class _RatingBarWidgetState extends State<RatingBarWidget> {
 }
 
 class SMClipper extends CustomClipper<Rect> {
+
   final double rating;
-  SMClipper({required this.rating}) : assert(rating != null);
+
+  SMClipper({required this.rating});
+
   @override
   Rect getClip(Size size) {
     return Rect.fromLTRB(0.0, 0.0, rating, size.height);

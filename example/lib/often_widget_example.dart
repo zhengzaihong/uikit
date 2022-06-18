@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/bubble/bubble.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/utils/font_utils.dart';
 
@@ -37,6 +36,12 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   TextStyle textBlodStyle = const TextStyle(
       fontSize: 15, color: Colors.black54, fontWeight: FontWeight.w600);
 
+  TextStyle textViewStyle = const TextStyle(
+      fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w600);
+
+  TextStyle textViewStyle1 = const TextStyle(
+      fontSize: 15, color: Colors.red, fontWeight: FontWeight.w600);
+
   Widget checkedIconWidget = FontIcon(0xe650,size: 30,color: Colors.red,);
 
   Widget unCheckedWidget =  FontIcon(0xe64f,size: 30,color: Colors.white);
@@ -47,6 +52,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
 
   var checked = false;
+
+  var ratingBarCount = 3.0;
 
 
 
@@ -63,21 +70,77 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
       ),
       backgroundColor: Colors.brown,
       body:Container(
-        margin: const EdgeInsets.only(left: 20,top: 20),
+        margin: const EdgeInsets.only(left: 20,top: 20,bottom: 30),
         child:  SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  title("仿Android TextView"),
-                  TextView(
-                    title: "TextView",
-                    drawablePositon: PositionEnum.drawableRight,
-                    checkedTextStyle: textBlodStyle,
-                    unCheckTextStyle: textBlodStyle,
-                    drawablePressWidget: const Icon(Icons.alarm_rounded,color: Colors.red),
-                    drawableWidget: const Icon(Icons.airplanemode_active_outlined,color: Colors.red),
+                  title("评分组件"),
+                  RatingBar(
+                    value: ratingBarCount,
+                    size: 20,
+                    nomalImage: "images/空心五角星.png",
+                    selectImage: "images/五角星.png",
+                    selectAble: true,
+                    half: true,
+                    maxRating: 5,
+                    count: 5,
+                    onRatingUpdate: (double value) {
+                      setState(() {
+                        ratingBarCount = value;
+                        Toast.show("评分：$value");
+                      });
+                    },
                   ),
+
+
+                  title("仿Android TextView"),
+                  Row(children: [
+
+                    TextView(
+                      title: "TextView",
+                      drawablePositon: PositionEnum.drawableLeft,
+                      checkedTextStyle: textViewStyle1,
+                      unCheckTextStyle: textViewStyle,
+                      drawablePressWidget: const Icon(Icons.alarm_rounded,color: Colors.red),
+                      drawableWidget: const Icon(Icons.alarm_rounded,color: Colors.grey),
+                    ),
+
+
+                    const SizedBox(width: 10),
+                    TextView(
+                      title: "TextView",
+                      drawablePositon: PositionEnum.drawableRight,
+                      checkedTextStyle: textViewStyle1,
+                      unCheckTextStyle: textViewStyle,
+                      drawablePressWidget: const Icon(Icons.home,color: Colors.red),
+                      drawableWidget: const Icon(Icons.home,color: Colors.grey),
+                    ),
+
+                    const SizedBox(width: 30),
+                    TextView(
+                      title: "TextView",
+                      drawablePositon: PositionEnum.drawableTop,
+                      checkedTextStyle: textViewStyle1,
+                      unCheckTextStyle: textViewStyle,
+                      drawablePressWidget: const Icon(Icons.home,color: Colors.red),
+                      drawableWidget: const Icon(Icons.home,color: Colors.grey),
+                    ),
+
+                    const SizedBox(width: 30),
+                    TextView(
+                      title: "TextView",
+                      drawablePositon: PositionEnum.drawableBottom,
+                      checkedTextStyle: textViewStyle1,
+                      unCheckTextStyle: textViewStyle,
+                      drawablePressWidget: const Icon(Icons.home,color: Colors.red),
+                      drawableWidget: const Icon(Icons.home,color: Colors.grey),
+                    ),
+
+                  ]),
+
+
                   title("开关按钮"),
                   PlusSwitch(
                     value: checked,
@@ -325,7 +388,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                   title("图标组件"),
                   SizedBox(height: 100,child:  FunctionContainer(
-                    defaultCheck: 1,
+                    defaultCheck: 0,
                     singleCheckedChange: (id){
                       Toast.show("图标组件下标: ${id.toString()}");
                     },
@@ -576,6 +639,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       } else {
                         print("--------请$time秒后再试");
                       }
+
+
 
                       return Container(
                           width: 150,

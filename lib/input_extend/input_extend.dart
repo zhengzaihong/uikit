@@ -44,11 +44,12 @@ class InputExtentd<T> extends StatefulWidget {
 
   ///输入框的背景样式
   final InputDecorationStyle? inputDecoration;
-  final double? itemsBoxMaxWidth;
-  final double? itemsBoxMixWidth;
 
-  final double? itemsBoxMaxHeight;
-  final double? itemsBoxMixHeight;
+  final double? checkBoxMaxWidth;
+  final double? checkBoxMixWidth;
+
+  final double? checkBoxMaxHeight;
+  final double? checkBoxMixHeight;
   final ScrollPhysics? physics;
 
   ///输入框中的初始数据
@@ -85,10 +86,10 @@ class InputExtentd<T> extends StatefulWidget {
         this.duration =const Duration(milliseconds: 300),
         this.curve = Curves.linear,
         this.checkedItemWidth = 60,
-        this.itemsBoxMaxWidth,
-        this.itemsBoxMixWidth,
-        this.itemsBoxMaxHeight,
-        this.itemsBoxMixHeight,
+        this.checkBoxMaxWidth,
+        this.checkBoxMaxHeight,
+        this.checkBoxMixWidth,
+        this.checkBoxMixHeight,
         this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
         this.inputDecoration,
         this.physics,
@@ -344,10 +345,10 @@ class InputExtentdState<T> extends State<InputExtentd> {
         children: [
           Container(
             constraints: BoxConstraints(
-                maxWidth: widget.itemsBoxMaxWidth ?? 100,
-                maxHeight: widget.itemsBoxMaxHeight ?? 40,
-                minHeight: widget.itemsBoxMixHeight ?? 0,
-                minWidth: widget.itemsBoxMixWidth ?? 0),
+                maxWidth: widget.checkBoxMaxWidth ?? 100,
+                maxHeight: widget.checkBoxMaxHeight ?? 40,
+                minHeight: widget.checkBoxMixHeight ?? 0,
+                minWidth: widget.checkBoxMixWidth ?? 0),
             child: _checkedData.isEmpty
                 ? const SizedBox(
               width: 0,

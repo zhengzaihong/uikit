@@ -3,6 +3,14 @@ description: flutter_uikit_forzzh.
 version: 0.0.3
 homepage: https://github.com/zhengzaihong/uikit
 
+platforms:
+  windows:
+  web:
+  andorid:
+  linux:
+  ios:
+  macos:
+
 environment:
   sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.20.0"

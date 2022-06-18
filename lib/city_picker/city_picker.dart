@@ -175,7 +175,7 @@ class _CityPickerViewState extends State<CityPickerView> {
 
   Future _loadCitys() async {
     var cityStr =
-        await rootBundle.loadString('packages/uikit/assets/citys.json');
+        await rootBundle.loadString('packages/flutter_uikit_forzzh/assets/citys.json');
     datas = json.decode(cityStr) as List;
     return Future.value(true);
   }

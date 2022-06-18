@@ -13,3 +13,9 @@
  10. 增加类似android TextView 上下左右可添加元素组件
  11. 添加可自定大小的switch组件
 
+
+
+
+
+
+[comment]: <> (![FL Chart Logo]&#40;https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/landing_logo.jpg&#41;)

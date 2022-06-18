@@ -54,6 +54,12 @@ class _ProgressBarState extends State<CycleProgressBar> with SingleTickerProvide
     });
   }
   @override
+  void dispose() {
+    animationController.dispose();
+
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
 
     if(widget.enableAnimation!){
@@ -78,6 +84,9 @@ class _ProgressBarState extends State<CycleProgressBar> with SingleTickerProvide
             );
           });
     }
+
+
+
     return CustomPaint(
       painter: CurvePainter(
           cycleBgColor:  widget.cycleBgColor,

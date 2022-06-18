@@ -24,15 +24,7 @@ class _InputExtentdExampleState extends State<InputExtentdExample> {
         title: const Text("输入搜索框扩展"),
       ),
       backgroundColor: Colors.teal,
-      body: SingleChildScrollView(child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:  [
-          SizedBox(height: 20),
-          InputExtendDemo() ,
-          // InputSearchNameWidget(),
-        ],
-      )),
+      body: InputExtendDemo(),
     );
   }
 }
@@ -40,39 +32,43 @@ class _InputExtentdExampleState extends State<InputExtentdExample> {
 class InputExtendDemo extends StatelessWidget {
    InputExtendDemo({Key? key}) : super(key: key);
 
-  List<String> checkeds =  ["item1","item3"];
+  List<String> checkeds =  [];
 
   @override
   Widget build(BuildContext context) {
     return  Container(
-        margin: const EdgeInsets.only(left: 30),
-        width: 300,
+        width: 350,
+        margin: const EdgeInsets.only(top: 30,left: 10),
         padding: const EdgeInsets.only(top: 5,left: 10,bottom: 5),
         decoration: const BoxDecoration(
             color:Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
         child: InputExtentd<String>(
             checkedItemWidth: 80,
-            itemsBoxMaxWidth: 240,
+            checkBoxMaxWidth: 240,
             autoClose: true,
             enableMultipleChoice: true,
             enableClickClear: true,
             initCheckedValue: checkeds,
             ///真实项目一般都是对象(bean) 填充对象即可
             inputDecoration: (c){
-              return const InputDecoration(
-                hintText: "请填写",
+              return InputDecoration(
+                hintText: "输入搜索名称",
                 filled: true,
                 counterText: "",
+                hintStyle: const TextStyle(color: Colors.black45,fontSize: 14),
                 fillColor: Colors.transparent,
                 hoverColor: Colors.transparent,
                 isCollapsed: true,
-                contentPadding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                enabledBorder: InputBorder.none,
-                border: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                focusedErrorBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
+                contentPadding: const EdgeInsets.fromLTRB(5, 15, 5, 15),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide:  const BorderSide(color: Colors.transparent),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.transparent),
+                ),
               );
             },
 
@@ -123,7 +119,7 @@ class InputExtendDemo extends StatelessWidget {
             builder: (context,srcs, controller) {
               return Material(
                 color: Colors.transparent,
-                elevation: 20,
+                elevation: 10,
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
                   decoration: const BoxDecoration(
@@ -186,7 +182,7 @@ class InputSearchNameWidget extends StatelessWidget {
         child: Row(children: [
           Expanded(child: InputExtentd<dynamic>(
               checkedItemWidth: 90,
-              itemsBoxMaxWidth: 240,
+              checkBoxMaxWidth: 240,
               autoClose: true,
               enableClickClear: true,
               popConstraintBox: PopConstraintBox(

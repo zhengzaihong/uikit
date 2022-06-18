@@ -12,6 +12,9 @@ class _PopWindowExampleState extends State<PopWindowExample> {
   
   GlobalKey btnKey = GlobalKey();
 
+
+  String selectText = "请选择信息";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,8 +30,15 @@ class _PopWindowExampleState extends State<PopWindowExample> {
                 showSelectPop(
                     context: context,
                     globalKey: btnKey,
+                    clickCallBack: (data,index){
+                      selectText = "item $index";
+                      setState(() {
+
+                      });
+                    },
                     datas: List.generate(100, (index) => index),
                     buildItem: (data, index) {
+
                       return Text("item $index",
                           style: const TextStyle(
                               color: Colors.black, fontSize: 10));
@@ -36,8 +46,8 @@ class _PopWindowExampleState extends State<PopWindowExample> {
               },
               child: Container(
                 margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                width: 236,
-                height: 30,
+                width: 300,
+                height: 40,
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     border:
@@ -45,12 +55,12 @@ class _PopWindowExampleState extends State<PopWindowExample> {
                     borderRadius:
                     const BorderRadius.all(Radius.circular(5))),
                 child: Row(
-                  children: const [
-                    SizedBox(width: 10),
-                    Text("请选择信息",
-                        style: TextStyle(
+                  children:  [
+                    const SizedBox(width: 10),
+                    Text(selectText,
+                        style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 12)),
+                            fontSize: 14)),
                   ],
                 ),
               )),
@@ -86,9 +96,9 @@ void showSelectPop({
           key: GlobalKey(),
           builder: (popContext, popState) {
             return Bubble(
-                width: 0 == width ? 236.0 : width!,
+                width: 0 == width ? 300.0 : width!,
                 height: 0 == height ? 300 : width!,
-                color:Colors.green.withOpacity(0.7),
+                color:Colors.tealAccent.withOpacity(0.7),
                 position:BubbleArrowDirection.top,
                 child:  Container(
                   margin: const EdgeInsets.only(top: 2),

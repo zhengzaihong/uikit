@@ -20,7 +20,6 @@ class CityPickerExample extends StatelessWidget {
               var cityStr = await rootBundle.loadString('assets/city.json');
               List datas = json.decode(cityStr) as List;
               CityResult res =
-              // await PickerHelper.showPicker(context);
               await PickerHelper.showPicker(context, datas: datas);
               print("--${res.provinceCode}-----${res.cityCode}----" +
                   "${res.areaCode}");
@@ -69,7 +68,7 @@ class CityPickerExample extends StatelessWidget {
                     );
 
                   }).then((value){
-                print("----------------------${value.toString()}");
+                        print("----------------------${value.toString()}");
               });
             },
             child: Container(

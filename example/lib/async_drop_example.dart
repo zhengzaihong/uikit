@@ -10,8 +10,7 @@ class AsyncDropExample extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("异步下拉框，"),
-        leading: null,
+        title: const Text("异步下拉框，样式跟随系统，建议InputExtentd组件代替"),
       ),
       body: ListView(
           children: [
@@ -23,7 +22,7 @@ class AsyncDropExample extends StatelessWidget {
                   onPressed: (){
 
                   }),
-              padding: const EdgeInsets.only(top: 30,bottom: 30),
+              padding: const EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),
               loadingWidget: DropdownButtonFormField<dynamic>(
                   onChanged: (data){
 
@@ -63,12 +62,9 @@ class AsyncDropExample extends StatelessWidget {
               asyncLoad: (c) {
                 Future.delayed(const Duration(seconds: 1),(){
                   List<Object> data = [];
-                  data.add("111");
-                  data.add("222");
-                  data.add("333");
-                  data.add("4");
-                  data.add(2243434);
-                  data.add("asfasgafga");
+                  List.generate(30, (index){
+                    data.add("item $index");
+                  });
                   return c.complete(Future.value(data));
                 });
 
@@ -88,7 +84,7 @@ class AsyncDropExample extends StatelessWidget {
                         ));
                   });
                 }
-                return DropWapper(drops: items,initValue: "4");
+                return DropWapper(drops: items,initValue: null);//可以给初始值，但必须是下拉项中的某一项
               },
             ),
 

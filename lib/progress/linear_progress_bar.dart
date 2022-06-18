@@ -52,6 +52,11 @@ class _LinearProgressBarState extends State<LinearProgressBar> with SingleTicker
     });
   }
 
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

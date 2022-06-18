@@ -10,7 +10,6 @@ import 'package:flutter_uikit_forzzh/src/position_enum.dart';
 /// describe: 上下左右支持 icon的Widget
 ///
 class TextView extends StatefulWidget {
-
   final TextStyle checkedTextStyle;
   final TextStyle unCheckTextStyle;
   final String title;
@@ -29,7 +28,7 @@ class TextView extends StatefulWidget {
   ///是否可点击
   final bool enableClick;
 
-   final bool isChecked;
+  final bool isChecked;
 
   final Function(bool checked)? callBack;
 
@@ -50,7 +49,7 @@ class TextView extends StatefulWidget {
     this.drawableWidget,
     this.drawablePressWidget,
     this.enableClick = true,
-    this.isChecked =  true,
+    this.isChecked = true,
     this.callBack,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,

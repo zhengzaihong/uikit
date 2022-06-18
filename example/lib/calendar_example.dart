@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 class CalendarExample extends StatefulWidget {
@@ -55,8 +56,16 @@ class _CalendarExampleState extends State<CalendarExample> {
       ],
     );
 
+
+   WidgetsBinding.instance?.addPostFrameCallback((callback){
+
+     _openCalendar();
+    });
   }
 
+  String selectDate = "请选中时间";
+
+  
   @override
   Widget build(BuildContext context) {
 
@@ -66,17 +75,14 @@ class _CalendarExampleState extends State<CalendarExample> {
       ),
       body: LayoutBuilder(
         builder: (context,_){
-
-          Future.delayed(const Duration(
-            microseconds: 300
-          ),(){
-            _openCalendar();
-          });
           return GestureDetector(
             onTap: (){
               _openCalendar();
             },
-            child: Container(color: Colors.white),);
+            child: Container(
+              child: Center(child: Text(selectDate,style: const TextStyle(fontSize: 14,color: Colors.red))),
+                color: Colors.white),
+          );
       }),
     );
   }
@@ -87,10 +93,14 @@ class _CalendarExampleState extends State<CalendarExample> {
           print("---${startTime.year}--${startTime.month}--${startTime.day}->");
           print("---${endTime.year}--${endTime.month}--${endTime.day}->");
 
-          Toast.show(
-              "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
-                  "结束时间：${endTime.year}--${endTime.month}--${endTime.day}"
-          );
+          selectDate = "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
+              "结束时间：${endTime.year}--${endTime.month}--${endTime.day}";
+
+          Toast.show(selectDate);
+
+          setState(() {
+
+          });
         });
   }
 }

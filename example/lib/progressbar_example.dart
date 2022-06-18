@@ -14,21 +14,21 @@ class ProgressBarExample extends StatelessWidget {
       appBar: AppBar(
         title: const Text("ProgressBar"),
       ),
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.white,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
       children:  [
 
         Row(children: const [Expanded(child: SizedBox(height: 20))]),
 
-        const CycleProgressBar(
+         CycleProgressBar(
           enableAnimation: true,
           animationTime: 6000,
           height: 100,
           width: 100,
           angle: 200,
           progressBgColor: Colors.red,
-          cycleBgColor: Colors.white,
+          cycleBgColor: Colors.teal.withOpacity(0.5),
         ),
         const SizedBox(height: 10),
 
