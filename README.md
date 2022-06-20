@@ -16,6 +16,36 @@
 
 
 
+##日历组件：
+
+![](https://github.com/zhengzaihong/uikit/blob/master/images/calendar.gif)
 
 
-[comment]: <> (![FL Chart Logo]&#40;https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/landing_logo.jpg&#41;)
+##输入框拓展搜索组件：
+
+![](https://github.com/zhengzaihong/uikit/blob/master/images/inputextentd.gif)
+
+
+##城市选择器：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)
+
+
+##可定制的Toast：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
+
+##弹窗组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/popwindow.gif)
+
+
+##进度条组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/progressbar.gif)
+
+
+##拓展系统下拉选择器(推荐使用本库的InputExtend输入框拓展搜索组件组件代替)：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/asyncdrop.gif)
+
+
+
+##其他常用小组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
+
