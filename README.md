@@ -47,6 +47,6 @@
 
 
 
-##其他常用小组件：
+## 其他常用小组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
 
