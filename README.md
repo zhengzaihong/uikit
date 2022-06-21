@@ -1,3 +1,7 @@
+# pubspec.yaml 依赖
+dependencies:
+  flutter_uikit_forzzh: ^0.0.4
+
 
 # flutter 常用组件ui库
  1. 可自定义日历组件
