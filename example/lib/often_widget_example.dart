@@ -80,8 +80,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   RatingBar(
                     value: ratingBarCount,
                     size: 20,
-                    nomalImage: "images/空心五角星.png",
-                    selectImage: "images/五角星.png",
+                    nomalImage: "images/wjx.png",
+                    selectImage: "images/wjx.png",
                     selectAble: true,
                     half: true,
                     maxRating: 5,

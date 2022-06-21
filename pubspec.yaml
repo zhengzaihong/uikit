@@ -6,7 +6,7 @@ homepage: https://github.com/zhengzaihong/uikit
 platforms:
   windows:
   web:
-  andorid:
+  android:
   linux:
   ios:
   macos:
