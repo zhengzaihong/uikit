@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uikit_example/tableview_example.dart';
 import 'async_drop_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
       createMenue("popwindow",context, const PopWindowExample()),
       createMenue("日历",context, const CalendarExample()),
       createMenue("输入框拓展",context, const InputExtentdExample()),
+      createMenue("表格布局",context, const TableViewExample()),
       createMenue("常用小组件",context, const OftenWidgetExample()),
     ];
   }

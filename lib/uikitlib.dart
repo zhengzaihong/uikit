@@ -18,6 +18,7 @@ export 'switcher/plus_switch.dart';
 export 'input_extend/inputlib.dart';
 export 'src/position_enum.dart';
 export 'textview/text_view.dart';
+export 'table/tableview.dart';
 
 /// Utils package 工具包
 export 'utils/cache_manager.dart';

@@ -11,7 +11,8 @@
  9. 倒计时控件
  10. 增加类似android TextView 上下左右可添加元素组件
  11. 添加可自定大小的switch组件
- 
+ 12. 新增表格布局
+
   ...持续更新中....
 
 ## 更多效果请查看demo
@@ -41,6 +42,10 @@
 ## 进度条组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/progressbar.gif)
 
+
+## 表格组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview2.png)
 
 ## 拓展系统下拉选择器(推荐使用本库的InputExtend组件代替)：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/asyncdrop.gif)
