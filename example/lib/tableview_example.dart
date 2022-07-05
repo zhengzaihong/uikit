@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
+import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 
 class TableViewExample extends StatefulWidget {
   const TableViewExample({Key? key}) : super(key: key);
@@ -37,11 +38,12 @@ class _TableViewExampleeState extends State<TableViewExample> {
                   enableDivider: true,
                   enableTopDivider: true,
                   enableBottomDivider: true,
+                  physics: const BouncingScrollPhysics(),
                   preDealData: (){
 
                     List<RowBean> rowDatas = [
                       RowBean(cells: [
-                        CellBean(name: "姓      名"),
+                        CellBean(name: "姓名",isTitle: true),
                         CellBean(name: "张三"),
                         CellBean(name: "性别"),
                         CellBean(name: "男"),
@@ -51,30 +53,30 @@ class _TableViewExampleeState extends State<TableViewExample> {
                       ]),
 
                       RowBean(cells: [
-                        CellBean(name: "医  嘱  号"),
+                        CellBean(name: "医嘱号",isTitle: true),
                         CellBean(name: "1472923243"),
-                        CellBean(name: "就诊号  "),
+                        CellBean(name: "就诊号",isTitle: true),
                         CellBean(name: ""),
                       ]),
 
                       RowBean(cells: [
-                        CellBean(name: "病      区"),
+                        CellBean(name: "病区",isTitle: true),
                         CellBean(name: "中西医结合科医疗单位"),
-                        CellBean(name: "床位号  "),
+                        CellBean(name: "床位号",isTitle: true),
                         CellBean(name: ""),
                       ]),
 
                       RowBean(cells: [
-                        CellBean(name: "检查日期"),
+                        CellBean(name: "检查日期",isTitle: true),
                         CellBean(name: "2020.08.23"),
-                        CellBean(name: "报告日期"),
+                        CellBean(name: "报告日期",isTitle: true),
                         CellBean(name: "2020.08.23"),
                       ]),
 
                       RowBean(cells: [
-                        CellBean(name: "检查部位"),
+                        CellBean(name: "检查部位",isTitle: true),
                         CellBean(name: "CT上腹部平扫"),
-                        CellBean(name: "床位号"),
+                        CellBean(name: "床位号",isTitle: true),
                         CellBean(name: "2020.08.23"),
                       ]),
                     ];
@@ -98,6 +100,12 @@ class _TableViewExampleeState extends State<TableViewExample> {
                                     cell.alignment  = Alignment.center;
                                   }
                                   var cellBean =  (data as RowBean).cells[index];
+                                  if(cellBean.isTitle){
+                                    return TabSpaceText(
+                                        contents: KitMath.parseStr((cellBean.name).toString()),
+                                        padding: const EdgeInsets.only(left: 10,right: 10),
+                                        style: const TextStyle(fontSize: 14,color: Colors.black));
+                                  }
                                   return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
                                 }
                             ));
@@ -120,6 +128,12 @@ class _TableViewExampleeState extends State<TableViewExample> {
                                     cell.alignment  = Alignment.center;
                                   }
                                   var cellBean =  (data as RowBean).cells[index];
+                                  if(cellBean.isTitle){
+                                    return TabSpaceText(
+                                        contents: KitMath.parseStr((cellBean.name).toString()),
+                                        padding: const EdgeInsets.only(left: 10,right: 10),
+                                        style: const TextStyle(fontSize: 14,color: Colors.black));
+                                  }
                                   return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
                                 }
                             ));
@@ -135,10 +149,16 @@ class _TableViewExampleeState extends State<TableViewExample> {
                             buildCell: (cell,index){
                               if(index==1 ||  index ==6){
                                 cell.alignment = Alignment.centerLeft;
-                                cell.padding = EdgeInsets.only(left: 10);
+                                cell.padding = const EdgeInsets.only(left: 10);
                               }
                               var cellBean =  (data as RowBean).cells[index];
-                              return Text((cellBean.name).toString(),style: TextStyle(fontSize: 14,color: Colors.black));
+                              if(cellBean.isTitle){
+                                return TabSpaceText(
+                                    contents: KitMath.parseStr((cellBean.name).toString()),
+                                    padding: const EdgeInsets.only(left: 10,right: 10),
+                                    style: const TextStyle(fontSize: 14,color: Colors.black));
+                              }
+                              return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
                             }
                         ));
 
@@ -158,6 +178,8 @@ class _TableViewExampleeState extends State<TableViewExample> {
                   enableDivider: false,
                   enableTopDivider: false,
                   enableBottomDivider: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: ScrollController(),
                   preDealData: (){
 
                     List<RowBean> rowDatas = [

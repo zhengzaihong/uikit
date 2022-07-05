@@ -52,25 +52,26 @@ class TableView<T> extends StatefulWidget {
   final bool addSemanticIndexes;
   final double? cacheExtent;
 
-  const TableView({this.tableDatas = const [],
-    required this.buildRowStyle,
-    this.enableTopDivider = false,
-    this.enableBottomDivider = false,
-    this.enableDivider = false,
-    this.preDealData,
-    this.shrinkWrap = true,
-    this.dividerColor = Colors.black,
-    this.dividerHeight = 1,
-    this.scrollDirection = Axis.vertical,
-    this.reverse = false,
-    this.controller,
-    this.physics,
-    this.padding,
-    this.addAutomaticKeepAlives = true,
-    this.addRepaintBoundaries = true,
-    this.addSemanticIndexes = true,
-    this.cacheExtent,
-    Key? key})
+  const TableView(
+      {this.tableDatas = const [],
+      required this.buildRowStyle,
+      this.enableTopDivider = false,
+      this.enableBottomDivider = false,
+      this.enableDivider = false,
+      this.preDealData,
+      this.shrinkWrap = true,
+      this.dividerColor = Colors.black,
+      this.dividerHeight = 1,
+      this.scrollDirection = Axis.vertical,
+      this.reverse = false,
+      this.controller,
+      this.physics,
+      this.padding,
+      this.addAutomaticKeepAlives = true,
+      this.addRepaintBoundaries = true,
+      this.addSemanticIndexes = true,
+      this.cacheExtent,
+      Key? key})
       : super(key: key);
 
   @override
@@ -153,19 +154,19 @@ class TabRow extends StatelessWidget {
   final TextDirection? textDirection;
   final VerticalDirection verticalDirection;
 
-  const TabRow({
-    this.enableDivider = true,
-    this.dividerHeight = 24,
-    required this.cellWeiget,
-    required this.cellItem,
-    this.mainAxisAlignment = MainAxisAlignment.start,
-    this.mainAxisSize = MainAxisSize.max,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
-    this.verticalDirection = VerticalDirection.down,
-    this.textDirection,
-    this.dividerWidth = 0.5,
-    this.dividerColor = Colors.red,
-    Key? key})
+  const TabRow(
+      {this.enableDivider = true,
+      this.dividerHeight = 24,
+      required this.cellWeiget,
+      required this.cellItem,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.mainAxisSize = MainAxisSize.max,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.verticalDirection = VerticalDirection.down,
+      this.textDirection,
+      this.dividerWidth = 0.5,
+      this.dividerColor = Colors.red,
+      Key? key})
       : super(key: key);
 
   @override
@@ -195,11 +196,11 @@ class TabRow extends StatelessWidget {
               ),
             Expanded(
                 child: Container(
-                  color: cellItem.background,
-                  padding: cellItem.padding,
-                  alignment: cellItem.alignment,
-                  child: widget,
-                ))
+              color: cellItem.background,
+              padding: cellItem.padding,
+              alignment: cellItem.alignment,
+              child: widget,
+            ))
           ])));
     }
 
@@ -222,18 +223,17 @@ class TabRow extends StatelessWidget {
 typedef BuildCell = Widget Function(CellItem cellItem, int index);
 
 class CellItem {
-
   AlignmentGeometry alignment;
   EdgeInsetsGeometry padding;
   Color background;
 
   final BuildCell buildCell;
 
-  CellItem({
-    this.alignment = Alignment.center,
-    this.background = Colors.transparent,
-    this.padding = const EdgeInsets.all(0),
-    required this.buildCell});
+  CellItem(
+      {this.alignment = Alignment.center,
+      this.background = Colors.transparent,
+      this.padding = const EdgeInsets.all(0),
+      required this.buildCell});
 }
 
 ///通用性单元格实体，只针对非列表数据结构的处理成表格
@@ -242,11 +242,17 @@ class CellBean {
   String? name;
   int? rowIndex;
   int? cellIndex;
+  final bool isTitle;
 
   ///附加信息
   dynamic obj;
 
-  CellBean({this.rowIndex, required this.name, this.cellIndex, this.obj});
+  CellBean(
+      {this.rowIndex,
+      required this.name,
+      this.cellIndex,
+      this.obj,
+      this.isTitle = false});
 }
 
 ///通用性单元格实体，只针对非列表数据结构的处理成表格
@@ -255,4 +261,58 @@ class RowBean {
   final List<CellBean> cells;
 
   RowBean({required this.cells});
+}
+
+/// 如果想让标题类的 左右对齐可使用该文本组件
+/// 外部可直接使用该组件，
+/// eg:  return TabSpaceText(
+///  contents: StringUtils.parseStr((cellBean.name).toString()),
+///  padding: const EdgeInsets.only(left: 10,right: 10),
+///  style: const TextStyle(fontSize: 14,color: Colors.black));
+///
+class TabSpaceText extends StatelessWidget {
+  final List<String> contents;
+  final TextStyle style;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
+  final Color? backgroundColor;
+  final double? width;
+  final double? height;
+  final AlignmentGeometry? alignment;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisSize mainAxisSize;
+
+  const TabSpaceText(
+      {Key? key,
+      required this.contents,
+      this.margin,
+      this.padding,
+      this.backgroundColor,
+      this.width,
+      this.height,
+      this.alignment,
+      this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.mainAxisSize = MainAxisSize.max,
+      this.style = const TextStyle(color: Colors.red, fontSize: 12)})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      padding: padding,
+      width: width,
+      height: height,
+      alignment: alignment,
+      color: backgroundColor,
+      child: Row(
+        mainAxisAlignment: mainAxisAlignment,
+        crossAxisAlignment: crossAxisAlignment,
+        mainAxisSize: mainAxisSize,
+        children: [...contents.map((e) => Text(e, style: style)).toList()],
+      ),
+    );
+  }
 }

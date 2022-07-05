@@ -21,4 +21,4 @@ export 'textview/text_view.dart';
 export 'table/tableview.dart';
 
 /// Utils package 工具包
-export 'utils/cache_manager.dart';
+export 'utils/utils_lib.dart';
