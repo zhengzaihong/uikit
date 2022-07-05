@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
-import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 
 class TableViewExample extends StatefulWidget {
   const TableViewExample({Key? key}) : super(key: key);
@@ -341,7 +339,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context,index){
-                      return Row(children: [
+                      return   Row(children:const  [
 
                         Expanded(
                             flex: 2,
