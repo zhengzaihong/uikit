@@ -75,13 +75,12 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   title("评分组件"),
                   RatingBar(
                     value: ratingBarCount,
                     size: 20,
                     nomalImage: "images/wjx.png",
-                    selectImage: "images/wjx.png",
+                    selectImage: "images/wjx1.png",
                     selectAble: true,
                     half: true,
                     maxRating: 5,
