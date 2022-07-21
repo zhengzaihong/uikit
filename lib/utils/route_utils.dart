@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 ///
 class RouteUtils {
 
+  RouteUtils._();
+
   /// 跳转页面
   static push(BuildContext context, Widget page,{bool noAnimation=false}) async {
     final result = await Navigator.push(context, noAnimation?NoAnimRouter(page):

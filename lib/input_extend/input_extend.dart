@@ -357,6 +357,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
   }
 
   void setText(String text) {
+    _editingController.text = text;
     _editingController.selection = TextSelection.collapsed(offset: text.length);
   }
 
