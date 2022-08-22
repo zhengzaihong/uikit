@@ -70,6 +70,7 @@ class InputExtentd<T> extends StatefulWidget {
 
   ///选中后是否自动关闭下拉
   final bool autoClose;
+  final FocusNode? focusNode;
 
   ///输入框得到焦点即回调。
   final bool enableHasFocusCallBack;
@@ -132,6 +133,7 @@ class InputExtentd<T> extends StatefulWidget {
       {required this.buildSelectPop,
       required this.onChanged,
       this.buildCheckedBarStyle,
+      this.focusNode,
       this.duration = const Duration(milliseconds: 300),
       this.curve = Curves.linear,
       this.checkedItemWidth = 60,
@@ -204,7 +206,8 @@ class InputExtentd<T> extends StatefulWidget {
 }
 
 class InputExtentdState<T> extends State<InputExtentd> {
-  final FocusNode _focusNode = FocusNode();
+
+  late final FocusNode _focusNode;
 
   ///关联输入框，处理在组价在列表中跟随滚动
   final LayerLink _layerLink = LayerLink();
@@ -234,6 +237,9 @@ class InputExtentdState<T> extends State<InputExtentd> {
   @override
   void initState() {
     super.initState();
+
+    _focusNode = widget.focusNode==null? FocusNode():widget.focusNode!;
+
     if (widget.initCheckedValue == null) {
       _checkedData = [];
     } else {
@@ -354,6 +360,12 @@ class InputExtentdState<T> extends State<InputExtentd> {
     }
 
     return Future.value(true);
+  }
+
+  void closePop(){
+    if(_focusNode.hasFocus){
+      _focusNode.unfocus();
+    }
   }
 
   void setText(String text) {

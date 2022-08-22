@@ -61,6 +61,7 @@ class TextView extends StatefulWidget {
 }
 
 class _TextViewState extends State<TextView> {
+
   TextStyle? style;
   Widget? iconWidget;
   bool? isChecked;

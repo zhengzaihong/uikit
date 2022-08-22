@@ -8,51 +8,60 @@ import 'package:flutter/material.dart';
 /// describe: 路由工具
 ///
 class RouteUtils {
-
-  RouteUtils._();
-
   /// 跳转页面
-  static push(BuildContext context, Widget page,{bool noAnimation=false}) async {
-    final result = await Navigator.push(context, noAnimation?NoAnimRouter(page):
-    MaterialPageRoute(builder: (context) {
-      return page;
-    }));
-    return result;
+  static Future<dynamic> push(BuildContext context, Widget page,
+      {String? name, Object? arguments, bool noAnimation = false})  {
+    return Navigator.push(
+        context,
+        noAnimation
+            ? NoAnimRouter(page, name: name, arguments: arguments)
+            : MaterialPageRoute(
+            settings: RouteSettings(name: name, arguments: arguments),
+            builder: (_) => page));
   }
 
-  static pushReplaceTagPage(BuildContext context, Widget page,{bool noAnimation=false}) {
-    Navigator.of(context).pushReplacement(noAnimation?NoAnimRouter(page):MaterialPageRoute(builder: (context) {
-      return page;
-    }));
+  static Future<dynamic> pushReplaceTagPage(BuildContext context, Widget page,
+      {String? name, Object? arguments, bool noAnimation = false}) {
+
+    return Navigator.of(context).pushReplacement(noAnimation
+        ? NoAnimRouter(page, name: name, arguments: arguments)
+        : MaterialPageRoute(
+        settings: RouteSettings(name: name, arguments: arguments),
+        builder: (_) => page));
   }
 
   ///跳转到起始页并关闭所有页面
-  static pushClearTop(BuildContext context, Widget page,{bool noAnimation=false}) {
-    Navigator.pushAndRemoveUntil(
+  static Future<dynamic> pushClearTop(BuildContext context, Widget page,
+      {String? name, Object? arguments, bool noAnimation = false}) {
+    return Navigator.pushAndRemoveUntil(
       context,
-      noAnimation?NoAnimRouter(page): MaterialPageRoute(builder: (context) {
-        return page;
-      }),
-     (Route<dynamic> route) => false,
+      noAnimation
+          ? NoAnimRouter(page, name: name, arguments: arguments)
+          : MaterialPageRoute(
+          settings: RouteSettings(name: name, arguments: arguments),
+          builder: (_) => page),
+          (Route<dynamic> route) => false,
     );
   }
 
   /// 跳转页面
-  static pushNamed(
+  static Future<dynamic> pushNamed(
       BuildContext context,
       String routeName, {
         Object? arguments,
       }) {
-    Navigator.pushNamed(context, routeName, arguments: arguments);
+    return Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 }
 
 //无动画
 class NoAnimRouter<T> extends PageRouteBuilder<T> {
   final Widget page;
-  NoAnimRouter(this.page)
+
+  NoAnimRouter(this.page, {String? name, Object? arguments})
       : super(
       opaque: false,
+      settings: RouteSettings(name: name, arguments: arguments),
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionDuration: const Duration(milliseconds: 0),
       transitionsBuilder:

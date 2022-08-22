@@ -32,141 +32,155 @@ class InputExtendDemo extends StatelessWidget {
 
   List<String> checkeds = [];
 
+  FocusNode focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
-          width: 350,
-          margin: const EdgeInsets.only(top: 30, left: 10),
-          padding: const EdgeInsets.only(top: 5, left: 10, bottom: 5),
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30))),
-          child: InputExtentd<String>(
-              checkedItemWidth: 80,
-              checkBoxMaxWidth: 240,
-              autoClose: true,
-              enableMultipleChoice: true,
-              enableClickClear: true,
-              initCheckedValue: checkeds,
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              width: 350,
+              margin: const EdgeInsets.only(top: 30, left: 10,right: 20),
+              padding: const EdgeInsets.only(top: 5, left: 10, bottom: 5),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
+              child: InputExtentd<String>(
+                  checkedItemWidth: 80,
+                  checkBoxMaxWidth: 240,
+                  autoClose: true,
+                  enableMultipleChoice: true,
+                  enableClickClear: true,
+                  initCheckedValue: checkeds,
+                  focusNode: focusNode,
 
-              ///真实项目一般都是对象(bean) 填充对象即可
-              inputDecoration: (c) {
-                return InputDecoration(
-                  hintText: "输入搜索名称",
-                  filled: true,
-                  counterText: "",
-                  hintStyle:
+                  ///真实项目一般都是对象(bean) 填充对象即可
+                  inputDecoration: (c) {
+                    return InputDecoration(
+                      hintText: "输入搜索名称",
+                      filled: true,
+                      counterText: "",
+                      hintStyle:
                       const TextStyle(color: Colors.black45, fontSize: 14),
-                  fillColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  isCollapsed: true,
-                  contentPadding: const EdgeInsets.fromLTRB(5, 15, 5, 15),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.transparent),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.transparent),
-                  ),
-                );
-              },
-              onChanged: (text, controller) {
-                ///模拟接口数据
-                List<String> datas = [];
-                int max = Random().nextInt(15);
-                for (int i = 0; i < max; i++) {
-                  datas.add("item$i");
-                }
+                      fillColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      isCollapsed: true,
+                      contentPadding: const EdgeInsets.fromLTRB(5, 15, 5, 15),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                    );
+                  },
+                  onChanged: (text, controller) {
+                    ///模拟接口数据
+                    List<String> datas = [];
+                    int max = Random().nextInt(15);
+                    for (int i = 0; i < max; i++) {
+                      datas.add("item$i");
+                    }
 
-                ///无论是同步还是异步 拿到数据后setSearchData填充数据
-                controller.setSearchData(datas);
-              },
+                    ///无论是同步还是异步 拿到数据后setSearchData填充数据
+                    controller.setSearchData(datas);
+                  },
 
-              ///自定义选中后样式
-              buildCheckedBarStyle: (element, controller) {
-                return Container(
-                    width: 80,
-                    height: 30,
-                    margin: const EdgeInsets.only(left: 3),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.lightBlue),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: InkWell(
-                      onTap: () {
-                        ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                        ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                        ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                        controller.setCheckChange(data: element);
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(element),
-                            FontIcon(0xe642, size: 20, color: Colors.grey)
-                          ]),
-                    ));
-              },
+                  ///自定义选中后样式
+                  buildCheckedBarStyle: (element, controller) {
+                    return Container(
+                        width: 80,
+                        height: 30,
+                        margin: const EdgeInsets.only(left: 3),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.lightBlue),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: InkWell(
+                          onTap: () {
+                            ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                            ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                            ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                            controller.setCheckChange(data: element);
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(element),
+                                FontIcon(0xe642, size: 20, color: Colors.grey)
+                              ]),
+                        ));
+                  },
 
-              ///自定义构建弹出窗样式
-              buildSelectPop: (context, srcs, controller) {
-                return Material(
-                  color: Colors.transparent,
-                  elevation: 10,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child:  srcs.isEmpty?Container(
-                      child: const Text("无数据"),
-                      alignment: Alignment.center,
-                      height: 40,
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10))
-                    ))
-                    :ListView.builder(
-                        itemCount: srcs.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          var data = controller.getSearchData[index];
-                          bool hasValue = controller.isChecked(index);
+                  ///自定义构建弹出窗样式
+                  buildSelectPop: (context, srcs, controller) {
+                    return Material(
+                      color: Colors.transparent,
+                      elevation: 10,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                        child:  srcs.isEmpty?Container(
+                            child: const Text("无数据"),
+                            alignment: Alignment.center,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(10))
+                            ))
+                            :ListView.builder(
+                            itemCount: srcs.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              var data = controller.getSearchData[index];
+                              bool hasValue = controller.isChecked(index);
 
-                          return InkWell(
-                              onTap: () {
-                                Toast.showToast(
-                                    context: context, msg: "----${index}");
+                              return InkWell(
+                                  onTap: () {
+                                    Toast.showToast(
+                                        context: context, msg: "----${index}");
 
-                                ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                                ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                                ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                                controller.setCheckChange(data: data);
-                              },
-                              child: Container(
-                                  height: 40,
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  child: Row(
-                                      mainAxisAlignment:
+                                    ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                                    ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                                    ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
+                                    controller.setCheckChange(data: data);
+                                  },
+                                  child: Container(
+                                      height: 40,
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      child: Row(
+                                          mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("item$index"),
-                                        Visibility(
-                                            visible: hasValue,
-                                            child: FontIcon(
-                                              0xe64a,
-                                              size: 30,
-                                              color: Colors.lightBlue,
-                                            ))
-                                      ])));
-                        }),
-                  ),
-                );
-              })),
+                                          children: [
+                                            Text("item$index"),
+                                            Visibility(
+                                                visible: hasValue,
+                                                child: FontIcon(
+                                                  0xe64a,
+                                                  size: 30,
+                                                  color: Colors.lightBlue,
+                                                ))
+                                          ])));
+                            }),
+                      ),
+                    );
+                  })),
+          GestureDetector(
+            onTap: (){
+              focusNode.unfocus();
+            },
+            child:const Padding(padding:  EdgeInsets.only(top: 20),child: Text("搜索",style:  TextStyle(color: Colors.white,fontSize: 20))),)
+        ],
+      ),
 
       Container(width: 200,
       margin: const EdgeInsets.only(top: 30),

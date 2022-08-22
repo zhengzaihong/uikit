@@ -49,3 +49,17 @@ class StringUtils {
     return false;
   }
 }
+
+
+
+extension StringExt on Object? {
+
+
+  String toStr(Object? value){
+    return null==value?"":value.toString();
+  }
+
+  bool isEmpty(){
+    return (null==this || toString().isEmpty)?true:false;
+  }
+}
