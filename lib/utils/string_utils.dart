@@ -1,5 +1,3 @@
-
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -8,7 +6,6 @@
 /// describe: 文本处理工具
 ///
 class StringUtils {
-
   StringUtils._();
 
   /// 【全为英文】返回true  否则false
@@ -48,18 +45,30 @@ class StringUtils {
     }
     return false;
   }
-}
 
-
-
-extension StringExt on Object? {
-
-
-  String toStr(Object? value){
-    return null==value?"":value.toString();
+  static bool isEmptyObj(Object? obj) {
+    return obj == null || obj.toString().isEmpty;
   }
 
-  bool isEmpty(){
-    return (null==this || toString().isEmpty)?true:false;
+  static bool equals(String? a, String? b) {
+    if (a == b) return true;
+    if (a != null && b != null && (a.length == b.length)) {
+      for (int i = 0; i < a.length; i++) {
+        if (a.codeUnitAt(i) != b.codeUnitAt(i)) return false;
+      }
+      return true;
+    }
+    return false;
+  }
+}
+
+extension StringExt on Object? {
+  
+  String toStr(Object? value) {
+    return null == value ? "" : value.toString();
+  }
+
+  String str() {
+    return toStr(this);
   }
 }
