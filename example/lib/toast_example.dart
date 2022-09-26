@@ -11,7 +11,6 @@ class ToastExample extends StatelessWidget {
 
   const ToastExample({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext  baseContext) {
 
@@ -21,11 +20,16 @@ class ToastExample extends StatelessWidget {
         ),
         backgroundColor: Colors.brown,
         endDrawer: SmartDrawer(
-          widthPercent: 0.3,
+          widthPercent: 0.8,
           child: Container(
             color: Colors.white,
             alignment: Alignment.center,
-            child: const Text("一个侧边页面"),
+            child: GestureDetector(
+              onTap: (){
+                Toast.show("我是侧边栏~~~");
+              },
+              child: const Text("一个侧边页面"),
+            ),
           ),
         ),
         body: LayoutBuilder(builder: (mContext,_){
@@ -35,18 +39,17 @@ class ToastExample extends StatelessWidget {
                 InkWell(
                     onTap: (){
                       Toast.show("常规Toast");
+                      // Toast.show("常规Toast",context: mContext);
                     }, child: Container(
                     width: 200,
                     height: 40,
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Colors.lightBlue.withAlpha(200),
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
                     ),
                     child: const Text("常规Toast",style: TextStyle(color: Colors.white)))),
-
-
 
                 InkWell(
                     onTap: (){

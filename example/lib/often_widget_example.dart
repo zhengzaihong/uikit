@@ -75,6 +75,44 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  title("跑马灯"),
+                  Row(
+                    children: [
+
+                      Container(
+                        padding: const EdgeInsets.only(left: 10),
+                        height: 30,
+                        color: Colors.redAccent,
+                        child:  TextView(
+                          unCheckTextStyle:const TextStyle(color: Colors.white,fontSize: 14),
+                          drawablePositon: PositionEnum.drawableLeft,
+                          enableClick: false,
+                          isChecked: false,
+                          drawableWidget: FontIcon(0xe6be,size: 14,color: Colors.white),
+                          title:  "通知：",
+                        ),
+                      ),
+
+                      Expanded(child:  Container(
+                        height: 30,
+                        color: Colors.redAccent,
+                        child:  const MarqueeView(
+                            messages: [
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
+                            ]),
+                      ))
+                    ],
+                  ),
+
+
+
                   title("评分组件"),
                   RatingBar(
                     value: ratingBarCount,

@@ -57,7 +57,7 @@ class _CalendarExampleState extends State<CalendarExample> {
     );
 
 
-   WidgetsBinding.instance?.addPostFrameCallback((callback){
+   WidgetsBinding.instance.addPostFrameCallback((callback){
 
      _openCalendar();
     });

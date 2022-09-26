@@ -145,8 +145,7 @@ class InputExtendDemo extends StatelessWidget {
 
                               return InkWell(
                                   onTap: () {
-                                    Toast.showToast(
-                                        context: context, msg: "----${index}");
+                                    Toast.show( "----${index}");
 
                                     ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                                     ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
@@ -246,8 +245,7 @@ class InputExtendDemo extends StatelessWidget {
                       bool hasValue = controller.isChecked(index);
                       return InkWell(
                           onTap: () {
-                            Toast.showToast(
-                                context: context, msg: "----${index}");
+                            Toast.show("----${index}");
 
                             ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                             ///非同一数据源 即两个集合  一定要传比较器，根据属性比较

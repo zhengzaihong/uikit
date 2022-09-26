@@ -88,7 +88,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                             cellWeiget: const [2,4,1,1,1,1,4],
                             enableDivider: true,
                             dividerColor: Colors.black,
-                            dividerHeight: 30,
+                            rowDividerHeight: 30,
                             cellItem:CellItem(
                                 buildCell: (cell,index){
                                   if(index==1 ||  index ==6){
@@ -115,7 +115,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                             cellWeiget: const [2,6,2,4],
                             enableDivider: true,
                             dividerColor: Colors.black,
-                            dividerHeight: 30,
+                            rowDividerHeight: 30,
                             cellItem:CellItem(
                                 buildCell: (cell,index){
 
@@ -142,7 +142,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                         cellWeiget: const [2,12],
                         dividerColor: Colors.black,
                         enableDivider: true,
-                        dividerHeight: 30,
+                        rowDividerHeight: 30,
                         cellItem:CellItem(
                             buildCell: (cell,index){
                               if(index==1 ||  index ==6){
@@ -231,7 +231,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                               cellWeiget: const [2,9,2,3],
                               enableDivider: true,
                               dividerColor: Colors.white,
-                              dividerHeight: 30,
+                              rowDividerHeight: 30,
                               cellItem:CellItem(
                                   alignment: Alignment.centerLeft,
                                   buildCell: (cell,index){
@@ -253,7 +253,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                             cellWeiget: const [2,4,1,1,1,2,2,3],
                             enableDivider: true,
                             dividerColor: Colors.white,
-                            dividerHeight: 30,
+                            rowDividerHeight: 30,
                             cellItem:CellItem(
                                 alignment: Alignment.centerLeft,
                                 buildCell: (cell,index){
@@ -270,7 +270,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                             cellWeiget: const [2,6,1,2,2,3],
                             enableDivider: true,
                             dividerColor: Colors.white,
-                            dividerHeight: 30,
+                            rowDividerHeight: 30,
                             cellItem:CellItem(
                                 alignment: Alignment.centerLeft,
                                 buildCell: (cell,index){
@@ -287,7 +287,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                         cellWeiget: const [2,4,2,8],
                         dividerColor: Colors.white,
                         enableDivider: true,
-                        dividerHeight: 30,
+                        rowDividerHeight: 30,
                         cellItem:CellItem(
                             alignment: Alignment.centerLeft,
                             buildCell: (cell,index){

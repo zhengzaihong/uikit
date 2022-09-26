@@ -30,14 +30,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      navigatorKey: Toast.navigatorState,
       home: Scaffold(
         backgroundColor: Colors.purple,
         resizeToAvoidBottomInset: false,
         body: LayoutBuilder(
           builder:(context,_){
-
-            ///全局初始化 toast
-            Toast.init(context);
 
             _createMenues(context);
 
