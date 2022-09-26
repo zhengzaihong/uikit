@@ -20,6 +20,7 @@ export 'src/position_enum.dart';
 export 'textview/text_view.dart';
 export 'table/tableview.dart';
 export 'blur/Blur.dart';
+export 'textview/marquee_view.dart';
 
 /// Utils package 工具包
 export 'utils/utils_lib.dart';

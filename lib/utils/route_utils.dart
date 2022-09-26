@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 /// describe: 路由工具
 ///
 class RouteUtils {
+
+  RouteUtils._();
+
   /// 跳转页面
   static Future<dynamic> push(BuildContext context, Widget page,
       {String? name, Object? arguments, bool noAnimation = false})  {

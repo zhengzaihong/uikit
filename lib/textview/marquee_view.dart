@@ -2,6 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+///
+/// create_user: zhengzaihong
+/// email:1096877329@qq.com
+/// create_date: 2022/9/26
+/// create_time: 15:20
+/// describe: 跑马灯效果
+///
 class MarqueeView extends StatefulWidget {
   final Duration duration;
   final List<String> messages;

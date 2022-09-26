@@ -19,6 +19,7 @@ typedef BuildRowStyle<T> = Widget Function(T data, int index);
 typedef PreDealData<T> = List<T> Function();
 
 class TableView<T> extends StatefulWidget {
+
   ///数据 表示表格有多少行
   final List<T>? tableDatas;
 
@@ -79,6 +80,7 @@ class TableView<T> extends StatefulWidget {
 }
 
 class _TableViewState<T> extends State<TableView> {
+
   List<dynamic> datas = [];
 
   int _itemCount = 0;
@@ -127,14 +129,13 @@ class _TableViewState<T> extends State<TableView> {
               widget.enableTopDivider ? index : index + 1);
         },
         separatorBuilder: (context, index) {
-          final divider = Divider(
+          final divider = Container(   ///修复 web html 像素丢失问题
             height: widget.dividerHeight,
             color: widget.dividerColor,
           );
           if (widget.enableBottomDivider && index == _itemCount) {
             return divider;
           }
-
           return widget.enableDivider ? divider : const SizedBox();
         });
   }
@@ -143,10 +144,11 @@ class _TableViewState<T> extends State<TableView> {
 class TabRow extends StatelessWidget {
   final bool enableDivider;
   final List<int> cellWeiget;
-  final double dividerHeight;
-  final double dividerWidth;
+  final double rowDividerHeight;
+  final double rowDividerWidth;
   final Color? dividerColor;
   final CellItem cellItem;
+  final double? rowHeight;
 
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
@@ -156,28 +158,33 @@ class TabRow extends StatelessWidget {
 
   const TabRow(
       {this.enableDivider = true,
-      this.dividerHeight = 24,
+      this.rowDividerHeight = 24,
+      this.rowDividerWidth = 0.5,
       required this.cellWeiget,
       required this.cellItem,
+      this.rowHeight,
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.mainAxisSize = MainAxisSize.max,
       this.crossAxisAlignment = CrossAxisAlignment.center,
       this.verticalDirection = VerticalDirection.down,
       this.textDirection,
-      this.dividerWidth = 0.5,
+
       this.dividerColor = Colors.red,
       Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisSize: mainAxisSize,
-        mainAxisAlignment: mainAxisAlignment,
-        crossAxisAlignment: crossAxisAlignment,
-        verticalDirection: verticalDirection,
-        textDirection: textDirection,
-        children: buildCells(cellWeiget));
+    return SizedBox(
+          height: rowHeight ?? rowDividerHeight, /// 不设置行高度 则默认高度为每行 垂直方向的分割线高度
+          child: Row(
+              mainAxisSize: mainAxisSize,
+              mainAxisAlignment: mainAxisAlignment,
+              crossAxisAlignment: crossAxisAlignment,
+              verticalDirection: verticalDirection,
+              textDirection: textDirection,
+              children: buildCells(cellWeiget)),
+        );
   }
 
   List<Widget> buildCells(List<int> cellWeiget) {
@@ -190,8 +197,8 @@ class TabRow extends StatelessWidget {
           child: Row(children: [
             if (enableDivider)
               Container(
-                width: dividerWidth,
-                height: dividerHeight,
+                width: rowDividerWidth,
+                height: rowDividerHeight,
                 color: dividerColor,
               ),
             Expanded(
@@ -207,8 +214,8 @@ class TabRow extends StatelessWidget {
     if (enableDivider) {
       cells.add(
         Container(
-          width: dividerWidth,
-          height: dividerHeight,
+          width: rowDividerWidth,
+          height: rowDividerHeight,
           color: dividerColor,
         ),
       );

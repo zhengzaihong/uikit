@@ -362,7 +362,7 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
 
     ///绘制完成的监听
     ///Draw completed listener
-    WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
       if (widget._customPage) {
         widget._controller!.forward();
         return;

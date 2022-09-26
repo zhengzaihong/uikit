@@ -47,7 +47,7 @@ class _LinearProgressBarState extends State<LinearProgressBar> with SingleTicker
         vsync: this);
 
     var widgetsBinding=WidgetsBinding.instance;
-    widgetsBinding?.addPostFrameCallback((callback){
+    widgetsBinding.addPostFrameCallback((callback){
       animationController.forward(from: 0);
     });
   }

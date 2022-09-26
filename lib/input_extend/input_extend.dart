@@ -22,7 +22,7 @@ typedef Compare<T> = bool Function(List<T> data);
 typedef BuildCheckedBarStyle<T> = Widget? Function(
     T checkDatas, InputExtentdState controller);
 
-typedef OnchangeInput<String> = void Function(
+typedef OnChangeInput<String> = void Function(
     String value, InputExtentdState controller);
 
 typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds);
@@ -32,7 +32,7 @@ class InputExtentd<T> extends StatefulWidget {
   final BuildSelectPop buildSelectPop;
 
   ///数据发生变化时的回调
-  final OnchangeInput<String> onChanged;
+  final OnChangeInput<String> onChanged;
 
   ///自定义选中后样式
   final BuildCheckedBarStyle? buildCheckedBarStyle;
@@ -128,77 +128,82 @@ class InputExtentd<T> extends StatefulWidget {
   final String? restorationId;
   final bool scribbleEnabled;
   final bool enableIMEPersonalizedLearning;
-
+  final TextEditingController? textEditingController;
+  final ScrollController? scrollController ;
+  final ScrollController? inputScrollController;
   const InputExtentd(
-      {required this.buildSelectPop,
-      required this.onChanged,
-      this.buildCheckedBarStyle,
-      this.focusNode,
-      this.duration = const Duration(milliseconds: 300),
-      this.curve = Curves.linear,
-      this.checkedItemWidth = 60,
-      this.checkBoxMaxWidth,
-      this.checkBoxMaxHeight,
-      this.checkBoxMixWidth,
-      this.checkBoxMixHeight,
-      this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
-      this.inputDecoration,
-      this.physics,
-      this.intervalTime = 500,
-      this.initCheckedValue,
-      this.maxChecked = 100,
-      this.enableClickClear = false,
-      this.enableMultipleChoice = false,
-      this.autoClose = false,
-      this.enableHasFocusCallBack = false,
-      this.popConstraintBox,
-      this.selectPopMarginTop = 5,
-      this.keyboardType,
-      this.textInputAction,
-      this.textCapitalization = TextCapitalization.none,
-      this.strutStyle,
-      this.textAlign = TextAlign.start,
-      this.textAlignVertical,
-      this.textDirection,
-      this.readOnly = false,
-      this.toolbarOptions,
-      this.showCursor,
-      this.autofocus = false,
-      this.obscuringCharacter = '•',
-      this.obscureText = false,
-      this.autocorrect = true,
-      this.smartDashesType,
-      this.smartQuotesType,
-      this.enableSuggestions = true,
-      this.maxLines = 1,
-      this.minLines,
-      this.expands = false,
-      this.maxLength,
-      this.maxLengthEnforcement,
-      this.onEditingComplete,
-      this.onSubmitted,
-      this.onAppPrivateCommand,
-      this.inputFormatters,
-      this.enabled,
-      this.cursorWidth = 2.0,
-      this.cursorHeight,
-      this.cursorRadius,
-      this.cursorColor,
-      this.keyboardAppearance,
-      this.scrollPadding = const EdgeInsets.all(20.0),
-      this.dragStartBehavior = DragStartBehavior.start,
-      this.enableInteractiveSelection,
-      this.selectionControls,
-      this.onTap,
-      this.mouseCursor,
-      this.buildCounter,
-      this.scrollPhysics,
-      this.autofillHints = const <String>[],
-      this.clipBehavior = Clip.hardEdge,
-      this.restorationId,
-      this.scribbleEnabled = true,
-      this.enableIMEPersonalizedLearning = true,
-      Key? key})
+      { required this.buildSelectPop,
+        required this.onChanged,
+        this.buildCheckedBarStyle,
+        this.focusNode,
+        this.duration = const Duration(milliseconds: 300),
+        this.curve = Curves.linear,
+        this.checkedItemWidth = 60,
+        this.checkBoxMaxWidth,
+        this.checkBoxMaxHeight,
+        this.checkBoxMixWidth,
+        this.checkBoxMixHeight,
+        this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
+        this.inputDecoration,
+        this.physics,
+        this.intervalTime = 500,
+        this.initCheckedValue,
+        this.maxChecked = 100,
+        this.enableClickClear = false,
+        this.enableMultipleChoice = false,
+        this.autoClose = false,
+        this.enableHasFocusCallBack = false,
+        this.popConstraintBox,
+        this.selectPopMarginTop = 5,
+        this.textEditingController,
+        this.inputScrollController,
+        this.scrollController,
+        this.keyboardType,
+        this.textInputAction,
+        this.textCapitalization = TextCapitalization.none,
+        this.strutStyle,
+        this.textAlign = TextAlign.start,
+        this.textAlignVertical,
+        this.textDirection,
+        this.readOnly = false,
+        this.toolbarOptions,
+        this.showCursor,
+        this.autofocus = false,
+        this.obscuringCharacter = '•',
+        this.obscureText = false,
+        this.autocorrect = true,
+        this.smartDashesType,
+        this.smartQuotesType,
+        this.enableSuggestions = true,
+        this.maxLines = 1,
+        this.minLines,
+        this.expands = false,
+        this.maxLength,
+        this.maxLengthEnforcement,
+        this.onEditingComplete,
+        this.onSubmitted,
+        this.onAppPrivateCommand,
+        this.inputFormatters,
+        this.enabled,
+        this.cursorWidth = 2.0,
+        this.cursorHeight,
+        this.cursorRadius,
+        this.cursorColor,
+        this.keyboardAppearance,
+        this.scrollPadding = const EdgeInsets.all(20.0),
+        this.dragStartBehavior = DragStartBehavior.start,
+        this.enableInteractiveSelection,
+        this.selectionControls,
+        this.onTap,
+        this.mouseCursor,
+        this.buildCounter,
+        this.scrollPhysics,
+        this.autofillHints = const <String>[],
+        this.clipBehavior = Clip.hardEdge,
+        this.restorationId,
+        this.scribbleEnabled = true,
+        this.enableIMEPersonalizedLearning = true,
+        Key? key})
       : super(key: key);
 
   @override
@@ -208,11 +213,6 @@ class InputExtentd<T> extends StatefulWidget {
 class InputExtentdState<T> extends State<InputExtentd> {
 
   late final FocusNode _focusNode;
-
-  ///关联输入框，处理在组价在列表中跟随滚动
-  final LayerLink _layerLink = LayerLink();
-
-  OverlayEntry? _overlayEntry;
 
   ///提供给外部的控制器
   late InputExtentdState _controller;
@@ -225,19 +225,29 @@ class InputExtentdState<T> extends State<InputExtentd> {
   ///已选择数据
   List<T> _checkedData = [];
 
-  final TextEditingController _editingController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final ScrollController _inputScrollController = ScrollController();
+  late final TextEditingController _editingController;
+  late final ScrollController _scrollController;
+  late final ScrollController _inputScrollController;
   late final int intervalTime;
 
   int oldSize = 0;
 
   Timer? _timer;
 
+  ///关联输入框，处理在组价在列表中跟随滚动
+  final LayerLink _layerLink = LayerLink();
+
+  OverlayEntry? _overlayEntry;
+
+
+
   @override
   void initState() {
     super.initState();
 
+    _editingController = widget.textEditingController==null? TextEditingController():widget.textEditingController!;
+    _scrollController = widget.scrollController==null? ScrollController():widget.scrollController!;
+    _inputScrollController = widget.inputScrollController==null? ScrollController():widget.inputScrollController!;
     _focusNode = widget.focusNode==null? FocusNode():widget.focusNode!;
 
     if (widget.initCheckedValue == null) {
@@ -284,10 +294,6 @@ class InputExtentdState<T> extends State<InputExtentd> {
     }
   }
 
-  TextEditingController get getTextController => _editingController;
-
-  ///返回输入框的滑动控制器
-  ScrollController get getInputScrollController => _inputScrollController;
 
   ///
   /// data:需要比较的对象
@@ -362,6 +368,14 @@ class InputExtentdState<T> extends State<InputExtentd> {
     return Future.value(true);
   }
 
+
+
+  TextEditingController get getTextController => _editingController;
+
+  ///返回输入框的滑动控制器
+  ScrollController get getInputScrollController => _inputScrollController;
+
+
   void closePop(){
     if(_focusNode.hasFocus){
       _focusNode.unfocus();
@@ -402,19 +416,19 @@ class InputExtentdState<T> extends State<InputExtentd> {
     var popBox = widget.popConstraintBox;
     return OverlayEntry(
         builder: (context) => Positioned(
-              width: popBox == null
-                  ? size.width
-                  : popBox.limitSize
-                      ? null
-                      : popBox.width,
-              height: popBox?.height,
-              child: CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: false,
-                offset: Offset(0.0, size.height + widget.selectPopMarginTop),
-                child: widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
-              ),
-            ));
+          width: popBox == null
+              ? size.width
+              : popBox.limitSize
+              ? null
+              : popBox.width,
+          height: popBox?.height,
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0.0, size.height + widget.selectPopMarginTop),
+            child: widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
+          ),
+        ));
   }
 
   ///外部构建传入选中后的数据样式
@@ -422,7 +436,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
     List<Widget> widgets = [];
     for (var element in _checkedData) {
       final widgetItem =
-          widget.buildCheckedBarStyle?.call(element, _controller);
+      widget.buildCheckedBarStyle?.call(element, _controller);
       if (null != widgetItem) {
         widgets.add(widgetItem);
       }

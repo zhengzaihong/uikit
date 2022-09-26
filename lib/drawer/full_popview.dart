@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 /// describe: 全局全屏弹窗,
 /// 支持模糊背景,此组件不用于组件树child,通常用于事件弹出等
 /// 它是 drawer的一种简单替代方案。
+/// 显示不正常 请使用 Material包裹 子组件
 ///
 
 typedef BuildChild = Widget Function(FullPopView popView);

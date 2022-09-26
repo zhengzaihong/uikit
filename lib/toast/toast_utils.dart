@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/toast/toast_config.dart';
 
@@ -20,7 +21,8 @@ class Toast {
 
   static bool _showing = false;
 
-  static BuildContext? _appContext;
+  ///使用请在入口函数的 MaterialApp( navigatorKey: Toast.navigatorState ) 添加绑定
+  static final navigatorState = GlobalKey<NavigatorState>();
 
   ///一个默认的样式,外部可自定义
   static ToastConfig _globalToastConfig =
@@ -43,10 +45,6 @@ class Toast {
                 fontSize: 12)));
   });
 
-  static void init(BuildContext context){
-    _appContext = context;
-  }
-
   static ToastConfig get getGlobalToastConfig => _globalToastConfig;
 
   ///外部设置一个弹出样式
@@ -55,18 +53,12 @@ class Toast {
 
   static ToastConfig? _toastConfig;
 
-  static void show(String msg, { ToastConfig? tempConfig}) {
-    if (_appContext == null) {
-      print("--------请先初始化context------");
-      return;
-    }
-    showToast(context: _appContext!, msg: msg, tempConfig: tempConfig);
-  }
 
   ///显示一个吐司
-  static void showToast({
-    required BuildContext context,
-    required String msg,
+  static void show(
+    String msg,
+    {
+    BuildContext? context,
     ToastConfig? tempConfig,
   }) async {
     ///全局的间隔时间才生效  动态配置不生效
@@ -86,11 +78,7 @@ class Toast {
     _toastConfig = tempConfig ?? getGlobalToastConfig;
 
     _startedTime = DateTime.now();
-
-    ///获取OverlayState
-    OverlayState? overlayState = Overlay.of(context);
     _showing = true;
-
     _overlayEntry = OverlayEntry(
         builder: (BuildContext context) =>
             Positioned(
@@ -114,7 +102,16 @@ class Toast {
                     ),
                   )),
             ));
-    overlayState?.insert(_overlayEntry!);
+
+    ///获取OverlayState
+    if(context==null){
+      ///创建和显示顶层OverlayEntry
+      navigatorState.currentState?.overlay?.insert(_overlayEntry!);
+    }else{
+      OverlayState? overlayState =Overlay.of(context);
+      overlayState?.insert(_overlayEntry!);
+    }
+
     await Future.delayed(Duration(milliseconds: _toastConfig!.showTime));
 
     ///移除浮层

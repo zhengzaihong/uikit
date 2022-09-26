@@ -49,7 +49,7 @@ class _ProgressBarState extends State<CycleProgressBar> with SingleTickerProvide
         vsync: this);
 
     var widgetsBinding=WidgetsBinding.instance;
-    widgetsBinding?.addPostFrameCallback((callback){
+    widgetsBinding.addPostFrameCallback((callback){
       animationController.forward(from: 0);
     });
   }

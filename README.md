@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.0.5
+      flutter_uikit_forzzh: ^0.0.7
 
 
 # flutter 常用组件ui库
@@ -16,6 +16,7 @@
  10. 增加类似android TextView 上下左右可添加元素组件
  11. 添加可自定大小的switch组件
  12. 新增表格布局
+ 13. 新增 MarqueeView 跑马灯组件
 
   ...持续更新中....
 
