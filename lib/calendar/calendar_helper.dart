@@ -21,6 +21,7 @@ class CalendarHelper{
   /// endDate 默认选中日历的结束日期
   /// onClickOutSide 点击非日历区域是否关闭
   /// Function 选择日期后的回调
+  /// aspectRatio 添加宽高比，设置的calendarHeight将失效。
   ///
   static void showDateDialog(BuildContext context,
       {
@@ -30,6 +31,7 @@ class CalendarHelper{
         Function(DateTime startTime,
         DateTime endTime)? callBack,
         Function()? closeCallBack,
+        double? aspectRatio,
       }) {
 
     showDialog<dynamic>(
@@ -44,9 +46,10 @@ class CalendarHelper{
                 }
               },
               behavior: HitTestBehavior.opaque,
-              child:Center(child:  SizedBox(
-                width: getConfig().calendarWidth,
+              child:Center(child:
+              aspectRatio==null?SizedBox(
                 height: getConfig().calendarHeight,
+                width: getConfig().calendarWidth,
                 child: CalendarPopupView(
                   calendarConfig: getConfig(),
                   barrierDismissible: false,
@@ -63,7 +66,29 @@ class CalendarHelper{
                     closeCallBack?.call();
                   },
                 ),
-              )),
+              ):
+               SizedBox(
+                 width: getConfig().calendarWidth,
+                 child: AspectRatio(
+                   aspectRatio: aspectRatio,
+                   child: CalendarPopupView(
+                     calendarConfig: getConfig(),
+                     barrierDismissible: false,
+                     minimumDate: getConfig().maximumDate,
+                     maximumDate: getConfig().maximumDate,
+                     initialEndDate: endDate,
+                     initialStartDate: startDate,
+                     onApplyClick: (DateTime startData, DateTime endData) {
+                       if(null!=callBack){
+                         callBack.call(startData,endData);
+                       }
+                     },
+                     onCancelClick: () {
+                       closeCallBack?.call();
+                     },
+                   ),
+                 ),
+               )),
             ),
           );
         },
