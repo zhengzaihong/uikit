@@ -33,6 +33,7 @@ class InfiniteLevelsMenues<T> extends StatefulWidget {
   final Widget? noDataView;
   final BuildChildContainer buildChildContainer;
   final double titleChildSpace;
+  final Function? buildComplete;
   const InfiniteLevelsMenues(
       {
         required this.buildMenueItem,
@@ -42,6 +43,7 @@ class InfiniteLevelsMenues<T> extends StatefulWidget {
         this.datas,
         this.noDataView,
         this.titleChildSpace =5,
+        this.buildComplete,
         Key? key
       }) : super(key: key);
 
@@ -50,6 +52,16 @@ class InfiniteLevelsMenues<T> extends StatefulWidget {
 }
 
 class InfiniteLevelsMenuesState extends State<InfiniteLevelsMenues> {
+
+  @override
+  void initState(){
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.buildComplete?.call();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildContent();
@@ -174,7 +186,6 @@ class InfiniteLevelsMenuesState extends State<InfiniteLevelsMenues> {
     }else{
       _mExpands.add(data);
     }
-
     setState((){});
   }
 }
