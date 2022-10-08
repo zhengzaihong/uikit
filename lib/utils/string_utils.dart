@@ -63,12 +63,23 @@ class StringUtils {
 }
 
 extension StringExt on Object? {
-  
   String toStr(Object? value) {
     return null == value ? "" : value.toString();
   }
 
   String str() {
     return toStr(this);
+  }
+
+  List<String> toList() {
+    String str = toStr(this);
+    if (StringUtils.isEmpty(str)) {
+      return [];
+    }
+    List<String> contents = [];
+    for (int i = 0; i < str.length; i++) {
+      contents.add(str.substring(i, i + 1));
+    }
+    return contents;
   }
 }

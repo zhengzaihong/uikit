@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
+import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/tableview_example.dart';
 import 'async_drop_example.dart';
 import 'calendar_example.dart';
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
       createMenue("日历",context, const CalendarExample()),
       createMenue("输入框拓展",context, const InputExtentdExample()),
       createMenue("表格布局",context, const TableViewExample()),
+      createMenue("无限层级菜单",context, const InfiniteLevelsExample()),
       createMenue("常用小组件",context, const OftenWidgetExample()),
     ];
   }

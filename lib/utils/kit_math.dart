@@ -70,6 +70,4 @@ class KitMath{
 
     return contents;
   }
-
-
 }

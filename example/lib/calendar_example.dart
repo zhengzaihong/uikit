@@ -31,7 +31,7 @@ class _CalendarExampleState extends State<CalendarExample> {
     super.initState();
 
     var config = CalendarHelper.getConfig();
-    // config.calendarWidth=300;
+    config.calendarWidth=300;
 
     config.sureButtonWidth = 100;
 
@@ -91,6 +91,7 @@ class _CalendarExampleState extends State<CalendarExample> {
   void _openCalendar(){
     CalendarHelper.showDateDialog(context,
         aspectRatio: 1/2,   ///添加宽高比，设置的高度将失效。
+        onClickOutSide: true,
         callBack: (startTime, endTime) {
           print("---${startTime.year}--${startTime.month}--${startTime.day}->");
           print("---${endTime.year}--${endTime.month}--${endTime.day}->");
