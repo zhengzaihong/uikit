@@ -22,6 +22,7 @@ export 'table/tableview.dart';
 export 'blur/Blur.dart';
 export 'textview/marquee_view.dart';
 export 'Infinite/infinite_levels_menues.dart';
+export 'Infinite/bean/infinite_wrapper.dart';
 
 /// Utils package 工具包
 export 'utils/utils_lib.dart';

@@ -106,7 +106,7 @@ class InfiniteLevelsBean{
   String? name;
   String? code;
 
-  List<InfiniteLevelsBean>? childs;
+  List<dynamic>? childs;
 
   InfiniteLevelsBean(this.name,this.code,this.childs);
 
