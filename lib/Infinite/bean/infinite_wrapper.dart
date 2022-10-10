@@ -18,10 +18,10 @@ class InfiniteWrapper {
   /// 当前菜单标题
   String? title;
 
-  ///该层级的 唯一标识。 同一层级的pid 因该一直
+  ///该层级的 唯一标识。 同一层级的pid 必须一直
   String pid;
 
-  /// 是否是 根节点
+  /// 是否是根节点，且只需配置根节点
   bool? isRoot;
 
   /// 子孙菜单

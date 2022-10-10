@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
-import 'package:uikit_example/infinite_levels_example2.dart';
 import 'package:uikit_example/tableview_example.dart';
+
 import 'async_drop_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
@@ -11,7 +11,6 @@ import 'often_widget_example.dart';
 import 'pop_window_example.dart';
 import 'progressbar_example.dart';
 import 'toast_example.dart';
-import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 
 void main() {
@@ -70,7 +69,6 @@ class _MyAppState extends State<MyApp> {
       createMenue("输入框拓展",context, const InputExtentdExample()),
       createMenue("表格布局",context, const TableViewExample()),
       createMenue("无限层级菜单",context, const InfiniteLevelsExample()),
-      createMenue("无限层级菜单2",context, const InfiniteLevelsExample2()),
       createMenue("常用小组件",context, const OftenWidgetExample()),
     ];
   }

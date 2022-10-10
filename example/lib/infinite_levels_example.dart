@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
+///
+/// create_user: zhengzaihong
+/// email:1096877329@qq.com
+/// create_date: 2022/10/10
+/// create_time: 9:44
+/// describe: 真正的无限层级菜单，
+/// 服用时，请严格按照该 demo 模型进行数据转换。 必配参数：pid,isRoot,说明详见实体类。
+///
 class InfiniteLevelsExample extends StatefulWidget {
   const InfiniteLevelsExample({Key? key}) : super(key: key);
 
@@ -11,35 +19,125 @@ class InfiniteLevelsExample extends StatefulWidget {
 class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
 
-  List<InfiniteLevelsBean>   menues = [
+  List<InfiniteWrapper> menues = [
 
-    InfiniteLevelsBean("标题1","1",[
-      InfiniteLevelsBean("子标题1","2",[
-        InfiniteLevelsBean("子子标题1","3",[
-          InfiniteLevelsBean("子子子标题1","4",[]),
-          InfiniteLevelsBean("子子子标题2","4",[])
-        ])
-      ]),
+    InfiniteWrapper(
+      pid: "0001",
+      title: "一级标题A",
+      isRoot: true,
+      childs: [
+        InfiniteWrapper(
+            pid: "0001",
+            title: "二级标题1",
+            childs: [
 
-      InfiniteLevelsBean("子标题2","2",[
-        InfiniteLevelsBean("子子标题2","3",[])
-      ]),
-    ]),
+              InfiniteWrapper(
+                  pid: "0001",
+                  title: "三级标题1",
+                  childs: [
+                    InfiniteWrapper(
+                        pid: "0001",
+                        title: "四级标题1",
+                        childs: [
+                          InfiniteWrapper(
+                              pid: "0001",
+                              title: "五级标题1",
+                              childs: [
+                                InfiniteWrapper(
+                                    pid: "0001",
+                                    title: "六级标题1",
+                                    childs: [
 
-    InfiniteLevelsBean("标题2","1",[
-      InfiniteLevelsBean("子标题2","2",[
-        InfiniteLevelsBean("子子标题2","3",[])
-      ]) ]),
+                                    ]
+                                ),
+                                InfiniteWrapper(
+                                    pid: "0001",
+                                    title: "六级标题2",
+                                    childs: [
 
-    InfiniteLevelsBean("标题3","1",[]),
+                                    ]
+                                ),
+                              ]
+                          ),
+                        ]
+                    ),
+                  ]
+              ),
+              InfiniteWrapper(
+                  pid: "0001",
+                  title: "三级标题2",
+                  childs: [
+
+                  ]
+              ),
+            ]
+        ),
+        InfiniteWrapper(
+            pid: "0001",
+            title: "二级标题2",
+            childs: [
+              InfiniteWrapper(
+                  pid: "0001",
+                  title: "二级标题3",
+                  childs: [
+
+                    InfiniteWrapper(
+                        pid: "0001",
+                        title: "二级标题4",
+                        childs: [
+
+                        ]
+                    ),
+                  ]
+              ),
+            ]
+        ),
+        InfiniteWrapper(
+            pid: "0001",
+            title: "二级标题3",
+            childs: [
+
+            ]
+        ),
+        InfiniteWrapper(
+            pid: "0001",
+            title: "二级标题4",
+            childs: [
+
+            ]
+        ),
+      ]
+    ),
+
+    InfiniteWrapper(
+        pid: "0002",
+        title: "一级标题B",
+        isRoot: true,
+        childs: [
+          InfiniteWrapper(
+              pid: "0002",
+              title: "二级标题1",
+              childs: [
+
+                InfiniteWrapper(
+                    pid: "0002",
+                    title: "三级标题1",
+                    childs: [
+
+                    ]
+                ),
+                InfiniteWrapper(
+                    pid: "0002",
+                    title: "三级标题2",
+                    childs: [
+
+                    ]
+                ),
+              ]
+          ),
+        ]),
+
   ];
-
-
-  @override
-  void initState(){
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,22 +147,24 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
         title: const Text("无限层级菜单"),
       ),
       backgroundColor: Colors.white,
-      body:  Row(children: [
+      body: Row(children: [
 
-        SizedBox(width: 200,
-            child: Column(
+        SizedBox(
+            width: 200,
+            child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: Container(
                   margin: const EdgeInsets.only(left: 10,top: 10),
                   child:  InfiniteLevelsMenues(
-                    level: 100,
                     datas: menues,
-                    buildMenueItem:(state,expand,isCurrent,data,lv){
-                      if(data is InfiniteLevelsBean){
+                    oneExpand: true,
+                    buildMenueItem:(state,isCurrent,data,lv){
+                      if(data is InfiniteWrapper){
                         return  GestureDetector(
                             onTap: (){
-                              state.setCurrentExpand(data);
+                              print("---点击:${data.title}--层级：$lv");
+                              state.setItem(data);
                             },
                             child: Container(
                               padding: const EdgeInsets.only(left: 4,right: 4,top: 5,bottom: 5),
@@ -74,13 +174,13 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                                   border: Border.all(color: isCurrent?Colors.red:Colors.white),
                                   color: isCurrent?Colors.lightBlue:Colors.white
                               ),
-                              child: Text(data.name.toString(),style: TextStyle(fontSize: lv==1?18:lv==2?16:12)),
+                              child: Text(data.title.toString(),style: TextStyle(fontSize: lv==1?18:lv==2?16:12)),
                             ));
                       }
                       return const SizedBox();
                     },
-                    buildChildContainer: (data,lv){
-                      return (data as InfiniteLevelsBean).childs??[];
+                    callBackChildData: (data,lv){
+                      return (data as InfiniteWrapper).childs??[];
                     },
                   ),
                 ))
@@ -95,20 +195,5 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
       ]),
     ));
   }
-
-}
-
-
-
-
-class InfiniteLevelsBean{
-
-  String? name;
-  String? code;
-
-  List<dynamic>? childs;
-
-  InfiniteLevelsBean(this.name,this.code,this.childs);
-
 
 }

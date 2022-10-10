@@ -17,6 +17,7 @@
  11. 添加可自定大小的switch组件
  12. 新增表格布局
  13. 新增 MarqueeView 跑马灯组件
+ 14. 新增 InfiniteLevelsMenues 无限层级菜单
 
   ...持续更新中....
 
@@ -47,6 +48,9 @@
 ## 进度条组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/progressbar.gif)
 
+## 无限层级菜单：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/all_expand.gif)
 
 ## 表格组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)

@@ -63,6 +63,7 @@ class StringUtils {
 }
 
 extension StringExt on Object? {
+
   String toStr(Object? value) {
     return null == value ? "" : value.toString();
   }
@@ -70,6 +71,8 @@ extension StringExt on Object? {
   String str() {
     return toStr(this);
   }
+
+  String get s => str();
 
   List<String> toList() {
     String str = toStr(this);
@@ -82,4 +85,5 @@ extension StringExt on Object? {
     }
     return contents;
   }
+
 }
