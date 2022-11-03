@@ -52,7 +52,7 @@ class CalendarHelper{
                 width: getConfig().calendarWidth,
                 child: CalendarPopupView(
                   calendarConfig: getConfig(),
-                  barrierDismissible: false,
+                  barrierDismissible: onClickOutSide,
                   minimumDate: getConfig().maximumDate,
                   maximumDate: getConfig().maximumDate,
                   initialEndDate: endDate,
@@ -73,7 +73,7 @@ class CalendarHelper{
                    aspectRatio: aspectRatio,
                    child: CalendarPopupView(
                      calendarConfig: getConfig(),
-                     barrierDismissible: false,
+                     barrierDismissible: onClickOutSide,
                      minimumDate: getConfig().maximumDate,
                      maximumDate: getConfig().maximumDate,
                      initialEndDate: endDate,

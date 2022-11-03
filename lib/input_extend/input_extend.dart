@@ -1,4 +1,3 @@
-// ignore_for_file: must_call_super
 
 import 'dart:async';
 
