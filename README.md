@@ -21,6 +21,12 @@
 
   ...持续更新中....
 
+# 移除组件
+
+  1.AsyncInputDrop 系统选择下拉框。 
+
+
+
 ## 更多效果请查看demo
 
 
@@ -56,8 +62,7 @@
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview2.png)
 
-## 拓展系统下拉选择器(推荐使用本库的InputExtend组件代替)：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/asyncdrop.gif)
+
 
 
 

@@ -13,7 +13,7 @@ class RouteUtils {
 
   /// 跳转页面
   static Future<dynamic> push(BuildContext context, Widget page,
-      {String? name, Object? arguments, bool noAnimation = false})  {
+      {String? name, Object? arguments, bool noAnimation = true})  {
     return Navigator.push(
         context,
         noAnimation
@@ -24,7 +24,7 @@ class RouteUtils {
   }
 
   static Future<dynamic> pushReplaceTagPage(BuildContext context, Widget page,
-      {String? name, Object? arguments, bool noAnimation = false}) {
+      {String? name, Object? arguments, bool noAnimation = true}) {
 
     return Navigator.of(context).pushReplacement(noAnimation
         ? NoAnimRouter(page, name: name, arguments: arguments)
@@ -35,7 +35,7 @@ class RouteUtils {
 
   ///跳转到起始页并关闭所有页面
   static Future<dynamic> pushClearTop(BuildContext context, Widget page,
-      {String? name, Object? arguments, bool noAnimation = false}) {
+      {String? name, Object? arguments, bool noAnimation = true}) {
     return Navigator.pushAndRemoveUntil(
       context,
       noAnimation

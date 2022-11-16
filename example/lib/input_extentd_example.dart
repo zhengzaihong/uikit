@@ -7,14 +7,14 @@ import 'package:flutter_uikit_forzzh/input_extend/landscape_listview.dart';
 import 'package:flutter_uikit_forzzh/toast/toast_lib.dart';
 import 'package:uikit_example/utils/font_utils.dart';
 
-class InputExtentdExample extends StatefulWidget {
-  const InputExtentdExample({Key? key}) : super(key: key);
+class InputExtendExample extends StatefulWidget {
+  const InputExtendExample({Key? key}) : super(key: key);
 
   @override
-  _InputExtentdExampleState createState() => _InputExtentdExampleState();
+  _InputExtendExampleState createState() => _InputExtendExampleState();
 }
 
-class _InputExtentdExampleState extends State<InputExtentdExample> {
+class _InputExtendExampleState extends State<InputExtendExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,11 +48,11 @@ class InputExtendDemo extends StatelessWidget {
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(30))),
-              child: InputExtentd<String>(
+              child: InputExtend<String>(
                   checkedItemWidth: 80,
                   checkBoxMaxWidth: 240,
                   autoClose: true,
-                  enableMultipleChoice: true,
+                  enableMultipleChoice: false,
                   enableClickClear: true,
                   initCheckedValue: checkeds,
                   focusNode: focusNode,
@@ -183,7 +183,7 @@ class InputExtendDemo extends StatelessWidget {
 
       Container(width: 200,
       margin: const EdgeInsets.only(top: 30),
-      child:  InputExtentd<String>(
+      child:  InputExtend<String>(
           autoClose: true,
           enableMultipleChoice: true,
           selectPopMarginTop: 5,
@@ -292,7 +292,7 @@ class InputSearchNameWidget extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(10))),
         child: Row(children: [
           Expanded(
-              child: InputExtentd<dynamic>(
+              child: InputExtend<dynamic>(
                   checkedItemWidth: 90,
                   checkBoxMaxWidth: 240,
                   autoClose: true,
@@ -474,7 +474,7 @@ class InputSearchNameWidget extends StatelessWidget {
         child: Column(children: oftenSearchButtons));
   }
 
-  void checkDataStatus(InputExtentdState controller, String bean) {
+  void checkDataStatus(InputExtendState controller, String bean) {
     ///这里是字符串直接比较的 内容，如果是对象 且数据来源于网络一定的通过对象 属性id 等来判断
     controller.setCheckChange(
         data: bean,

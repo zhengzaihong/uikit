@@ -3,7 +3,6 @@ import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/tableview_example.dart';
 
-import 'async_drop_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
 import 'input_extentd_example.dart';
@@ -63,10 +62,9 @@ class _MyAppState extends State<MyApp> {
       createMenue("进度条", context,const ProgressBarExample()),
       createMenue("toast", context,const ToastExample()),
       createMenue("城市选择", context,const CityPickerExample()),
-      createMenue("异步加载下拉框",context, const AsyncDropExample()),
       createMenue("popwindow",context, const PopWindowExample()),
       createMenue("日历",context, const CalendarExample()),
-      createMenue("输入框拓展",context, const InputExtentdExample()),
+      createMenue("输入框拓展",context, const InputExtendExample()),
       createMenue("表格布局",context, const TableViewExample()),
       createMenue("无限层级菜单",context, const InfiniteLevelsExample()),
       createMenue("常用小组件",context, const OftenWidgetExample()),

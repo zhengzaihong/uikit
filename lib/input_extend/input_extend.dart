@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -14,19 +15,22 @@ import 'package:flutter/services.dart';
 ///
 
 typedef BuildSelectPop<T> = Widget Function(
-    BuildContext context, List<T> src, InputExtentdState controller);
+    BuildContext context, List<T> src, InputExtendState controller);
 
 typedef Compare<T> = bool Function(List<T> data);
 
 typedef BuildCheckedBarStyle<T> = Widget? Function(
-    T checkDatas, InputExtentdState controller);
+    T checkDatas, InputExtendState controller);
 
 typedef OnChangeInput<String> = void Function(
-    String value, InputExtentdState controller);
+    String value, InputExtendState controller);
+
+typedef ValueChanged<String> = void Function(
+    String value, InputExtendState controller);
 
 typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds);
 
-class InputExtentd<T> extends StatefulWidget {
+class InputExtend<T> extends StatefulWidget {
   ///自定义构建弹出窗样式
   final BuildSelectPop buildSelectPop;
 
@@ -80,6 +84,7 @@ class InputExtentd<T> extends StatefulWidget {
   final Curve curve;
 
   final double selectPopMarginTop;
+  final ValueChanged<String>? onSubmitted;
 
   /// 以下都为输入框的样式 属性
   final TextInputType? keyboardType;
@@ -105,7 +110,6 @@ class InputExtentd<T> extends StatefulWidget {
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
   final VoidCallback? onEditingComplete;
-  final ValueChanged<String>? onSubmitted;
   final AppPrivateCommandCallback? onAppPrivateCommand;
   final List<TextInputFormatter>? inputFormatters;
   final bool? enabled;
@@ -130,7 +134,7 @@ class InputExtentd<T> extends StatefulWidget {
   final TextEditingController? textEditingController;
   final ScrollController? scrollController ;
   final ScrollController? inputScrollController;
-  const InputExtentd(
+  const InputExtend(
       { required this.buildSelectPop,
         required this.onChanged,
         this.buildCheckedBarStyle,
@@ -206,15 +210,15 @@ class InputExtentd<T> extends StatefulWidget {
       : super(key: key);
 
   @override
-  InputExtentdState createState() => InputExtentdState();
+  InputExtendState createState() => InputExtendState();
 }
 
-class InputExtentdState<T> extends State<InputExtentd> {
+class InputExtendState<T> extends State<InputExtend> {
 
   late final FocusNode _focusNode;
 
   ///提供给外部的控制器
-  late InputExtentdState _controller;
+  late InputExtendState _controller;
 
   late final BuildContext _buildContext;
 
@@ -252,22 +256,20 @@ class InputExtentdState<T> extends State<InputExtentd> {
     if (widget.initCheckedValue == null) {
       _checkedData = [];
     } else {
-      _checkedData = widget.initCheckedValue!.cast<T>();
-      oldSize = _checkedData.length;
+      List<T> temps = [];
+      for (var element in widget.initCheckedValue!) {
+        temps.add(element);
+      }
+      _checkedData = temps;
+       oldSize = _checkedData.length;
     }
 
     intervalTime = widget.intervalTime;
     _controller = this;
     _buildContext = context;
     _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        _overlayEntry = _createOverlayEntry();
-        Overlay.of(context)?.insert(_overlayEntry!);
-        if (widget.enableHasFocusCallBack) {
-          _onTextChangeCallBack(_editingController.text, true);
-        }
-      } else {
-        _overlayEntry?.remove();
+      if (_focusNode.hasFocus && widget.enableHasFocusCallBack) {
+        _onTextChangeCallBack(_editingController.text, true);
       }
     });
   }
@@ -361,7 +363,7 @@ class InputExtentdState<T> extends State<InputExtentd> {
     notyListUiChange();
 
     if (widget.autoClose) {
-      _focusNode.unfocus();
+      _removePop();
     }
 
     return Future.value(true);
@@ -375,10 +377,11 @@ class InputExtentdState<T> extends State<InputExtentd> {
   ScrollController get getInputScrollController => _inputScrollController;
 
 
+  FocusNode get getFocusNode => _focusNode;
+
+
   void closePop(){
-    if(_focusNode.hasFocus){
-      _focusNode.unfocus();
-    }
+    _removePop();
   }
 
   void setText(String text) {
@@ -514,7 +517,6 @@ class InputExtentdState<T> extends State<InputExtentd> {
                 maxLengthEnforcement: widget.maxLengthEnforcement,
                 onEditingComplete: widget.onEditingComplete,
                 onAppPrivateCommand: widget.onAppPrivateCommand,
-                onSubmitted: widget.onSubmitted,
                 inputFormatters: widget.inputFormatters,
                 enabled: widget.enabled,
                 cursorWidth: widget.cursorWidth,
@@ -534,6 +536,9 @@ class InputExtentdState<T> extends State<InputExtentd> {
                 restorationId: widget.restorationId,
                 scribbleEnabled: widget.scribbleEnabled,
                 enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
+                onSubmitted:(text){
+                  widget.onSubmitted?.call(text,this);
+                },
                 onChanged: (text) async {
                   _timer?.cancel();
                   _timer = Timer(Duration(milliseconds: intervalTime), () {
@@ -549,16 +554,24 @@ class InputExtentdState<T> extends State<InputExtentd> {
 
   void _onTextChangeCallBack(String text, bool isFirst) {
     setText(text);
-    if ("" == text && !isFirst) {
-      _focusNode.unfocus();
+    if (StringUtils.isEmpty(text) && !isFirst) {
+      _removePop();
+    }else{
+      _addPop();
     }
-    if (isFirst) {
-      widget.onChanged.call(text, _controller);
-    } else {
-      widget.onChanged.call(text, _controller);
-    }
+    widget.onChanged.call(text, _controller);
   }
 
+  void _addPop(){
+    if(null==_overlayEntry){
+      _overlayEntry = _createOverlayEntry();
+      Overlay.of(context)?.insert(_overlayEntry!);
+    }
+  }
+  void _removePop(){
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
   void notyOverlayDataChange() {
     _overlayEntry?.markNeedsBuild();
   }
