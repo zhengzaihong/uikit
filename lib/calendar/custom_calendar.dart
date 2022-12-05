@@ -12,12 +12,14 @@ class CustomCalendarView extends StatefulWidget {
 
   const CustomCalendarView(
       {Key? key,
-      this.initialStartDate,
-      this.initialEndDate,
-      this.startEndDateChange,
-      this.minimumDate,
-      this.maximumDate,
+        this.initialStartDate,
+        this.initialEndDate,
+        this.startEndDateChange,
+        this.minimumDate,
+        this.maximumDate,
         required this.calendarConfig,
+        this.allowSameDate = true
+
       })
       : super(key: key);
 
@@ -26,6 +28,7 @@ class CustomCalendarView extends StatefulWidget {
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
   final CalendarConfig calendarConfig;
+  final bool? allowSameDate;
 
   final Function(DateTime, DateTime)? startEndDateChange;
 
@@ -40,6 +43,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
   DateTime? startDate;
   DateTime? endDate;
   late CalendarConfig calendarConfig;
+
   @override
   void initState() {
     calendarConfig = widget.calendarConfig;
@@ -85,22 +89,26 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
             children: <Widget>[
 
               Padding(
-                padding: calendarConfig.monthWidgetPadding,
+                padding: calendarConfig.yearWidgetPadding,
                 child: Container(
-                  height: calendarConfig.monthWidgetHeight,
-                  width: calendarConfig.monthWidgetWidth,
-                  decoration: calendarConfig.monthWidgetDecoration,
+                  height: calendarConfig.yearWidgetHeight,
+                  width: calendarConfig.yearWidgetWidth,
+                  decoration: calendarConfig.yearWidgetDecoration,
                   child: Material(
                     color: Colors.transparent,
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          currentMonthDate = DateTime(currentMonthDate.year,
-                              currentMonthDate.month, 0);
+                          currentMonthDate = DateTime.utc(currentMonthDate.year-1,
+                              currentMonthDate.month,
+                              currentMonthDate.day,
+                              currentMonthDate.hour,
+                              currentMonthDate.minute,
+                              currentMonthDate.second);
                           setListOfDate(currentMonthDate);
                         });
                       },
-                      child: calendarConfig.preMonthWidget,
+                      child: calendarConfig.preYearWidget,
                     ),
                   ),
                 ),
@@ -108,36 +116,89 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
 
               Expanded(
                 child: Center(
-                  child: Text(
-                    "${currentMonthDate.year} ${
-                        calendarConfig.getDateFormat()==1? "-":
-                        calendarConfig.getDateFormat()==2? "年":"/"
-                    } ${currentMonthDate.month} ${
-                        calendarConfig.getDateFormat()==1? "-":
-                        calendarConfig.getDateFormat()==2? "月":"/"
-                    }",
-                    style: calendarConfig.yearMonthStyle,
-                  ),
+                  child: Row(
+                     mainAxisSize: MainAxisSize.min,
+                      children: [
+                    Padding(
+                      padding: calendarConfig.monthWidgetPadding,
+                      child: Container(
+                        height: calendarConfig.monthWidgetHeight,
+                        width: calendarConfig.monthWidgetWidth,
+                        decoration: calendarConfig.monthWidgetDecoration,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                currentMonthDate = DateTime(currentMonthDate.year,
+                                    currentMonthDate.month, 0);
+                                setListOfDate(currentMonthDate);
+                              });
+                            },
+                            child: calendarConfig.preMonthWidget,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Text(
+                      "${currentMonthDate.year} ${
+                          calendarConfig.getDateFormat()==1? "-":
+                          calendarConfig.getDateFormat()==2? "年":"/"
+                      } ${currentMonthDate.month} ${
+                          calendarConfig.getDateFormat()==1? "-":
+                          calendarConfig.getDateFormat()==2? "月":"/"
+                      }",
+                      style: calendarConfig.yearMonthStyle,
+                    ),
+
+                    Padding(
+                      padding: calendarConfig.monthWidgetPadding,
+                      child: Container(
+                        height: calendarConfig.monthWidgetHeight,
+                        width: calendarConfig.monthWidgetWidth,
+                        decoration: calendarConfig.monthWidgetDecoration,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                currentMonthDate = DateTime(currentMonthDate.year,
+                                    currentMonthDate.month + 2, 0);
+                                setListOfDate(currentMonthDate);
+                              });
+                            },
+                            child: calendarConfig.nextMonthWidget,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
                 ),
               ),
 
+
               Padding(
-                padding: calendarConfig.monthWidgetPadding,
+                padding: calendarConfig.yearWidgetPadding,
                 child: Container(
-                  height: calendarConfig.monthWidgetHeight,
-                  width: calendarConfig.monthWidgetWidth,
-                  decoration: calendarConfig.monthWidgetDecoration,
+                  height: calendarConfig.yearWidgetHeight,
+                  width: calendarConfig.yearWidgetWidth,
+                  decoration: calendarConfig.yearWidgetDecoration,
                   child: Material(
                     color: Colors.transparent,
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          currentMonthDate = DateTime(currentMonthDate.year,
-                              currentMonthDate.month + 2, 0);
+                          currentMonthDate = DateTime.utc(currentMonthDate.year+1,
+                              currentMonthDate.month,
+                              currentMonthDate.day,
+                              currentMonthDate.hour,
+                              currentMonthDate.minute,
+                              currentMonthDate.second);
                           setListOfDate(currentMonthDate);
                         });
                       },
-                      child: calendarConfig.nextMonthWidget,
+                      child: calendarConfig.nextYearWidget,
                     ),
                   ),
                 ),
@@ -346,6 +407,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
 
   bool isStartDateRadius(DateTime date) {
     if (startDate != null &&
+        startDate!.year == date.year&&
         startDate!.day == date.day &&
         startDate!.month == date.month) {
       return true;
@@ -358,6 +420,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
 
   bool isEndDateRadius(DateTime date) {
     if (endDate != null &&
+        endDate!.year == date.year&&
         endDate!.day == date.day &&
         endDate!.month == date.month) {
       return true;
@@ -368,7 +431,89 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
     }
   }
 
+
+  int _count = 0;
   void onDateClick(DateTime date) {
+    if(widget.allowSameDate!){
+      _dataPickerState2(date);
+    }else{
+      _dataPickerState(date);
+    }
+  }
+
+  void _dataPickerState2(DateTime date) {
+    if (startDate != null && endDate != null) {
+      if (
+          endDate!.year == date.year &&
+          endDate!.day == date.day &&
+          endDate!.month == date.month &&
+          startDate!.year == date.year &&
+          startDate!.day == date.day &&
+          startDate!.month == date.month &&
+          _count >= 1
+      ) {
+        _count = 0;
+        endDate = null;
+        startDate = null;
+        setState(() {
+          try {
+            widget.startEndDateChange!(startDate!, endDate!);
+          } catch (_) {}
+        });
+        return;
+      }
+    }
+
+    if (startDate == null) {
+      startDate = date;
+    } else if (startDate != null && endDate == null) {
+      endDate = date;
+    }
+    else if (startDate!.day == date.day && startDate!.month == date.month) {
+      startDate = null;
+    } else if (endDate!.day == date.day && endDate!.month == date.month) {
+      endDate = null;
+    }
+    if (startDate == null && endDate != null) {
+      startDate = endDate;
+      endDate = null;
+    }
+    if (startDate != null && endDate != null) {
+      if (!endDate!.isAfter(startDate!)) {
+        final DateTime d = startDate!;
+        startDate = endDate;
+        endDate = d;
+      }
+      if (date.isBefore(startDate!)) {
+        startDate = date;
+      }else{
+        if (date.isAfter(startDate!) && date.isBefore(endDate!)) {
+          startDate = date;
+        }
+      }
+      if (date.isAfter(endDate!)) {
+        endDate = date;
+      }
+      if(
+         endDate!.year == date.year&&
+          endDate!.day == date.day &&
+          endDate!.month == date.month &&
+          startDate!.year == date.year&&
+          startDate!.day == date.day &&
+          startDate!.month == date.month
+      ){
+        _count++;
+      }
+    }
+    setState(() {
+      try {
+        widget.startEndDateChange!(startDate!, endDate!);
+      } catch (_) {}
+    });
+  }
+
+
+  void _dataPickerState(DateTime date){
     if (startDate == null) {
       startDate = date;
     } else if (startDate != date && endDate == null) {

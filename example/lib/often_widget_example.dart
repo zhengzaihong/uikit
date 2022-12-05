@@ -179,15 +179,14 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
 
                   title("开关按钮"),
-                  PlusSwitch(
-                    value: checked,
+                  CustomSwitch(
+                    isOpen: checked,
                     activeTrackColor:Color(0xFFF9820E),
                     activeColor:Colors.white,
                     inactiveTrackColor: Color(0xFFB3B3B3),
-                    kTrackWidth: 40,
-                    kTrackHeight: 20,
-                    onChanged: (value) {
+                    onChange: (value) {
                       checked = value;
+                      print("-----checked：$checked");
                       setState(() {
 
                       });
@@ -487,8 +486,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   title("复选框"),
                   CustomCheckBox(
                     iconLeft: true,
-                    checked: true,
-                    checkedCallBack: (checked) {
+                    isChecked: true,
+                    onChange: (checked) {
                       print("------------>${checked}");
                     },
                     uncheckedIcon: Container(
@@ -505,14 +504,14 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                           width: 25,
                           height: 25,
                         )),
-                    checkedText: const Text("已经勾选自动登录",
+                    checkedText: const Text("已勾选自动登录",
                         style: TextStyle(
                             color: Colors.lightBlue,
                             fontSize: 16,
                             fontWeight: FontWeight.w500)),
-                    unCheckedText: const Text("下次自动登录",
+                    text: const Text("下次自动登录",
                         style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.grey,
                             fontSize: 16,
                             fontWeight: FontWeight.w500)),
 

@@ -17,6 +17,15 @@ class ClickButton extends StatefulWidget {
   final BoxDecoration unCheckedBoxDecoration;
   final int index;
   final String title;
+  final StrutStyle? strutStyle;
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final bool? softWrap;
+  final TextOverflow? overflow;
+  final double? textScaleFactor;
+  final int? maxLines;
+  final String? semanticsLabel;
   final double width;
   final double height;
   final EdgeInsetsGeometry padding;
@@ -49,7 +58,7 @@ class ClickButton extends StatefulWidget {
     required this.index,
     this.checkedTextStyle = const TextStyle(color: Colors.white, fontSize: 20),
     this.unCheckTextStyle =
-        const TextStyle(color: Colors.black38, fontSize: 20),
+    const TextStyle(color: Colors.black38, fontSize: 20),
     this.checkedBoxDecoration = const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -58,6 +67,15 @@ class ClickButton extends StatefulWidget {
         borderRadius: BorderRadius.all(Radius.circular(10))),
     this.width = 20,
     this.height = 20,
+    this.strutStyle,
+    this.textAlign,
+    this.textDirection,
+    this.locale,
+    this.softWrap,
+    this.overflow,
+    this.textScaleFactor,
+    this.maxLines,
+    this.semanticsLabel,
     this.padding = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
     this.highlightColor = Colors.transparent,
@@ -135,6 +153,7 @@ class _ClickButtonState extends State<ClickButton> {
       switch (widget.drawablePositon) {
         case PositionEnum.drawableLeft:
           {
+
             return Row(
                 mainAxisSize: widget.mainAxisSize,
                 crossAxisAlignment: widget.crossAxisAlignment,
@@ -142,7 +161,18 @@ class _ClickButtonState extends State<ClickButton> {
                 children: [
                   iconWidget!,
                   SizedBox(width: widget.drawPadding),
-                  Text(widget.title, style: style)
+                  Expanded(child: Text(
+                      widget.title,
+                      maxLines: widget.maxLines,
+                      semanticsLabel: widget.semanticsLabel,
+                      strutStyle: widget.strutStyle,
+                      textAlign: widget.textAlign,
+                      textDirection: widget.textDirection,
+                      locale: widget.locale,
+                      softWrap: widget.softWrap,
+                      overflow:widget.overflow,
+                      textScaleFactor: widget.textScaleFactor,
+                      style: style))
                 ]);
           }
         case PositionEnum.drawableRight:
@@ -152,7 +182,18 @@ class _ClickButtonState extends State<ClickButton> {
                 crossAxisAlignment: widget.crossAxisAlignment,
                 mainAxisAlignment: widget.mainAxisAlignment,
                 children: [
-                  Text(widget.title, style: style),
+                  Expanded(child: Text(
+                      widget.title,
+                      maxLines: widget.maxLines,
+                      semanticsLabel: widget.semanticsLabel,
+                      strutStyle: widget.strutStyle,
+                      textAlign: widget.textAlign,
+                      textDirection: widget.textDirection,
+                      locale: widget.locale,
+                      softWrap: widget.softWrap,
+                      overflow:widget.overflow,
+                      textScaleFactor: widget.textScaleFactor,
+                      style: style)),
                   SizedBox(width: widget.drawPadding),
                   iconWidget!,
                 ]);
@@ -166,7 +207,18 @@ class _ClickButtonState extends State<ClickButton> {
               children: [
                 iconWidget!,
                 SizedBox(height: widget.drawPadding),
-                Text(widget.title, style: style)
+                Expanded(child: Text(
+                    widget.title,
+                    maxLines: widget.maxLines,
+                    semanticsLabel: widget.semanticsLabel,
+                    strutStyle: widget.strutStyle,
+                    textAlign: widget.textAlign,
+                    textDirection: widget.textDirection,
+                    locale: widget.locale,
+                    softWrap: widget.softWrap,
+                    overflow:widget.overflow,
+                    textScaleFactor: widget.textScaleFactor,
+                    style: style))
               ],
             );
           }
@@ -177,7 +229,18 @@ class _ClickButtonState extends State<ClickButton> {
               crossAxisAlignment: widget.crossAxisAlignment,
               mainAxisAlignment: widget.mainAxisAlignment,
               children: [
-                Text(widget.title, style: style),
+                Expanded(child: Text(
+                    widget.title,
+                    maxLines: widget.maxLines,
+                    semanticsLabel: widget.semanticsLabel,
+                    strutStyle: widget.strutStyle,
+                    textAlign: widget.textAlign,
+                    textDirection: widget.textDirection,
+                    locale: widget.locale,
+                    softWrap: widget.softWrap,
+                    overflow:widget.overflow,
+                    textScaleFactor: widget.textScaleFactor,
+                    style: style)),
                 SizedBox(height: widget.drawPadding),
                 iconWidget!
               ],
@@ -185,6 +248,17 @@ class _ClickButtonState extends State<ClickButton> {
           }
       }
     }
-    return Text(widget.title, style: style);
+    return  Text(
+        widget.title,
+        maxLines: widget.maxLines,
+        semanticsLabel: widget.semanticsLabel,
+        strutStyle: widget.strutStyle,
+        textAlign: widget.textAlign,
+        textDirection: widget.textDirection,
+        locale: widget.locale,
+        softWrap: widget.softWrap,
+        overflow:widget.overflow,
+        textScaleFactor: widget.textScaleFactor,
+        style: style);
   }
 }

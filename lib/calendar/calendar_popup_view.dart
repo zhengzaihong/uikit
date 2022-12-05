@@ -22,6 +22,7 @@ class CalendarPopupView extends StatefulWidget {
       this.minimumDate,
       this.maximumDate,
         required this.calendarConfig,
+        this.allowSameDate = true
       })
       : super(key: key);
 
@@ -33,8 +34,8 @@ class CalendarPopupView extends StatefulWidget {
   final DateTime? initialEndDate;
   final CalendarConfig calendarConfig;
   final Function(DateTime, DateTime)? onApplyClick;
-
   final Function()? onCancelClick;
+  final bool? allowSameDate;
   @override
   _CalendarPopupViewState createState() => _CalendarPopupViewState();
 }
@@ -148,6 +149,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                             maximumDate: widget.maximumDate,
                             initialEndDate: widget.initialEndDate,
                             initialStartDate: widget.initialStartDate,
+                            allowSameDate: widget.allowSameDate,
                             startEndDateChange: (DateTime startDateData, DateTime endDateData) {
                               setState(() {
                                 startDate = startDateData;

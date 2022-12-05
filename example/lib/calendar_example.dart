@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 class CalendarExample extends StatefulWidget {
@@ -31,9 +30,8 @@ class _CalendarExampleState extends State<CalendarExample> {
     super.initState();
 
     var config = CalendarHelper.getConfig();
-    config.calendarWidth=300;
+    config.calendarWidth=480;
 
-    config.sureButtonWidth = 100;
 
     config.callBackStartTime = (dateTime) {
       return createDateWidget(dateTime);
@@ -43,23 +41,9 @@ class _CalendarExampleState extends State<CalendarExample> {
       return createDateWidget(dateTime);
     };
     config.dayTextSize = 14;
-    config.sureButton =
-    const Text("确定", style: TextStyle(fontSize: 14));
-    config.sureButtonBgStyle = BoxDecoration(
-      color: Colors.lightBlue,
-      borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-      boxShadow: <BoxShadow>[
-        BoxShadow(
-          color: Colors.red.withOpacity(0.6),
-          blurRadius: 8,
-          offset: const Offset(4, 4),
-        ),
-      ],
-    );
-
+    config.sureButtonWidth=200;
 
    WidgetsBinding.instance.addPostFrameCallback((callback){
-
      _openCalendar();
     });
   }

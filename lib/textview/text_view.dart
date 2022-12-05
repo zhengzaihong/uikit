@@ -12,6 +12,15 @@ class TextView extends StatefulWidget {
   final TextStyle checkedTextStyle;
   final TextStyle unCheckTextStyle;
   final String title;
+  final StrutStyle? strutStyle;
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final bool? softWrap;
+  final TextOverflow? overflow;
+  final double? textScaleFactor;
+  final int? maxLines;
+  final String? semanticsLabel;
   final Color highlightColor;
   final Color hoverColor;
 
@@ -50,6 +59,15 @@ class TextView extends StatefulWidget {
     this.enableClick = true,
     this.isChecked = true,
     this.callBack,
+    this.strutStyle,
+    this.textAlign,
+    this.textDirection,
+    this.locale,
+    this.softWrap,
+    this.overflow,
+    this.textScaleFactor,
+    this.maxLines,
+    this.semanticsLabel,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.min,
@@ -108,7 +126,17 @@ class _TextViewState extends State<TextView> {
                 children: [
                   iconWidget!,
                   SizedBox(width: widget.drawPadding),
-                  Text(widget.title, style: style)
+                  Text(widget.title,
+                      maxLines: widget.maxLines,
+                      semanticsLabel: widget.semanticsLabel,
+                      strutStyle: widget.strutStyle,
+                      textAlign: widget.textAlign,
+                      textDirection: widget.textDirection,
+                      locale: widget.locale,
+                      softWrap: widget.softWrap,
+                      overflow:widget.overflow,
+                      textScaleFactor: widget.textScaleFactor,
+                      style: style)
                 ]);
           }
         case PositionEnum.drawableRight:
@@ -118,7 +146,17 @@ class _TextViewState extends State<TextView> {
                 crossAxisAlignment: widget.crossAxisAlignment,
                 mainAxisAlignment: widget.mainAxisAlignment,
                 children: [
-                  Text(widget.title, style: style),
+                  Text(widget.title,
+                      maxLines: widget.maxLines,
+                      semanticsLabel: widget.semanticsLabel,
+                      strutStyle: widget.strutStyle,
+                      textAlign: widget.textAlign,
+                      textDirection: widget.textDirection,
+                      locale: widget.locale,
+                      softWrap: widget.softWrap,
+                      overflow:widget.overflow,
+                      textScaleFactor: widget.textScaleFactor,
+                      style: style),
                   SizedBox(width: widget.drawPadding),
                   iconWidget!,
                 ]);
@@ -132,7 +170,17 @@ class _TextViewState extends State<TextView> {
               children: [
                 iconWidget!,
                 SizedBox(height: widget.drawPadding),
-                Text(widget.title, style: style)
+                Text(widget.title,
+                    maxLines: widget.maxLines,
+                    semanticsLabel: widget.semanticsLabel,
+                    strutStyle: widget.strutStyle,
+                    textAlign: widget.textAlign,
+                    textDirection: widget.textDirection,
+                    locale: widget.locale,
+                    softWrap: widget.softWrap,
+                    overflow:widget.overflow,
+                    textScaleFactor: widget.textScaleFactor,
+                    style: style)
               ],
             );
           }
@@ -143,7 +191,17 @@ class _TextViewState extends State<TextView> {
               crossAxisAlignment: widget.crossAxisAlignment,
               mainAxisAlignment: widget.mainAxisAlignment,
               children: [
-                Text(widget.title, style: style),
+                Text(widget.title,
+                    maxLines: widget.maxLines,
+                    semanticsLabel: widget.semanticsLabel,
+                    strutStyle: widget.strutStyle,
+                    textAlign: widget.textAlign,
+                    textDirection: widget.textDirection,
+                    locale: widget.locale,
+                    softWrap: widget.softWrap,
+                    overflow:widget.overflow,
+                    textScaleFactor: widget.textScaleFactor,
+                    style: style),
                 SizedBox(height: widget.drawPadding),
                 iconWidget!
               ],

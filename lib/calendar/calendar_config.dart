@@ -113,15 +113,35 @@ class CalendarConfig{
   ///翻月 行的内距
   EdgeInsets preNextPadding = const EdgeInsets.only(left: 8.0, right: 8.0, top: 4, bottom: 4);
 
-  Widget preMonthWidget = const Icon(
+
+
+
+
+  Widget preYearWidget = const Icon(
     Icons.keyboard_arrow_left,
     color: Colors.grey,
   );
 
-  Widget nextMonthWidget = const Icon(
+  Widget nextYearWidget = const Icon(
     Icons.keyboard_arrow_right,
     color: Colors.grey,
   );
+
+
+  EdgeInsets yearWidgetPadding = const EdgeInsets.all(8.0);
+  double yearWidgetWidth = 38.0;
+  double yearWidgetHeight =38.0;
+
+  BoxDecoration yearWidgetDecoration= BoxDecoration(
+    borderRadius:
+    const BorderRadius.all(Radius.circular(24.0)),
+    border: Border.all(
+      color:Colors.black12,
+    ),
+  );
+
+
+
 
   ///翻月 按钮的内距 和宽高
   EdgeInsets monthWidgetPadding = const EdgeInsets.all(8.0);
@@ -132,9 +152,26 @@ class CalendarConfig{
     borderRadius:
     const BorderRadius.all(Radius.circular(24.0)),
     border: Border.all(
-      color:Colors.black12,
+      color:Colors.transparent,
     ),
   );
+
+  Widget preMonthWidget = const Icon(
+    Icons.keyboard_arrow_left,
+    color: Colors.grey,
+    size: 30,
+  );
+
+  Widget nextMonthWidget = const Icon(
+    Icons.keyboard_arrow_right,
+    color: Colors.grey,
+    size: 30,
+  );
+
+
+
+
+
 
 
   TextStyle yearMonthStyle = const TextStyle(

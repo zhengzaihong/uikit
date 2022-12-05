@@ -32,6 +32,7 @@ class CalendarHelper{
         DateTime endTime)? callBack,
         Function()? closeCallBack,
         double? aspectRatio,
+        bool? allowSameDate = true,
       }) {
 
     showDialog<dynamic>(
@@ -57,6 +58,7 @@ class CalendarHelper{
                   maximumDate: getConfig().maximumDate,
                   initialEndDate: endDate,
                   initialStartDate: startDate,
+                  allowSameDate: allowSameDate,
                   onApplyClick: (DateTime startData, DateTime endData) {
                     if(null!=callBack){
                       callBack.call(startData,endData);
@@ -78,6 +80,7 @@ class CalendarHelper{
                      maximumDate: getConfig().maximumDate,
                      initialEndDate: endDate,
                      initialStartDate: startDate,
+                     allowSameDate: allowSameDate,
                      onApplyClick: (DateTime startData, DateTime endData) {
                        if(null!=callBack){
                          callBack.call(startData,endData);
