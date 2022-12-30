@@ -15,6 +15,8 @@ export 'progress/progress_lib.dart';
 export 'toast/toast_lib.dart';
 export 'city_picker/citypicker_lib.dart';
 export 'input_extend/inputlib.dart';
+export 'edit_text/input_text.dart';
+export 'edit_text/input_style_factory.dart';
 export 'src/position_enum.dart';
 export 'textview/text_view.dart';
 export 'table/tableview.dart';

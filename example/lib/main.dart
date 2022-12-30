@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
+import 'package:uikit_example/edit_text_example.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/tableview_example.dart';
 
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
       createMenue("城市选择", context,const CityPickerExample()),
       createMenue("popwindow",context, const PopWindowExample()),
       createMenue("日历",context, const CalendarExample()),
+      createMenue("输入框",context,  const InputExample()),
       createMenue("输入框拓展",context, const InputExtendExample()),
       createMenue("表格布局",context, const TableViewExample()),
       createMenue("无限层级菜单",context, const InfiniteLevelsExample()),
