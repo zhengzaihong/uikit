@@ -9,9 +9,12 @@ import 'package:flutter/services.dart';
 /// describe: 通用文本输入框
 ///
 
+typedef BuildInputDecorationStyle = InputDecoration Function(InputTextState state);
+
 class InputText extends StatefulWidget {
   final bool showClear;
   final Widget? title;
+  final BuildInputDecorationStyle? buildInputDecorationStyle;
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -112,9 +115,12 @@ class InputText extends StatefulWidget {
   final bool? alignLabelWithHint;
   final BoxConstraints? constraints;
 
+
   const InputText(
-      {this.title,
+      {
+        this.title,
       this.showClear = true,
+        this.buildInputDecorationStyle,
       this.controller,
       this.focusNode,
       this.decoration,
@@ -215,11 +221,12 @@ class InputText extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<InputText> createState() => _InputTextState();
+  State<InputText> createState() => InputTextState();
 }
 
-class _InputTextState extends State<InputText> {
+class InputTextState extends State<InputText> {
 
+  bool hasContent = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -270,9 +277,17 @@ class _InputTextState extends State<InputText> {
           scribbleEnabled: widget.scribbleEnabled,
           enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
           onSubmitted: widget.onSubmitted,
-          onChanged: widget.onChanged,
-          decoration: widget.decoration ??
-              InputDecoration(
+          onChanged:(text){
+            widget.onChanged?.call(text);
+            if(text==null || "" == text){
+              hasContent = false;
+            }else{
+              hasContent = true;
+            }
+            setState((){});
+          },
+          decoration:widget.buildInputDecorationStyle?.call(this)??
+              ( widget.decoration ?? InputDecoration(
                 fillColor: widget.fillColor,
                 filled: widget.filled,
                 isCollapsed: widget.isCollapsed,
@@ -321,9 +336,17 @@ class _InputTextState extends State<InputText> {
                 semanticCounterText: widget.semanticCounterText,
                 alignLabelWithHint: widget.alignLabelWithHint,
                 constraints: widget.constraints,
-              ),
+              )),
         ),
       ],
     );
   }
+
+  void clearContent(){
+    widget.controller?.text = "";
+    widget.onChanged?.call("");
+    hasContent = false;
+    setState((){});
+  }
+
 }
