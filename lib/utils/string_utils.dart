@@ -40,7 +40,7 @@ class StringUtils {
 
   /// 检查字符串是否空
   static bool isEmpty(String? string) {
-    if (null == string || string.isEmpty) {
+    if (null == string || string.isEmpty ) {
       return true;
     }
     return false;

@@ -1,20 +1,66 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_uikit_forzzh/edit_text/style/clear_style_input.dart';
+import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
+import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
 /// create_date: 2022/12/30
 /// create_time: 16:28
-/// describe: 通用文本输入框
-///
-
-typedef BuildInputDecorationStyle = InputDecoration Function(InputTextState state);
+/// describe: 通用文本输入框，可内置样式，外部定义等。支持系统全部属性 ,默认自带删除按钮。
+/// 使用此组件一定要注意使用规范：输入框的高度应该由输入框自身大小所决定。当使用
+/// 于较多文本编辑时高度通过 maxLines 设置填充。而非外部容器设置虚拟高度和背景来包裹输入框（TextField）
+///eg:
+//        InputText(
+//          // width: 200, //不传宽度默认填充父容器宽度
+//           controller: TextEditingController(),//必传参数,规避后期TextFormField 中的initValue的二义性
+//           hintText: "请输入手机号",
+//           clearIcon: const Icon(Icons.delete,size: 20,color: Colors.red),
+//           inputFormatters: [
+//             LengthLimitingTextInputFormatter(11),
+//             FilteringTextInputFormatter.digitsOnly
+//           ],
+//           onSubmitted: (text){
+//             print("---------onSubmitted:$text");
+//           },
+//           onChanged: (msg){
+//             print("---------onChanged:$msg");
+//           },
+//           // decoration: InputDecoration( // 自定义样式
+//           //   hintText: "患者姓名/联系方式/证件号码",
+//           //   hintStyle: const TextStyle(
+//           //       fontSize: 14,
+//           //       color: Colors.black
+//           //   ),
+//           //   suffixIcon: const Icon(Icons.add),
+//           //   fillColor: Colors.purple,
+//           //   enabledBorder: _outlineInputBorder,
+//           //   border: _outlineInputBorder,
+//           //   focusedBorder: _outlineInputBorder,
+//           //   errorBorder: _outlineInputBorder,
+//           //   focusedErrorBorder: _outlineInputBorder,
+//           //   contentPadding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+//           // ),
+//         )
+typedef BuildInputDecorationStyle = InputDecoration Function(
+    InputTextState state);
 
 class InputText extends StatefulWidget {
-  final bool showClear;
   final Widget? title;
-  final BuildInputDecorationStyle? buildInputDecorationStyle;
+  final bool noBorder;
+  final double bgRadius;
+  final bool enableForm;
+
+  final Widget clearIcon;
+  final Inline inline;
+  final double? width;
+  final EdgeInsetsGeometry? margin;
+  final AlignmentGeometry? alignment;
+  final EdgeInsetsGeometry? padding;
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -115,238 +161,548 @@ class InputText extends StatefulWidget {
   final bool? alignLabelWithHint;
   final BoxConstraints? constraints;
 
+  ///TextFormField所支持的属性
+  final ValueChanged<String>? onFieldSubmitted;
+  final FormFieldSetter<String>? onSaved;
+  final FormFieldValidator<String>? validator;
 
+  // final String? initialValue;
+
+  final bool enableClear;
+  final InputBorder? allLineBorder;
   const InputText(
       {
+        this.inline = Inline.clearStyle,
         this.title,
-      this.showClear = true,
-        this.buildInputDecorationStyle,
-      this.controller,
-      this.focusNode,
-      this.decoration,
-      this.keyboardType,
-      this.textInputAction,
-      this.textCapitalization = TextCapitalization.none,
-      this.style,
-      this.strutStyle,
-      this.textAlign = TextAlign.start,
-      this.textAlignVertical,
-      this.textDirection,
-      this.readOnly = false,
-      this.toolbarOptions,
-      this.showCursor,
-      this.autofocus = false,
-      this.obscuringCharacter = '•',
-      this.obscureText = false,
-      this.autocorrect = true,
-      this.enableSuggestions = true,
-      this.maxLines = 1,
-      this.minLines,
-      this.expands = false,
-      this.maxLength,
-      this.maxLengthEnforcement,
-      this.onChanged,
-      this.onEditingComplete,
-      this.onSubmitted,
-      this.onAppPrivateCommand,
-      this.inputFormatters,
-      this.enabled,
-      this.cursorWidth = 2.0,
-      this.cursorHeight,
-      this.cursorRadius,
-      this.cursorColor,
-      this.keyboardAppearance,
-      this.scrollPadding = const EdgeInsets.all(20.0),
-      this.selectionControls,
-      this.onTap,
-      this.mouseCursor,
-      this.buildCounter,
-      this.scrollController,
-      this.scrollPhysics,
-      this.autofillHints = const <String>[],
-      this.clipBehavior = Clip.hardEdge,
-      this.restorationId,
-      this.scribbleEnabled = true,
-      this.enableIMEPersonalizedLearning = true,
-      this.icon,
-      this.iconColor,
-      this.label,
-      this.labelText,
-      this.labelStyle,
-      this.floatingLabelStyle,
-      this.helperText,
-      this.helperStyle,
-      this.helperMaxLines,
-      this.hintText,
-      this.hintStyle,
-      this.hintTextDirection,
-      this.hintMaxLines,
-      this.errorText,
-      this.errorStyle,
-      this.errorMaxLines,
-      this.floatingLabelBehavior,
-      this.floatingLabelAlignment,
-      this.isCollapsed = false,
-      this.isDense,
-      this.contentPadding,
-      this.prefixIcon,
-      this.prefixIconConstraints,
-      this.prefix,
-      this.prefixText,
-      this.prefixStyle,
-      this.prefixIconColor,
-      this.suffixIcon,
-      this.suffix,
-      this.suffixText,
-      this.suffixStyle,
-      this.suffixIconColor,
-      this.suffixIconConstraints,
-      this.counter,
-      this.counterText,
-      this.counterStyle,
-      this.filled,
-      this.fillColor,
-      this.focusColor,
-      this.hoverColor,
-      this.errorBorder,
-      this.focusedBorder,
-      this.focusedErrorBorder,
-      this.disabledBorder,
-      this.enabledBorder,
-      this.border,
-      this.semanticCounterText,
-      this.alignLabelWithHint,
-      this.constraints,
-      Key? key})
+        this.noBorder = true,
+        this.bgRadius = 10,
+        this.enableForm = false,
+        this.enableClear = true,
+        this.clearIcon = const Icon(
+          Icons.cancel,
+          size: 20.0,
+          color: Colors.grey,
+        ),
+        this.allLineBorder = const OutlineInputBorder(
+            gapPadding: 0,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: Colors.transparent, width: 0)),
+        this.width = 250,
+        this.padding,
+        this.margin,
+        this.alignment = Alignment.centerLeft,
+        required this.controller,
+        this.focusNode,
+        this.decoration,
+        this.keyboardType = TextInputType.text,
+        this.textInputAction = TextInputAction.done,
+        this.textCapitalization = TextCapitalization.none,
+        this.style =
+        const TextStyle(fontSize: 14, color:Color(0xff222222)),
+        this.strutStyle,
+        this.textAlign = TextAlign.start,
+        this.textAlignVertical,
+        this.textDirection,
+        this.readOnly = false,
+        this.toolbarOptions,
+        this.showCursor,
+        this.autofocus = false,
+        this.obscuringCharacter = '•',
+        this.obscureText = false,
+        this.autocorrect = true,
+        this.enableSuggestions = true,
+        this.maxLines = 1,
+        this.minLines,
+        this.expands = false,
+        this.maxLength,
+        this.maxLengthEnforcement,
+        this.onChanged,
+        this.onEditingComplete,
+        this.onSubmitted,
+        this.onAppPrivateCommand,
+        this.inputFormatters,
+        this.enabled = true,
+        this.cursorWidth = 2.0,
+        this.cursorHeight,
+        this.cursorRadius,
+        this.cursorColor,
+        this.keyboardAppearance,
+        this.scrollPadding = const EdgeInsets.all(20.0),
+        this.selectionControls,
+        this.onTap,
+        this.mouseCursor,
+        this.buildCounter,
+        this.scrollController,
+        this.scrollPhysics,
+        this.autofillHints = const <String>[],
+        this.clipBehavior = Clip.hardEdge,
+        this.restorationId,
+        this.scribbleEnabled = true,
+        this.enableIMEPersonalizedLearning = true,
+        this.icon,
+        this.iconColor,
+        this.label,
+        this.labelText,
+        this.labelStyle,
+        this.floatingLabelStyle,
+        this.helperText,
+        this.helperStyle,
+        this.helperMaxLines,
+        this.hintText,
+        this.hintStyle = const TextStyle(fontSize: 14, color: Color(0xff999999)),
+        this.hintTextDirection,
+        this.hintMaxLines,
+        this.errorText,
+        this.errorStyle,
+        this.errorMaxLines,
+        this.floatingLabelBehavior,
+        this.floatingLabelAlignment,
+        this.isCollapsed = true,
+        this.isDense,
+        this.contentPadding = const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+        this.prefixIcon,
+        this.prefixIconConstraints,
+        this.prefix,
+        this.prefixText,
+        this.prefixStyle,
+        this.prefixIconColor,
+        this.suffixIcon,
+        this.suffix,
+        this.suffixText,
+        this.suffixStyle,
+        this.suffixIconColor,
+        this.suffixIconConstraints,
+        this.counter,
+        this.counterText,
+        this.counterStyle,
+        this.filled = true,
+        this.fillColor = const Color(0xffF1F2F6),
+        this.focusColor,
+        this.hoverColor = const Color(0xffF1F2F6),
+        this.errorBorder,
+        this.focusedBorder,
+        this.focusedErrorBorder,
+        this.disabledBorder,
+        this.enabledBorder,
+        this.border,
+        this.semanticCounterText,
+        this.alignLabelWithHint,
+        this.constraints,
+        this.onFieldSubmitted,
+        this.onSaved,
+        this.validator,
+        // this.initialValue,
+        Key? key})
       : super(key: key);
 
   @override
   State<InputText> createState() => InputTextState();
 }
 
-class InputTextState extends State<InputText> {
+class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin{
 
-  bool hasContent = false;
+  Timer? timer;
+  bool _hasContent = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (StringUtils.isEmpty(widget.controller?.text)) {
+      _hasContent = false;
+    } else {
+      _hasContent = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         widget.title ?? const SizedBox.shrink(),
-        TextField(
-          controller: widget.controller,
-          focusNode: widget.focusNode,
-          style: widget.style,
-          scrollController: widget.scrollController,
-          keyboardType: widget.keyboardType,
-          textInputAction: widget.textInputAction,
-          textCapitalization: widget.textCapitalization,
-          strutStyle: widget.strutStyle,
-          textAlign: widget.textAlign,
-          textAlignVertical: widget.textAlignVertical,
-          textDirection: widget.textDirection,
-          autofocus: widget.autofocus,
-          obscuringCharacter: widget.obscuringCharacter,
-          obscureText: widget.obscureText,
-          autocorrect: widget.autocorrect,
-          enableSuggestions: widget.enableSuggestions,
-          maxLines: widget.maxLines,
-          minLines: widget.minLines,
-          expands: widget.expands,
-          readOnly: widget.readOnly,
-          toolbarOptions: widget.toolbarOptions,
-          showCursor: widget.showCursor,
-          maxLength: widget.maxLength,
-          maxLengthEnforcement: widget.maxLengthEnforcement,
-          onEditingComplete: widget.onEditingComplete,
-          onAppPrivateCommand: widget.onAppPrivateCommand,
-          inputFormatters: widget.inputFormatters,
-          enabled: widget.enabled,
-          cursorWidth: widget.cursorWidth,
-          cursorHeight: widget.cursorHeight,
-          cursorRadius: widget.cursorRadius,
-          keyboardAppearance: widget.keyboardAppearance,
-          scrollPadding: widget.scrollPadding,
-          selectionControls: widget.selectionControls,
-          onTap: widget.onTap,
-          mouseCursor: widget.mouseCursor,
-          buildCounter: widget.buildCounter,
-          scrollPhysics: widget.scrollPhysics,
-          autofillHints: widget.autofillHints,
-          clipBehavior: widget.clipBehavior,
-          restorationId: widget.restorationId,
-          scribbleEnabled: widget.scribbleEnabled,
-          enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
-          onSubmitted: widget.onSubmitted,
-          onChanged:(text){
-            widget.onChanged?.call(text);
-            if(text==null || "" == text){
-              hasContent = false;
-            }else{
-              hasContent = true;
-            }
-            setState((){});
-          },
-          decoration:widget.buildInputDecorationStyle?.call(this)??
-              ( widget.decoration ?? InputDecoration(
-                fillColor: widget.fillColor,
-                filled: widget.filled,
-                isCollapsed: widget.isCollapsed,
-                contentPadding: widget.contentPadding,
-                border: widget.border,
-                focusedBorder: widget.focusedBorder,
-                enabledBorder: widget.enabledBorder,
-                disabledBorder: widget.disabledBorder,
-                focusedErrorBorder: widget.focusedErrorBorder,
-                errorBorder: widget.enabledBorder,
-                icon: widget.icon,
-                iconColor: widget.iconColor,
-                label: widget.label,
-                labelText: widget.labelText,
-                labelStyle: widget.labelStyle,
-                floatingLabelStyle: widget.floatingLabelStyle,
-                helperText: widget.helperText,
-                helperStyle: widget.helperStyle,
-                helperMaxLines: widget.helperMaxLines,
-                hintText: widget.hintText,
-                hintStyle: widget.hintStyle,
-                hintTextDirection: widget.hintTextDirection,
-                hintMaxLines: widget.hintMaxLines,
-                errorText: widget.errorText,
-                errorStyle: widget.errorStyle,
-                errorMaxLines: widget.errorMaxLines,
-                floatingLabelBehavior: widget.floatingLabelBehavior,
-                floatingLabelAlignment: widget.floatingLabelAlignment,
-                prefixIcon: widget.prefixIcon,
-                prefixIconConstraints: widget.prefixIconConstraints,
-                prefix: widget.prefix,
-                prefixText: widget.prefixText,
-                prefixStyle: widget.prefixStyle,
-                prefixIconColor: widget.prefixIconColor,
-                suffixIcon: widget.suffixIcon,
-                suffix: widget.suffix,
-                suffixText: widget.suffixText,
-                suffixStyle: widget.suffixStyle,
-                suffixIconColor: widget.suffixIconColor,
-                suffixIconConstraints: widget.suffixIconConstraints,
-                counter: widget.counter,
-                counterText: widget.counterText,
-                counterStyle: widget.counterStyle,
-                focusColor: widget.focusColor,
-                hoverColor: widget.hoverColor,
-                semanticCounterText: widget.semanticCounterText,
-                alignLabelWithHint: widget.alignLabelWithHint,
-                constraints: widget.constraints,
-              )),
-        ),
+        widget.noBorder
+            ? Theme(
+            data: ThemeData(
+              primaryColor: Colors.transparent,
+              inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(widget.bgRadius)),
+                      borderSide: const BorderSide(color: Colors.transparent)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(widget.bgRadius)),
+                      borderSide: const BorderSide(color: Colors.transparent))),
+            ),
+            child: widget.enableForm ? _createInputForm() : _createInput())
+            : widget.enableForm
+            ? _createInputForm()
+            : _createInput(),
       ],
     );
   }
 
-  void clearContent(){
-    widget.controller?.text = "";
-    widget.onChanged?.call("");
-    hasContent = false;
-    setState((){});
+  Widget _createInput() {
+    return widget.width == null
+        ? Row(
+      children: [
+        Expanded(
+            child: Container(
+              alignment: widget.alignment,
+              padding: widget.padding,
+              margin: widget.margin,
+              width: widget.width,
+              child: TextField(
+                controller: widget.controller,
+                focusNode: widget.focusNode,
+                style: widget.style,
+                scrollController: widget.scrollController,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                textCapitalization: widget.textCapitalization,
+                strutStyle: widget.strutStyle,
+                textAlign: widget.textAlign,
+                textAlignVertical: widget.textAlignVertical,
+                textDirection: widget.textDirection,
+                autofocus: widget.autofocus,
+                obscuringCharacter: widget.obscuringCharacter,
+                obscureText: widget.obscureText,
+                autocorrect: widget.autocorrect,
+                enableSuggestions: widget.enableSuggestions,
+                maxLines: widget.maxLines,
+                minLines: widget.minLines,
+                expands: widget.expands,
+                readOnly: widget.readOnly,
+                toolbarOptions: widget.toolbarOptions,
+                showCursor: widget.showCursor,
+                maxLength: widget.maxLength,
+                maxLengthEnforcement: widget.maxLengthEnforcement,
+                onEditingComplete: widget.onEditingComplete,
+                onAppPrivateCommand: widget.onAppPrivateCommand,
+                inputFormatters: widget.inputFormatters,
+                enabled: widget.enabled,
+                cursorWidth: widget.cursorWidth,
+                cursorHeight: widget.cursorHeight,
+                cursorRadius: widget.cursorRadius,
+                keyboardAppearance: widget.keyboardAppearance,
+                scrollPadding: widget.scrollPadding,
+                selectionControls: widget.selectionControls,
+                onTap: widget.onTap,
+                mouseCursor: widget.mouseCursor,
+                buildCounter: widget.buildCounter,
+                scrollPhysics: widget.scrollPhysics,
+                autofillHints: widget.autofillHints,
+                clipBehavior: widget.clipBehavior,
+                restorationId: widget.restorationId,
+                scribbleEnabled: widget.scribbleEnabled,
+                enableIMEPersonalizedLearning:
+                widget.enableIMEPersonalizedLearning,
+                onSubmitted: widget.onSubmitted,
+                onChanged: (text) {
+                  _refresh(text);
+                },
+                decoration: buildDefaultInputDecoration(),
+              ),
+            ))
+      ],
+    )
+        : Container(
+      alignment: widget.alignment,
+      padding: widget.padding,
+      margin: widget.margin,
+      width: widget.width,
+      child:TextField(
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        style: widget.style,
+        scrollController: widget.scrollController,
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        textCapitalization: widget.textCapitalization,
+        strutStyle: widget.strutStyle,
+        textAlign: widget.textAlign,
+        textAlignVertical: widget.textAlignVertical,
+        textDirection: widget.textDirection,
+        autofocus: widget.autofocus,
+        obscuringCharacter: widget.obscuringCharacter,
+        obscureText: widget.obscureText,
+        autocorrect: widget.autocorrect,
+        enableSuggestions: widget.enableSuggestions,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        expands: widget.expands,
+        readOnly: widget.readOnly,
+        toolbarOptions: widget.toolbarOptions,
+        showCursor: widget.showCursor,
+        maxLength: widget.maxLength,
+        maxLengthEnforcement: widget.maxLengthEnforcement,
+        onEditingComplete: widget.onEditingComplete,
+        onAppPrivateCommand: widget.onAppPrivateCommand,
+        inputFormatters: widget.inputFormatters,
+        enabled: widget.enabled,
+        cursorWidth: widget.cursorWidth,
+        cursorHeight: widget.cursorHeight,
+        cursorRadius: widget.cursorRadius,
+        keyboardAppearance: widget.keyboardAppearance,
+        scrollPadding: widget.scrollPadding,
+        selectionControls: widget.selectionControls,
+        onTap: widget.onTap,
+        mouseCursor: widget.mouseCursor,
+        buildCounter: widget.buildCounter,
+        scrollPhysics: widget.scrollPhysics,
+        autofillHints: widget.autofillHints,
+        clipBehavior: widget.clipBehavior,
+        restorationId: widget.restorationId,
+        scribbleEnabled: widget.scribbleEnabled,
+        enableIMEPersonalizedLearning:
+        widget.enableIMEPersonalizedLearning,
+        onSubmitted: widget.onSubmitted,
+        onChanged: (text) {
+          _refresh(text);
+        },
+        decoration: buildDefaultInputDecoration(),
+      ),
+    );
   }
 
+  Widget _createInputForm() {
+    return widget.width == null
+        ? Row(
+      children: [
+        Expanded(
+            child: Container(
+              alignment: widget.alignment,
+              padding: widget.padding,
+              margin: widget.margin,
+              // width: widget.width,
+              child: TextFormField(
+                controller: widget.controller,
+                focusNode: widget.focusNode,
+                style: widget.style,
+                scrollController: widget.scrollController,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                textCapitalization: widget.textCapitalization,
+                strutStyle: widget.strutStyle,
+                textAlign: widget.textAlign,
+                textAlignVertical: widget.textAlignVertical,
+                textDirection: widget.textDirection,
+                autofocus: widget.autofocus,
+                obscuringCharacter: widget.obscuringCharacter,
+                obscureText: widget.obscureText,
+                autocorrect: widget.autocorrect,
+                enableSuggestions: widget.enableSuggestions,
+                maxLines: widget.maxLines,
+                minLines: widget.minLines,
+                expands: widget.expands,
+                readOnly: widget.readOnly,
+                toolbarOptions: widget.toolbarOptions,
+                showCursor: widget.showCursor,
+                maxLength: widget.maxLength,
+                maxLengthEnforcement: widget.maxLengthEnforcement,
+                onEditingComplete: widget.onEditingComplete,
+                inputFormatters: widget.inputFormatters,
+                enabled: widget.enabled,
+                cursorWidth: widget.cursorWidth,
+                cursorHeight: widget.cursorHeight,
+                cursorRadius: widget.cursorRadius,
+                keyboardAppearance: widget.keyboardAppearance,
+                scrollPadding: widget.scrollPadding,
+                selectionControls: widget.selectionControls,
+                onTap: widget.onTap,
+                mouseCursor: widget.mouseCursor,
+                buildCounter: widget.buildCounter,
+                scrollPhysics: widget.scrollPhysics,
+                autofillHints: widget.autofillHints,
+                restorationId: widget.restorationId,
+                enableIMEPersonalizedLearning:
+                widget.enableIMEPersonalizedLearning,
+                // initialValue: widget.initialValue,
+                validator: (value) {
+                  return widget.validator?.call(value);
+                },
+                onFieldSubmitted: (text) {
+                  widget.onFieldSubmitted?.call(text);
+                },
+                onSaved: (text) {
+                  widget.onSaved?.call(text);
+                },
+                onChanged: (text) {
+                  _refresh(text);
+
+                  timer?.cancel();
+                  timer = Timer(const Duration(milliseconds: 500), () {
+                    widget.onChanged?.call(text);
+                  });
+                },
+                decoration: buildDefaultInputDecoration(),
+              ),
+            ))
+      ],
+    )
+        : Container(
+      alignment: widget.alignment,
+      padding: widget.padding,
+      margin: widget.margin,
+      // width: widget.width,
+      child: TextFormField(
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        style: widget.style,
+        scrollController: widget.scrollController,
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        textCapitalization: widget.textCapitalization,
+        strutStyle: widget.strutStyle,
+        textAlign: widget.textAlign,
+        textAlignVertical: widget.textAlignVertical,
+        textDirection: widget.textDirection,
+        autofocus: widget.autofocus,
+        obscuringCharacter: widget.obscuringCharacter,
+        obscureText: widget.obscureText,
+        autocorrect: widget.autocorrect,
+        enableSuggestions: widget.enableSuggestions,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        expands: widget.expands,
+        readOnly: widget.readOnly,
+        toolbarOptions: widget.toolbarOptions,
+        showCursor: widget.showCursor,
+        maxLength: widget.maxLength,
+        maxLengthEnforcement: widget.maxLengthEnforcement,
+        onEditingComplete: widget.onEditingComplete,
+        inputFormatters: widget.inputFormatters,
+        enabled: widget.enabled,
+        cursorWidth: widget.cursorWidth,
+        cursorHeight: widget.cursorHeight,
+        cursorRadius: widget.cursorRadius,
+        keyboardAppearance: widget.keyboardAppearance,
+        scrollPadding: widget.scrollPadding,
+        selectionControls: widget.selectionControls,
+        onTap: widget.onTap,
+        mouseCursor: widget.mouseCursor,
+        buildCounter: widget.buildCounter,
+        scrollPhysics: widget.scrollPhysics,
+        autofillHints: widget.autofillHints,
+        restorationId: widget.restorationId,
+        enableIMEPersonalizedLearning:
+        widget.enableIMEPersonalizedLearning,
+        // initialValue: widget.initialValue,
+        validator: (value) {
+          return widget.validator?.call(value);
+        },
+        onFieldSubmitted: (text) {
+          widget.onFieldSubmitted?.call(text);
+        },
+        onSaved: (text) {
+          widget.onSaved?.call(text);
+        },
+        onChanged: (text) {
+          _refresh(text);
+
+          timer?.cancel();
+          timer = Timer(const Duration(milliseconds: 500), () {
+            widget.onChanged?.call(text);
+          });
+        },
+        decoration: buildDefaultInputDecoration(),
+      ),
+    );
+  }
+
+  InputDecoration buildDefaultInputDecoration() {
+    if (widget.decoration == null) {
+      if(widget.inline == Inline.clearStyle){
+        return ClearStyleInput().build(
+          this,
+          clearIcon:widget.clearIcon ,
+          allLineBorder: widget.allLineBorder,
+          enableClear: widget.enableClear,
+          fillColor: widget.fillColor,
+          filled: widget.filled,
+          isCollapsed: widget.isCollapsed,
+          contentPadding: widget.contentPadding,
+          border: widget.border,
+          focusedBorder: widget.focusedBorder??widget.allLineBorder,
+          enabledBorder:widget.enabledBorder??widget.allLineBorder,
+          disabledBorder: widget.disabledBorder??widget.allLineBorder,
+          focusedErrorBorder:widget.focusedErrorBorder??widget.allLineBorder,
+          errorBorder: widget.enabledBorder??widget.allLineBorder,
+          icon: widget.icon,
+          iconColor: widget.iconColor,
+          label: widget.label,
+          labelText: widget.labelText,
+          labelStyle: widget.labelStyle,
+          floatingLabelStyle: widget.floatingLabelStyle,
+          helperText: widget.helperText,
+          helperStyle: widget.helperStyle,
+          helperMaxLines: widget.helperMaxLines,
+          hintText: widget.hintText,
+          hintStyle: widget.hintStyle,
+          hintTextDirection: widget.hintTextDirection,
+          hintMaxLines: widget.hintMaxLines,
+          errorText: widget.errorText,
+          errorStyle: widget.errorStyle,
+          errorMaxLines: widget.errorMaxLines,
+          floatingLabelBehavior: widget.floatingLabelBehavior,
+          floatingLabelAlignment: widget.floatingLabelAlignment,
+          prefixIcon: widget.prefixIcon,
+          prefixIconConstraints: widget.prefixIconConstraints,
+          prefix: widget.prefix,
+          prefixText: widget.prefixText,
+          prefixStyle: widget.prefixStyle,
+          prefixIconColor: widget.prefixIconColor,
+          suffixIcon: widget.suffixIcon,
+          suffix: widget.suffix,
+          suffixText: widget.suffixText,
+          suffixStyle: widget.suffixStyle,
+          suffixIconColor: widget.suffixIconColor,
+          suffixIconConstraints: widget.suffixIconConstraints,
+          counter: widget.counter,
+          counterText: widget.counterText,
+          counterStyle: widget.counterStyle,
+          focusColor: widget.focusColor,
+          hoverColor: widget.hoverColor,
+          semanticCounterText: widget.semanticCounterText,
+          alignLabelWithHint: widget.alignLabelWithHint,
+          constraints: widget.constraints,
+        );
+      }
+
+      if(widget.inline == Inline.none){
+
+      }
+    }
+    return widget.decoration!;
+  }
+
+  void _refresh(String text){
+    if(mounted){
+      setState(() {
+         widget.onChanged?.call(text);
+        _hasContent = text.isNotEmpty;
+      });
+    }
+  }
+
+  void clearContent() {
+    setState(() {
+      widget.controller?.text = "";
+      widget.onChanged?.call("");
+      widget.onSubmitted?.call("");
+      widget.onEditingComplete?.call();
+      _hasContent = false;
+    });
+  }
+
+  bool getIsEnable() {
+    return widget.enabled ?? true;
+  }
+  bool getHasContent() {
+    return _hasContent;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
