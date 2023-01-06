@@ -56,7 +56,7 @@ class InputText extends StatefulWidget {
   final bool enableForm;
 
   final Widget clearIcon;
-  final Inline inline;
+  final InlineStyle inline;
   final double? width;
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
@@ -172,7 +172,7 @@ class InputText extends StatefulWidget {
   final InputBorder? allLineBorder;
   const InputText(
       {
-        this.inline = Inline.clearStyle,
+        this.inline = InlineStyle.clearStyle,
         this.title,
         this.noBorder = true,
         this.bgRadius = 10,
@@ -613,7 +613,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   InputDecoration buildDefaultInputDecoration() {
     if (widget.decoration == null) {
-      if(widget.inline == Inline.clearStyle){
+      if(widget.inline == InlineStyle.clearStyle){
         return ClearStyleInput().build(
           this,
           clearIcon:widget.clearIcon ,
@@ -670,7 +670,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         );
       }
 
-      if(widget.inline == Inline.none){
+      if(widget.inline == InlineStyle.none){
 
       }
     }

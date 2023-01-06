@@ -6,7 +6,7 @@
 /// create_time: 11:10
 /// describe: 后期拓展样式的类型
 ///
-enum Inline {
+enum InlineStyle {
 
   clearStyle,
 
