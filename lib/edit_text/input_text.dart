@@ -14,7 +14,23 @@ import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 /// describe: 通用文本输入框，可内置样式，外部定义等。支持系统全部属性 ,默认自带删除按钮。
 /// 使用此组件一定要注意使用规范：输入框的高度应该由输入框自身大小所决定。当使用
 /// 于较多文本编辑时高度通过 maxLines 设置填充。而非外部容器设置虚拟高度和背景来包裹输入框（TextField）
-///eg:
+///
+/// 当启用enableForm时，完成校验工作需要在你全部需要校验的输入框最外层提供 Form 布局包裹。并提供 FormState，列如：
+///          final _formKey = GlobalKey<FormState>();
+///           Form(
+///               key: _formKey,
+///               child:xxx包含输入框的子布局
+///            ）
+/// 在提交处验证输入信息：
+///             onPressed: () {
+///                  if (_formKey.currentState!.validate()) {
+///                    print("验证通过");
+///                  }else{
+///                    print("验证失败");
+///                  }
+///              },
+///
+///常规简易用法: 更多内容查看 demo 源码
 //        InputText(
 //          // width: 200, //不传宽度默认填充父容器宽度
 //           controller: TextEditingController(),//必传参数,规避后期TextFormField 中的initValue的二义性
@@ -545,7 +561,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       alignment: widget.alignment,
       padding: widget.padding,
       margin: widget.margin,
-      // width: widget.width,
+      width: widget.width,
       child: TextFormField(
         controller: widget.controller,
         focusNode: widget.focusNode,
@@ -628,7 +644,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
           enabledBorder:widget.enabledBorder??widget.allLineBorder,
           disabledBorder: widget.disabledBorder??widget.allLineBorder,
           focusedErrorBorder:widget.focusedErrorBorder??widget.allLineBorder,
-          errorBorder: widget.enabledBorder??widget.allLineBorder,
+          errorBorder: widget.errorBorder??widget.allLineBorder,
           icon: widget.icon,
           iconColor: widget.iconColor,
           label: widget.label,

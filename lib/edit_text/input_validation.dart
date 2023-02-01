@@ -1,0 +1,88 @@
+
+import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
+
+///
+/// create_user: zhengzaihong
+/// email:1096877329@qq.com
+/// create_date: 2023/2/1
+/// create_time: 17:52
+/// describe: 输入框基础校验器
+///
+class InputValidation {
+
+  final bool? mustFill;
+  final int? minLength;
+  final int? maxLength;
+  final String? errorMsg;
+  final String? format;
+  final String? emptyTip;
+  final List? formatValues;
+  final bool? mobilePhone;
+
+  const InputValidation({ this.mustFill = true,
+    this.minLength,
+    this.maxLength,
+    this.mobilePhone,
+    this.errorMsg,
+    this.format,
+    this.emptyTip = "输入不能为空",
+    this.formatValues = const [],
+  });
+
+  String? validate(value) {
+    if ((mustFill != null && mustFill != false) &&
+        (value == null || value.isEmpty)) {
+      return emptyTip;
+    }
+    if (mobilePhone != null && mobilePhone != false) {
+      if (StringUtils.isEmpty(value)) {
+        return errorMsg;
+      }
+      if (value
+          .toString()
+          .length != 11) {
+        return errorMsg;
+      }
+    }
+
+    if (format == null && errorMsg != null) {
+      if (minLength != null && value.length < minLength) {
+        return errorMsg;
+      } else if (maxLength != null && value.length > maxLength) {
+        return errorMsg;
+      }
+    }
+    if (format != null) {
+      if (minLength != null && value.length < minLength) {
+        return _strFormat();
+      } else if (maxLength != null && value.length > maxLength) {
+        return _strFormat();
+      }
+    }
+    return null;
+  }
+
+  String _strFormat() {
+    if (StringUtils.isEmpty(format)) {
+      return "";
+    }
+    if (format!.contains("%s")) {
+      var list = format!.split("%s");
+      if (list.length - 1 != formatValues!.length) {
+        print("InputValidation 校验中占位符和填充内容长度不匹配~");
+        return errorMsg ?? "";
+      }
+      StringBuffer buffer = StringBuffer();
+      int index = 0;
+      for (var item in list) {
+        if (index != 0) {
+          buffer.write(formatValues![index - 1]);
+        }
+        buffer.write(item);
+        index++;
+      }
+      return buffer.toString();
+    }
+    return format!;
+  }
+}

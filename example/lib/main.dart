@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
-import 'package:uikit_example/edit_text_example.dart';
+import 'package:uikit_example/InputExample.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/tableview_example.dart';
 
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
         body: LayoutBuilder(
           builder:(context,_){
 
-            _createMenues(context);
+            _createMenus(context);
 
             return GridView.builder(
               itemCount: funList.length,
@@ -57,25 +57,25 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _createMenues(BuildContext context){
+  void _createMenus(BuildContext context){
 
     funList = [
-      createMenue("进度条", context,const ProgressBarExample()),
-      createMenue("toast", context,const ToastExample()),
-      createMenue("城市选择", context,const CityPickerExample()),
-      createMenue("popwindow",context, const PopWindowExample()),
-      createMenue("日历",context, const CalendarExample()),
-      createMenue("输入框",context,  const InputExample()),
-      createMenue("输入框拓展",context, const InputExtendExample()),
-      createMenue("表格布局",context, const TableViewExample()),
-      createMenue("无限层级菜单",context, const InfiniteLevelsExample()),
-      createMenue("常用小组件",context, const OftenWidgetExample()),
+      createMenu("进度条", context,const ProgressBarExample()),
+      createMenu("toast", context,const ToastExample()),
+      createMenu("城市选择", context,const CityPickerExample()),
+      createMenu("popwindow",context, const PopWindowExample()),
+      createMenu("日历",context, const CalendarExample()),
+      createMenu("输入框",context,  const InputExample()),
+      createMenu("输入框拓展",context, const InputExtendExample()),
+      createMenu("表格布局",context, const TableViewExample()),
+      createMenu("无限层级菜单",context, const InfiniteLevelsExample()),
+      createMenu("常用小组件",context, const OftenWidgetExample()),
     ];
   }
 
 
 
-  Widget createMenue(String title,BuildContext context,dynamic page){
+  Widget createMenu(String title,BuildContext context,dynamic page){
 
     return InkWell(
         onTap: () {
