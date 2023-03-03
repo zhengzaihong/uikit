@@ -6,7 +6,7 @@ import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 /// email:1096877329@qq.com
 /// create_date: 2023/2/1
 /// create_time: 17:52
-/// describe: 输入框基础校验器
+/// describe: 输入框基础校验器,内置校验不满足时可继承该类或仿写校验规则
 ///
 class InputValidation {
 

@@ -17,7 +17,7 @@ typedef BuildChild = Widget Function(FullPopView popView);
 class FullPopView {
 
   final BuildChild buildChild;
-  final Color backgrounColor;
+  final Color backGroundColor;
   final AlignmentGeometry alignment;
   final double sigmaX;
   final double sigmaY;
@@ -29,7 +29,7 @@ class FullPopView {
   FullPopView({
     required this.buildChild,
     this.alignment = Alignment.center,
-    this.backgrounColor = Colors.transparent,
+    this.backGroundColor = Colors.transparent,
     this.sigmaX=5.0,
     this.sigmaY = 5.0,
     this.tileMode = TileMode.clamp,
@@ -70,7 +70,7 @@ class FullPopView {
               },
               child: Container(
                   alignment: alignment,
-                  color: backgrounColor,
+                  color: backGroundColor,
                   width: size.width,
                   height: size.height,
                   child: BackdropFilter(

@@ -31,7 +31,7 @@ class TextView extends StatefulWidget {
   final Widget? drawablePressWidget;
 
   ///图标显示位置
-  final PositionEnum drawablePositon;
+  final PositionEnum drawablePosition;
 
   ///是否可点击
   final bool enableClick;
@@ -53,7 +53,7 @@ class TextView extends StatefulWidget {
     this.highlightColor = Colors.transparent,
     this.hoverColor = Colors.transparent,
     this.drawPadding = 5.0,
-    this.drawablePositon = PositionEnum.drawableRight,
+    this.drawablePosition = PositionEnum.drawableRight,
     this.drawableWidget,
     this.drawablePressWidget,
     this.enableClick = true,
@@ -116,7 +116,7 @@ class _TextViewState extends State<TextView> {
 
   Widget createButtonStyle() {
     if (iconWidget != null) {
-      switch (widget.drawablePositon) {
+      switch (widget.drawablePosition) {
         case PositionEnum.drawableLeft:
           {
             return Row(

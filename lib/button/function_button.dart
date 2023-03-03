@@ -21,16 +21,18 @@ class FunctionButton extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry margin;
-  final Color splashColor;
+  final Color highlightColor;
   final Color hoverColor;
+  final Color? focusColor;
+  final Color? splashColor;
+  final double? radius;
 
   const FunctionButton(
     this.title,
     this.index, {
     this.checkedTextStyle =
         const TextStyle(color: Colors.lightBlue, fontSize: 20),
-    this.unCheckTextStyle =
-        const TextStyle(color: Colors.black, fontSize: 20),
+    this.unCheckTextStyle = const TextStyle(color: Colors.black, fontSize: 20),
     this.checkedBoxDecoration = const BoxDecoration(
         color: Colors.deepPurple,
         borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -42,8 +44,11 @@ class FunctionButton extends StatefulWidget {
     this.padding = const EdgeInsets.all(0),
     this.margin = const EdgeInsets.all(0),
     this.alignment = Alignment.center,
-    this.splashColor = Colors.transparent,
+    this.highlightColor = Colors.transparent,
     this.hoverColor = Colors.transparent,
+    this.focusColor,
+    this.splashColor,
+    this.radius,
     Key? key,
   }) : super(key: key);
 
@@ -54,7 +59,6 @@ class FunctionButton extends StatefulWidget {
 class _FunctionButtonState extends State<FunctionButton> {
   @override
   Widget build(BuildContext context) {
-
     final containerManger = FunctionContainer.of(context);
     final checkeds = containerManger?.defaultCheckeds;
     final allow = containerManger?.allowMultipleChoice;
@@ -82,8 +86,11 @@ class _FunctionButtonState extends State<FunctionButton> {
     }
 
     return InkWell(
-        splashColor: widget.splashColor,
+        highlightColor: widget.highlightColor,
         hoverColor: widget.hoverColor,
+        focusColor: widget.focusColor,
+        splashColor: widget.splashColor,
+        radius: widget.radius,
         onTap: () {
           containerManger?.mangerState?.updateChange(widget.index);
         },

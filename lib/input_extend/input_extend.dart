@@ -19,6 +19,8 @@ typedef BuildSelectPop<T> = Widget Function(
 
 typedef Compare<T> = bool Function(List<T> data);
 
+typedef CompareVO<T> = bool Function(T item);
+
 typedef BuildCheckedBarStyle<T> = Widget? Function(
     T checkDatas, InputExtendState controller);
 
@@ -134,6 +136,17 @@ class InputExtend<T> extends StatefulWidget {
   final TextEditingController? textEditingController;
   final ScrollController? scrollController ;
   final ScrollController? inputScrollController;
+
+
+  final double? popElevation;
+  final Color? popColor;
+  final Color? popShadowColor;
+  final Color? popSurfaceTintColor;
+  final TextStyle? popChildTextStyle;
+  final BorderRadiusGeometry? popBorderRadius;
+  final ShapeBorder? popShape;
+
+
   const InputExtend(
       { required this.buildSelectPop,
         required this.onChanged,
@@ -157,7 +170,7 @@ class InputExtend<T> extends StatefulWidget {
         this.autoClose = false,
         this.enableHasFocusCallBack = false,
         this.popConstraintBox,
-        this.selectPopMarginTop = 5,
+        this.selectPopMarginTop = 0,
         this.textEditingController,
         this.inputScrollController,
         this.scrollController,
@@ -206,6 +219,13 @@ class InputExtend<T> extends StatefulWidget {
         this.restorationId,
         this.scribbleEnabled = true,
         this.enableIMEPersonalizedLearning = true,
+        this.popElevation = 0.0,
+        this.popColor = Colors.transparent,
+        this.popShadowColor,
+        this.popSurfaceTintColor,
+        this.popChildTextStyle,
+        this.popBorderRadius,
+        this.popShape,
         Key? key})
       : super(key: key);
 
@@ -428,7 +448,16 @@ class InputExtendState<T> extends State<InputExtend> {
             link: _layerLink,
             showWhenUnlinked: false,
             offset: Offset(0.0, size.height + widget.selectPopMarginTop),
-            child: widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
+            child: Material(
+              elevation: widget.popElevation!,
+              shadowColor: widget.popShadowColor,
+              color: widget.popColor,
+              shape: widget.popShape,
+              borderRadius: widget.popBorderRadius,
+              surfaceTintColor: widget.popSurfaceTintColor,
+              textStyle: widget.popChildTextStyle,
+              child:  widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
+            ),
           ),
         ));
   }
@@ -452,10 +481,31 @@ class InputExtendState<T> extends State<InputExtend> {
     super.dispose();
   }
 
+  ///提供给同一个数据源集合的判断方法，实际中 通常不是
   bool isChecked(int index) {
     final bean = getSearchData[index];
     return getCheckedDatas.contains(bean);
   }
+
+  ///提供不同数据源的比较，通常是边搜索，边比较是否选中
+  bool isCheckedVO(CompareVO compareVO) {
+
+    List list = getCheckedDatas;
+    if(list.isEmpty){
+      return false;
+    }
+    for (var item in list) {
+      ///检查到外部有相等的内容 则认为是已包含此项
+      if(compareVO.call(item)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {

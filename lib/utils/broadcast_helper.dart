@@ -46,7 +46,7 @@ class BroadcastHelper {
   void regist(dynamic target, void Function(Object? object) onData,
       {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     if (_listenerMap.containsKey(target)) {
-      return;
+      _listenerMap.remove(target);
     }
     _listenerMap[target] = onData;
     if(!_streamController.hasListener){

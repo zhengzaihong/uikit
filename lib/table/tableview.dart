@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// describe: 绘制表格的组件，使用此组件一定要注意每行的权重比
 /// 此组件用于通用性表格，
 /// 表格存在各种合并的单元格 需根据行号单独处理
-///
+///  2023-02-25 已支持非固定行高，一行中自动适配最高行。
 /// 待优化
 ///
 
@@ -52,6 +52,7 @@ class TableView<T> extends StatefulWidget {
   final bool addRepaintBoundaries;
   final bool addSemanticIndexes;
   final double? cacheExtent;
+
 
   const TableView(
       {this.tableDatas = const [],
@@ -143,8 +144,8 @@ class _TableViewState<T> extends State<TableView> {
 
 class TabRow extends StatelessWidget {
   final bool enableDivider;
-  final List<int> cellWeiget;
-  final double rowDividerHeight;
+  final List<int> cellWidget;
+  final double? rowDividerHeight;
   final double rowDividerWidth;
   final Color? dividerColor;
   final CellItem cellItem;
@@ -155,12 +156,14 @@ class TabRow extends StatelessWidget {
   final CrossAxisAlignment crossAxisAlignment;
   final TextDirection? textDirection;
   final VerticalDirection verticalDirection;
+  final bool fixRowHeight;
 
   const TabRow(
-      {this.enableDivider = true,
-      this.rowDividerHeight = 24,
+      {
+      this.enableDivider = true,
+      this.rowDividerHeight,
       this.rowDividerWidth = 0.5,
-      required this.cellWeiget,
+      required this.cellWidget,
       required this.cellItem,
       this.rowHeight,
       this.mainAxisAlignment = MainAxisAlignment.start,
@@ -168,57 +171,70 @@ class TabRow extends StatelessWidget {
       this.crossAxisAlignment = CrossAxisAlignment.center,
       this.verticalDirection = VerticalDirection.down,
       this.textDirection,
-
       this.dividerColor = Colors.red,
+      this.fixRowHeight = false,
       Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-          height: rowHeight ?? rowDividerHeight, /// 不设置行高度 则默认高度为每行 垂直方向的分割线高度
-          child: Row(
-              mainAxisSize: mainAxisSize,
-              mainAxisAlignment: mainAxisAlignment,
-              crossAxisAlignment: crossAxisAlignment,
-              verticalDirection: verticalDirection,
-              textDirection: textDirection,
-              children: buildCells(cellWeiget)),
-        );
+    return  _buildRow();
   }
 
-  List<Widget> buildCells(List<int> cellWeiget) {
-    List<Widget> cells = [];
-    for (var i = 0; i < cellWeiget.length; i++) {
-      var widget = cellItem.buildCell(cellItem, i);
+  Widget _buildRow(){
+    return IntrinsicHeight(
+      child: Row(
+          mainAxisSize: mainAxisSize,
+          mainAxisAlignment: mainAxisAlignment,
+          crossAxisAlignment: crossAxisAlignment,
+          verticalDirection: verticalDirection,
+          textDirection: textDirection,
+          children: _buildCells(cellWidget)),
+    );
+  }
 
+  Widget _createRowLine(){
+    if(!fixRowHeight && rowHeight!=null){
+      return SizedBox(
+        width: rowDividerWidth,
+        height: rowHeight,
+        child: Row(
+          children: [
+            Expanded(child: Container(
+              width: rowDividerWidth,
+              color: dividerColor,
+            ))
+          ],
+        ),);
+    }
+    return Container(
+      width: rowDividerWidth,
+      height: rowDividerHeight,
+      color: dividerColor,
+    );
+  }
+  List<Widget> _buildCells(List<int> cellWidget) {
+    List<Widget> cells = [];
+
+    for (var i = 0; i < cellWidget.length; i++) {
+      var widget = cellItem.buildCell(cellItem, i);
       cells.add(Expanded(
-          flex: cellWeiget[i],
-          child: Row(children: [
+          flex: cellWidget[i],
+          child:Row(children: [
             if (enableDivider)
-              Container(
-                width: rowDividerWidth,
-                height: rowDividerHeight,
-                color: dividerColor,
-              ),
+              _createRowLine(),
+
             Expanded(
                 child: Container(
-              color: cellItem.background,
-              padding: cellItem.padding,
-              alignment: cellItem.alignment,
-              child: widget,
-            ))
+                  color: cellItem.background,
+                  padding: cellItem.padding,
+                  alignment: cellItem.alignment,
+                  child: widget,
+                ))
           ])));
     }
-
     if (enableDivider) {
-      cells.add(
-        Container(
-          width: rowDividerWidth,
-          height: rowDividerHeight,
-          color: dividerColor,
-        ),
-      );
+      cells.add(_createRowLine());
     }
 
     return cells;

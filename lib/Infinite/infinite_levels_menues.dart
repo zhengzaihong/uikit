@@ -12,8 +12,8 @@ import 'package:flutter_uikit_forzzh/uikitlib.dart';
 /// describe: 纵向无限层级菜单
 ///
 
-typedef BuildMenueItem<T> = Widget Function(
-    InfiniteLevelsMenuesState state,
+typedef BuildMenuItem<T> = Widget Function(
+    InfiniteLevelsMenusState state,
     bool isCurrent,
     T data,
     int currentLevel);
@@ -25,10 +25,10 @@ typedef BuildSeparator<Dynamic> = Widget Function(
 typedef CallBackChildData<Dynamic> = List<dynamic> Function(dynamic data,int currentLevel);
 
 
-class InfiniteLevelsMenues<T> extends StatefulWidget {
+class InfiniteLevelsMenus<T> extends StatefulWidget {
 
   final List<InfiniteWrapper>? datas;
-  final BuildMenueItem buildMenueItem;
+  final BuildMenuItem buildMenueItem;
   final BuildSeparator? buildSeparator;
   final Widget? noDataView;
   final CallBackChildData callBackChildData;
@@ -36,7 +36,7 @@ class InfiniteLevelsMenues<T> extends StatefulWidget {
   final Function? buildComplete;
   final bool? oneExpand;
 
-  const InfiniteLevelsMenues(
+  const InfiniteLevelsMenus(
       {
         required this.buildMenueItem,
         required this.callBackChildData,
@@ -50,10 +50,10 @@ class InfiniteLevelsMenues<T> extends StatefulWidget {
       }) : super(key: key);
 
   @override
-  State<InfiniteLevelsMenues> createState() => InfiniteLevelsMenuesState();
+  State<InfiniteLevelsMenus> createState() => InfiniteLevelsMenusState();
 }
 
-class InfiniteLevelsMenuesState extends State<InfiniteLevelsMenues> {
+class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
 
   InfiniteWrapper? _lastClickItem;
 

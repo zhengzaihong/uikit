@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_uikit_forzzh/city_picker/city_result.dart';
-import 'package:flutter_uikit_forzzh/city_picker/picker_helper.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 class CityPickerExample extends StatelessWidget {
   const CityPickerExample({Key? key}) : super(key: key);
@@ -12,6 +11,12 @@ class CityPickerExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // leading: GestureDetector(
+        //   onTap: (){
+        //     RouteUtils.pop(context);
+        //   },
+        //   child: const Icon(Icons.arrow_back_ios,color: Colors.red,),
+        // ),
         title: const Text("城市选择器"),
       ),
       body: Column(children: [
@@ -46,7 +51,7 @@ class CityPickerExample extends StatelessWidget {
                           children: <Widget>[
 
                             TextButton(
-                              child: const Text('cancle',style: TextStyle(color: Colors.grey)),
+                              child: const Text('cancel',style: TextStyle(color: Colors.grey)),
                               onPressed: () {
                                 Navigator.pop(context);
                               },

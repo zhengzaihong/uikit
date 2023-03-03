@@ -67,12 +67,21 @@ typedef BuildInputDecorationStyle = InputDecoration Function(
 
 class InputText extends StatefulWidget {
   final Widget? title;
+  ///设置为真 ，边框样式将取下
   final bool noBorder;
+  /// 配合边框样式 实现圆角
   final double bgRadius;
+  /// 是否使用表单输入框
   final bool enableForm;
-
+  /// 输入框末尾的删除按钮样式 enableClear为真是生效
   final Widget clearIcon;
+  /// 是否开启删除按钮
+  final bool enableClear;
+  /// 所有边框的样式
+  final InputBorder? allLineBorder;
+
   final InlineStyle inline;
+  /// 输入框的宽度，默认填充父布局
   final double? width;
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
@@ -183,14 +192,11 @@ class InputText extends StatefulWidget {
   final FormFieldValidator<String>? validator;
 
   // final String? initialValue;
-
-  final bool enableClear;
-  final InputBorder? allLineBorder;
   const InputText(
       {
         this.inline = InlineStyle.clearStyle,
         this.title,
-        this.noBorder = true,
+        this.noBorder = false,
         this.bgRadius = 10,
         this.enableForm = false,
         this.enableClear = true,
@@ -203,7 +209,7 @@ class InputText extends StatefulWidget {
             gapPadding: 0,
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: Colors.transparent, width: 0)),
-        this.width = 250,
+        this.width,
         this.padding,
         this.margin,
         this.alignment = Alignment.centerLeft,
@@ -292,9 +298,9 @@ class InputText extends StatefulWidget {
         this.counterText,
         this.counterStyle,
         this.filled = true,
-        this.fillColor = const Color(0xffF1F2F6),
+        this.fillColor = Colors.transparent,
         this.focusColor,
-        this.hoverColor = const Color(0xffF1F2F6),
+        this.hoverColor =  Colors.transparent,
         this.errorBorder,
         this.focusedBorder,
         this.focusedErrorBorder,
@@ -317,7 +323,6 @@ class InputText extends StatefulWidget {
 
 class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin{
 
-  Timer? timer;
   bool _hasContent = false;
 
   @override
@@ -546,11 +551,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
                 },
                 onChanged: (text) {
                   _refresh(text);
-
-                  timer?.cancel();
-                  timer = Timer(const Duration(milliseconds: 500), () {
-                    widget.onChanged?.call(text);
-                  });
                 },
                 decoration: buildDefaultInputDecoration(),
               ),
@@ -616,35 +616,40 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         },
         onChanged: (text) {
           _refresh(text);
-
-          timer?.cancel();
-          timer = Timer(const Duration(milliseconds: 500), () {
-            widget.onChanged?.call(text);
-          });
         },
         decoration: buildDefaultInputDecoration(),
       ),
     );
   }
 
+  InputBorder? _buildBorder(InputBorder? inputBorderType){
+    if(widget.noBorder){
+      return null;
+    }
+    if(inputBorderType!=null){
+      return inputBorderType;
+    }
+    return widget.allLineBorder;
+  }
   InputDecoration buildDefaultInputDecoration() {
     if (widget.decoration == null) {
       if(widget.inline == InlineStyle.clearStyle){
         return ClearStyleInput().build(
           this,
           clearIcon:widget.clearIcon ,
-          allLineBorder: widget.allLineBorder,
           enableClear: widget.enableClear,
           fillColor: widget.fillColor,
           filled: widget.filled,
+          border: widget.border,
+          allLineBorder: _buildBorder(widget.allLineBorder),
+          focusedBorder: _buildBorder(widget.focusedBorder),
+          enabledBorder:_buildBorder(widget.enabledBorder),
+          disabledBorder: _buildBorder(widget.disabledBorder),
+          focusedErrorBorder:_buildBorder(widget.focusedErrorBorder),
+          errorBorder:_buildBorder(widget.errorBorder),
+
           isCollapsed: widget.isCollapsed,
           contentPadding: widget.contentPadding,
-          border: widget.border,
-          focusedBorder: widget.focusedBorder??widget.allLineBorder,
-          enabledBorder:widget.enabledBorder??widget.allLineBorder,
-          disabledBorder: widget.disabledBorder??widget.allLineBorder,
-          focusedErrorBorder:widget.focusedErrorBorder??widget.allLineBorder,
-          errorBorder: widget.errorBorder??widget.allLineBorder,
           icon: widget.icon,
           iconColor: widget.iconColor,
           label: widget.label,
@@ -706,8 +711,8 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     setState(() {
       widget.controller?.text = "";
       widget.onChanged?.call("");
-      widget.onSubmitted?.call("");
-      widget.onEditingComplete?.call();
+      // widget.onSubmitted?.call("");
+      // widget.onEditingComplete?.call();
       _hasContent = false;
     });
   }

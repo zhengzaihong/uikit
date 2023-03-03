@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.1.0
+      flutter_uikit_forzzh: ^0.1.1
 
 
 # flutter 常用组件ui库
@@ -15,9 +15,10 @@
  9. 倒计时控件
  10. 增加类似android TextView 上下左右可添加元素组件
  11. 添加可自定大小的switch组件
- 12. 新增表格布局
+ 12. 新增表格布局 tableview 
  13. 新增 MarqueeView 跑马灯组件
- 14. 新增 InfiniteLevelsMenues 无限层级菜单
+ 14. 新增 InfiniteLevelsMenus 无限层级菜单
+ 15. 新增 InputText 极简输入框,支持实时表单校验,支持 TextField和 TextFormField全部属性。
 
   ...持续更新中....
 
@@ -33,6 +34,11 @@
 ## 日历组件：
 
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/calendar.gif)
+
+
+## 极简输入框支持TextField 和TextFormField全部属性，支持实时表单校验
+![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text.gif)
+
 
 
 ## 输入框拓展搜索组件：

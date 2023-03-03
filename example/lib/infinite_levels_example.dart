@@ -156,7 +156,7 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
               children: [
                 Expanded(child: Container(
                   margin: const EdgeInsets.only(left: 10,top: 10),
-                  child:  InfiniteLevelsMenues(
+                  child:  InfiniteLevelsMenus(
                     datas: menues,
                     oneExpand: true,
                     buildMenueItem:(state,isCurrent,data,lv){

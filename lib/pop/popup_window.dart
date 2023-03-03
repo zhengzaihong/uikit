@@ -27,6 +27,9 @@ PopupWindow showPopupWindow<T>(
   double? offsetY,
   Duration? duration,
   bool? needSafeDisplay,
+  bool? useCustomWH,
+  double? customWidth,
+  double? customHeight,
   Function(PopupWindow popup)? onShowStart,
   Function(PopupWindow popup)? onShowFinish,
   Function(PopupWindow popup)? onDismissStart,
@@ -52,6 +55,7 @@ PopupWindow showPopupWindow<T>(
     offsetY: offsetY,
     duration: duration,
     needSafeDisplay: needSafeDisplay,
+    useCustomWH: useCustomWH,
     onShowStart: onShowStart,
     onShowFinish: onShowFinish,
     onDismissStart: onDismissStart,
@@ -81,6 +85,9 @@ PopupWindow createPopupWindow<T>(
   double? offsetY,
   Duration? duration,
   bool? needSafeDisplay,
+  bool? useCustomWH,
+  double? customWidth,
+  double? customHeight,
   Function(PopupWindow popup)? onShowStart,
   Function(PopupWindow popup)? onShowFinish,
   Function(PopupWindow popup)? onDismissStart,
@@ -105,6 +112,9 @@ PopupWindow createPopupWindow<T>(
     offsetY: offsetY,
     duration: duration,
     needSafeDisplay: needSafeDisplay,
+    useCustomWH: useCustomWH,
+    customWidth: customWidth,
+    customHeight: customHeight,
     onShowStart: onShowStart,
     onShowFinish: onShowFinish,
     onDismissStart: onDismissStart,
@@ -191,6 +201,9 @@ class PopupWindow extends StatefulWidget {
   /// 是否需要安全显示弹出框
   /// 如果为true，并且[_targetRenderBox]不为null时，当弹出框超出边界时，会自动贴边
   final bool _needSafeDisplay;
+  final bool _useCustomWH;
+  final double _customWidth;
+  final double _customHeight;
 
   /// 当前弹框是否已经显示
   bool? _isShow;
@@ -234,7 +247,8 @@ class PopupWindow extends StatefulWidget {
 
   AnimationController? get controller => _controller;
 
-  PopupWindow({Key? key,
+  PopupWindow({
+    Key? key,
     required Widget Function(PopupWindow popup)? childFun,
     Size? childSize,
     PopupGravity? gravity,
@@ -252,6 +266,9 @@ class PopupWindow extends StatefulWidget {
     double? offsetY,
     Duration? duration,
     bool? needSafeDisplay,
+    bool? useCustomWH,
+    double? customWidth,
+    double? customHeight,
     Function(PopupWindow popup)? onShowStart,
     Function(PopupWindow popup)? onShowFinish,
     Function(PopupWindow popup)? onDismissStart,
@@ -275,19 +292,24 @@ class PopupWindow extends StatefulWidget {
         _relativeOffsetY = offsetY ?? 0,
         _duration = duration ?? const Duration(milliseconds: 300),
         _needSafeDisplay = needSafeDisplay ?? false,
+        _useCustomWH = useCustomWH ?? false,
+        _customWidth = customWidth ?? 0,
+        _customHeight = customHeight ?? 0,
         _onShowStart = onShowStart,
         _onShowEnd = onShowFinish,
         _onDismissStart = onDismissStart,
         _onDismissEnd = onDismissFinish,
         _onClickOut = onClickOut,
-        _onClickBack = onClickBack, super(key: key);
+        _onClickBack = onClickBack,
+        super(key: key);
 
   @override
   _PopupWindowState createState() => _PopupWindowState();
 
   ///收起弹框
   ///popup window dismiss
-  Future dismiss(BuildContext context, {bool? notStartAnimation, Function(PopupWindow pop)? onFinish}) async {
+  Future dismiss(BuildContext context,
+      {bool? notStartAnimation, Function(PopupWindow pop)? onFinish}) async {
     if (_isShow == false) {
       return;
     }
@@ -318,13 +340,15 @@ class PopupWindow extends StatefulWidget {
   }
 }
 
-class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStateMixin {
+class _PopupWindowState extends State<PopupWindow>
+    with SingleTickerProviderStateMixin {
   Animation<Offset>? animation;
 
   @override
   void initState() {
     super.initState();
-    widget._controller = AnimationController(duration: widget._duration, vsync: this);
+    widget._controller =
+        AnimationController(duration: widget._duration, vsync: this);
     widget._controller!.addStatusListener((status) {
       switch (status) {
         case AnimationStatus.forward:
@@ -376,7 +400,8 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
 
       if (widget._childSize == null) {
         ///那么此时可以直接获取弹出框绘制完成之后的尺寸
-        widget._childSize = (widget._child!.key as GlobalKey).currentContext!.size;
+        widget._childSize =
+            (widget._child!.key as GlobalKey).currentContext!.size;
 
         ///并且开始动画，必须放在setState里面
         setState(() {
@@ -406,9 +431,10 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
 
   ///判断是否需要将弹出框显示在statusBar或者appBar下方，并返回偏移量
   double _getTopPadding(BuildContext context) {
-    return widget._underAppBar == true ? _getStatusBarAndAppBarHeight(context) : (widget._underStatusBar == true ? _getStatusBar(context) : 0);
+    return widget._underAppBar == true
+        ? _getStatusBarAndAppBarHeight(context)
+        : (widget._underStatusBar == true ? _getStatusBar(context) : 0);
   }
-
 
   Widget getLayout(BuildContext context) {
     ///如果想要自定义整个页面
@@ -433,7 +459,9 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
                 Align(
                   child: GestureDetector(
                     child: FadeTransition(
-                      opacity: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      opacity: Tween(begin: 0.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: Container(
                         alignment: Alignment.center,
                         color: widget._bgColor,
@@ -467,7 +495,7 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
     }
 
     ///popup window的最终widget
-   late Widget childView;
+    late Widget childView;
 
     ///目标widget的坐标
     late Offset targetOffset;
@@ -494,11 +522,19 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : ScaleTransition(
-                      scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      scale: Tween(begin: 0.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: SlideTransition(
-                        position: Tween(begin: const Offset(-1, -1), end: const Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        position: Tween(
+                                begin: const Offset(-1, -1),
+                                end: const Offset(0, 0))
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: FadeTransition(
-                          opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                          opacity: Tween(begin: -1.0, end: 1.0)
+                              .chain(CurveTween(curve: widget._curve))
+                              .animate(widget._controller!),
                           child: widget._child,
                         ),
                       ),
@@ -509,23 +545,39 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
           var safeWidth = 0.0;
           var safeHeight = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeWidth = widget._childSize!.width - widget._relativeOffsetX - targetOffset.dx;
-            safeHeight = widget._childSize!.height - widget._relativeOffsetY - targetOffset.dy;
+            safeWidth = widget._childSize!.width -
+                widget._relativeOffsetX -
+                targetOffset.dx;
+            safeHeight = widget._childSize!.height -
+                widget._relativeOffsetY -
+                targetOffset.dy;
           }
 
           ///如果位置相对于目标widget，从目标widget的左上角弹出
           ///弹出之前，弹出框左上角与目标widget的左上角对齐
           childView = Positioned(
-            left: targetOffset.dx + widget._relativeOffsetX + (safeWidth > 0 ? safeWidth : 0),
-            top: targetOffset.dy + widget._relativeOffsetY + (safeHeight > 0 ? safeHeight : 0),
+            left: targetOffset.dx +
+                widget._relativeOffsetX +
+                (safeWidth > 0 ? safeWidth : 0),
+            top: targetOffset.dy +
+                widget._relativeOffsetY +
+                (safeHeight > 0 ? safeHeight : 0),
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(-1, -1)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(-1, -1))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -545,9 +597,15 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : SlideTransition(
-                      position: Tween(begin: Offset(0, -1), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, -1),
+                              end: const Offset(0, 0))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -556,22 +614,39 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
         } else {
           var safeHeight = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeHeight = widget._childSize!.height - widget._relativeOffsetY - targetOffset.dy;
+            safeHeight = widget._childSize!.height -
+                widget._relativeOffsetY -
+                targetOffset.dy;
           }
 
           ///如果位置相对于目标widget，从目标widget的正上方弹出
           ///弹出之前，弹出框的x轴中心点与目标widget的x轴中心点对齐，弹出框的上边与目标widget的上边对齐
           childView = Positioned(
-            left: targetOffset.dx - (widget._childSize == null ? 0 : widget._childSize!.width - targetSize.width) / 2 + widget._relativeOffsetX,
-            top: targetOffset.dy + widget._relativeOffsetY + (safeHeight > 0 ? safeHeight : 0),
+            left: targetOffset.dx -
+                (widget._childSize == null
+                        ? 0
+                        : widget._childSize!.width - targetSize.width) /
+                    2 +
+                widget._relativeOffsetX,
+            top: targetOffset.dy +
+                widget._relativeOffsetY +
+                (safeHeight > 0 ? safeHeight : 0),
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(0, -1)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(0, -1))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -592,11 +667,19 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : ScaleTransition(
-                      scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      scale: Tween(begin: 0.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: SlideTransition(
-                        position: Tween(begin: Offset(1, -1), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        position: Tween(
+                                begin: const Offset(1, -1),
+                                end: const Offset(0, 0))
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: FadeTransition(
-                          opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                          opacity: Tween(begin: -1.0, end: 1.0)
+                              .chain(CurveTween(curve: widget._curve))
+                              .animate(widget._controller!),
                           child: widget._child,
                         ),
                       ),
@@ -607,26 +690,44 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
           var safeWidth = 0.0;
           var safeHeight = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeWidth = widget._childSize!.width + widget._relativeOffsetX - (MediaQuery.of(context).size.width - targetOffset.dx - targetSize.width);
-            safeHeight = widget._childSize!.height - widget._relativeOffsetY - targetOffset.dy;
+            safeWidth = widget._childSize!.width +
+                widget._relativeOffsetX -
+                (_getWidth(context) -
+                    targetOffset.dx -
+                    targetSize.width);
+            safeHeight = widget._childSize!.height -
+                widget._relativeOffsetY -
+                targetOffset.dy;
           }
 
           ///如果位置相对于目标widget，从目标widget的右上方弹出
           ///弹出之前，弹出框的右上角与目标widget的右上角对齐
           childView = Positioned(
             left: targetOffset.dx -
-                (widget._childSize == null ? 0 : widget._childSize!.width - targetSize.width) +
+                (widget._childSize == null
+                    ? 0
+                    : widget._childSize!.width - targetSize.width) +
                 widget._relativeOffsetX -
                 (safeWidth > 0 ? safeWidth : 0),
-            top: targetOffset.dy + widget._relativeOffsetY + (safeHeight > 0 ? safeHeight : 0),
+            top: targetOffset.dy +
+                widget._relativeOffsetY +
+                (safeHeight > 0 ? safeHeight : 0),
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(1, -1)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(1, -1))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -647,9 +748,15 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : SlideTransition(
-                      position: Tween(begin: Offset(-1, 0), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(-1, 0),
+                              end: const Offset(0, 0))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -658,22 +765,41 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
         } else {
           var safeWidth = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeWidth = widget._childSize!.width + widget._relativeOffsetX - (MediaQuery.of(context).size.width - targetOffset.dx - targetSize.width);
+            safeWidth = widget._childSize!.width +
+                widget._relativeOffsetX -
+                (_getWidth(context) -
+                    targetOffset.dx -
+                    targetSize.width);
           }
 
           ///如果位置相对于目标widget，从目标widget的正左方弹出
           ///弹出之前，弹出框的y轴中心点与目标widget的y轴中心点对齐，弹出框的左边与目标widget的左边对齐
           childView = Positioned(
-            left: targetOffset.dx + widget._relativeOffsetX + (safeWidth > 0 ? safeWidth : 0),
-            top: targetOffset.dy - (widget._childSize == null ? 0 : widget._childSize!.height - targetSize.height) / 2 + widget._relativeOffsetY,
+            left: targetOffset.dx +
+                widget._relativeOffsetX +
+                (safeWidth > 0 ? safeWidth : 0),
+            top: targetOffset.dy -
+                (widget._childSize == null
+                        ? 0
+                        : widget._childSize!.height - targetSize.height) /
+                    2 +
+                widget._relativeOffsetY,
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(-1, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(-1, 0))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -687,13 +813,19 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
           childView = Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: EdgeInsets.only(left: widget._relativeOffsetX, top: widget._relativeOffsetY + _getTopPadding(context)),
+              padding: EdgeInsets.only(
+                  left: widget._relativeOffsetX,
+                  top: widget._relativeOffsetY + _getTopPadding(context)),
               child: widget._customAnimation
                   ? widget._child
                   : ScaleTransition(
-                      scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      scale: Tween(begin: 0.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -703,14 +835,28 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
           ///如果位置相对于目标widget，从目标widget的正中心弹出
           ///弹出之前，弹出框的中心点与目标widget的中心点对齐
           childView = Positioned(
-            left: targetOffset.dx - (widget._childSize == null ? 0 : widget._childSize!.width - targetSize.width) / 2 + widget._relativeOffsetX,
-            top: targetOffset.dy - (widget._childSize == null ? 0 : widget._childSize!.height - targetSize.height) / 2 + widget._relativeOffsetY,
+            left: targetOffset.dx -
+                (widget._childSize == null
+                        ? 0
+                        : widget._childSize!.width - targetSize.width) /
+                    2 +
+                widget._relativeOffsetX,
+            top: targetOffset.dy -
+                (widget._childSize == null
+                        ? 0
+                        : widget._childSize!.height - targetSize.height) /
+                    2 +
+                widget._relativeOffsetY,
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: FadeTransition(
-                      opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      opacity: Tween(begin: -1.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: widget._child,
                     )),
           );
@@ -729,9 +875,15 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : SlideTransition(
-                      position: Tween(begin: Offset(1, 0), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(1, 0),
+                              end: const Offset(0, 0))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -740,25 +892,44 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
         } else {
           var safeWidth = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeWidth = widget._childSize!.width + widget._relativeOffsetX - (MediaQuery.of(context).size.width - targetOffset.dx - targetSize.width);
+            safeWidth = widget._childSize!.width +
+                widget._relativeOffsetX -
+                (_getWidth(context) -
+                    targetOffset.dx -
+                    targetSize.width);
           }
 
           ///如果位置相对于目标widget，从目标widget的正右方弹出
           ///弹出之前，弹出框的y轴中心点与目标widget的y轴中心点对齐，弹出框的右边与目标widget的右边对齐
           childView = Positioned(
             left: targetOffset.dx -
-                (widget._childSize == null ? 0 : widget._childSize!.width - targetSize.width) +
+                (widget._childSize == null
+                    ? 0
+                    : widget._childSize!.width - targetSize.width) +
                 widget._relativeOffsetX -
                 (safeWidth > 0 ? safeWidth : 0),
-            top: targetOffset.dy - (widget._childSize == null ? 0 : widget._childSize!.height - targetSize.height) / 2 + widget._relativeOffsetY,
+            top: targetOffset.dy -
+                (widget._childSize == null
+                        ? 0
+                        : widget._childSize!.height - targetSize.height) /
+                    2 +
+                widget._relativeOffsetY,
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(1, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(1, 0))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -779,11 +950,19 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : ScaleTransition(
-                      scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      scale: Tween(begin: 0.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: SlideTransition(
-                        position: Tween(begin: Offset(-1, 1), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        position: Tween(
+                                begin: const Offset(-1, 1),
+                                end: const Offset(0, 0))
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: FadeTransition(
-                          opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                          opacity: Tween(begin: -1.0, end: 1.0)
+                              .chain(CurveTween(curve: widget._curve))
+                              .animate(widget._controller!),
                           child: widget._child,
                         ),
                       ),
@@ -794,26 +973,44 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
           var safeWidth = 0.0;
           var safeHeight = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeWidth = widget._childSize!.width - widget._relativeOffsetX - targetOffset.dx;
-            safeHeight = widget._childSize!.height + widget._relativeOffsetY - (MediaQuery.of(context).size.height - targetOffset.dy - targetSize.height);
+            safeWidth = widget._childSize!.width -
+                widget._relativeOffsetX -
+                targetOffset.dx;
+            safeHeight = widget._childSize!.height +
+                widget._relativeOffsetY -
+                (_getHeight(context) -
+                    targetOffset.dy -
+                    targetSize.height);
           }
 
           ///如果位置相对于目标widget，从目标widget的左下方弹出
           ///弹出之前，弹出框的左下角与目标widget的左下角对齐
           childView = Positioned(
-            left: targetOffset.dx + widget._relativeOffsetX + (safeWidth > 0 ? safeWidth : 0),
+            left: targetOffset.dx +
+                widget._relativeOffsetX +
+                (safeWidth > 0 ? safeWidth : 0),
             top: targetOffset.dy -
-                (widget._childSize == null ? 0 : widget._childSize!.height - targetSize.height) +
+                (widget._childSize == null
+                    ? 0
+                    : widget._childSize!.height - targetSize.height) +
                 widget._relativeOffsetY -
                 (safeHeight > 0 ? safeHeight : 0),
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(-1, 1)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(-1, 1))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -833,9 +1030,15 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : SlideTransition(
-                      position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 1),
+                              end: const Offset(0, 0))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -844,25 +1047,44 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
         } else {
           var safeHeight = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeHeight = widget._childSize!.height + widget._relativeOffsetY - (MediaQuery.of(context).size.height - targetOffset.dy - targetSize.height);
+            safeHeight = widget._childSize!.height +
+                widget._relativeOffsetY -
+                (_getHeight(context) -
+                    targetOffset.dy -
+                    targetSize.height);
           }
 
           ///如果位置相对于目标widget，从目标widget的正下方弹出
           ///弹出之前，弹出框的x轴中心点与目标widget的x轴中心点对齐，弹出框的右边与目标widget的下边对齐
           childView = Positioned(
-            left: targetOffset.dx - (widget._childSize == null ? 0 : widget._childSize!.width - targetSize.width) / 2 + widget._relativeOffsetX,
+            left: targetOffset.dx -
+                (widget._childSize == null
+                        ? 0
+                        : widget._childSize!.width - targetSize.width) /
+                    2 +
+                widget._relativeOffsetX,
             top: targetOffset.dy -
-                (widget._childSize == null ? 0 : widget._childSize!.height - targetSize.height) +
+                (widget._childSize == null
+                    ? 0
+                    : widget._childSize!.height - targetSize.height) +
                 widget._relativeOffsetY -
                 (safeHeight > 0 ? safeHeight : 0),
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(0, 1)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(0, 1))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -883,11 +1105,19 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               child: widget._customAnimation
                   ? widget._child
                   : ScaleTransition(
-                      scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      scale: Tween(begin: 0.0, end: 1.0)
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: SlideTransition(
-                        position: Tween(begin: Offset(1, 1), end: Offset(0, 0)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        position: Tween(
+                                begin: const Offset(1, 1),
+                                end: const Offset(0, 0))
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: FadeTransition(
-                          opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                          opacity: Tween(begin: -1.0, end: 1.0)
+                              .chain(CurveTween(curve: widget._curve))
+                              .animate(widget._controller!),
                           child: widget._child,
                         ),
                       ),
@@ -898,29 +1128,49 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
           var safeWidth = 0.0;
           var safeHeight = 0.0;
           if (widget._childSize != null && widget._needSafeDisplay) {
-            safeWidth = widget._childSize!.width + widget._relativeOffsetX - (MediaQuery.of(context).size.width - targetOffset.dx - targetSize.width);
-            safeHeight = widget._childSize!.height + widget._relativeOffsetY - (MediaQuery.of(context).size.height - targetOffset.dy - targetSize.height);
+            safeWidth = widget._childSize!.width +
+                widget._relativeOffsetX -
+                (_getWidth(context) -
+                    targetOffset.dx -
+                    targetSize.width);
+            safeHeight = widget._childSize!.height +
+                widget._relativeOffsetY -
+                (_getHeight(context) -
+                    targetOffset.dy -
+                    targetSize.height);
           }
 
           ///如果位置相对于目标widget，从目标widget的右下方弹出
           ///弹出之前，弹出框的右下角与目标widget的右下角对齐
           childView = Positioned(
             left: targetOffset.dx -
-                (widget._childSize == null ? 0 : widget._childSize!.width - targetSize.width) +
+                (widget._childSize == null
+                    ? 0
+                    : widget._childSize!.width - targetSize.width) +
                 widget._relativeOffsetX -
                 (safeWidth > 0 ? safeWidth : 0),
             top: targetOffset.dy -
-                (widget._childSize == null ? 0 : widget._childSize!.height - targetSize.height) +
+                (widget._childSize == null
+                    ? 0
+                    : widget._childSize!.height - targetSize.height) +
                 widget._relativeOffsetY -
                 (safeHeight > 0 ? safeHeight : 0),
             child: widget._customAnimation
                 ? widget._child!
                 : ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    scale: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: SlideTransition(
-                      position: Tween(begin: Offset(0, 0), end: Offset(1, 1)).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                      position: Tween(
+                              begin: const Offset(0, 0),
+                              end: const Offset(1, 1))
+                          .chain(CurveTween(curve: widget._curve))
+                          .animate(widget._controller!),
                       child: FadeTransition(
-                        opacity: Tween(begin: -1.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                        opacity: Tween(begin: -1.0, end: 1.0)
+                            .chain(CurveTween(curve: widget._curve))
+                            .animate(widget._controller!),
                         child: widget._child,
                       ),
                     ),
@@ -940,7 +1190,9 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
               Positioned(
                 child: GestureDetector(
                   child: FadeTransition(
-                    opacity: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: widget._curve)).animate(widget._controller!),
+                    opacity: Tween(begin: 0.0, end: 1.0)
+                        .chain(CurveTween(curve: widget._curve))
+                        .animate(widget._controller!),
                     child: Container(
                       alignment: Alignment.center,
                       color: widget._bgColor,
@@ -977,6 +1229,18 @@ class _PopupWindowState extends State<PopupWindow> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return getLayout(context);
   }
+
+  double _getWidth(BuildContext context) {
+    if(widget._useCustomWH){
+      return widget._customWidth;
+    }
+    return MediaQuery.of(context).size.width;
+  }
+
+  double _getHeight(BuildContext context) {
+    if(widget._useCustomWH){
+      return widget._customHeight;
+    }
+    return MediaQuery.of(context).size.height;
+  }
 }
-
-

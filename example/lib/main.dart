@@ -6,7 +6,7 @@ import 'package:uikit_example/tableview_example.dart';
 
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
-import 'input_extentd_example.dart';
+import 'input_extend_example.dart';
 import 'often_widget_example.dart';
 import 'pop_window_example.dart';
 import 'progressbar_example.dart';
@@ -30,8 +30,20 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 
+
     return MaterialApp(
       navigatorKey: Toast.navigatorState,
+      builder: (context, child) => Scaffold(
+        body: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: child,
+        ),
+      ),
       home: Scaffold(
         backgroundColor: Colors.purple,
         resizeToAvoidBottomInset: false,
@@ -41,13 +53,13 @@ class _MyAppState extends State<MyApp> {
             _createMenus(context);
 
             return GridView.builder(
-              itemCount: funList.length,
+                itemCount: funList.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 3/1
-            ), itemBuilder: (context,index){
+                    crossAxisCount: 5,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 3/1
+                ), itemBuilder: (context,index){
 
               return  funList[index];
             });

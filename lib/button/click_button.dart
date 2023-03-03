@@ -34,6 +34,9 @@ class ClickButton extends StatefulWidget {
 
   final Color highlightColor;
   final Color hoverColor;
+  final Color? focusColor;
+  final Color? splashColor;
+  final double? radius;
 
   final double drawPadding;
 
@@ -42,7 +45,7 @@ class ClickButton extends StatefulWidget {
   final Widget? drawablePressWidget;
 
   ///图标显示位置
-  final PositionEnum drawablePositon;
+  final PositionEnum drawablePosition;
 
   ///是否可点击
   final bool enableClick;
@@ -80,9 +83,12 @@ class ClickButton extends StatefulWidget {
     this.margin = const EdgeInsets.all(0),
     this.highlightColor = Colors.transparent,
     this.hoverColor = Colors.transparent,
+    this.focusColor,
+    this.splashColor,
+    this.radius,
     this.alignment = Alignment.center,
     this.drawPadding = 5.0,
-    this.drawablePositon = PositionEnum.drawableRight,
+    this.drawablePosition = PositionEnum.drawableRight,
     this.drawableWidget,
     this.drawablePressWidget,
     this.enableClick = true,
@@ -133,6 +139,9 @@ class _ClickButtonState extends State<ClickButton> {
     return InkWell(
         highlightColor: widget.highlightColor,
         hoverColor: widget.hoverColor,
+        focusColor: widget.focusColor,
+        splashColor: widget.splashColor,
+        radius: widget.radius,
         onTap: () {
           if (widget.enableClick) {
             containerManger?.mangerState?.updateChange(widget.index);
@@ -150,7 +159,7 @@ class _ClickButtonState extends State<ClickButton> {
 
   Widget createButtonStyle() {
     if (iconWidget != null) {
-      switch (widget.drawablePositon) {
+      switch (widget.drawablePosition) {
         case PositionEnum.drawableLeft:
           {
 

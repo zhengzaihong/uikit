@@ -86,7 +86,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         color: Colors.redAccent,
                         child:  TextView(
                           unCheckTextStyle:const TextStyle(color: Colors.white,fontSize: 14),
-                          drawablePositon: PositionEnum.drawableLeft,
+                          drawablePosition: PositionEnum.drawableLeft,
                           enableClick: false,
                           isChecked: false,
                           drawableWidget: FontIcon(0xe6be,size: 14,color: Colors.white),
@@ -96,6 +96,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                       Expanded(child:  Container(
                         height: 30,
+                        alignment: Alignment.centerLeft,
                         color: Colors.redAccent,
                         child:  const MarqueeView(
                             messages: [
@@ -137,7 +138,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                     TextView(
                       title: "TextView",
-                      drawablePositon: PositionEnum.drawableLeft,
+                      drawablePosition: PositionEnum.drawableLeft,
                       checkedTextStyle: textViewStyle1,
                       unCheckTextStyle: textViewStyle,
                       drawablePressWidget: const Icon(Icons.alarm_rounded,color: Colors.red),
@@ -148,7 +149,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     const SizedBox(width: 10),
                     TextView(
                       title: "TextView",
-                      drawablePositon: PositionEnum.drawableRight,
+                      drawablePosition: PositionEnum.drawableRight,
                       checkedTextStyle: textViewStyle1,
                       unCheckTextStyle: textViewStyle,
                       drawablePressWidget: const Icon(Icons.home,color: Colors.red),
@@ -158,7 +159,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     const SizedBox(width: 30),
                     TextView(
                       title: "TextView",
-                      drawablePositon: PositionEnum.drawableTop,
+                      drawablePosition: PositionEnum.drawableTop,
                       checkedTextStyle: textViewStyle1,
                       unCheckTextStyle: textViewStyle,
                       drawablePressWidget: const Icon(Icons.home,color: Colors.red),
@@ -168,7 +169,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     const SizedBox(width: 30),
                     TextView(
                       title: "TextView",
-                      drawablePositon: PositionEnum.drawableBottom,
+                      drawablePosition: PositionEnum.drawableBottom,
                       checkedTextStyle: textViewStyle1,
                       unCheckTextStyle: textViewStyle,
                       drawablePressWidget: const Icon(Icons.home,color: Colors.red),
@@ -314,7 +315,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 1,
                         checkedBoxDecoration: checkBoxBg,
                         unCheckedBoxDecoration: checkBoxBg,
-                        drawablePositon: PositionEnum.drawableLeft,
+                        drawablePosition: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
                         drawablePressWidget:checkedIcon,
@@ -328,7 +329,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 2,
                         checkedBoxDecoration: checkBoxBg,
                         unCheckedBoxDecoration: checkBoxBg,
-                        drawablePositon: PositionEnum.drawableLeft,
+                        drawablePosition: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
                         drawablePressWidget:checkedIcon,
@@ -342,7 +343,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 3,
                         checkedBoxDecoration: checkBoxBg,
                         unCheckedBoxDecoration: checkBoxBg,
-                        drawablePositon: PositionEnum.drawableLeft,
+                        drawablePosition: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
                         drawablePressWidget:checkedIcon,
@@ -356,7 +357,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 4,
                         checkedBoxDecoration: checkBoxBg,
                         unCheckedBoxDecoration: checkBoxBg,
-                        drawablePositon: PositionEnum.drawableLeft,
+                        drawablePosition: PositionEnum.drawableLeft,
                         checkedTextStyle: checkedTextStyle,
                         unCheckTextStyle: unCheckTextStyle,
                         drawablePressWidget:checkedIcon,
@@ -447,7 +448,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 1,
                         width: 100,
                         height: 60,
-                        drawablePositon: PositionEnum.drawableLeft,
+                        drawablePosition: PositionEnum.drawableLeft,
                         padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,
@@ -460,7 +461,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 2,
                         width: 100,
                         height: 60,
-                        drawablePositon: PositionEnum.drawableTop,
+                        drawablePosition: PositionEnum.drawableTop,
                         padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,
@@ -473,7 +474,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         index: 3,
                         width: 100,
                         height: 60,
-                        drawablePositon: PositionEnum.drawableBottom,
+                        drawablePosition: PositionEnum.drawableBottom,
                         padding: const EdgeInsets.only(left: 5),
                         checkedTextStyle: textBlodStyle,
                         unCheckTextStyle: textBlodStyle,

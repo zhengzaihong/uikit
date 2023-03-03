@@ -59,9 +59,11 @@ class _TableViewExampleeState extends State<TableViewExample> {
 
                       RowBean(cells: [
                         CellBean(name: "病区",isTitle: true),
-                        CellBean(name: "中西医结合科医疗单位"),
+                        CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位中西医结合科医疗单位11111"),
                         CellBean(name: "床位号",isTitle: true),
-                        CellBean(name: ""),
+                        CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，"
+                            "中西医结合科医疗单位中西医结合科医疗单位11111中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，"
+                            "中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，888888888888888888888888888888888888"),
                       ]),
 
                       RowBean(cells: [
@@ -73,7 +75,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
 
                       RowBean(cells: [
                         CellBean(name: "检查部位",isTitle: true),
-                        CellBean(name: "CT上腹部平扫"),
+                        CellBean(name: "CT上腹部平扫，CT上腹部平扫，CT上腹部平扫CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫11"),
                         CellBean(name: "床位号",isTitle: true),
                         CellBean(name: "2020.08.23"),
                       ]),
@@ -85,11 +87,11 @@ class _TableViewExampleeState extends State<TableViewExample> {
                     ///第一行
                       case 1:
                         return TabRow(
-                            cellWeiget: const [2,4,1,1,1,1,4],
+                            cellWidget: const [2,4,1,1,1,1,4],
                             enableDivider: true,
                             dividerColor: Colors.black,
-                            rowDividerHeight: 30,
                             cellItem:CellItem(
+                                padding: const EdgeInsets.only(top: 10,bottom: 10),
                                 buildCell: (cell,index){
                                   if(index==1 ||  index ==6){
                                     cell.alignment = Alignment.centerLeft;
@@ -107,18 +109,17 @@ class _TableViewExampleeState extends State<TableViewExample> {
                                   return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
                                 }
                             ));
-
                       case 2:
                       case 3:
                       case 4:
                         return TabRow(
-                            cellWeiget: const [2,6,2,4],
+
+                            cellWidget: const [2,6,2,4],
                             enableDivider: true,
                             dividerColor: Colors.black,
-                            rowDividerHeight: 30,
                             cellItem:CellItem(
+                                padding: const EdgeInsets.only(top: 10,bottom: 10),
                                 buildCell: (cell,index){
-
                                   if(index==1 ||  index ==3){
                                     cell.alignment = Alignment.centerLeft;
                                     cell.padding = const EdgeInsets.only(left: 10);
@@ -139,11 +140,11 @@ class _TableViewExampleeState extends State<TableViewExample> {
 
 
                     return TabRow(
-                        cellWeiget: const [2,12],
+                        cellWidget: const [2,12],
                         dividerColor: Colors.black,
                         enableDivider: true,
-                        rowDividerHeight: 30,
                         cellItem:CellItem(
+                            padding: const EdgeInsets.only(top: 10,bottom: 10),
                             buildCell: (cell,index){
                               if(index==1 ||  index ==6){
                                 cell.alignment = Alignment.centerLeft;
@@ -228,10 +229,10 @@ class _TableViewExampleeState extends State<TableViewExample> {
                       case 1:
                         return Column(children: [
                           TabRow(
-                              cellWeiget: const [2,9,2,3],
+                              cellWidget: const [2,9,2,3],
                               enableDivider: true,
+                              rowHeight: 40,
                               dividerColor: Colors.white,
-                              rowDividerHeight: 30,
                               cellItem:CellItem(
                                   alignment: Alignment.centerLeft,
                                   buildCell: (cell,index){
@@ -250,10 +251,10 @@ class _TableViewExampleeState extends State<TableViewExample> {
 
                       case 2:
                         return TabRow(
-                            cellWeiget: const [2,4,1,1,1,2,2,3],
+                            cellWidget: const [2,4,1,1,1,2,2,3],
                             enableDivider: true,
                             dividerColor: Colors.white,
-                            rowDividerHeight: 30,
+                             rowHeight: 40,
                             cellItem:CellItem(
                                 alignment: Alignment.centerLeft,
                                 buildCell: (cell,index){
@@ -267,10 +268,10 @@ class _TableViewExampleeState extends State<TableViewExample> {
 
                       case 3:
                         return TabRow(
-                            cellWeiget: const [2,6,1,2,2,3],
+                            cellWidget: const [2,6,1,2,2,3],
                             enableDivider: true,
                             dividerColor: Colors.white,
-                            rowDividerHeight: 30,
+                             rowHeight: 40,
                             cellItem:CellItem(
                                 alignment: Alignment.centerLeft,
                                 buildCell: (cell,index){
@@ -284,10 +285,10 @@ class _TableViewExampleeState extends State<TableViewExample> {
                     }
 
                     return TabRow(
-                        cellWeiget: const [2,4,2,8],
+                        cellWidget: const [2,4,2,8],
                         dividerColor: Colors.white,
                         enableDivider: true,
-                        rowDividerHeight: 30,
+                         rowHeight: 40,
                         cellItem:CellItem(
                             alignment: Alignment.centerLeft,
                             buildCell: (cell,index){
