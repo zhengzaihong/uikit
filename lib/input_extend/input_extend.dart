@@ -603,7 +603,7 @@ class InputExtendState<T> extends State<InputExtend> {
   }
 
   void _onTextChangeCallBack(String text, bool isFirst) {
-    setText(text);
+    // setText(text); //fix bug ios
     if (StringUtils.isEmpty(text) && !isFirst) {
       _removePop();
     }else{
