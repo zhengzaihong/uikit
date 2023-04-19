@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.1.1
+      flutter_uikit_forzzh: ^0.1.2
 
 
 # flutter 常用组件ui库
@@ -19,12 +19,15 @@
  13. 新增 MarqueeView 跑马灯组件
  14. 新增 InfiniteLevelsMenus 无限层级菜单
  15. 新增 InputText 极简输入框,支持实时表单校验,支持 TextField和 TextFormField全部属性。
+ 16. 新增 FloatExpendButton 悬浮菜单按钮
 
   ...持续更新中....
 
-# 移除组件
+# 最后一次提交记录摘要
 
-  1.AsyncInputDrop 系统选择下拉框。 
+  1.新增 FloatExpendButton 悬浮菜单按钮
+  2.修复 InputExtend 在ios上的输入法bug
+  3.修复 Toast bug
 
 
 
@@ -45,6 +48,8 @@
 
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/inputextentd.gif)
 
+## 可伸展的悬浮按钮
+![](https://github.com/zhengzaihong/uikit/blob/master/images/float_button.gif)
 
 ## 城市选择器：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/InputExample.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
+import 'package:uikit_example/often_widget_example2.dart';
 import 'package:uikit_example/tableview_example.dart';
 
 import 'calendar_example.dart';
@@ -29,7 +30,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
 
     return MaterialApp(
       navigatorKey: Toast.navigatorState,
@@ -82,6 +82,7 @@ class _MyAppState extends State<MyApp> {
       createMenu("表格布局",context, const TableViewExample()),
       createMenu("无限层级菜单",context, const InfiniteLevelsExample()),
       createMenu("常用小组件",context, const OftenWidgetExample()),
+      createMenu("常用小组件2",context, const OftenWidgetExample2()),
     ];
   }
 

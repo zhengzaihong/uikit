@@ -53,7 +53,7 @@ class Toast {
             .size
             .width,
         height: 60,
-        margin: const EdgeInsets.only(left: 20,right: 20),
+        margin: const EdgeInsets.only(left: 10,right: 10),
         alignment: Alignment.center,
         decoration: const BoxDecoration(
           color: Colors.redAccent,
@@ -63,7 +63,7 @@ class Toast {
             style: const TextStyle(
                 decoration: TextDecoration.none,
                 color: Colors.white,
-                fontSize: 14)));
+                fontSize: 18)));
   }
   ///显示一个吐司
   static Future<OverlayEntryManger?> show(
