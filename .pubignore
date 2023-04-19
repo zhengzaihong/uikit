@@ -1,0 +1,15 @@
+.DS_Store
+.dart_tool/
+.idea/
+.packages
+.pub/
+example/
+
+build/
+ios/.generated/
+ios/Flutter/Generated.xcconfig
+ios/Runner/GeneratedPluginRegistrant.*
+pubspec.lock
+.vscode/launch.json
+coverage/
+images/
