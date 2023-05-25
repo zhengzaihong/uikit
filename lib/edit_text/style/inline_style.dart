@@ -10,6 +10,8 @@ enum InlineStyle {
 
   clearStyle,
 
+  normalStyle,
+
   none,
 
   ///todo

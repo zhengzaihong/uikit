@@ -24,6 +24,7 @@ class Toast {
   Toast._();
 
   ///如果不关心，context调用，需在入口函数的 MaterialApp( navigatorKey: Toast.navigatorState ) 添加绑定
+  ///如果路由2.0 则使用 RouterDelegate 下面的 navigatorKey
   static final navigatorState = GlobalKey<NavigatorState>();
 
   /// toast显示时间 单位 毫秒

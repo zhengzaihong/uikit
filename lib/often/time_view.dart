@@ -22,11 +22,14 @@ class TimeView extends StatefulWidget {
   ///时间单位
   final Duration duration;
 
+  final bool enableCancel;
+
   const TimeView(
       {required this.countdown,
-      required this.child,
-      this.duration = const Duration(seconds: 1),
-      Key? key})
+        required this.child,
+        this.enableCancel = false,
+        this.duration = const Duration(seconds: 1),
+        Key? key})
       : super(key: key);
 
   @override
@@ -52,19 +55,22 @@ class TimeViewState extends State<TimeView> {
 
 
   bool isStart(){
-    return _timer!=null;
+    return _timer!=null && _currentTime!=0;
   }
 
   /// 启动倒计时的计时器。
   void startTimer() {
+    if(widget.enableCancel){
+      if(_timer!=null){
+        cancelTimer();
+      }
+    }
     if(_timer!=null){
       return;
     }
     _timer = Timer.periodic(widget.duration, (timer) {
-      if (_currentTime == 0) {
+      if (_currentTime == 1) {
         cancelTimer();
-        notyChange();
-        return;
       }
       _currentTime--;
       notyChange();
@@ -75,7 +81,7 @@ class TimeViewState extends State<TimeView> {
   void cancelTimer() {
     _timer?.cancel();
     _timer = null;
-    _currentTime = 0;
+    _currentTime = widget.countdown;
     notyChange();
   }
 
@@ -83,6 +89,13 @@ class TimeViewState extends State<TimeView> {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _timer = null;
+    super.dispose();
   }
 
   @override

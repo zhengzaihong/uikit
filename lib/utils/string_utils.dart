@@ -15,7 +15,7 @@ class StringUtils {
 
   ///【全为数字】返回true
   static bool isNum(String str) {
-    return RegExp(r"^[0-9_]+$").hasMatch(str);
+    return RegExp(r'^-?[0-9]+(\.[0-9]+)?$').hasMatch(str);
   }
 
   ///【除英文和数字外无其他字符(只有英文数字的字符串)】返回true 否则false
@@ -85,5 +85,4 @@ extension StringExt on Object? {
     }
     return contents;
   }
-
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/city_picker_example.dart';
 
@@ -44,7 +45,7 @@ class _InputExampleState extends State<InputExample> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: (){
-            RouteUtils.push(context, CityPickerExample(),hideKeyboard: false);
+            RouteUtils.push(context, const CityPickerExample(),hide: false);
           },
           child: const Text("输入框"),
         ),
@@ -58,7 +59,9 @@ class _InputExampleState extends State<InputExample> {
             margin: const EdgeInsets.only(top: 30),
             labelText: "常规输入框,此输入框不参与校验",
             hintText: "请输入昵称",
+            inline: InlineStyle.normalStyle,
             fillColor: Colors.grey.withAlpha(40),
+            suffixIcon: Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
             onChanged: (msg){
 
               print("----------msg:$msg");
@@ -79,8 +82,11 @@ class _InputExampleState extends State<InputExample> {
                     width: 300,
                     margin: const EdgeInsets.only(top: 30),
                     enableForm: true,
+                    obscureText: true,
                     noBorder: true,
                     hintText: "请输入手机号",
+                    showCursor: true,
+                    cursorColor: Colors.red,
                     fillColor: Colors.grey.withAlpha(40),
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(11),
@@ -110,6 +116,7 @@ class _InputExampleState extends State<InputExample> {
                     enableForm: true,
                     hintText: "请输入密码",
                     obscureText: true,
+                    inline: InlineStyle.normalStyle,
                     controller: TextEditingController(),
                     fillColor: Colors.grey.withAlpha(40),
                     validator: const InputValidation(

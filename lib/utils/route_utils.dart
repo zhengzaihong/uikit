@@ -15,8 +15,8 @@ class RouteUtils {
       {String? name,
       Object? arguments,
       bool noAnimation = true,
-      bool hideKeyboard = true}) {
-    _hideKeyboard(context, hideKeyboard);
+      bool hide = true}) {
+    hideKeyboard(context, hide: hide);
     return Navigator.push(
         context,
         noAnimation
@@ -27,8 +27,8 @@ class RouteUtils {
   }
 
   static void pop<T extends Object?>(BuildContext context,
-      [T? result, bool hideKeyboard = true]) {
-    _hideKeyboard(context, hideKeyboard);
+      [T? result, bool hide = true]) {
+    hideKeyboard(context, hide: hide);
     Navigator.of(context).pop<T>(result);
   }
 
@@ -36,8 +36,8 @@ class RouteUtils {
       {String? name,
       Object? arguments,
       bool noAnimation = true,
-      bool hideKeyboard = true}) {
-    _hideKeyboard(context, hideKeyboard);
+      bool hide = true}) {
+    hideKeyboard(context, hide: hide);
     return Navigator.of(context).pushReplacement(noAnimation
         ? NoAnimRouter(page, name: name, arguments: arguments)
         : MaterialPageRoute(
@@ -50,8 +50,8 @@ class RouteUtils {
       {String? name,
       Object? arguments,
       bool noAnimation = true,
-      bool hideKeyboard = true}) {
-    _hideKeyboard(context, hideKeyboard);
+      bool hide = true}) {
+    hideKeyboard(context, hide: hide);
     return Navigator.pushAndRemoveUntil(
       context,
       noAnimation
@@ -65,13 +65,13 @@ class RouteUtils {
 
   /// 跳转页面
   static Future<dynamic> pushNamed(BuildContext context, String routeName,
-      {Object? arguments, bool hideKeyboard = true}) {
-    _hideKeyboard(context, hideKeyboard);
+      {Object? arguments, bool hide = true}) {
+    hideKeyboard(context, hide: hide);
     return Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
-  static void _hideKeyboard(BuildContext context, bool hideKeyboard) {
-    if (hideKeyboard) {
+  static void hideKeyboard(BuildContext context, {bool hide = true}) {
+    if (hide) {
       FocusScopeNode currentFocus = FocusScope.of(context);
       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
         FocusManager.instance.primaryFocus?.unfocus();

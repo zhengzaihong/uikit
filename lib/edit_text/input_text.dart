@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/clear_style_input.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
+import 'package:flutter_uikit_forzzh/edit_text/style/normal_style_input.dart';
 import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
+
+import 'base/input_style_factory.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -387,6 +390,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
                 textAlignVertical: widget.textAlignVertical,
                 textDirection: widget.textDirection,
                 autofocus: widget.autofocus,
+                cursorColor: widget.cursorColor,
                 obscuringCharacter: widget.obscuringCharacter,
                 obscureText: widget.obscureText,
                 autocorrect: widget.autocorrect,
@@ -456,6 +460,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         readOnly: widget.readOnly,
         toolbarOptions: widget.toolbarOptions,
         showCursor: widget.showCursor,
+        cursorColor: widget.cursorColor,
         maxLength: widget.maxLength,
         maxLengthEnforcement: widget.maxLengthEnforcement,
         onEditingComplete: widget.onEditingComplete,
@@ -520,6 +525,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
                 readOnly: widget.readOnly,
                 toolbarOptions: widget.toolbarOptions,
                 showCursor: widget.showCursor,
+                cursorColor: widget.cursorColor,
                 maxLength: widget.maxLength,
                 maxLengthEnforcement: widget.maxLengthEnforcement,
                 onEditingComplete: widget.onEditingComplete,
@@ -590,6 +596,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         onEditingComplete: widget.onEditingComplete,
         inputFormatters: widget.inputFormatters,
         enabled: widget.enabled,
+        cursorColor: widget.cursorColor,
         cursorWidth: widget.cursorWidth,
         cursorHeight: widget.cursorHeight,
         cursorRadius: widget.cursorRadius,
@@ -633,67 +640,70 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
   }
   InputDecoration buildDefaultInputDecoration() {
     if (widget.decoration == null) {
+
+      InputStyleFactory? factory;
       if(widget.inline == InlineStyle.clearStyle){
-        return ClearStyleInput().build(
-          this,
-          clearIcon:widget.clearIcon ,
-          enableClear: widget.enableClear,
-          fillColor: widget.fillColor,
-          filled: widget.filled,
-          border: widget.border,
-          allLineBorder: _buildBorder(widget.allLineBorder),
-          focusedBorder: _buildBorder(widget.focusedBorder),
-          enabledBorder:_buildBorder(widget.enabledBorder),
-          disabledBorder: _buildBorder(widget.disabledBorder),
-          focusedErrorBorder:_buildBorder(widget.focusedErrorBorder),
-          errorBorder:_buildBorder(widget.errorBorder),
-
-          isCollapsed: widget.isCollapsed,
-          contentPadding: widget.contentPadding,
-          icon: widget.icon,
-          iconColor: widget.iconColor,
-          label: widget.label,
-          labelText: widget.labelText,
-          labelStyle: widget.labelStyle,
-          floatingLabelStyle: widget.floatingLabelStyle,
-          helperText: widget.helperText,
-          helperStyle: widget.helperStyle,
-          helperMaxLines: widget.helperMaxLines,
-          hintText: widget.hintText,
-          hintStyle: widget.hintStyle,
-          hintTextDirection: widget.hintTextDirection,
-          hintMaxLines: widget.hintMaxLines,
-          errorText: widget.errorText,
-          errorStyle: widget.errorStyle,
-          errorMaxLines: widget.errorMaxLines,
-          floatingLabelBehavior: widget.floatingLabelBehavior,
-          floatingLabelAlignment: widget.floatingLabelAlignment,
-          prefixIcon: widget.prefixIcon,
-          prefixIconConstraints: widget.prefixIconConstraints,
-          prefix: widget.prefix,
-          prefixText: widget.prefixText,
-          prefixStyle: widget.prefixStyle,
-          prefixIconColor: widget.prefixIconColor,
-          suffixIcon: widget.suffixIcon,
-          suffix: widget.suffix,
-          suffixText: widget.suffixText,
-          suffixStyle: widget.suffixStyle,
-          suffixIconColor: widget.suffixIconColor,
-          suffixIconConstraints: widget.suffixIconConstraints,
-          counter: widget.counter,
-          counterText: widget.counterText,
-          counterStyle: widget.counterStyle,
-          focusColor: widget.focusColor,
-          hoverColor: widget.hoverColor,
-          semanticCounterText: widget.semanticCounterText,
-          alignLabelWithHint: widget.alignLabelWithHint,
-          constraints: widget.constraints,
-        );
+        factory = ClearStyleInput();
+      }
+      if(widget.inline == InlineStyle.normalStyle){
+        factory = NormalStyleInput();
       }
 
-      if(widget.inline == InlineStyle.none){
-
-      }
+      factory ??= ClearStyleInput();
+      return factory.build(
+        this,
+        clearIcon:widget.clearIcon ,
+        enableClear: widget.enableClear,
+        fillColor: widget.fillColor,
+        filled: widget.filled,
+        border: widget.border,
+        allLineBorder: _buildBorder(widget.allLineBorder),
+        focusedBorder: _buildBorder(widget.focusedBorder),
+        enabledBorder:_buildBorder(widget.enabledBorder),
+        disabledBorder: _buildBorder(widget.disabledBorder),
+        focusedErrorBorder:_buildBorder(widget.focusedErrorBorder),
+        errorBorder:_buildBorder(widget.errorBorder),
+        isCollapsed: widget.isCollapsed,
+        contentPadding: widget.contentPadding,
+        icon: widget.icon,
+        iconColor: widget.iconColor,
+        label: widget.label,
+        labelText: widget.labelText,
+        labelStyle: widget.labelStyle,
+        floatingLabelStyle: widget.floatingLabelStyle,
+        helperText: widget.helperText,
+        helperStyle: widget.helperStyle,
+        helperMaxLines: widget.helperMaxLines,
+        hintText: widget.hintText,
+        hintStyle: widget.hintStyle,
+        hintTextDirection: widget.hintTextDirection,
+        hintMaxLines: widget.hintMaxLines,
+        errorText: widget.errorText,
+        errorStyle: widget.errorStyle,
+        errorMaxLines: widget.errorMaxLines,
+        floatingLabelBehavior: widget.floatingLabelBehavior,
+        floatingLabelAlignment: widget.floatingLabelAlignment,
+        prefixIcon: widget.prefixIcon,
+        prefixIconConstraints: widget.prefixIconConstraints,
+        prefix: widget.prefix,
+        prefixText: widget.prefixText,
+        prefixStyle: widget.prefixStyle,
+        prefixIconColor: widget.prefixIconColor,
+        suffixIcon: widget.suffixIcon,
+        suffix: widget.suffix,
+        suffixText: widget.suffixText,
+        suffixStyle: widget.suffixStyle,
+        suffixIconColor: widget.suffixIconColor,
+        suffixIconConstraints: widget.suffixIconConstraints,
+        counter: widget.counter,
+        counterText: widget.counterText,
+        counterStyle: widget.counterStyle,
+        focusColor: widget.focusColor,
+        hoverColor: widget.hoverColor,
+        semanticCounterText: widget.semanticCounterText,
+        alignLabelWithHint: widget.alignLabelWithHint,
+        constraints: widget.constraints,
+      );
     }
     return widget.decoration!;
   }
