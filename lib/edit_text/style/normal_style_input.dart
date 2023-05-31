@@ -7,7 +7,7 @@ import 'package:flutter_uikit_forzzh/edit_text/input_text.dart';
 /// email:1096877329@qq.com
 /// create_date: 2023/1/3
 /// create_time: 9:48
-/// describe: 带删除的输入框框样式
+/// describe:
 ///
 class NormalStyleInput extends InputStyleFactory {
 

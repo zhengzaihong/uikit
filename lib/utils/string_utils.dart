@@ -60,6 +60,15 @@ class StringUtils {
     }
     return false;
   }
+
+  bool hasEmptyStr(List<String?> list){
+    for (var str in list) {
+      if(isEmpty(str)){
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 extension StringExt on Object? {
@@ -72,7 +81,7 @@ extension StringExt on Object? {
     return toStr(this);
   }
 
-  String get s => str();
+  String get s => toStr(this);
 
   List<String> toList() {
     String str = toStr(this);
@@ -85,4 +94,5 @@ extension StringExt on Object? {
     }
     return contents;
   }
+
 }

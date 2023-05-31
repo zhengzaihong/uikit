@@ -98,16 +98,24 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         height: 30,
                         alignment: Alignment.centerLeft,
                         color: Colors.redAccent,
-                        child:  const MarqueeView(
-                            messages: [
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!",
-                            ]),
+                        child: MarqueeView(
+                            direction: MarqueeDirection.vertical,
+                            itemExtent: 30,
+                            interval: 5,
+                            marqueeItems: const [
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!1",
+                              "测试代码2",
+                              "垂直翻滚效果",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!1",
+                              "测试代码2",
+                              "垂直翻滚效果",
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!1",
+                              "测试代码2",
+                              "垂直翻滚效果",
+                            ],
+                            buildItem: (context, data) {
+                              return Text(data);
+                         }),
                       ))
                     ],
                   ),

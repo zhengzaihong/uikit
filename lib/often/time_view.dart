@@ -25,7 +25,7 @@ class TimeView extends StatefulWidget {
   final bool enableCancel;
 
   const TimeView(
-      {required this.countdown,
+      { required this.countdown,
         required this.child,
         this.enableCancel = false,
         this.duration = const Duration(seconds: 1),

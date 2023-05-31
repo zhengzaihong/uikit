@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.1.2
+      flutter_uikit_forzzh: ^0.1.3
 
 
 # flutter 常用组件ui库
@@ -26,8 +26,11 @@
 # 最后一次提交记录摘要
 
   1.新增 FloatExpendButton 悬浮菜单按钮
-  2.修复 InputExtend 在ios上的输入法bug
+  2.InputExtend 扩展新功能
   3.修复 Toast bug
+  4.MarqueeView 新增垂直滚动效果。
+  5.新加一些工具类
+  
 
 
 

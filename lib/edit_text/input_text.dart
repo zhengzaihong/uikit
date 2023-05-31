@@ -86,6 +86,8 @@ class InputText extends StatefulWidget {
   final InlineStyle inline;
   /// 输入框的宽度，默认填充父布局
   final double? width;
+  ///始终光标在末尾
+  final bool cursorEnd;
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
@@ -217,6 +219,7 @@ class InputText extends StatefulWidget {
         this.margin,
         this.alignment = Alignment.centerLeft,
         required this.controller,
+        this.cursorEnd = false,
         this.focusNode,
         this.decoration,
         this.keyboardType = TextInputType.text,
@@ -335,6 +338,14 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       _hasContent = false;
     } else {
       _hasContent = true;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant InputText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(widget.cursorEnd){
+      widget.controller?.selection = TextSelection.collapsed(offset: widget.controller?.text.length??0);
     }
   }
 

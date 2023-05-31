@@ -5,3 +5,5 @@ export 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 export 'package:flutter_uikit_forzzh/utils/route_utils.dart';
 export 'package:flutter_uikit_forzzh/utils/broadcast_helper.dart';
 export 'package:flutter_uikit_forzzh/utils/measure_utils.dart';
+export 'package:flutter_uikit_forzzh/utils/color_utils.dart';
+export 'package:flutter_uikit_forzzh/utils/keyboard.dart';

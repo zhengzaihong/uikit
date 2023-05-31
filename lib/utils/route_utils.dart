@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/utils/keyboard.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -72,10 +73,7 @@ class RouteUtils {
 
   static void hideKeyboard(BuildContext context, {bool hide = true}) {
     if (hide) {
-      FocusScopeNode currentFocus = FocusScope.of(context);
-      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      }
+      KeyBoard.hideKeyboard(context);
     }
   }
 }

@@ -25,8 +25,8 @@ import 'package:flutter/material.dart';
 
 class CustomCheckBox extends StatefulWidget {
 
-  final Text? text;
-  final Text? checkedText;
+  final Widget? text;
+  final Widget? checkedText;
   final Widget? checkIcon;
   final Widget? uncheckedIcon;
   final bool? iconLeft;

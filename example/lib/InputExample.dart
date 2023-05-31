@@ -28,7 +28,6 @@ class _InputExampleState extends State<InputExample> {
   late OutlineInputBorder errorBorder;
   late OutlineInputBorder focusedErrorBorder;
   late OutlineInputBorder focusedBorder;
-
   @override
   void initState() {
     super.initState();
@@ -61,9 +60,9 @@ class _InputExampleState extends State<InputExample> {
             hintText: "请输入昵称",
             inline: InlineStyle.normalStyle,
             fillColor: Colors.grey.withAlpha(40),
-            suffixIcon: Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
+            cursorEnd: true,
+            suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
             onChanged: (msg){
-
               print("----------msg:$msg");
             },
             controller: TextEditingController(),
