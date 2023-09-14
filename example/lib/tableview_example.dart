@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
@@ -9,6 +12,29 @@ class TableViewExample extends StatefulWidget {
 }
 
 class _TableViewExampleeState extends State<TableViewExample> {
+
+
+  var list = [
+    RowBean(cells: [
+      CellBean(name: "姓名",),
+      CellBean(name: "张三"),
+      CellBean(name: "性别"),
+      CellBean(name: "男"),
+      CellBean(name: "年龄"),
+      CellBean(name: "42岁"),
+      CellBean(name: "病人号： 2434393458u")
+    ]),
+    RowBean(cells: [
+      CellBean(name: "姓名",),
+      CellBean(name: "张三"),
+      CellBean(name: "性别"),
+      CellBean(name: "男"),
+      CellBean(name: "年龄"),
+      CellBean(name: "42岁"),
+      CellBean(name: "病人号： 2434393458u")
+    ])
+  ];
+  List<RowBean> checkedBeans = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +46,73 @@ class _TableViewExampleeState extends State<TableViewExample> {
           padding:  const EdgeInsets.only(top: 30,left: 100,right: 100),
           color: Colors.white,
           child:SingleChildScrollView(
+            // physics: NeverScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  color: Colors.lightBlue,
+                    child: TableView<RowBean>(
+                  // enableDivider: true,
+                  // enableTopDivider: true,
+                  // enableBottomDivider: true,
+                  doubleScroll: true,
+                  tableDatas: list,
+                  buildTableHeaderStyle: (context){
+                    return Row(
+                      children: [
+                        Container(
+                          width:50,
+                          child: Text("姓名"),
+                        ),
+                        Container(
+                          width:60,
+                          child: Text("姓名"),
+                        ),
+                      ],
+                    );
+                  },
+                  buildRowStyle: (data,index){
+
+                    print("--------------${data.toString()})");
+                    List<Widget> rows = [];
+                    var cellBean =  (data as RowBean).cells;
+                    int it = 0;
+                    cellBean.forEach((element) {
+                      it++;
+                      rows.add(Container(
+                        width: it*10 +50,
+                        child: Text(element.name.str()),
+                      ));
+                      rows.add(Container(
+                        color: Colors.red,
+                        height: 10,
+                        width: 3,
+                      ));
+                      print("--------------${element.name.toString()})");
+                    });
+
+                    return GestureDetector(
+                      onTap: (){
+                        if(checkedBeans.contains(data)){
+                          checkedBeans.remove(data);
+                        }else{
+                          checkedBeans.add(data);
+                        }
+                        setState(() {
+
+                        });
+                      },
+                      child: Container(
+                        color: checkedBeans.contains(data)?Colors.yellow:Colors.green,
+                        child: Row(children: [
+                          ...rows
+                        ]),
+                      ),
+                    );
+
+                  },
+                )),
 
                 const SizedBox(height: 10),
                 Row(children: const [
@@ -36,7 +126,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                   enableDivider: true,
                   enableTopDivider: true,
                   enableBottomDivider: true,
-                  physics: const BouncingScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   preDealData: (){
 
                     List<RowBean> rowDatas = [
@@ -164,6 +254,7 @@ class _TableViewExampleeState extends State<TableViewExample> {
                   },
                 ),
 
+
                 const SizedBox(height: 30),
                 Row(children: const [
                   Expanded(child:  Center(child:  Text("四川xxxxx医院",style: TextStyle(color: Colors.black,
@@ -173,135 +264,135 @@ class _TableViewExampleeState extends State<TableViewExample> {
 
                 const SizedBox(height: 10),
 
-                TableView<int>(
-                  enableDivider: false,
-                  enableTopDivider: false,
-                  enableBottomDivider: false,
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: ScrollController(),
-                  preDealData: (){
-
-                    List<RowBean> rowDatas = [
-                      RowBean(cells: [
-                        CellBean(name: "病案"),
-                        CellBean(name: "hx202206022034"),
-                        CellBean(name: "检查设备"),
-                        CellBean(name: "PHILIPS-iE22-2"),
-                        CellBean(name: "年龄"),
-                        CellBean(name: "30岁"),
-                        CellBean(name: "族别"),
-                        CellBean(name: "汉族")
-                      ]),
-
-
-                      RowBean(cells: [
-                        CellBean(name: "姓名"),
-                        CellBean(name: "张三"),
-                        CellBean(name: "性别"),
-                        CellBean(name: "男"),
-                        CellBean(name: "年龄"),
-                        CellBean(name: "30岁"),
-                        CellBean(name: "族别"),
-                        CellBean(name: "汉族")
-                      ]),
-
-                      RowBean(cells: [
-                        CellBean(name: "科室"),
-                        CellBean(name: "门诊抽血室"),
-                        CellBean(name: "床号"),
-                        CellBean(name: "ks3003"),
-                        CellBean(name: "门诊/住院号"),
-                        CellBean(name: "14323023"),
-                      ]),
-
-                      RowBean(cells: [
-                        CellBean(name: "临床诊断"),
-                        CellBean(name: "缺铁贫血"),
-                        CellBean(name: "标本种类"),
-                        CellBean(name: "--"),
-                      ]),
-                    ];
-                    return rowDatas;
-                  },
-                  buildRowStyle: (data,index){
-                    switch(index){
-
-                      case 1:
-                        return Column(children: [
-                          TabRow(
-                              cellWidget: const [2,9,2,3],
-                              enableDivider: true,
-                              rowHeight: 40,
-                              dividerColor: Colors.white,
-                              cellItem:CellItem(
-                                  alignment: Alignment.centerLeft,
-                                  buildCell: (cell,index){
-                                    var cellBean =  (data as RowBean).cells[index];
-                                    if(index%2!=0){
-                                      return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
-                                    }
-                                    return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
-                                  }
-                              )),
-
-                          Container(
-                            height: 1,
-                            color: Colors.black,)
-                        ]);
-
-                      case 2:
-                        return TabRow(
-                            cellWidget: const [2,4,1,1,1,2,2,3],
-                            enableDivider: true,
-                            dividerColor: Colors.white,
-                             rowHeight: 40,
-                            cellItem:CellItem(
-                                alignment: Alignment.centerLeft,
-                                buildCell: (cell,index){
-                                  var cellBean =  (data as RowBean).cells[index];
-                                  if(index%2!=0){
-                                    return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
-                                  }
-                                  return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
-                                }
-                            ));
-
-                      case 3:
-                        return TabRow(
-                            cellWidget: const [2,6,1,2,2,3],
-                            enableDivider: true,
-                            dividerColor: Colors.white,
-                             rowHeight: 40,
-                            cellItem:CellItem(
-                                alignment: Alignment.centerLeft,
-                                buildCell: (cell,index){
-                                  var cellBean =  (data as RowBean).cells[index];
-                                  if(index%2!=0){
-                                    return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
-                                  }
-                                  return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
-                                }
-                            ));
-                    }
-
-                    return TabRow(
-                        cellWidget: const [2,4,2,8],
-                        dividerColor: Colors.white,
-                        enableDivider: true,
-                         rowHeight: 40,
-                        cellItem:CellItem(
-                            alignment: Alignment.centerLeft,
-                            buildCell: (cell,index){
-                              var cellBean =  (data as RowBean).cells[index];
-                              if(index%2!=0){
-                                return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
-                              }
-                              return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
-                            }
-                        ));
-
-                  },
-                ),
+                // TableView<int>(
+                //   enableDivider: false,
+                //   enableTopDivider: false,
+                //   enableBottomDivider: false,
+                //   physics: const NeverScrollableScrollPhysics(),
+                //   controller: ScrollController(),
+                //   preDealData: (){
+                //
+                //     List<RowBean> rowDatas = [
+                //       RowBean(cells: [
+                //         CellBean(name: "病案"),
+                //         CellBean(name: "hx202206022034"),
+                //         CellBean(name: "检查设备"),
+                //         CellBean(name: "PHILIPS-iE22-2"),
+                //         CellBean(name: "年龄"),
+                //         CellBean(name: "30岁"),
+                //         CellBean(name: "族别"),
+                //         CellBean(name: "汉族")
+                //       ]),
+                //
+                //
+                //       RowBean(cells: [
+                //         CellBean(name: "姓名"),
+                //         CellBean(name: "张三"),
+                //         CellBean(name: "性别"),
+                //         CellBean(name: "男"),
+                //         CellBean(name: "年龄"),
+                //         CellBean(name: "30岁"),
+                //         CellBean(name: "族别"),
+                //         CellBean(name: "汉族")
+                //       ]),
+                //
+                //       RowBean(cells: [
+                //         CellBean(name: "科室"),
+                //         CellBean(name: "门诊抽血室"),
+                //         CellBean(name: "床号"),
+                //         CellBean(name: "ks3003"),
+                //         CellBean(name: "门诊/住院号"),
+                //         CellBean(name: "14323023"),
+                //       ]),
+                //
+                //       RowBean(cells: [
+                //         CellBean(name: "临床诊断"),
+                //         CellBean(name: "缺铁贫血"),
+                //         CellBean(name: "标本种类"),
+                //         CellBean(name: "--"),
+                //       ]),
+                //     ];
+                //     return rowDatas;
+                //   },
+                //   buildRowStyle: (data,index){
+                //     switch(index){
+                //
+                //       case 1:
+                //         return Column(children: [
+                //           TabRow(
+                //               cellWidget: const [2,9,2,3],
+                //               enableDivider: true,
+                //               rowHeight: 40,
+                //               dividerColor: Colors.white,
+                //               cellItem:CellItem(
+                //                   alignment: Alignment.centerLeft,
+                //                   buildCell: (cell,index){
+                //                     var cellBean =  (data as RowBean).cells[index];
+                //                     if(index%2!=0){
+                //                       return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
+                //                     }
+                //                     return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
+                //                   }
+                //               )),
+                //
+                //           Container(
+                //             height: 1,
+                //             color: Colors.black,)
+                //         ]);
+                //
+                //       case 2:
+                //         return TabRow(
+                //             cellWidget: const [2,4,1,1,1,2,2,3],
+                //             enableDivider: true,
+                //             dividerColor: Colors.white,
+                //              rowHeight: 40,
+                //             cellItem:CellItem(
+                //                 alignment: Alignment.centerLeft,
+                //                 buildCell: (cell,index){
+                //                   var cellBean =  (data as RowBean).cells[index];
+                //                   if(index%2!=0){
+                //                     return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
+                //                   }
+                //                   return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
+                //                 }
+                //             ));
+                //
+                //       case 3:
+                //         return TabRow(
+                //             cellWidget: const [2,6,1,2,2,3],
+                //             enableDivider: true,
+                //             dividerColor: Colors.white,
+                //              rowHeight: 40,
+                //             cellItem:CellItem(
+                //                 alignment: Alignment.centerLeft,
+                //                 buildCell: (cell,index){
+                //                   var cellBean =  (data as RowBean).cells[index];
+                //                   if(index%2!=0){
+                //                     return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
+                //                   }
+                //                   return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
+                //                 }
+                //             ));
+                //     }
+                //
+                //     return TabRow(
+                //         cellWidget: const [2,4,2,8],
+                //         dividerColor: Colors.white,
+                //         enableDivider: true,
+                //          rowHeight: 40,
+                //         cellItem:CellItem(
+                //             alignment: Alignment.centerLeft,
+                //             buildCell: (cell,index){
+                //               var cellBean =  (data as RowBean).cells[index];
+                //               if(index%2!=0){
+                //                 return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.lightBlue));
+                //               }
+                //               return Text(cellBean.name.toString(),style: TextStyle(fontSize: 14,color: Colors.black));
+                //             }
+                //         ));
+                //
+                //   },
+                // ),
 
                 Row(children: const [
                   Expanded(child:  Center(child:  Text("血常规24项化验单",style: TextStyle(fontSize: 14,color: Colors.black))))

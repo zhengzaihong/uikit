@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 ///
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 /// 待优化
 ///
 
+///构建标题行
+typedef BuildTableHeaderStyle<T> = Widget Function(T data);
 ///构建每一行的样式
 typedef BuildRowStyle<T> = Widget Function(T data, int index);
 
@@ -19,7 +22,6 @@ typedef BuildRowStyle<T> = Widget Function(T data, int index);
 typedef PreDealData<T> = List<T> Function();
 
 class TableView<T> extends StatefulWidget {
-
   ///数据 表示表格有多少行
   final List<T>? tableDatas;
 
@@ -53,6 +55,10 @@ class TableView<T> extends StatefulWidget {
   final bool addSemanticIndexes;
   final double? cacheExtent;
 
+  ///是否开启双向滑动
+  final bool doubleScroll;
+  final ScrollBehavior? behavior;
+  final BuildTableHeaderStyle? buildTableHeaderStyle;
 
   const TableView(
       {this.tableDatas = const [],
@@ -73,6 +79,9 @@ class TableView<T> extends StatefulWidget {
       this.addRepaintBoundaries = true,
       this.addSemanticIndexes = true,
       this.cacheExtent,
+      this.doubleScroll = false,
+      this.behavior,
+        this.buildTableHeaderStyle,
       Key? key})
       : super(key: key);
 
@@ -81,7 +90,6 @@ class TableView<T> extends StatefulWidget {
 }
 
 class _TableViewState<T> extends State<TableView> {
-
   List<dynamic> datas = [];
 
   int _itemCount = 0;
@@ -104,8 +112,70 @@ class _TableViewState<T> extends State<TableView> {
     }
   }
 
+  List<Widget> _buildRowLines() {
+    List<Widget> rows = [];
+    for (int index = 0; index < _itemCount; index++) {
+      List<Widget> lines = [];
+      if ((widget.enableTopDivider && index == 0) ||
+          (widget.enableBottomDivider && index == _itemCount - 1)) {
+        lines.add(const SizedBox());
+      } else {
+        lines.add(widget.buildRowStyle(
+            widget.enableTopDivider ? datas[index - 1] : datas[index],
+            widget.enableTopDivider ? index : index + 1));
+      }
+
+
+      final divider = Container(
+        height: widget.dividerHeight,
+        color: widget.dividerColor,
+      );
+      if (widget.enableBottomDivider && index == _itemCount) {
+        lines.add(divider);
+      } else {
+        lines.add(widget.enableDivider ? divider : const SizedBox());
+      }
+      rows.add(Column(children: lines));
+    }
+    return rows;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.doubleScroll) {
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ScrollConfiguration(
+                behavior: widget.behavior ??
+                    ScrollConfiguration.of(context).copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  controller: widget.controller,
+                  physics: widget.physics,
+                  reverse: widget.reverse,
+                  padding: widget.padding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      widget.buildTableHeaderStyle?.call(context)??const SizedBox(),
+                      ..._buildRowLines(),
+                    ],
+                  ),
+                ))
+          ],
+        ),
+      );
+    }
+
     return ListView.separated(
         shrinkWrap: widget.shrinkWrap,
         scrollDirection: widget.scrollDirection,
@@ -130,7 +200,8 @@ class _TableViewState<T> extends State<TableView> {
               widget.enableTopDivider ? index : index + 1);
         },
         separatorBuilder: (context, index) {
-          final divider = Container(   ///修复 web html 像素丢失问题
+          final divider = Container(
+            ///修复 web html 像素丢失问题
             height: widget.dividerHeight,
             color: widget.dividerColor,
           );
@@ -159,8 +230,7 @@ class TabRow extends StatelessWidget {
   final bool fixRowHeight;
 
   const TabRow(
-      {
-      this.enableDivider = true,
+      {this.enableDivider = true,
       this.rowDividerHeight,
       this.rowDividerWidth = 0.5,
       required this.cellWidget,
@@ -178,10 +248,10 @@ class TabRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  _buildRow();
+    return _buildRow();
   }
 
-  Widget _buildRow(){
+  Widget _buildRow() {
     return IntrinsicHeight(
       child: Row(
           mainAxisSize: mainAxisSize,
@@ -193,19 +263,21 @@ class TabRow extends StatelessWidget {
     );
   }
 
-  Widget _createRowLine(){
-    if(!fixRowHeight && rowHeight!=null){
+  Widget _createRowLine() {
+    if (!fixRowHeight && rowHeight != null) {
       return SizedBox(
         width: rowDividerWidth,
         height: rowHeight,
         child: Row(
           children: [
-            Expanded(child: Container(
+            Expanded(
+                child: Container(
               width: rowDividerWidth,
               color: dividerColor,
             ))
           ],
-        ),);
+        ),
+      );
     }
     return Container(
       width: rowDividerWidth,
@@ -213,6 +285,7 @@ class TabRow extends StatelessWidget {
       color: dividerColor,
     );
   }
+
   List<Widget> _buildCells(List<int> cellWidget) {
     List<Widget> cells = [];
 
@@ -220,17 +293,15 @@ class TabRow extends StatelessWidget {
       var widget = cellItem.buildCell(cellItem, i);
       cells.add(Expanded(
           flex: cellWidget[i],
-          child:Row(children: [
-            if (enableDivider)
-              _createRowLine(),
-
+          child: Row(children: [
+            if (enableDivider) _createRowLine(),
             Expanded(
                 child: Container(
-                  color: cellItem.background,
-                  padding: cellItem.padding,
-                  alignment: cellItem.alignment,
-                  child: widget,
-                ))
+              color: cellItem.background,
+              padding: cellItem.padding,
+              alignment: cellItem.alignment,
+              child: widget,
+            ))
           ])));
     }
     if (enableDivider) {
@@ -276,6 +347,7 @@ class CellBean {
       this.cellIndex,
       this.obj,
       this.isTitle = false});
+
 }
 
 ///通用性单元格实体，只针对非列表数据结构的处理成表格
