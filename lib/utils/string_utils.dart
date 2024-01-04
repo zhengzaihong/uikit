@@ -45,6 +45,12 @@ class StringUtils {
     }
     return false;
   }
+  static bool isNotEmpty(String? string) {
+    if (null == string || string.isEmpty ) {
+      return false;
+    }
+    return true;
+  }
 
   static bool isEmptyObj(Object? obj) {
     return obj == null || obj.toString().isEmpty;
@@ -77,9 +83,7 @@ extension StringExt on Object? {
     return null == value ? "" : value.toString();
   }
 
-  String str() {
-    return toStr(this);
-  }
+  String str()=>toStr(this);
 
   String get s => toStr(this);
 

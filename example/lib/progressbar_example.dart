@@ -22,49 +22,46 @@ class ProgressBarExample extends StatelessWidget {
         Row(children: const [Expanded(child: SizedBox(height: 20))]),
 
          CycleProgressBar(
-          enableAnimation: true,
-          animationTime: 6000,
-          height: 100,
-          width: 100,
-          angle: 200,
-          progressBgColor: Colors.red,
-          cycleBgColor: Colors.teal.withOpacity(0.5),
+           radius: 40.0,
+           animation: true,
+           animationDuration: 1200,
+           lineWidth: 15.0,
+           percent: 0.4,
+           center: const Text("女",style:TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
+           circularStrokeCap: CircularStrokeCap.butt,
+           backgroundColor: Colors.yellow,
+           progressColor: Colors.red,
         ),
         const SizedBox(height: 10),
 
-        const LinearProgressBar(
-          enableAnimation: true,
-          animationTime: 6000,
-          height: 10,
-          strokeWidth: 10,
-          width: 100,
-          progress: 30,
-          progressBgColor: Colors.red,
-          bgColor: Colors.lightBlue,
+         LinearProgressBar(
+          width: 200,
+          animation: true,
+          animationDuration: 1000,
+          lineHeight: 20.0,
+          leading: const Text("左侧内容"),
+          trailing: const Text("右侧内容"),
+          percent: 0.5,
+          center: Text((0.5*100).toString()+'%'),
+          barRadius: const Radius.circular(10),
+          progressColor: Colors.red,
         ),
 
         const SizedBox(height: 10),
 
-        Container(
-          height: 100,
-          width: 100,
-          child: Stack(
-          children: const [
-
-            Align(child:  CycleProgressBar(
-              enableAnimation: true,
-              animationTime: 6000,
-              height: 100,
-              width: 100,
-              angle:( 30.0/100.0)*360,
-              strokeWidth: 10,
-              progressBgColor: Colors.red,
-              cycleBgColor: Colors.grey,
-            )),
-
-            Align(child: Text("进度30%",style: TextStyle(color: Colors.lightBlue,fontSize: 12)))
-          ],
-        ),)
+        Align(child:  CycleProgressBar(
+          radius: 40.0,
+          lineWidth: 10.0,
+          percent: 0.3,
+          header: const Text("男30%"),
+          center: const Icon(
+            Icons.man_rounded,
+            size: 50.0,
+            color: Colors.blue,
+          ),
+          backgroundColor: Colors.grey,
+          progressColor: Colors.blue,
+        )),
 
       ],
     ));

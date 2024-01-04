@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.1.3
+      flutter_uikit_forzzh: ^0.1.4
 
 
 # flutter 常用组件ui库
@@ -20,17 +20,11 @@
  14. 新增 InfiniteLevelsMenus 无限层级菜单
  15. 新增 InputText 极简输入框,支持实时表单校验,支持 TextField和 TextFormField全部属性。
  16. 新增 FloatExpendButton 悬浮菜单按钮
+ 17. 新增 CustomAnimatedBottomBar 底部菜单
 
   ...持续更新中....
 
-# 最后一次提交记录摘要
 
-  1.新增 FloatExpendButton 悬浮菜单按钮
-  2.InputExtend 扩展新功能
-  3.修复 Toast bug
-  4.MarqueeView 新增垂直滚动效果。
-  5.新加一些工具类
-  
 
 
 
