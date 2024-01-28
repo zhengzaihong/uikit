@@ -158,7 +158,7 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                   margin: const EdgeInsets.only(left: 10,top: 10),
                   child:  InfiniteLevelsMenus(
                     datas: menues,
-                    oneExpand: true,
+                    oneExpand: false,
                     buildMenueItem:(state,isCurrent,data,lv){
                       if(data is InfiniteWrapper){
                         return  GestureDetector(

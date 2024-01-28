@@ -28,7 +28,7 @@ typedef CallBackChildData<Dynamic> = List<dynamic> Function(dynamic data,int cur
 class InfiniteLevelsMenus<T> extends StatefulWidget {
 
   final List<InfiniteWrapper>? datas;
-  final BuildMenuItem buildMenueItem;
+  final BuildMenuItem buildMenuItem;
   final BuildSeparator? buildSeparator;
   final Widget? noDataView;
   final CallBackChildData callBackChildData;
@@ -38,7 +38,7 @@ class InfiniteLevelsMenus<T> extends StatefulWidget {
 
   const InfiniteLevelsMenus(
       {
-        required this.buildMenueItem,
+        required this.buildMenuItem,
         required this.callBackChildData,
         this.buildSeparator,
         this.datas,
@@ -100,7 +100,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widget.buildMenueItem.call(
+                  widget.buildMenuItem.call(
                       this,
                       bean == _lastClickItem,
                       bean,
@@ -139,7 +139,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.buildMenueItem.call(
+            widget.buildMenuItem.call(
                 this,
                 element == _lastClickItem,
                 element,
