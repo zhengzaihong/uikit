@@ -28,8 +28,14 @@ class _TableViewExampleState extends State<TableViewExample> {
     return   Container(
       width: flex,
       alignment: Alignment.center,
-      height: 50,
-      child:  Text(title,style: const TextStyle(fontSize: 14,color: Colors.black)),
+      decoration: BoxDecoration(
+        border: Border(left: BorderSide(color: Colors.red,width: 1)),
+      ),
+      child:Row(
+        children: [
+          Expanded(child: Center(child: Text(title,style: const TextStyle(fontSize: 14,color: Colors.black)),)),
+        ],
+      )
     );
   }
   @override
@@ -43,7 +49,9 @@ class _TableViewExampleState extends State<TableViewExample> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
+            const Center(child:  Text("双向滚动示例",style: TextStyle(color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w500))),
             Container(
                height: 500,
               margin: const EdgeInsets.only(left: 100,right: 100),
@@ -57,13 +65,14 @@ class _TableViewExampleState extends State<TableViewExample> {
               cellColumnCount: 6,
               minCellWidth:100,
               shrinkWrap: true,
-              cellWidthFlex: const [1,1,1,1,10,10],
+              cellWidthFlex: const [1,1,1,1,1,1],
               buildTableHeaderStyle: (context,rowWidth,flex){
                 return SizedBox(
                   width: rowWidth,
                   child: Row(
                     children: [
                       _cellBuilder("姓名",flex[0]),
+
                       _cellBuilder("年龄",flex[1]),
                       _cellBuilder("生日",flex[2]),
                       _cellBuilder("身份证",flex[3]),
@@ -76,17 +85,21 @@ class _TableViewExampleState extends State<TableViewExample> {
               },
               buildRowStyle: (data,index,rowWidth,flex){
                 TestBean bean = data;
-                return SizedBox(
-                  width: rowWidth,
-                  child: Row(
-                    children: [
-                      _cellBuilder(bean.name!, flex[0]),
-                      _cellBuilder(bean.age!, flex[1]),
-                      _cellBuilder(bean.birth!, flex[2]),
-                      _cellBuilder(bean.card!, flex[3]),
-                      _cellBuilder(bean.phone!, flex[4]),
-                      _cellBuilder(bean.address!, flex[5]),
-                    ],
+                return IntrinsicHeight(
+                  child: SizedBox(
+                    width: rowWidth,
+                    child:Column(
+                      children: [ Expanded(child: Row(
+                        children: [
+                          _cellBuilder(bean.name!, flex[0]),
+                          _cellBuilder(bean.age!, flex[1]),
+                          _cellBuilder(bean.birth!, flex[2]),
+                          _cellBuilder(bean.card!, flex[3]),
+                          _cellBuilder(bean.phone!, flex[4]),
+                          _cellBuilder(index==1?bean.address!:'sssssss', flex[5]),
+                        ],
+                      ))],
+                    ),
                   ),
                 );
               },
