@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 ///
@@ -13,10 +15,13 @@ import 'package:flutter/material.dart';
 /// 待优化
 ///
 
+/// BuildTableHeaderStyle  BuildRowStyle 中rowWidth 为总宽度 cellWidth 为单元格宽度 只再双向滚动中生效
+
 ///构建标题行
-typedef BuildTableHeaderStyle<T> = Widget Function(T data);
+typedef BuildTableHeaderStyle<T> = Widget Function(BuildContext context,double rowWidth,List<double> cellWidth);
+
 ///构建每一行的样式
-typedef BuildRowStyle<T> = Widget Function(T data, int index);
+typedef BuildRowStyle<T> = Widget Function(T data, int index,double rowWidth,List<double> cellWidth);
 
 ///预处理数据
 typedef PreDealData<T> = List<T> Function();
@@ -50,15 +55,22 @@ class TableView<T> extends StatefulWidget {
   final ScrollController? controller;
   final ScrollPhysics? physics;
   final EdgeInsetsGeometry? padding;
-  final bool addAutomaticKeepAlives;
+  final bool addAutomaticKeepAlive;
   final bool addRepaintBoundaries;
   final bool addSemanticIndexes;
   final double? cacheExtent;
 
-  ///是否开启双向滑动
+  ///是否开启双向滑动 以下属性只有在双向滑动时有效
   final bool doubleScroll;
+  /// 需要双向滑动说明列表不满足一屏显示，此时需要设置最小宽度作为基准，
+  /// 其余宽度按照此基准扩大倍数。
+  final double minCellWidth;
+  final int cellColumnCount;
+  final List<double>? cellWidthFlex;
   final ScrollBehavior? behavior;
   final BuildTableHeaderStyle? buildTableHeaderStyle;
+  final ScrollController? titleScrollController;
+  final ScrollController? contentScrollController;
 
   const TableView(
       {this.tableDatas = const [],
@@ -75,13 +87,19 @@ class TableView<T> extends StatefulWidget {
       this.controller,
       this.physics,
       this.padding,
-      this.addAutomaticKeepAlives = true,
+      this.addAutomaticKeepAlive = true,
       this.addRepaintBoundaries = true,
       this.addSemanticIndexes = true,
       this.cacheExtent,
       this.doubleScroll = false,
       this.behavior,
         this.buildTableHeaderStyle,
+      this.minCellWidth = 100,
+      this.cellWidthFlex,
+        this.cellColumnCount=1,
+        this.titleScrollController,
+        this.contentScrollController,
+
       Key? key})
       : super(key: key);
 
@@ -93,10 +111,19 @@ class _TableViewState<T> extends State<TableView> {
   List<dynamic> datas = [];
 
   int _itemCount = 0;
+  late ScrollController _titleController;
+  late ScrollController _contentController;
+
+  List<double>? cellWidthFlex;
+  ///双向滚动的总宽
+  double _horizontalTotalWidth = 0;
 
   @override
   void initState() {
     super.initState();
+    _titleController = widget.titleScrollController??ScrollController();
+    _contentController = widget.contentScrollController??ScrollController();
+
     datas = widget.tableDatas ?? [];
     if (widget.preDealData != null) {
       datas = widget.preDealData!.call();
@@ -110,69 +137,112 @@ class _TableViewState<T> extends State<TableView> {
     } else if (widget.enableBottomDivider) {
       _itemCount = datas.length + 1;
     }
-  }
 
-  List<Widget> _buildRowLines() {
-    List<Widget> rows = [];
-    for (int index = 0; index < _itemCount; index++) {
-      List<Widget> lines = [];
-      if ((widget.enableTopDivider && index == 0) ||
-          (widget.enableBottomDivider && index == _itemCount - 1)) {
-        lines.add(const SizedBox());
-      } else {
-        lines.add(widget.buildRowStyle(
-            widget.enableTopDivider ? datas[index - 1] : datas[index],
-            widget.enableTopDivider ? index : index + 1));
+    if (widget.doubleScroll) {
+      _titleController.addListener(_updateContent);
+      _contentController.addListener(_updateTitle);
+      cellWidthFlex = widget.cellWidthFlex??[];
+      if (cellWidthFlex!.length != widget.cellColumnCount) {
+        cellWidthFlex = List.generate(widget.cellColumnCount, (index) => 1);
       }
 
-
-      final divider = Container(
-        height: widget.dividerHeight,
-        color: widget.dividerColor,
-      );
-      if (widget.enableBottomDivider && index == _itemCount) {
-        lines.add(divider);
-      } else {
-        lines.add(widget.enableDivider ? divider : const SizedBox());
+      for (int i = 0; i < cellWidthFlex!.length; i++) {
+        _horizontalTotalWidth += cellWidthFlex![i] * widget.minCellWidth;
       }
-      rows.add(Column(children: lines));
     }
-    return rows;
   }
+
+
+  void _updateTitle() {
+    _titleController.jumpTo(_contentController.offset);
+  }
+
+  void _updateContent() {
+    _contentController.jumpTo(_titleController.offset);
+  }
+
+  @override
+  void dispose() {
+    _titleController.removeListener(_updateContent);
+    _contentController.removeListener(_updateTitle);
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     if (widget.doubleScroll) {
-      return SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ScrollConfiguration(
-                behavior: widget.behavior ??
-                    ScrollConfiguration.of(context).copyWith(
-                      dragDevices: {
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.mouse,
-                      },
-                    ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  controller: widget.controller,
-                  physics: widget.physics,
-                  reverse: widget.reverse,
-                  padding: widget.padding,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      widget.buildTableHeaderStyle?.call(context)??const SizedBox(),
-                      ..._buildRowLines(),
-                    ],
-                  ),
-                ))
-          ],
-        ),
+      return Column(
+       children: [
+         Row(
+           children: [
+             Expanded(
+                 child: SizedBox(
+                   width: _horizontalTotalWidth,
+                   child: SingleChildScrollView(
+                     controller:_titleController,
+                     scrollDirection: Axis.horizontal,
+                     child:widget.buildTableHeaderStyle?.call(context,_horizontalTotalWidth,cellWidthFlex!.map((e) => e * widget.minCellWidth).toList()),
+                   ),
+                 ))
+           ],
+         ),
+         Expanded(child: SingleChildScrollView(
+            controller: ScrollController(),
+             physics: const AlwaysScrollableScrollPhysics(),
+             child: Column(
+               children: [
+                 Row(
+                   children: [
+                     Expanded(
+                         child:ScrollConfiguration(
+                             behavior: widget.behavior ?? const ScrollBehavior().copyWith(
+                                 scrollbars: true,
+                                 overscroll: true,
+                                 dragDevices: {
+                                   PointerDeviceKind.touch,
+                                   PointerDeviceKind.mouse,
+                                 }
+                             ),
+                             child:SingleChildScrollView(
+                               scrollDirection: Axis.horizontal,
+                               controller: _contentController,
+                               child: SizedBox(
+                                 width: _horizontalTotalWidth,
+                                 child: ListView.separated(
+                                     itemCount: _itemCount,
+                                     shrinkWrap: true,
+                                     physics: const NeverScrollableScrollPhysics(),
+                                     itemBuilder: (context, index) {
+                                       if ((widget.enableTopDivider && index == 0) ||
+                                           (widget.enableBottomDivider && index == _itemCount - 1)) {
+                                         return const SizedBox();
+                                       }
+
+                                       /// 外部处理的行的下标都从 1 第一行开始
+                                       return widget.buildRowStyle(
+                                           widget.enableTopDivider ? datas[index - 1] : datas[index],
+                                           widget.enableTopDivider ? index : index + 1,_horizontalTotalWidth,cellWidthFlex!.map((e) => e * widget.minCellWidth).toList());
+                                     },
+                                     separatorBuilder: (context, index) {
+                                       final divider = Container(
+                                         ///修复 web html 像素丢失问题
+                                         height: widget.dividerHeight,
+                                         color: widget.dividerColor,
+                                       );
+                                       if (widget.enableBottomDivider && index == _itemCount) {
+                                         return divider;
+                                       }
+                                       return widget.enableDivider ? divider : const SizedBox();
+                                     }
+                                 ),
+                               ),
+                             )))
+                   ],
+                 )
+               ],
+             )))
+       ],
       );
     }
 
@@ -183,7 +253,7 @@ class _TableViewState<T> extends State<TableView> {
         physics: widget.physics,
         controller: widget.controller,
         padding: widget.padding,
-        addAutomaticKeepAlives: widget.addAutomaticKeepAlives,
+        addAutomaticKeepAlives: widget.addAutomaticKeepAlive,
         addRepaintBoundaries: widget.addRepaintBoundaries,
         addSemanticIndexes: widget.addSemanticIndexes,
         cacheExtent: widget.cacheExtent,
@@ -197,7 +267,7 @@ class _TableViewState<T> extends State<TableView> {
           /// 外部处理的行的下标都从 1 第一行开始
           return widget.buildRowStyle(
               widget.enableTopDivider ? datas[index - 1] : datas[index],
-              widget.enableTopDivider ? index : index + 1);
+              widget.enableTopDivider ? index : index + 1,0,[]);
         },
         separatorBuilder: (context, index) {
           final divider = Container(
@@ -209,7 +279,8 @@ class _TableViewState<T> extends State<TableView> {
             return divider;
           }
           return widget.enableDivider ? divider : const SizedBox();
-        });
+        }
+        );
   }
 }
 
@@ -290,7 +361,7 @@ class TabRow extends StatelessWidget {
     List<Widget> cells = [];
 
     for (var i = 0; i < cellWidget.length; i++) {
-      var widget = cellItem.buildCell(cellItem, i);
+      var widget = cellItem.buildCell(cellItem, i,null);
       cells.add(Expanded(
           flex: cellWidget[i],
           child: Row(children: [
@@ -314,7 +385,7 @@ class TabRow extends StatelessWidget {
 
 /// CellItem 每个元素的信息
 ///外部构建每个表格的样式信息
-typedef BuildCell = Widget Function(CellItem cellItem, int index);
+typedef BuildCell = Widget Function(CellItem cellItem, int index,double? weight);
 
 class CellItem {
   AlignmentGeometry alignment;

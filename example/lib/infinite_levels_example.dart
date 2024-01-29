@@ -159,7 +159,7 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                   child:  InfiniteLevelsMenus(
                     datas: menues,
                     oneExpand: false,
-                    buildMenueItem:(state,isCurrent,data,lv){
+                    buildMenuItem:(state,isCurrent,data,lv){
                       if(data is InfiniteWrapper){
                         return  GestureDetector(
                             onTap: (){

@@ -25,6 +25,7 @@ export 'widgets/custom_checkbox.dart';
 export 'widgets/custom_switch.dart';
 export 'line/line_lib.dart';
 export 'drawer/drawer_lib.dart';
+export 'package:flutter_uikit_forzzh/table/list_view2.dart';
 
 
 /// Utils package 工具包
