@@ -5,6 +5,7 @@
 /// create_time: 17:35
 /// describe: 实现无线层级的实体类
 /// 实际开发中需要将 您的菜单类别转换成该类模型。
+/// 简化以前的逻辑
 ///
 ///
 class InfiniteMenu {

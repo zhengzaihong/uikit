@@ -7,7 +7,7 @@ import 'package:flutter_uikit_forzzh/uikitlib.dart';
 /// create_date: 2022/10/10
 /// create_time: 9:44
 /// describe: 真正的无限层级菜单，
-/// 服用时，请严格按照该 demo 模型进行数据转换。 必配参数：pid,isRoot,说明详见实体类。
+/// 简化以前的逻辑
 ///
 class InfiniteLevelsExample extends StatefulWidget {
   const InfiniteLevelsExample({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class InfiniteLevelsExample extends StatefulWidget {
 class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
 
-  List<InfiniteMenu> menus = [
+ static List<InfiniteMenu> menus = [
 
     InfiniteMenu(
       title: "一级标题A",
@@ -88,16 +88,26 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
   ];
 
+  bool? isAllExpand;
+  InfiniteMenu? _lastClickItem = menus.last.children?.first.children?.first;
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(child:  Scaffold(
       appBar: AppBar(
-        title: const Text("无限层级菜单"),
+        title:GestureDetector(
+          onTap: (){
+            ///测试 全部展开和 闭合
+           setState(() {
+             _lastClickItem=null;
+             isAllExpand = !(isAllExpand??false);
+           });
+          },
+          child:  const Text("无限层级菜单"),
+        ),
       ),
       backgroundColor: Colors.white,
       body: Row(children: [
-
         SizedBox(
             width: 200,
             child:  Column(
@@ -106,27 +116,30 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                 Expanded(child: Container(
                   margin: const EdgeInsets.only(left: 10,top: 10),
                   child:  InfiniteLevelsMenus(
+                    key: ValueKey(isAllExpand),
                     datas: menus,
-                    oneExpand: false,
+                    allExpand: isAllExpand,
+                    defaultExpand: _lastClickItem,
+                    buildComplete: (state,item){
+                      print("---------------------buildComplete-----${item?.title}");
+                    },
                     buildMenuItem:(state,isCurrent,data,lv){
-                      if(data is InfiniteMenu){
-                        return  GestureDetector(
-                            onTap: (){
-                              print("---点击:${data.title}--层级：$lv");
-                              state.setItem(data);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 4,right: 4,top: 5,bottom: 5),
-                              margin: const EdgeInsets.only(top: 2),
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                                  border: Border.all(color: isCurrent?Colors.red:Colors.white),
-                                  color: isCurrent?Colors.lightBlue:Colors.white
-                              ),
-                              child: Text(data.title.toString(),style: TextStyle(fontSize: lv==1?18:lv==2?16:12)),
-                            ));
-                      }
-                      return const SizedBox();
+                      return  GestureDetector(
+                          onTap: (){
+                            print("---点击:${data.title}--层级：$lv");
+                            _lastClickItem = data;
+                            state.setItem(data);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 4,right: 4,top: 5,bottom: 5),
+                            margin: const EdgeInsets.only(top: 2),
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                border: Border.all(color: isCurrent?Colors.red:Colors.white),
+                                color: isCurrent?Colors.lightBlue:Colors.white
+                            ),
+                            child: Text(data.title.toString(),style: TextStyle(fontSize: lv==1?18:lv==2?16:12)),
+                          ));
                     },
                   ),
                 ))

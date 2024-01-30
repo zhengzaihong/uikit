@@ -12,25 +12,26 @@ import 'package:flutter_uikit_forzzh/uikitlib.dart';
 /// describe: 纵向无限层级菜单
 ///
 
-typedef BuildMenuItem<T> = Widget Function(
+typedef BuildMenuItem = Widget Function(
     InfiniteLevelsMenusState state,
     bool isCurrent,
-    T data,
+    InfiniteMenu data,
     int currentLevel);
 
 typedef BuildSeparator<Dynamic> = Widget Function(
     BuildContext context, dynamic data, int currentLevel);
 
 
-class InfiniteLevelsMenus<T> extends StatefulWidget {
+class InfiniteLevelsMenus extends StatefulWidget {
 
   final List<InfiniteMenu>? datas;
   final BuildMenuItem buildMenuItem;
   final BuildSeparator? buildSeparator;
   final Widget? noDataView;
   final double titleChildSpace;
-  final Function? buildComplete;
-  final bool oneExpand;
+  final Function(InfiniteLevelsMenusState state,InfiniteMenu? item)? buildComplete;
+  final bool? allExpand;
+  final InfiniteMenu? defaultExpand;
 
   const InfiniteLevelsMenus(
       {
@@ -40,7 +41,8 @@ class InfiniteLevelsMenus<T> extends StatefulWidget {
         this.noDataView,
         this.titleChildSpace =5,
         this.buildComplete,
-        this.oneExpand = true,
+        this.allExpand,
+        this.defaultExpand,
         Key? key
       }) : super(key: key);
 
@@ -51,13 +53,64 @@ class InfiniteLevelsMenus<T> extends StatefulWidget {
 class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
 
   InfiniteMenu? _lastClickItem;
+  bool isFirstBuild = true;
 
   @override
   void initState(){
     super.initState();
+    _lastClickItem = widget.defaultExpand;
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      widget.buildComplete?.call();
+
+      if(isFirstBuild){
+        isFirstBuild = false;
+        widget.buildComplete?.call(this,_lastClickItem);
+      }
+      if( widget.allExpand == true){
+        openAll();
+        return;
+      }
+      if( widget.allExpand == false){
+        closeAll();
+        return;
+      }
+      if(_lastClickItem!=null) {
+       ///根据当前选中的层级查询所在父层级
+       setState(() {
+         var datas = widget.datas??[];
+         for(int i =0 ;i<datas.length;i++){
+           List<InfiniteMenu> parents = [];
+           var bean = datas[i];
+           parents.add(bean);
+           List<InfiniteMenu> newParents = _findAllParents(bean,parents);
+
+           if(newParents.contains(_lastClickItem)){
+             int index = newParents.indexOf(_lastClickItem!);
+             newParents.removeRange(index+1, newParents.length);
+             newParents.forEach((element) {
+               element.isChecked = true;
+               print("---------element========${element.title}");
+             });
+           }
+
+
+         }
+       });
+      }
     });
+  }
+
+  List<InfiniteMenu> _findAllParents(InfiniteMenu data, List<InfiniteMenu> parents){
+    var datas = data.children??[];
+    for(int i =0 ;i<datas.length;i++){
+      var bean = datas[i];
+      parents.add(bean);
+      if(bean == _lastClickItem){
+        return parents;
+      }
+      _findAllParents(datas[i],parents);
+    }
+    return parents;
   }
 
   @override
@@ -91,11 +144,9 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
             itemCount: currentData.length,
             itemBuilder: (context,index){
               InfiniteMenu bean = currentData[index];
-              // print("-----------title:${bean.title}---- expand:$expand");
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   parentMenu.isChecked?widget.buildMenuItem.call(
                       this,
                       bean == _lastClickItem,
@@ -117,10 +168,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
               );
             },
             separatorBuilder:(context,index){
-              if(widget.buildSeparator==null){
-                return const SizedBox();
-              }
-              return widget.buildSeparator!.call(context,currentData[index],level);
+              return widget.buildSeparator?.call(context,currentData[index],level)??const SizedBox();
             })
       ],
     );
@@ -130,7 +178,6 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
   List<Widget> buildTitle(List<InfiniteMenu> titleMenus,int level){
     List<Widget> titles = [];
     for (var element in titleMenus) {
-      print("---------element:${element.title} --element.isChecked:${element.isChecked}");
       titles.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +188,6 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
                 element == _lastClickItem,
                 element,
                 level),
-
               ///子标题
               Row(
                 children: [
@@ -158,7 +204,6 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
     return titles;
   }
 
-  ///id 始终是根节点id
   void setItem(InfiniteMenu data) {
     setState(() {
       data.isChecked = !data.isChecked;
@@ -166,6 +211,24 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
         _closeAllChild(data);
       }
       _lastClickItem = data;
+    });
+  }
+
+  void openAll(){
+    setState(() {
+      widget.datas?.forEach((element) {
+        element.isChecked = true;
+        _openAllChild(element);
+      });
+    });
+  }
+
+  void closeAll(){
+    setState(() {
+      widget.datas?.forEach((element) {
+        element.isChecked = false;
+        _closeAllChild(element);
+      });
     });
   }
 
