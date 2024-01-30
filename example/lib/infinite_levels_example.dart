@@ -19,41 +19,33 @@ class InfiniteLevelsExample extends StatefulWidget {
 class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
 
-  List<InfiniteWrapper> menues = [
+  List<InfiniteMenu> menus = [
 
-    InfiniteWrapper(
-      pid: "0001",
+    InfiniteMenu(
       title: "一级标题A",
-      isRoot: true,
-      childs: [
-        InfiniteWrapper(
-            pid: "0001",
+      children: [
+        InfiniteMenu(
             title: "二级标题1",
-            childs: [
+            children: [
 
-              InfiniteWrapper(
-                  pid: "0001",
+              InfiniteMenu(
                   title: "三级标题1",
-                  childs: [
-                    InfiniteWrapper(
-                        pid: "0001",
+                  children: [
+                    InfiniteMenu(
                         title: "四级标题1",
-                        childs: [
-                          InfiniteWrapper(
-                              pid: "0001",
+                        children: [
+                          InfiniteMenu(
                               title: "五级标题1",
-                              childs: [
-                                InfiniteWrapper(
-                                    pid: "0001",
+                              children: [
+                                InfiniteMenu(
                                     title: "六级标题1",
-                                    childs: [
+                                    children: [
 
                                     ]
                                 ),
-                                InfiniteWrapper(
-                                    pid: "0001",
+                                InfiniteMenu(
                                     title: "六级标题2",
-                                    childs: [
+                                    children: [
 
                                     ]
                                 ),
@@ -63,75 +55,32 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                     ),
                   ]
               ),
-              InfiniteWrapper(
-                  pid: "0001",
+              InfiniteMenu(
                   title: "三级标题2",
-                  childs: [
+                  children: [
 
                   ]
               ),
-            ]
-        ),
-        InfiniteWrapper(
-            pid: "0001",
-            title: "二级标题2",
-            childs: [
-              InfiniteWrapper(
-                  pid: "0001",
-                  title: "二级标题3",
-                  childs: [
-
-                    InfiniteWrapper(
-                        pid: "0001",
-                        title: "二级标题4",
-                        childs: [
-
-                        ]
-                    ),
-                  ]
-              ),
-            ]
-        ),
-        InfiniteWrapper(
-            pid: "0001",
-            title: "二级标题3",
-            childs: [
-
-            ]
-        ),
-        InfiniteWrapper(
-            pid: "0001",
-            title: "二级标题4",
-            childs: [
-
-            ]
+            ],
         ),
       ]
     ),
 
-    InfiniteWrapper(
-        pid: "0002",
+    InfiniteMenu(
         title: "一级标题B",
-        isRoot: true,
-        childs: [
-          InfiniteWrapper(
-              pid: "0002",
+        children: [
+          InfiniteMenu(
               title: "二级标题1",
-              childs: [
+              children: [
 
-                InfiniteWrapper(
-                    pid: "0002",
+                InfiniteMenu(
                     title: "三级标题1",
-                    childs: [
+                    children: [
 
                     ]
                 ),
-                InfiniteWrapper(
-                    pid: "0002",
+                InfiniteMenu(
                     title: "三级标题2",
-                    childs: [
-
-                    ]
                 ),
               ]
           ),
@@ -157,10 +106,10 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                 Expanded(child: Container(
                   margin: const EdgeInsets.only(left: 10,top: 10),
                   child:  InfiniteLevelsMenus(
-                    datas: menues,
+                    datas: menus,
                     oneExpand: false,
                     buildMenuItem:(state,isCurrent,data,lv){
-                      if(data is InfiniteWrapper){
+                      if(data is InfiniteMenu){
                         return  GestureDetector(
                             onTap: (){
                               print("---点击:${data.title}--层级：$lv");
@@ -178,9 +127,6 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                             ));
                       }
                       return const SizedBox();
-                    },
-                    callBackChildData: (data,lv){
-                      return (data as InfiniteWrapper).childs??[];
                     },
                   ),
                 ))

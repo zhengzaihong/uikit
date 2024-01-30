@@ -97,7 +97,7 @@ class TableView<T> extends StatefulWidget {
       this.doubleScroll = false,
       this.behavior,
       this.buildTableHeaderStyle,
-      this.minCellWidth = 100,
+      this.minCellWidth = 50,
       this.cellWidthFlex,
       this.cellColumnCount = 1,
       this.titleScrollController,
@@ -453,7 +453,7 @@ class RowBean {
 /// 如果想让标题类的 左右对齐可使用该文本组件
 /// 外部可直接使用该组件，
 /// eg:  return TabSpaceText(
-///  contents: StringUtils.parseStr((cellBean.name).toString()),
+///  contents: KitMath.parseStr((cellBean.name).toString()),
 ///  padding: const EdgeInsets.only(left: 10,right: 10),
 ///  style: const TextStyle(fontSize: 14,color: Colors.black));
 ///

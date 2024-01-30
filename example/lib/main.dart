@@ -4,7 +4,6 @@ import 'package:uikit_example/InputExample.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/often_widget_example2.dart';
 import 'package:uikit_example/tableview_example.dart';
-
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
 import 'input_extend_example.dart';
@@ -70,7 +69,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _createMenus(BuildContext context){
-
     funList = [
       createMenu("进度条", context,const ProgressBarExample()),
       createMenu("toast", context,const ToastExample()),

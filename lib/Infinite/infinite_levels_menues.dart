@@ -1,5 +1,5 @@
 
-import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
@@ -22,24 +22,19 @@ typedef BuildSeparator<Dynamic> = Widget Function(
     BuildContext context, dynamic data, int currentLevel);
 
 
-typedef CallBackChildData<Dynamic> = List<dynamic> Function(dynamic data,int currentLevel);
-
-
 class InfiniteLevelsMenus<T> extends StatefulWidget {
 
-  final List<InfiniteWrapper>? datas;
+  final List<InfiniteMenu>? datas;
   final BuildMenuItem buildMenuItem;
   final BuildSeparator? buildSeparator;
   final Widget? noDataView;
-  final CallBackChildData callBackChildData;
   final double titleChildSpace;
   final Function? buildComplete;
-  final bool? oneExpand;
+  final bool oneExpand;
 
   const InfiniteLevelsMenus(
       {
         required this.buildMenuItem,
-        required this.callBackChildData,
         this.buildSeparator,
         this.datas,
         this.noDataView,
@@ -55,7 +50,7 @@ class InfiniteLevelsMenus<T> extends StatefulWidget {
 
 class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
 
-  InfiniteWrapper? _lastClickItem;
+  InfiniteMenu? _lastClickItem;
 
   @override
   void initState(){
@@ -71,7 +66,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
   }
 
   Widget buildContent(){
-    if(widget.datas==null){
+    if(widget.datas==null || widget.datas!.isEmpty){
       return  widget.noDataView==null?const SizedBox():widget.noDataView!;
     }
 
@@ -85,8 +80,8 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
 
   }
 
-  Widget buildChild(dynamic element,int level){
-    List currentData = widget.callBackChildData.call(element,level);
+  Widget buildChild(InfiniteMenu rootMenu,InfiniteMenu parentMenu,int level){
+    List<InfiniteMenu> currentData = parentMenu.children??[];
     Widget parent = Column(
       children: [
         ListView.separated(
@@ -95,28 +90,29 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: currentData.length,
             itemBuilder: (context,index){
-              InfiniteWrapper bean = currentData[index];
-              bool expand =  _mExpands.contains(bean);
+              InfiniteMenu bean = currentData[index];
+              // print("-----------title:${bean.title}---- expand:$expand");
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widget.buildMenuItem.call(
+
+                  parentMenu.isChecked?widget.buildMenuItem.call(
                       this,
                       bean == _lastClickItem,
                       bean,
-                      level),
+                      level):const SizedBox(),
 
-                    (
-                     expand && ((widget.oneExpand!)?bean.expand!:true)
-                    )? Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: widget.titleChildSpace*(level+1),
-                        ),
-                        Expanded(child: buildChild(bean,level+1))
-                      ],
-                    ):const SizedBox.shrink(),
+                  parentMenu.isChecked?
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child:Padding(
+                        padding: EdgeInsets.only(left: widget.titleChildSpace*(level+1)),
+                        child:  buildChild(rootMenu,bean,level+1),
+                      ))
+                    ],
+                  )
+                      :const SizedBox(),
                 ],
               );
             },
@@ -128,32 +124,33 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
             })
       ],
     );
-    return parent;
+    return parentMenu.isChecked?parent:const SizedBox();
   }
 
-  List<Widget> buildTitle(List<InfiniteWrapper> datas,int level){
+  List<Widget> buildTitle(List<InfiniteMenu> titleMenus,int level){
     List<Widget> titles = [];
-    for (var element in datas) {
-      bool contain =  _mExpands.contains(element);
+    for (var element in titleMenus) {
+      print("---------element:${element.title} --element.isChecked:${element.isChecked}");
       titles.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+             ///标题
             widget.buildMenuItem.call(
                 this,
                 element == _lastClickItem,
                 element,
                 level),
-             (
-                contain && ((widget.oneExpand!)?element.expand!:true)
-            )? Row(
+
+              ///子标题
+              Row(
                 children: [
-                  SizedBox(
-                    width: widget.titleChildSpace*(level+1),
-                  ),
-                  Expanded(child: buildChild(element,level+1))
+                  Expanded(child:Padding(
+                    padding: EdgeInsets.only(left: widget.titleChildSpace*(level+1)),
+                    child:  buildChild(element,element,level+1),
+                  ))
                 ],
-              ):const SizedBox.shrink(),
+              ),
           ],
         )
       );
@@ -161,104 +158,30 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
     return titles;
   }
 
-
-  void setItem(InfiniteWrapper data){
-    if(widget.oneExpand!){
-      _onlyOneExpand(data);
-    }else{
-      _canExpandAll(data);
-    }
-
-    setState((){});
-  }
-
-  void _canExpandAll(InfiniteWrapper data){
-    _lastClickItem = data;
-    if(_mExpands.contains(data)){
-      _mExpands.remove(data);
-    }else{
-      _mExpands.add(data);
-    }
-  }
-
-  void _onlyOneExpand(InfiniteWrapper data){
-    if(_samePids.contains(data)){
-      for (var element in _samePids) {
-        if(_lastClickItem!=data){
-          element.expand = false;
-        }
+  ///id 始终是根节点id
+  void setItem(InfiniteMenu data) {
+    setState(() {
+      data.isChecked = !data.isChecked;
+      if(!data.isChecked){
+        _closeAllChild(data);
       }
-    }
-    if(data.isRoot! && _lastClickItem!=data){
-      data.expand = false;
-    }
-    _samePids.clear();
-    _mExpands.clear();
-    data.expand = !data.expand!;
-    _lastClickItem = data;
-    _findCascadeData(data, null);
-    for (var element in _mExpands) {
-      if(element!=data){
-        element.expand = true;
-      }
-    }
+      _lastClickItem = data;
+    });
+  }
+
+  void _closeAllChild(InfiniteMenu data){
+    data.children?.forEach((element) {
+      element.isChecked = false;
+      _closeAllChild(element);
+    });
+  }
+
+  void _openAllChild(InfiniteMenu data){
+    data.children?.forEach((element) {
+      element.isChecked = true;
+      _openAllChild(element);
+    });
   }
 
 
-
-
-
-  final Set<InfiniteWrapper> _mExpands = HashSet();
-  void _findCascadeData(InfiniteWrapper child,InfiniteWrapper? parent){
-    _findSamePid(child,parent);
-    for (var element in _samePids) {
-      List  childs= element.childs??[];
-      if(childs.contains(child)){
-        _mExpands.add(element);
-        _findParent(element);
-      }
-    }
-    _mExpands.add(child);
-  }
-
-  void _findParent(InfiniteWrapper child){
-    for (var element in _samePids) {
-      var datas = element.childs??[];
-      if(datas.contains(child)){
-        _mExpands.add(element);
-        element.expand=true;
-        _findParent(element);
-      }
-    }
-  }
-
-   final Set<InfiniteWrapper> _samePids = HashSet();
-   void _findSamePid(InfiniteWrapper child,InfiniteWrapper? parent){
-    List datas =(parent==null? widget.datas:parent.childs)??[];
-    List<InfiniteWrapper> parents = [];
-    for (var element in datas) {
-      if(element is InfiniteWrapper){
-        if(element.pid == child.pid){
-          parents.add(element);
-        }
-      }
-    }
-    ///找出一级的 pid
-    _samePids.addAll(parents);
-
-    ///查找所有子孙级pid
-    for (var element in parents) {
-      _findChilds(element);
-    }
-  }
-
-  void _findChilds(InfiniteWrapper parent){
-    List<InfiniteWrapper> childs = parent.childs??[];
-    if(childs.isNotEmpty){
-      for (var element in childs) {
-        _samePids.add(element);
-        _findChilds(element);
-      }
-    }
-  }
 }
