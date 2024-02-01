@@ -15,12 +15,14 @@
  9. 倒计时控件
  10. 增加类似android TextView 上下左右可添加元素组件
  11. 添加可自定大小的switch组件
- 12. 新增表格布局 tableview 
+ 12. 新增表格布局 tableview ，新增横向和纵向都可滚动功能。
  13. 新增 MarqueeView 跑马灯组件
- 14. 新增 InfiniteLevelsMenus 无限层级菜单
+ 14. 新增 InfiniteLevelsMenus 无限层级菜单，简化使用逻辑
  15. 新增 InputText 极简输入框,支持实时表单校验,支持 TextField和 TextFormField全部属性。
  16. 新增 FloatExpendButton 悬浮菜单按钮
  17. 新增 CustomAnimatedBottomBar 底部菜单
+ 18. 新增分页组件 Pager.
+
 
   ...持续更新中....
 
@@ -72,7 +74,8 @@
 
 
 
-
+## 分页组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)
 
 ## 其他常用小组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
