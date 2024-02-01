@@ -75,7 +75,7 @@
 
 
 ## 分页组件：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/pager_image.png)
 
 ## 其他常用小组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
