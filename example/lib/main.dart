@@ -11,6 +11,7 @@ import 'input_extend_example.dart';
 import 'often_widget_example.dart';
 import 'pop_window_example.dart';
 import 'progressbar_example.dart';
+import 'selection_menu_example.dart';
 import 'toast_example.dart';
 
 
@@ -80,6 +81,7 @@ class _MyAppState extends State<MyApp> {
       createMenu("输入框拓展",context, const InputExtendExample()),
       createMenu("表格布局",context, const TableViewExample()),
       createMenu("无限层级菜单",context, const InfiniteLevelsExample()),
+      createMenu("仿系统下拉框",context, const SelectionMenuExample()),
       createMenu("分页组件",context, const PagerExample()),
       createMenu("常用小组件",context, const OftenWidgetExample()),
       createMenu("常用小组件2",context, const OftenWidgetExample2()),
