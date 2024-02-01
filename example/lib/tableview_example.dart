@@ -90,11 +90,10 @@ class _TableViewExampleState extends State<TableViewExample> {
                 },
                 buildRowStyle: (data,index,rowWidth,flex){
                   TestBean bean = data;
-                  return InkWell(
+                  return GestureDetector(
                     onTap: (){
                       print(index);
                     },
-                    hoverColor: Colors.lightBlue.withOpacity(0.2),
                     child: IntrinsicHeight(
                       child: Container(
                         width: rowWidth,

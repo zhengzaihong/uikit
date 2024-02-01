@@ -66,11 +66,10 @@
 
 ## 无限层级菜单：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/all_expand.gif)
 
 ## 表格组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/table_scroller.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview2.png)
 
 
 
