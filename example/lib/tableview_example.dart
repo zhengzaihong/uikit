@@ -121,147 +121,147 @@ class _TableViewExampleState extends State<TableViewExample> {
                 },
               ),)),
 
-            const SizedBox(height: 30),
-            Row(children: const [
-              Expanded(child:  Center(child:  Text("放射科检查报告单",style: TextStyle(color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500))))
-            ]),
-
-            const SizedBox(height: 10),
-
-            Padding(
-              padding: const EdgeInsets.only(left: 100,right: 100),
-              child: TableView<int>(
-                enableDivider: true,
-                enableTopDivider: true,
-                enableBottomDivider: true,
-                physics: const NeverScrollableScrollPhysics(),
-                preDealData: (){
-
-                  List<RowBean> rowDatas = [
-                    RowBean(cells: [
-                      CellBean(name: "姓名",isTitle: true),
-                      CellBean(name: "张三"),
-                      CellBean(name: "性别"),
-                      CellBean(name: "男"),
-                      CellBean(name: "年龄"),
-                      CellBean(name: "42岁"),
-                      CellBean(name: "病人号： 2434393458u")
-                    ]),
-
-                    RowBean(cells: [
-                      CellBean(name: "医嘱号",isTitle: true),
-                      CellBean(name: "1472923243"),
-                      CellBean(name: "就诊号",isTitle: true),
-                      CellBean(name: ""),
-                    ]),
-
-                    RowBean(cells: [
-                      CellBean(name: "病区",isTitle: true),
-                      CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中"),
-                      CellBean(name: "床位号",isTitle: true),
-                      CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，"
-                          "中西医结合科医疗单位中西医结合科医疗单位11111中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，"),
-                    ]),
-
-                    RowBean(cells: [
-                      CellBean(name: "检查日期",isTitle: true),
-                      CellBean(name: "2020.08.23"),
-                      CellBean(name: "报告日期",isTitle: true),
-                      CellBean(name: "2020.08.23"),
-                    ]),
-
-                    RowBean(cells: [
-                      CellBean(name: "检查部位",isTitle: true),
-                      CellBean(name: "CT上腹部平扫，CT上腹部平扫，CT上腹部平扫CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫11"),
-                      CellBean(name: "床位号",isTitle: true),
-                      CellBean(name: "2020.08.23"),
-                    ]),
-                  ];
-                  return rowDatas;
-                },
-                buildRowStyle: (data,index,rowWidth,flex){
-                  switch(index){
-                  ///第一行
-                    case 1:
-                      return TabRow(
-                          cellWidget: const [2,4,1,1,1,1,4],
-                          enableDivider: true,
-                          dividerColor: Colors.black,
-                          cellItem:CellItem(
-                              padding: const EdgeInsets.only(top: 10,bottom: 10),
-                              buildCell: (cell,index,width){
-                                if(index==1 ||  index ==6){
-                                  cell.alignment = Alignment.centerLeft;
-                                  cell.padding = const EdgeInsets.only(left: 10);
-                                }else{
-                                  cell.alignment  = Alignment.center;
-                                }
-                                var cellBean =  (data as RowBean).cells[index];
-                                if(cellBean.isTitle){
-                                  return TabSpaceText(
-                                      contents: KitMath.parseStr((cellBean.name).toString()),
-                                      padding: const EdgeInsets.only(left: 10,right: 10),
-                                      style: const TextStyle(fontSize: 14,color: Colors.black));
-                                }
-                                return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
-                              }
-                          ));
-                    case 2:
-                    case 3:
-                    case 4:
-                      return TabRow(
-
-                          cellWidget: const [2,6,2,4],
-                          enableDivider: true,
-                          dividerColor: Colors.black,
-                          cellItem:CellItem(
-                              padding: const EdgeInsets.only(top: 10,bottom: 10),
-                              buildCell: (cell,index,width){
-                                if(index==1 ||  index ==3){
-                                  cell.alignment = Alignment.centerLeft;
-                                  cell.padding = const EdgeInsets.only(left: 10);
-                                }else{
-                                  cell.alignment  = Alignment.center;
-                                }
-                                var cellBean =  (data as RowBean).cells[index];
-                                if(cellBean.isTitle){
-                                  return TabSpaceText(
-                                      contents: KitMath.parseStr((cellBean.name).toString()),
-                                      padding: const EdgeInsets.only(left: 10,right: 10),
-                                      style: const TextStyle(fontSize: 14,color: Colors.black));
-                                }
-                                return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
-                              }
-                          ));
-                  }
-
-
-                  return TabRow(
-                      cellWidget: const [2,12],
-                      dividerColor: Colors.black,
-                      enableDivider: true,
-                      cellItem:CellItem(
-                          padding: const EdgeInsets.only(top: 10,bottom: 10),
-                          buildCell: (cell,index,width){
-                            if(index==1 ||  index ==6){
-                              cell.alignment = Alignment.centerLeft;
-                              cell.padding = const EdgeInsets.only(left: 10);
-                            }
-                            var cellBean =  (data as RowBean).cells[index];
-                            if(cellBean.isTitle){
-                              return TabSpaceText(
-                                  contents: KitMath.parseStr((cellBean.name).toString()),
-                                  padding: const EdgeInsets.only(left: 10,right: 10),
-                                  style: const TextStyle(fontSize: 14,color: Colors.black));
-                            }
-                            return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
-                          }
-                      ));
-
-                },
-              ),)
+            // const SizedBox(height: 30),
+            // Row(children: const [
+            //   Expanded(child:  Center(child:  Text("放射科检查报告单",style: TextStyle(color: Colors.black,
+            //       fontSize: 18,
+            //       fontWeight: FontWeight.w500))))
+            // ]),
+            //
+            // const SizedBox(height: 10),
+            //
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 100,right: 100),
+            //   child: TableView<int>(
+            //     enableDivider: true,
+            //     enableTopDivider: true,
+            //     enableBottomDivider: true,
+            //     physics: const NeverScrollableScrollPhysics(),
+            //     preDealData: (){
+            //
+            //       List<RowBean> rowDatas = [
+            //         RowBean(cells: [
+            //           CellBean(name: "姓名",isTitle: true),
+            //           CellBean(name: "张三"),
+            //           CellBean(name: "性别"),
+            //           CellBean(name: "男"),
+            //           CellBean(name: "年龄"),
+            //           CellBean(name: "42岁"),
+            //           CellBean(name: "病人号： 2434393458u")
+            //         ]),
+            //
+            //         RowBean(cells: [
+            //           CellBean(name: "医嘱号",isTitle: true),
+            //           CellBean(name: "1472923243"),
+            //           CellBean(name: "就诊号",isTitle: true),
+            //           CellBean(name: ""),
+            //         ]),
+            //
+            //         RowBean(cells: [
+            //           CellBean(name: "病区",isTitle: true),
+            //           CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中"),
+            //           CellBean(name: "床位号",isTitle: true),
+            //           CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，"
+            //               "中西医结合科医疗单位中西医结合科医疗单位11111中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，"),
+            //         ]),
+            //
+            //         RowBean(cells: [
+            //           CellBean(name: "检查日期",isTitle: true),
+            //           CellBean(name: "2020.08.23"),
+            //           CellBean(name: "报告日期",isTitle: true),
+            //           CellBean(name: "2020.08.23"),
+            //         ]),
+            //
+            //         RowBean(cells: [
+            //           CellBean(name: "检查部位",isTitle: true),
+            //           CellBean(name: "CT上腹部平扫，CT上腹部平扫，CT上腹部平扫CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫11"),
+            //           CellBean(name: "床位号",isTitle: true),
+            //           CellBean(name: "2020.08.23"),
+            //         ]),
+            //       ];
+            //       return rowDatas;
+            //     },
+            //     buildRowStyle: (data,index,rowWidth,flex){
+            //       switch(index){
+            //       ///第一行
+            //         case 1:
+            //           return TabRow(
+            //               cellWidget: const [2,4,1,1,1,1,4],
+            //               enableDivider: true,
+            //               dividerColor: Colors.black,
+            //               cellItem:CellItem(
+            //                   padding: const EdgeInsets.only(top: 10,bottom: 10),
+            //                   buildCell: (cell,index,width){
+            //                     if(index==1 ||  index ==6){
+            //                       cell.alignment = Alignment.centerLeft;
+            //                       cell.padding = const EdgeInsets.only(left: 10);
+            //                     }else{
+            //                       cell.alignment  = Alignment.center;
+            //                     }
+            //                     var cellBean =  (data as RowBean).cells[index];
+            //                     if(cellBean.isTitle){
+            //                       return TabSpaceText(
+            //                           contents: KitMath.parseStr((cellBean.name).toString()),
+            //                           padding: const EdgeInsets.only(left: 10,right: 10),
+            //                           style: const TextStyle(fontSize: 14,color: Colors.black));
+            //                     }
+            //                     return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
+            //                   }
+            //               ));
+            //         case 2:
+            //         case 3:
+            //         case 4:
+            //           return TabRow(
+            //
+            //               cellWidget: const [2,6,2,4],
+            //               enableDivider: true,
+            //               dividerColor: Colors.black,
+            //               cellItem:CellItem(
+            //                   padding: const EdgeInsets.only(top: 10,bottom: 10),
+            //                   buildCell: (cell,index,width){
+            //                     if(index==1 ||  index ==3){
+            //                       cell.alignment = Alignment.centerLeft;
+            //                       cell.padding = const EdgeInsets.only(left: 10);
+            //                     }else{
+            //                       cell.alignment  = Alignment.center;
+            //                     }
+            //                     var cellBean =  (data as RowBean).cells[index];
+            //                     if(cellBean.isTitle){
+            //                       return TabSpaceText(
+            //                           contents: KitMath.parseStr((cellBean.name).toString()),
+            //                           padding: const EdgeInsets.only(left: 10,right: 10),
+            //                           style: const TextStyle(fontSize: 14,color: Colors.black));
+            //                     }
+            //                     return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
+            //                   }
+            //               ));
+            //       }
+            //
+            //
+            //       return TabRow(
+            //           cellWidget: const [2,12],
+            //           dividerColor: Colors.black,
+            //           enableDivider: true,
+            //           cellItem:CellItem(
+            //               padding: const EdgeInsets.only(top: 10,bottom: 10),
+            //               buildCell: (cell,index,width){
+            //                 if(index==1 ||  index ==6){
+            //                   cell.alignment = Alignment.centerLeft;
+            //                   cell.padding = const EdgeInsets.only(left: 10);
+            //                 }
+            //                 var cellBean =  (data as RowBean).cells[index];
+            //                 if(cellBean.isTitle){
+            //                   return TabSpaceText(
+            //                       contents: KitMath.parseStr((cellBean.name).toString()),
+            //                       padding: const EdgeInsets.only(left: 10,right: 10),
+            //                       style: const TextStyle(fontSize: 14,color: Colors.black));
+            //                 }
+            //                 return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
+            //               }
+            //           ));
+            //
+            //     },
+            //   ),)
 
           ],
         ),

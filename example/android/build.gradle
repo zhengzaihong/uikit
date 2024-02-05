@@ -1,8 +1,13 @@
 buildscript {
     ext.kotlin_version = '1.6.10'
     repositories {
+        maven { url 'https://maven.google.com' }
         google()
         mavenCentral()
+        maven {
+            url "https://storage.flutter-io.cn/download.flutter.io"
+        }
+
     }
 
     dependencies {
@@ -13,8 +18,12 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://maven.google.com' }
         google()
         mavenCentral()
+        maven {
+            url "https://storage.flutter-io.cn/download.flutter.io"
+        }
     }
 }
 

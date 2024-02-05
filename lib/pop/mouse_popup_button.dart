@@ -1,6 +1,3 @@
-
-import 'dart:io' if (dart.library.html) 'dart:html'as html;
-
 import 'package:flutter/material.dart';
 ///
 /// create_user: zhengzaihong
@@ -8,9 +5,18 @@ import 'package:flutter/material.dart';
 /// create_date: 2024/2/5
 /// create_time: 16:53
 /// describe: 鼠标右键弹出窗
+///防止移动端误入使用鼠标右键弹出窗，这里外部推荐方 1方式处理
 ///
-/// 防止此组件在移动端误用
-///
+/// 规避浏览器鼠标右键的方式：
+/// 方式1.在 web/index.html 中加入 script代码。屏蔽右键
+//    <script>
+//     document.body.addEventListener('contextmenu', (event) => {
+//       event.preventDefault();
+//     });
+//    </script>
+
+/// 方式2.import 'dart:html' as html 导入后使用 window对象 屏蔽
+///   html.document.body!.addEventListener('contextmenu', (event) => event.preventDefault());
 ///
 class MousePopupButton<T> extends StatefulWidget {
   final Widget? child;
@@ -33,13 +39,6 @@ class _MousePopupButtonState<T> extends State<MousePopupButton<T>> {
 
   late Offset position;
   RenderBox? overlay;
-
-  @override
-  void initState() {
-    super.initState();
-    html.document.body!
-        .addEventListener('contextmenu', (event) => event.preventDefault());
-  }
 
   @override
   Widget build(BuildContext context) {
