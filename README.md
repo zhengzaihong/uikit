@@ -22,6 +22,8 @@
  16. 新增 FloatExpendButton 悬浮菜单按钮
  17. 新增 CustomAnimatedBottomBar 底部菜单
  18. 新增分页组件 Pager.
+ 19. 新增选择下拉框菜单 SelectionMenu 可高度自定义，且不关注数据本身。
+ 20. 新增 TextExtend 文本拓展组件，支持web 前端js菜单效果。
 
 
   ...持续更新中....
@@ -50,6 +52,10 @@
 ## 可伸展的悬浮按钮
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/float_button.gif)
 
+## 防web前端 js菜单
+![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend2.gif)
+
 ## 城市选择器：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)
 
@@ -60,6 +66,9 @@
 ## 弹窗组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/popwindow.gif)
 
+
+## 选择下拉框组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu.gif)
 
 ## 进度条组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/progressbar.gif)

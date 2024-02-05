@@ -38,12 +38,12 @@ class BroadcastHelper {
     _streamController.sink.close();
   }
 
-  void unRegist(dynamic target){
+  void unRegister(dynamic target){
     if(_listenerMap.containsKey(target)){
       _listenerMap.remove(target);
     }
   }
-  void regist(dynamic target, void Function(Object? object) onData,
+  void register(dynamic target, void Function(Object? object) onData,
       {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     if (_listenerMap.containsKey(target)) {
       _listenerMap.remove(target);

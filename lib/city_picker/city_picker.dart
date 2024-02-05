@@ -17,7 +17,7 @@ import 'city_result.dart';
 typedef ResultBlock = void Function(CityResult result);
 
 ///自定义顶部按钮的样式，确定和取消
-typedef TopMenueStyle = Widget Function(
+typedef TopMenuStyle = Widget Function(
     ResultBlock block, _CityPickerViewState pickerViewState);
 
 class CityPickerView extends StatefulWidget {
@@ -26,30 +26,30 @@ class CityPickerView extends StatefulWidget {
 
   /// 结果返回
   final ResultBlock? onResult;
-  final TopMenueStyle? topMenueStyle;
+  final TopMenuStyle? topMenuStyle;
   final TextStyle? listTextStyle;
   final double listHeight;
 
   final Widget sureWidget;
-  final Widget cancleWidget;
+  final Widget cancelWidget;
 
   final double buttonBarHeight;
-  final BoxDecoration buttonBarBoxdec;
+  final BoxDecoration buttonBarBoxDecoration;
 
   const CityPickerView({
     key,
     this.onResult,
     this.params,
-    this.topMenueStyle,
+    this.topMenuStyle,
     this.buttonBarHeight = 44,
     this.listHeight = 200,
-    this.buttonBarBoxdec =  const BoxDecoration(
+    this.buttonBarBoxDecoration =  const BoxDecoration(
       border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
     this.listTextStyle = const TextStyle(color: Colors.black87, fontSize: 16),
     this.sureWidget = const Text(
       '确定',
     ),
-    this.cancleWidget = const Text(
+    this.cancelWidget = const Text(
       '取消',
     ),
   }) : super(key: key);
@@ -187,9 +187,9 @@ class _CityPickerViewState extends State<CityPickerView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          widget.topMenueStyle == null
+          widget.topMenuStyle == null
               ? _firstView()
-              : widget.topMenueStyle!.call(widget.onResult!, this),
+              : widget.topMenuStyle!.call(widget.onResult!, this),
           _contentView(),
         ],
       ),
@@ -203,7 +203,7 @@ class _CityPickerViewState extends State<CityPickerView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TextButton(
-              child: widget.cancleWidget,
+              child: widget.cancelWidget,
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -218,7 +218,7 @@ class _CityPickerViewState extends State<CityPickerView> {
               },
             ),
           ]),
-      decoration: widget.buttonBarBoxdec,
+      decoration: widget.buttonBarBoxDecoration,
     );
   }
 

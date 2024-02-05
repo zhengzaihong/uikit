@@ -28,8 +28,10 @@
 
   <title>uikit</title>
   <link rel="manifest" href="manifest.json">
+
 </head>
 <body>
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -96,6 +98,12 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+  </script>
+
+  <script>
+    document.body.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    });
   </script>
 </body>
 </html>

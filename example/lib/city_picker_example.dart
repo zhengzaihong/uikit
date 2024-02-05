@@ -43,7 +43,7 @@ class CityPickerExample extends StatelessWidget {
               await PickerHelper.showPicker(context,
                   textStyle:
                   const TextStyle(color: Colors.lightBlue, fontSize: 12),
-                  topMenueStyle: (onResult,pickerViewState){
+                  topMenuStyle: (onResult,pickerViewState){
                     return Container(
                       height: 44,
                       child: Row(

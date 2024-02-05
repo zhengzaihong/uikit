@@ -21,14 +21,11 @@ typedef Compare<T> = bool Function(List<T> data);
 
 typedef CompareVO<T> = bool Function(T item);
 
-typedef BuildCheckedBarStyle<T> = Widget? Function(
-    T checkDatas, InputExtendState controller);
+typedef BuildCheckedBarStyle<T> = Widget? Function(T checkDatas, InputExtendState controller);
 
-typedef OnChangeInput<String> = void Function(
-    String value, InputExtendState controller);
+typedef OnChangeInput<String> = void Function(String value, InputExtendState controller);
 
-typedef ValueChanged<String> = void Function(
-    String value, InputExtendState controller);
+typedef InputValueChanged<String> = void Function(String value, InputExtendState controller);
 
 typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds);
 
@@ -51,18 +48,15 @@ class InputExtend<T> extends StatefulWidget {
   ///输入框的背景样式
   final InputDecorationStyle? inputDecoration;
 
-  final double? checkBoxMaxWidth;
-  final double? checkBoxMixWidth;
+  final double? checkedBarMaxWidth;
+  final double? checkedBarMinWidth;
 
-  final double? checkBoxMaxHeight;
-  final double? checkBoxMixHeight;
+  final double? checkedBarMaxHeight;
+  final double? checkedBarMinHeight;
   final ScrollPhysics? physics;
 
   ///输入框中的初始数据
   final List<T>? initCheckedValue;
-
-  ///触发搜索的间隔时间
-  final int intervalTime;
 
   ///支持的最大选择数量
   final int maxChecked;
@@ -80,13 +74,16 @@ class InputExtend<T> extends StatefulWidget {
   ///输入框得到焦点即回调。
   final bool enableHasFocusCallBack;
 
+  ///点击非遮罩层是否关闭
+  final bool barrierDismissible;
+
   final PopConstraintBox? popConstraintBox;
 
   final Duration duration;
   final Curve curve;
 
   final double selectPopMarginTop;
-  final ValueChanged<String>? onSubmitted;
+  final InputValueChanged<String>? onSubmitted;
 
   /// 以下都为输入框的样式 属性
   final TextInputType? keyboardType;
@@ -155,20 +152,20 @@ class InputExtend<T> extends StatefulWidget {
         this.duration = const Duration(milliseconds: 300),
         this.curve = Curves.linear,
         this.checkedItemWidth = 60,
-        this.checkBoxMaxWidth,
-        this.checkBoxMaxHeight,
-        this.checkBoxMixWidth,
-        this.checkBoxMixHeight,
+        this.checkedBarMaxWidth,
+        this.checkedBarMinWidth,
+        this.checkedBarMaxHeight,
+        this.checkedBarMinHeight,
         this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
         this.inputDecoration,
         this.physics,
-        this.intervalTime = 500,
         this.initCheckedValue,
         this.maxChecked = 100,
         this.enableClickClear = false,
         this.enableMultipleChoice = false,
         this.autoClose = false,
         this.enableHasFocusCallBack = false,
+        this.barrierDismissible = true,
         this.popConstraintBox,
         this.selectPopMarginTop = 0,
         this.textEditingController,
@@ -255,23 +252,19 @@ class InputExtendState<T> extends State<InputExtend> {
 
   int oldSize = 0;
 
-  Timer? _timer;
-
   ///关联输入框，处理在组价在列表中跟随滚动
   final LayerLink _layerLink = LayerLink();
 
   OverlayEntry? _overlayEntry;
 
-
-
   @override
   void initState() {
     super.initState();
 
-    _editingController = widget.textEditingController==null? TextEditingController():widget.textEditingController!;
-    _scrollController = widget.scrollController==null? ScrollController():widget.scrollController!;
-    _inputScrollController = widget.inputScrollController==null? ScrollController():widget.inputScrollController!;
-    _focusNode = widget.focusNode==null? FocusNode():widget.focusNode!;
+    _editingController = widget.textEditingController?? TextEditingController();
+    _scrollController = widget.scrollController?? ScrollController();
+    _inputScrollController = widget.inputScrollController?? ScrollController();
+    _focusNode = widget.focusNode?? FocusNode();
 
     if (widget.initCheckedValue == null) {
       _checkedData = [];
@@ -281,10 +274,9 @@ class InputExtendState<T> extends State<InputExtend> {
         temps.add(element);
       }
       _checkedData = temps;
-       oldSize = _checkedData.length;
+      oldSize = _checkedData.length;
     }
 
-    intervalTime = widget.intervalTime;
     _controller = this;
     _buildContext = context;
     _focusNode.addListener(() {
@@ -307,7 +299,7 @@ class InputExtendState<T> extends State<InputExtend> {
     });
   }
 
-  List<T> get getCheckedDatas {
+  List<T> get getCheckedData {
     if (mounted) {
       return _checkedData;
     } else {
@@ -437,28 +429,47 @@ class InputExtendState<T> extends State<InputExtend> {
     var size = renderBox.size;
     var popBox = widget.popConstraintBox;
     return OverlayEntry(
-        builder: (context) => Positioned(
-          width: popBox == null
-              ? size.width
-              : popBox.limitSize
-              ? null
-              : popBox.width,
-          height: popBox?.height,
-          child: CompositedTransformFollower(
-            link: _layerLink,
-            showWhenUnlinked: false,
-            offset: Offset(0.0, size.height + widget.selectPopMarginTop),
-            child: Material(
-              elevation: widget.popElevation!,
-              shadowColor: widget.popShadowColor,
-              color: widget.popColor,
-              shape: widget.popShape,
-              borderRadius: widget.popBorderRadius,
-              surfaceTintColor: widget.popSurfaceTintColor,
-              textStyle: widget.popChildTextStyle,
-              child:  widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
+        builder: (context) => Stack(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: widget.barrierDismissible
+                  ? () {
+                _removePop();
+                ///让输入框失去焦点
+                if(_focusNode.hasFocus){
+                  _focusNode.unfocus();
+                }
+              } : null,
+              child: const SizedBox(
+                height: double.infinity,
+                width: double.infinity,
+              ),
             ),
-          ),
+            Positioned(
+              width: popBox == null
+                  ? size.width
+                  : popBox.limitSize
+                  ? null
+                  : popBox.width,
+              height: popBox?.height,
+              child: CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                offset: Offset(0.0, size.height + widget.selectPopMarginTop),
+                child: Material(
+                  elevation: widget.popElevation!,
+                  shadowColor: widget.popShadowColor,
+                  color: widget.popColor,
+                  shape: widget.popShape,
+                  borderRadius: widget.popBorderRadius,
+                  surfaceTintColor: widget.popSurfaceTintColor,
+                  textStyle: widget.popChildTextStyle,
+                  child:  widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
+                ),
+              ),
+            ),
+          ],
         ));
   }
 
@@ -477,20 +488,23 @@ class InputExtendState<T> extends State<InputExtend> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _editingController.dispose();
+    _inputScrollController.dispose();
+    _focusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   ///提供给同一个数据源集合的判断方法，实际中 通常不是
   bool isChecked(int index) {
     final bean = getSearchData[index];
-    return getCheckedDatas.contains(bean);
+    return getCheckedData.contains(bean);
   }
 
   ///提供不同数据源的比较，通常是边搜索，边比较是否选中
   bool isCheckedVO(CompareVO compareVO) {
 
-    List list = getCheckedDatas;
+    List list = getCheckedData;
     if(list.isEmpty){
       return false;
     }
@@ -516,15 +530,12 @@ class InputExtendState<T> extends State<InputExtend> {
           widget.buildCheckedBarStyle != null
               ? Container(
             constraints: BoxConstraints(
-                maxWidth: widget.checkBoxMaxWidth ?? 100,
-                maxHeight: widget.checkBoxMaxHeight ?? 40,
-                minHeight: widget.checkBoxMixHeight ?? 0,
-                minWidth: widget.checkBoxMixWidth ?? 0),
+                maxWidth: widget.checkedBarMaxWidth ?? 100,
+                maxHeight: widget.checkedBarMaxHeight ?? 40,
+                minHeight: widget.checkedBarMinHeight ?? 0,
+                minWidth: widget.checkedBarMinWidth ?? 0),
             child: _checkedData.isEmpty
-                ? const SizedBox(
-              width: 0,
-              height: 0,
-            )
+                ? const SizedBox.shrink()
                 : SingleChildScrollView(
               physics: widget.physics,
               controller: _scrollController,
@@ -536,7 +547,7 @@ class InputExtendState<T> extends State<InputExtend> {
               ),
             ),
           )
-              : const SizedBox(width: 0, height: 0),
+              : const SizedBox.shrink(),
           Expanded(
               child: TextField(
                 focusNode: _focusNode,
@@ -590,12 +601,9 @@ class InputExtendState<T> extends State<InputExtend> {
                   widget.onSubmitted?.call(text,this);
                 },
                 onChanged: (text) async {
-                  _timer?.cancel();
-                  _timer = Timer(Duration(milliseconds: intervalTime), () {
-                    _onTextChangeCallBack(text, false);
-                  });
+                  _onTextChangeCallBack(text, false);
                 },
-                decoration: widget.inputDecoration?.call(getCheckedDatas),
+                decoration: widget.inputDecoration?.call(getCheckedData),
               ))
         ],
       ),

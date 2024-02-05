@@ -7,6 +7,7 @@ import 'dart:io';
 /// describe: 缓存工具
 ///
 class CacheManager {
+  CacheManager._();
 
   ///获取当前文件大小
   static Future<double> _getTotalSizeOfFilesInDir(
@@ -90,7 +91,7 @@ class CacheManager {
   /// notes 要存储的内容
   /// direcName 文件夹名字，如分类，首页，购物车，我的等。可不传
   /// userId 可根据不同的用创建不同的文件夹 简单标示
-  static void writeToFile(
+  static Future<File> writeToFile(
   Directory documentsDir,
       String fileName, 
       String notes,
@@ -120,9 +121,6 @@ class CacheManager {
     }
 
     //写入文件
-    File file1 = await file.writeAsString(notes);
-    if (file1.existsSync()) {
-      print("保存成功");
-    }
+    return file.writeAsString(notes);
   }
 }

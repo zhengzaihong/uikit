@@ -15,11 +15,11 @@ import 'city_result.dart';
 ///
 class PickerHelper{
 
-  /// @parm datas 自定义的json数据
-  /// @parm topMenueStyle 自定义顶部按钮样式等
+  /// datas 自定义的json数据
+  /// topMenutyle 自定义顶部按钮样式等
   static Future<CityResult> showPicker(BuildContext context, {
     List? datas,
-    TopMenueStyle? topMenueStyle,
+    TopMenuStyle? topMenuStyle,
     TextStyle? textStyle,
   }) {
     Completer<CityResult> completer = Completer();
@@ -31,7 +31,7 @@ class PickerHelper{
           key: const Key('pickerkey'),
           params: datas,
           listTextStyle: textStyle,
-          topMenueStyle: topMenueStyle,
+          topMenuStyle: topMenuStyle,
           onResult: (res) {
             completer.complete(res);
           },

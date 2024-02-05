@@ -48,10 +48,11 @@ class InputExtendDemo extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(30))),
               child: InputExtend<String>(
                   checkedItemWidth: 80,
-                  checkBoxMaxWidth: 240,
+                  checkedBarMaxWidth: 240,
                   autoClose: true,
                   enableMultipleChoice: false,
                   enableClickClear: true,
+                  barrierDismissible: true,
                   ///真实项目一般都是对象(bean) 填充对象即可
                   initCheckedValue: checkeds,
                   focusNode: focusNode,
