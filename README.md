@@ -52,7 +52,7 @@
 ## 可伸展的悬浮按钮
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/float_button.gif)
 
-## 防web前端 js菜单
+## 仿web前端 js菜单
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend2.gif)
 
