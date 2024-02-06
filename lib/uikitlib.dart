@@ -19,7 +19,7 @@ export 'textview/textview_lib.dart';
 export 'table/tableview.dart';
 export 'blur/Blur.dart';
 export 'textview/marquee_view.dart';
-export 'Infinite/infinite_levels_menues.dart';
+export 'Infinite/infinite_levels_menus.dart';
 export 'Infinite/bean/infinite_menu.dart';
 export 'widgets/custom_checkbox.dart';
 export 'widgets/custom_switch.dart';

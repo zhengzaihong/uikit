@@ -187,79 +187,79 @@ class _TableViewState<T> extends State<TableView> {
                           .map((e) => e * widget.minCellWidth)
                           .toList()),
                 ),
-              ))
+              )),
             ],
           ),
           Expanded(
               child: SingleChildScrollView(
-              controller: ScrollController(),
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  Row(
+                  controller: ScrollController(),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
                     children: [
-                      Expanded(
-                          child: GestureDetector(
-                            onHorizontalDragUpdate: (details) {
-                              final newScrollOffset = _contentController.offset - details.delta.dx;
-                              _contentController.jumpTo(
-                                  newScrollOffset
-                              );
-                            },
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              controller: _contentController,
-                              physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
-                              child: SizedBox(
-                                width: _horizontalTotalWidth,
-                                child: ListView.separated(
-                                    itemCount: _itemCount,
-                                    shrinkWrap: true,
-                                    physics:
-                                    const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      if ((widget.enableTopDivider &&
-                                          index == 0) ||
-                                          (widget.enableBottomDivider &&
-                                              index == _itemCount - 1)) {
-                                        return const SizedBox();
-                                      }
+                      Row(
+                        children: [
+                          Expanded(
+                              child: GestureDetector(
+                                onHorizontalDragUpdate: (details) {
+                                  final newScrollOffset = _contentController.offset - details.delta.dx;
+                                  _contentController.jumpTo(
+                                      newScrollOffset
+                                  );
+                                },
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _contentController,
+                                  physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
+                                  child: SizedBox(
+                                    width: _horizontalTotalWidth,
+                                    child: ListView.separated(
+                                        itemCount: _itemCount,
+                                        shrinkWrap: true,
+                                        physics:
+                                        const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          if ((widget.enableTopDivider &&
+                                              index == 0) ||
+                                              (widget.enableBottomDivider &&
+                                                  index == _itemCount - 1)) {
+                                            return const SizedBox();
+                                          }
 
-                                      /// 外部处理的行的下标都从 1 第一行开始
-                                      return widget.buildRowStyle(
-                                          widget.enableTopDivider
-                                              ? datas[index - 1]
-                                              : datas[index],
-                                          widget.enableTopDivider
-                                              ? index
-                                              : index + 1,
-                                          _horizontalTotalWidth,
-                                          cellWidthFlex!
-                                              .map((e) =>
-                                          e * widget.minCellWidth)
-                                              .toList());
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      final divider = Container(
-                                        ///修复 web html 像素丢失问题
-                                        height: widget.dividerHeight,
-                                        color: widget.dividerColor,
-                                      );
-                                      if (widget.enableBottomDivider &&
-                                          index == _itemCount) {
-                                        return divider;
-                                      }
-                                      return widget.enableDivider
-                                          ? divider
-                                          : const SizedBox();
-                                    }),
-                              ),
-                            ),
-                          ))
+                                          /// 外部处理的行的下标都从 1 第一行开始
+                                          return widget.buildRowStyle(
+                                              widget.enableTopDivider
+                                                  ? datas[index - 1]
+                                                  : datas[index],
+                                              widget.enableTopDivider
+                                                  ? index
+                                                  : index + 1,
+                                              _horizontalTotalWidth,
+                                              cellWidthFlex!
+                                                  .map((e) =>
+                                              e * widget.minCellWidth)
+                                                  .toList());
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          final divider = Container(
+                                            ///修复 web html 像素丢失问题
+                                            height: widget.dividerHeight,
+                                            color: widget.dividerColor,
+                                          );
+                                          if (widget.enableBottomDivider &&
+                                              index == _itemCount) {
+                                            return divider;
+                                          }
+                                          return widget.enableDivider
+                                              ? divider
+                                              : const SizedBox();
+                                        }),
+                                  ),
+                                ),
+                              ))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              )))
+                  )))
         ],
       );
     }
