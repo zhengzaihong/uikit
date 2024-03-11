@@ -27,6 +27,7 @@ export 'line/line_lib.dart';
 export 'drawer/drawer_lib.dart';
 export 'pager/pager.dart';
 export 'select/selection_menu.dart';
+export 'loading/shimmer_loading.dart';
 
 
 /// Utils package 工具包

@@ -9,12 +9,22 @@ import 'package:flutter/material.dart';
 ///
 ///
 class TextExtend extends StatefulWidget {
-
   final TextStyle? style;
   final TextStyle? onHoverStyle;
   final String data;
   final bool enabledOnHover;
   final bool isSelectable;
+  final Widget? prefix;
+  final Widget? suffix;
+  final Widget? onHoverPrefix;
+  final Widget? onHoverSuffix;
+
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
+  final CrossAxisAlignment crossAxisAlignment;
+  final TextDirection? textDirection;
+  final VerticalDirection verticalDirection;
+  final TextBaseline? textBaseline;
 
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
@@ -35,8 +45,6 @@ class TextExtend extends StatefulWidget {
   final EdgeInsetsGeometry? onHoverMargin;
   final Matrix4? onHoverTransform;
   final AlignmentGeometry? onHoverTransformAlignment;
-
-
 
   final GestureTapCallback? onTap;
   final GestureTapDownCallback? onTapDown;
@@ -71,63 +79,69 @@ class TextExtend extends StatefulWidget {
   final bool canRequestFocus;
 
   const TextExtend(this.data,
-      {
-        this.onHover,
-        this.enabledOnHover = true,
-        this.style,
-        this.onHoverStyle,
-        this.isSelectable = false,
-        this.alignment,
-        this.padding,
-        this.color,
-        this.decoration,
-        this.foregroundDecoration,
-        this.constraints,
-        this.margin,
-        this.transform,
-        this.transformAlignment,
-
-        this.onHoverAlignment,
-        this.onHoverPadding,
-        this.onHoverColor,
-        this.onHoverDecoration,
-        this.onHoverForegroundDecoration,
-        this.onHoverConstraints,
-        this.onHoverMargin,
-        this.onHoverTransform,
-        this.onHoverTransformAlignment,
-
-
-        this.onTap,
-        this.onTapDown,
-        this.onTapUp,
-        this.onTapCancel,
-        this.onDoubleTap,
-        this.onLongPress,
-        this.onSecondaryTap,
-        this.onSecondaryTapDown,
-        this.onSecondaryTapUp,
-        this.onSecondaryTapCancel,
-        this.onHighlightChanged,
-        this.mouseCursor,
-        this.containedInkWell = false,
-        this.highlightShape = BoxShape.circle,
-        this.radius,
-        this.borderRadius,
-        this.customBorder,
-        this.focusColor,
-        this.hoverColor,
-        this.highlightColor,
-        this.overlayColor,
-        this.splashColor,
-        this.splashFactory,
-        this.enableFeedback = true,
-        this.excludeFromSemantics = false,
-        this.focusNode,
-        this.canRequestFocus = true,
-        this.onFocusChange,
-        this.autofocus = false,
-        Key? key})
+      {this.onHover,
+      this.enabledOnHover = true,
+      this.style,
+      this.onHoverStyle,
+      this.isSelectable = false,
+      this.suffix,
+      this.prefix,
+        this.onHoverSuffix,
+        this.onHoverPrefix,
+      this.mainAxisAlignment=MainAxisAlignment.start,
+      this.mainAxisSize = MainAxisSize.max,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.textDirection,
+      this.verticalDirection = VerticalDirection.down,
+      this.textBaseline,
+      this.alignment,
+      this.padding,
+      this.color,
+      this.decoration,
+      this.foregroundDecoration,
+      this.constraints,
+      this.margin,
+      this.transform,
+      this.transformAlignment,
+      this.onHoverAlignment,
+      this.onHoverPadding,
+      this.onHoverColor,
+      this.onHoverDecoration,
+      this.onHoverForegroundDecoration,
+      this.onHoverConstraints,
+      this.onHoverMargin,
+      this.onHoverTransform,
+      this.onHoverTransformAlignment,
+      this.onTap,
+      this.onTapDown,
+      this.onTapUp,
+      this.onTapCancel,
+      this.onDoubleTap,
+      this.onLongPress,
+      this.onSecondaryTap,
+      this.onSecondaryTapDown,
+      this.onSecondaryTapUp,
+      this.onSecondaryTapCancel,
+      this.onHighlightChanged,
+      this.mouseCursor,
+      this.containedInkWell = false,
+      this.highlightShape = BoxShape.circle,
+      this.radius,
+      this.borderRadius,
+      this.customBorder,
+      this.focusColor,
+      this.hoverColor,
+      this.highlightColor,
+      this.overlayColor,
+      this.splashColor,
+      this.splashFactory,
+      this.enableFeedback = true,
+      this.excludeFromSemantics = false,
+      this.focusNode,
+      this.canRequestFocus = true,
+      this.onFocusChange,
+      this.autofocus = false,
+      Key? key})
       : super(key: key);
 
   @override
@@ -170,24 +184,58 @@ class _TextExtendState extends State<TextExtend> {
       canRequestFocus: widget.canRequestFocus,
       onFocusChange: widget.onFocusChange,
       autofocus: widget.autofocus,
-      child: Container(
-        alignment: _onHover ? widget.onHoverAlignment??widget.alignment : widget.alignment,
-        padding:_onHover ? widget.onHoverPadding??widget.padding : widget.padding,
-        color: _onHover ? widget.onHoverColor??widget.color : widget.color,
-        decoration: _onHover ? widget.onHoverDecoration??widget.decoration : widget.decoration,
-        foregroundDecoration:_onHover ? widget.onHoverForegroundDecoration??widget.foregroundDecoration : widget.foregroundDecoration,
-        constraints: _onHover ? widget.onHoverConstraints??widget.constraints : widget.constraints,
-        margin: _onHover ? widget.onHoverMargin??widget.margin : widget.margin,
-        transform: _onHover ? widget.onHoverTransform??widget.transform : widget.transform,
-        transformAlignment: _onHover ? widget.onHoverTransformAlignment??widget.transformAlignment : widget.transformAlignment,
-        child: widget.isSelectable
-            ? SelectableText(
-          widget.data,
-          style: _onHover ? widget.onHoverStyle??widget.style : widget.style,
-        )
-            : Text(
-          widget.data,
-          style: _onHover ? widget.onHoverStyle??widget.style : widget.style,
+      child:Container(
+        alignment: _onHover
+            ? widget.onHoverAlignment ?? widget.alignment
+            : widget.alignment,
+        padding: _onHover
+            ? widget.onHoverPadding ?? widget.padding
+            : widget.padding,
+        color:
+        _onHover ? widget.onHoverColor ?? widget.color : widget.color,
+        decoration: _onHover
+            ? widget.onHoverDecoration ?? widget.decoration
+            : widget.decoration,
+        foregroundDecoration: _onHover
+            ? widget.onHoverForegroundDecoration ??
+            widget.foregroundDecoration
+            : widget.foregroundDecoration,
+        constraints: _onHover
+            ? widget.onHoverConstraints ?? widget.constraints
+            : widget.constraints,
+        margin: _onHover
+            ? widget.onHoverMargin ?? widget.margin
+            : widget.margin,
+        transform: _onHover
+            ? widget.onHoverTransform ?? widget.transform
+            : widget.transform,
+        transformAlignment: _onHover
+            ? widget.onHoverTransformAlignment ?? widget.transformAlignment
+            : widget.transformAlignment,
+        child:  Row(
+          mainAxisAlignment: widget.mainAxisAlignment,
+          mainAxisSize: widget.mainAxisSize,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          verticalDirection: widget.verticalDirection,
+          textDirection: widget.textDirection,
+          textBaseline: widget.textBaseline,
+          children: [
+            (_onHover?widget.onHoverPrefix:widget.prefix)??const SizedBox(),
+            Expanded(child:  widget.isSelectable
+                ? SelectableText(
+              widget.data,
+              style: _onHover
+                  ? widget.onHoverStyle ?? widget.style
+                  : widget.style,
+            )
+                : Text(
+              widget.data,
+              style: _onHover
+                  ? widget.onHoverStyle ?? widget.style
+                  : widget.style,
+            )),
+            (_onHover?widget.onHoverSuffix:widget.suffix)??const SizedBox(),
+          ],
         ),
       ),
     );

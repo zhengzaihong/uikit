@@ -20,31 +20,37 @@ class _ToastExampleState extends State<ToastExample> {
   void initState() {
     super.initState();
 
+    // Toast().initBaseStyle(
+    //     globalToastDecoration: const BoxDecoration(
+    //       color: Colors.lightGreen,
+    //       borderRadius: BorderRadius.all(Radius.circular(30)),
+    //     ),
+    // );
 
     ///初始化Toast  可选，内部默认有样式
-    Toast()
-      ..globalPosition = ToastPosition.center
-      ..intervalTime = 2000
-      ..showTime = 5000
-      ..globalBuildToastStyle  = (context,msg){
-        return Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: 60,
-            margin: const EdgeInsets.only(left: 20,right: 20),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: Colors.lightBlueAccent,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
-            child: Text(msg,
-                style: const TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Colors.white,
-                    fontSize: 14)));
-      };
+    // Toast()
+    //   ..globalPosition = ToastPosition.center
+    //   ..intervalTime = 2000
+    //   ..showTime = 5000
+    //   ..globalBuildToastStyle  = (context,msg){
+    //     return Container(
+    //         width: MediaQuery
+    //             .of(context)
+    //             .size
+    //             .width,
+    //         height: 60,
+    //         margin: const EdgeInsets.only(left: 20,right: 20),
+    //         alignment: Alignment.center,
+    //         decoration: const BoxDecoration(
+    //           color: Colors.lightBlueAccent,
+    //           borderRadius: BorderRadius.all(Radius.circular(30)),
+    //         ),
+    //         child: Text(msg,
+    //             style: const TextStyle(
+    //                 decoration: TextDecoration.none,
+    //                 color: Colors.white,
+    //                 fontSize: 14)));
+    //   };
 
   }
 
@@ -76,7 +82,7 @@ class _ToastExampleState extends State<ToastExample> {
 
                 InkWell(
                     onTap: (){
-                      Toast.show("常规Toast");
+                      Toast.show("常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast11111");
                     }, child: Container(
                     width: 200,
                     height: 40,

@@ -98,10 +98,12 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                     isSelectable: false,
                                     padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
                                     onHoverPadding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
-
                                     borderRadius: BorderRadius.circular(50),
                                     splashColor: Colors.purple,
                                     highlightColor: Colors.purple,
+                                    onHoverPrefix: const Icon(Icons.access_alarm),
+                                    onHoverSuffix:const Icon(Icons.account_circle,color: Colors.blue),
+                                    suffix: const Icon(Icons.account_circle),
                                     decoration: BoxDecoration(
                                         color: Colors.transparent,
                                         borderRadius: BorderRadius.circular(50),
@@ -124,7 +126,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                         fontWeight: FontWeight.bold
                                     ),
                                     onHoverStyle: const TextStyle(
-                                        fontSize: 22,
+                                        fontSize: 18,
                                         color: Colors.blue,
                                         fontWeight: FontWeight.bold
                                     ),
