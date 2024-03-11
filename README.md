@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.1.5
+      flutter_uikit_forzzh: ^0.1.6
 
 
 # flutter 常用组件ui库
@@ -25,7 +25,7 @@
  19. 新增选择下拉框菜单 SelectionMenu 可高度自定义，且不关注数据本身。
  20. 新增 TextExtend 文本拓展组件，支持web 前端js菜单效果。
  21. 新增 MousePopupButton 鼠标右键弹出窗组件，再Web端使用
- 22. 新增 shimmer 微光加载效果
+ 22. 新增 Shimmer 微光加载效果
 
   ...持续更新中....
 
