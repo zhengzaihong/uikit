@@ -4,6 +4,7 @@ import 'package:uikit_example/InputExample.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/often_widget_example2.dart';
 import 'package:uikit_example/pager_example.dart';
+import 'package:uikit_example/shimmer_example.dart';
 import 'package:uikit_example/tableview_example.dart';
 import 'calendar_example.dart';
 import 'city_picker_example.dart';
@@ -84,6 +85,7 @@ class _MyAppState extends State<MyApp> {
       createMenu("无限层级菜单",context, const InfiniteLevelsExample()),
       createMenu("仿系统下拉框",context, const SelectionMenuExample()),
       createMenu("分页组件",context, const PagerExample()),
+      createMenu("微光加载效果",context, const ShimmerLoadingExample()),
       createMenu("常用小组件",context, const OftenWidgetExample()),
       createMenu("常用小组件2",context, const OftenWidgetExample2()),
     ];

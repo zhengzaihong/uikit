@@ -19,7 +19,6 @@ class SelectionMenuExample extends StatefulWidget {
 class _SelectionMenuExampleState extends State<SelectionMenuExample> {
 
   int? _checkedIndex;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(child:  Scaffold(
