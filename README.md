@@ -64,7 +64,7 @@
 ## 可定制的Toast：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
 
-## 可定制的Toast：
+## 微光加载效果：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
 
 ## 弹窗组件：
