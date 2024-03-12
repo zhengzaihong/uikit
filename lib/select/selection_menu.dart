@@ -11,6 +11,7 @@ import 'package:flutter/rendering.dart';
 ///
 final RouteObserver<ModalRoute<void>> dropDownButtonRouteObserver =
     RouteObserver<ModalRoute<void>>();
+
 typedef DropDownButtonBuilder<T> = Widget Function(bool isShow);
 typedef DropDownPopCreated = void Function();
 typedef DropDownPopShow = void Function();
@@ -19,29 +20,62 @@ typedef DropDownPopDismiss = void Function();
 class SelectionMenu extends StatefulWidget {
   /// 下拉框构建器
   final DropDownButtonBuilder? dropDownButtonBuilder;
+
   /// 下拉框创建
   final DropDownPopCreated? onCreated;
+
   /// 下拉框显示
   final DropDownPopShow? onShow;
+
   /// 下拉框消失
   final DropDownPopDismiss? onDismiss;
+
   /// 是否开启鼠标悬浮
   final bool enableOnHover;
+
   /// 下拉框宽度 弹窗部分
   final double? popWidth;
 
   /// 下拉框样式构件 弹出部分
   final WidgetBuilder selectorBuilder;
+
   /// 阴影
   final double? elevation;
+
   /// 阴影颜色
   final Color? shadowColor;
   final String? barrierLabel;
   final Color? barrierColor;
+
   /// 是否允许点击其他区域消失
   final bool barrierDismissible;
+
   /// 动画时间
   final Duration transitionDuration;
+
+  final GestureTapCallback? onDoubleTap;
+  final GestureLongPressCallback? onLongPress;
+  final GestureTapDownCallback? onTapDown;
+  final GestureTapUpCallback? onTapUp;
+  final GestureTapCancelCallback? onTapCancel;
+  final ValueChanged<bool>? onHighlightChanged;
+  final ValueChanged<bool>? onHover;
+  final MouseCursor? mouseCursor;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final Color? highlightColor;
+  final MaterialStateProperty<Color?>? overlayColor;
+  final Color? splashColor;
+  final InteractiveInkFeatureFactory? splashFactory;
+  final double? radius;
+  final BorderRadius? borderRadius;
+  final ShapeBorder? customBorder;
+  final bool? enableFeedback;
+  final bool excludeFromSemantics;
+  final FocusNode? focusNode;
+  final bool canRequestFocus;
+  final ValueChanged<bool>? onFocusChange;
+  final bool autofocus;
 
   const SelectionMenu(
       {required this.selectorBuilder,
@@ -57,6 +91,29 @@ class SelectionMenu extends StatefulWidget {
       this.barrierColor,
       this.barrierDismissible = true,
       this.transitionDuration = const Duration(milliseconds: 200),
+        this.onDoubleTap,
+        this.onLongPress,
+        this.onTapDown,
+        this.onTapUp,
+        this.onTapCancel,
+        this.onHighlightChanged,
+        this.onHover,
+        this.mouseCursor,
+        this.focusColor,
+        this.hoverColor,
+        this.highlightColor,
+        this.overlayColor,
+        this.splashColor,
+        this.splashFactory,
+        this.radius,
+        this.borderRadius,
+        this.customBorder,
+        this.enableFeedback = true,
+        this.excludeFromSemantics = false,
+        this.focusNode,
+        this.canRequestFocus = true,
+        this.onFocusChange,
+        this.autofocus = false,
       Key? key})
       : super(key: key);
 
@@ -104,6 +161,30 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
     return StatefulBuilder(builder: (context, onState) {
       _innerStateSetter = onState;
       return InkWell(
+        onDoubleTap: widget.onDoubleTap,
+        onLongPress: widget.onLongPress,
+        onTapDown: widget.onTapDown,
+        onTapUp: widget.onTapUp,
+        onTapCancel: widget.onTapCancel,
+        onHighlightChanged: widget.onHighlightChanged,
+        mouseCursor: widget.mouseCursor,
+        focusColor: widget.focusColor,
+        hoverColor: widget.hoverColor,
+        highlightColor: widget.highlightColor,
+        overlayColor: widget.overlayColor,
+        splashColor: widget.splashColor,
+
+        splashFactory: widget.splashFactory,
+        radius: widget.radius,
+        borderRadius: widget.borderRadius,
+        customBorder: widget.customBorder,
+        enableFeedback: widget.enableFeedback,
+        excludeFromSemantics: widget.excludeFromSemantics,
+        focusNode: widget.focusNode,
+        canRequestFocus: widget.canRequestFocus,
+        onFocusChange: widget.onFocusChange,
+        autofocus: widget.autofocus,
+
         onHover: (hover) {
           if (hover && widget.enableOnHover) {
             _showSelection(context);
@@ -179,17 +260,17 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
   final Duration transitionDuration;
   final double? popWidth;
 
-  _CustomPopupRoute(
-      {required this.builder,
-      required this.position,
-      required this.barrierLabel,
-      this.elevation,
-      this.shadowColor,
-      this.barrierColor,
-      this.barrierDismissible = true,
-      this.transitionDuration = const Duration(milliseconds: 200),
-        this.popWidth,
-      });
+  _CustomPopupRoute({
+    required this.builder,
+    required this.position,
+    required this.barrierLabel,
+    this.elevation,
+    this.shadowColor,
+    this.barrierColor,
+    this.barrierDismissible = true,
+    this.transitionDuration = const Duration(milliseconds: 200),
+    this.popWidth,
+  });
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
