@@ -38,6 +38,10 @@ class StringUtils {
     return RegExp("[\\u4e00-\\u9fa5]+").hasMatch(str);
   }
 
+  static String nilToDef(String? value,String def) {
+    return value??def;
+  }
+
   /// 检查字符串是否空
   static bool isEmpty(String? string) {
     if (null == string || string.isEmpty ) {
@@ -79,24 +83,17 @@ class StringUtils {
 
 extension StringExt on Object? {
 
-  String toStr(Object? value) {
+  String _toStr(Object? value) {
     return null == value ? "" : value.toString();
   }
 
-  String str()=>toStr(this);
-
-  String get s => toStr(this);
+  String str()=>_toStr(this);
 
   List<String> toList() {
-    String str = toStr(this);
+    String str = _toStr(this);
     if (StringUtils.isEmpty(str)) {
       return [];
     }
-    List<String> contents = [];
-    for (int i = 0; i < str.length; i++) {
-      contents.add(str.substring(i, i + 1));
-    }
-    return contents;
+    return List.generate(str.length, (index) => str.substring(index, index + 1));
   }
-
 }

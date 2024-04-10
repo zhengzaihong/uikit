@@ -56,6 +56,7 @@
 ## 仿web前端 js菜单
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend2.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/TextExtend3.gif)
 
 ## 城市选择器：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)

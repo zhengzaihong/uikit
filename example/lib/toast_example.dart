@@ -202,7 +202,7 @@ class _ToastExampleState extends State<ToastExample> {
                                   top: 25,
                                   child: TimeView(
                                     countdown: 10,
-                                    child: (context, controller, time) {
+                                    builder: (context, controller, time) {
                                       if (!controller.isStart()) {
                                         controller.startTimer();
                                       }

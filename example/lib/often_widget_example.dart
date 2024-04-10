@@ -665,7 +665,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     duration: const Duration(
                         milliseconds: 100
                     ),
-                    child: (context, controller, time) {
+                    builder: (context, controller, time) {
                       if (!controller.isStart()) {
                         return InkWell(
                             onTap: () {

@@ -12,10 +12,11 @@ import 'package:flutter_uikit_forzzh/edit_text/outline_input_text_border.dart';
 /// create_date: 2024/1/23
 /// create_time: 16:57
 /// describe: 分页组件
+/// 2024-04-09 修改页码非1开始问题。
 ///
 
 enum PagerItemTypes { prev, next, ellipsis, number }
-typedef PageChangeCallback = void Function(int totalPages, dynamic currentPageIndex);
+typedef PageChangeCallback = void Function(int totalPages, dynamic currentPage);
 
 class Pager extends StatefulWidget {
   /// 总页数
@@ -23,7 +24,7 @@ class Pager extends StatefulWidget {
   /// 每页的数据数量
   final int pageEach;
   /// 当前所在页的回调 点击和输入
-  final PageChangeCallback? pageChangeCallback;
+  final PageChangeCallback? pageChange;
   /// 错误输入
   final Function()? errorInputCallback;
   /// 文本样式
@@ -32,6 +33,11 @@ class Pager extends StatefulWidget {
   final int sideDiff;
   /// 是否显示省略号
   final bool showEllipsis;
+  /// 当前页数
+  final int currentPage;
+
+  ///是否开启首次进入则回调
+  final bool isEnterCallback;
 
   final EdgeInsetsGeometry? inputContentPadding;
   final double inputHeight;
@@ -39,6 +45,7 @@ class Pager extends StatefulWidget {
   final Color?  prevColor;
   final Color?  nextColor;
   final Color?  ellipsisColor;
+
 
   final TextEditingController? inputController;
   final OutlineInputTextBorder outlineInputTextBorder;
@@ -62,8 +69,10 @@ class Pager extends StatefulWidget {
     Key? key,
     required this.totalCount,
     required this.pageEach,
-    this.pageChangeCallback,
+    this.pageChange,
+    this.currentPage = 1,
     this.errorInputCallback,
+    this.isEnterCallback= false,
     this.textStyle = const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w400,
@@ -112,7 +121,7 @@ class _PagerState extends State<Pager> {
   late int pageEach;
 
   // 当前所在页
-  int currentPageIndex = 0;
+  int currentPageIndex = 1;
 
   late TextEditingController pageInputController;
 
@@ -120,17 +129,20 @@ class _PagerState extends State<Pager> {
   void initState() {
     super.initState();
     pageEach = widget.pageEach;
+    currentPageIndex = widget.currentPage-1;
+    if(currentPageIndex<0){
+      currentPageIndex = 0;
+    }
     initData();
   }
 
   void initData() {
     pageInputController = widget.inputController ?? TextEditingController();
     totalPages = (widget.totalCount / pageEach).ceil();
-    currentPageIndex = 0;
   }
 
   void executeCallback() {
-    if (widget.pageChangeCallback != null) {
+    if (widget.pageChange != null) {
       if ((lastTotalPages == null || lastCurrentPageIndex == null) ||
           (lastTotalPages != totalPages ||
               lastCurrentPageIndex != currentPageIndex)) {
@@ -140,7 +152,7 @@ class _PagerState extends State<Pager> {
           pageInputController.text = '';
          return;
         }
-        widget.pageChangeCallback!(totalPages, currentPageIndex);
+        widget.pageChange!(totalPages, currentPageIndex+1);
       }
     }
   }
@@ -227,7 +239,9 @@ class _PagerState extends State<Pager> {
 
     /// next
     pageItems.add(pageItem(_buildIndicator(type: PagerItemTypes.next, index: currentPageIndex < totalPages - 1 ? currentPageIndex + 1 : null)));
-    executeCallback();
+    if(widget.isEnterCallback){
+      executeCallback();
+    }
     return pageItems;
   }
 
@@ -303,7 +317,7 @@ class _PagerState extends State<Pager> {
                       index = 1;
                     }
                     currentPageIndex = index-1;
-                    widget.pageChangeCallback?.call(totalPages,index);
+                    widget.pageChange?.call(totalPages,index);
                   });
                 }catch(e){
                   widget.errorInputCallback?.call();

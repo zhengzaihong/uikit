@@ -29,10 +29,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<Widget> funList = [];
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       navigatorKey: Toast.navigatorState,
       navigatorObservers: <NavigatorObserver>[dropDownButtonRouteObserver],

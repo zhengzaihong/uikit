@@ -10,25 +10,29 @@ import 'package:flutter/material.dart';
 /// 使用规范: 外部请不要将 TimeViewState 持久化。
 ///
 
-typedef Child = Widget Function(BuildContext context, TimeViewState controller, int time);
+typedef Builder = Widget Function(BuildContext context, TimeViewState controller, int time);
+typedef BuildCompleter = void Function(BuildContext context, TimeViewState controller);
 
 class TimeView extends StatefulWidget {
   /// 倒计时的秒数
   final int countdown;
 
   ///返回子控件的回调
-  final Child? child;
+  final Builder? builder;
 
   ///时间单位
   final Duration duration;
 
   final bool enableCancel;
 
+  final BuildCompleter? buildCompleter;
+
   const TimeView(
       { required this.countdown,
-        required this.child,
+        required this.builder,
         this.enableCancel = false,
         this.duration = const Duration(seconds: 1),
+        this.buildCompleter,
         Key? key})
       : super(key: key);
 
@@ -51,6 +55,11 @@ class TimeViewState extends State<TimeView> {
     super.initState();
     _controller = this;
     _currentTime = widget.countdown;
+    if(widget.buildCompleter!=null){
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        widget.buildCompleter?.call(context,this);
+      });
+    }
   }
 
 
@@ -72,7 +81,7 @@ class TimeViewState extends State<TimeView> {
       if (_currentTime == 1) {
         cancelTimer();
       }
-      _currentTime--;
+      _currentTime = widget.countdown - timer.tick;
       notyChange();
     });
   }
@@ -100,6 +109,6 @@ class TimeViewState extends State<TimeView> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.child!.call(context, _controller, _currentTime);
+    return widget.builder!.call(context, _controller, _currentTime);
   }
 }

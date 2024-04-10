@@ -7,7 +7,56 @@ import 'package:flutter/material.dart';
 /// create_time: 16:51
 /// describe: 仿前端 js 鼠标事件可修改文字样式的文本组件
 ///
-///
+// 基础示例：
+//     TextExtend(
+//         "测试文本鼠标效果 item $index",
+//         onTap: (){
+//
+//         },
+//         isSelectable: false,
+//         padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+//         onHoverPadding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+//         borderRadius: BorderRadius.circular(50),
+//         splashColor: Colors.purple,
+//         highlightColor: Colors.purple,
+//         onHoverPrefix: const Icon(Icons.access_alarm),
+//         onHoverSuffix:const Icon(Icons.account_circle,color: Colors.blue),
+//         suffix: const Icon(Icons.account_circle),
+//         decoration: BoxDecoration(
+//             color: Colors.transparent,
+//             borderRadius: BorderRadius.circular(50),
+//             border: Border.all(
+//                 color: Colors.purple,
+//                 width: 1
+//             )
+//         ),
+//         onHoverDecoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.circular(50),
+//             border: Border.all(
+//                 color: Colors.white,
+//                 width: 1
+//             )
+//         ),
+//         style: const TextStyle(
+//             fontSize: 18,
+//             color: Colors.black,
+//             fontWeight: FontWeight.bold
+//         ),
+//         onHoverStyle: const TextStyle(
+//             fontSize: 18,
+//             color: Colors.blue,
+//             fontWeight: FontWeight.bold
+//         ),
+//       )
+
+///自定义内部子组件
+typedef BuildCustomChild = Widget? Function(BuildContext context,bool isHover);
+
+///子组件内部对齐方式不满足时可重新改方法
+typedef WrapperChild = Widget Function(BuildContext context,Widget prefix,Widget child,Widget suffix);
+
+
 class TextExtend extends StatefulWidget {
   final TextStyle? style;
   final TextStyle? onHoverStyle;
@@ -18,6 +67,10 @@ class TextExtend extends StatefulWidget {
   final Widget? suffix;
   final Widget? onHoverPrefix;
   final Widget? onHoverSuffix;
+  final double? width;
+  final double? height;
+  final BuildCustomChild? buildCustomChild;
+  final WrapperChild? wrapperChild;
 
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
@@ -78,6 +131,8 @@ class TextExtend extends StatefulWidget {
   final FocusNode? focusNode;
   final bool canRequestFocus;
 
+
+
   const TextExtend(this.data,
       {this.onHover,
       this.enabledOnHover = true,
@@ -86,8 +141,12 @@ class TextExtend extends StatefulWidget {
       this.isSelectable = false,
       this.suffix,
       this.prefix,
-        this.onHoverSuffix,
-        this.onHoverPrefix,
+      this.onHoverSuffix,
+      this.onHoverPrefix,
+      this.width,
+      this.height,
+      this.buildCustomChild,
+      this.wrapperChild,
       this.mainAxisAlignment=MainAxisAlignment.start,
       this.mainAxisSize = MainAxisSize.max,
       this.crossAxisAlignment = CrossAxisAlignment.center,
@@ -153,6 +212,19 @@ class _TextExtendState extends State<TextExtend> {
 
   @override
   Widget build(BuildContext context) {
+    final child =  widget.isSelectable
+        ? SelectableText(
+      widget.data,
+      style: _onHover
+          ? widget.onHoverStyle ?? widget.style
+          : widget.style,
+    )
+        : Text(
+      widget.data,
+      style: _onHover
+          ? widget.onHoverStyle ?? widget.style
+          : widget.style,
+    );
     return InkWell(
       onHover: (onHover) {
         widget.onHover?.call(onHover);
@@ -185,6 +257,8 @@ class _TextExtendState extends State<TextExtend> {
       onFocusChange: widget.onFocusChange,
       autofocus: widget.autofocus,
       child:Container(
+        width: widget.width,
+        height: widget.height,
         alignment: _onHover
             ? widget.onHoverAlignment ?? widget.alignment
             : widget.alignment,
@@ -212,7 +286,7 @@ class _TextExtendState extends State<TextExtend> {
         transformAlignment: _onHover
             ? widget.onHoverTransformAlignment ?? widget.transformAlignment
             : widget.transformAlignment,
-        child:  Row(
+        child:widget.buildCustomChild?.call(context,_onHover)?? (widget.wrapperChild==null? Row(
           mainAxisAlignment: widget.mainAxisAlignment,
           mainAxisSize: widget.mainAxisSize,
           crossAxisAlignment: widget.crossAxisAlignment,
@@ -221,22 +295,12 @@ class _TextExtendState extends State<TextExtend> {
           textBaseline: widget.textBaseline,
           children: [
             (_onHover?widget.onHoverPrefix:widget.prefix)??const SizedBox(),
-            Expanded(child:  widget.isSelectable
-                ? SelectableText(
-              widget.data,
-              style: _onHover
-                  ? widget.onHoverStyle ?? widget.style
-                  : widget.style,
-            )
-                : Text(
-              widget.data,
-              style: _onHover
-                  ? widget.onHoverStyle ?? widget.style
-                  : widget.style,
-            )),
+            child,
             (_onHover?widget.onHoverSuffix:widget.suffix)??const SizedBox(),
           ],
-        ),
+        ):widget.wrapperChild==null?child:widget.wrapperChild!(context,
+            (_onHover?widget.onHoverPrefix:widget.prefix)??const SizedBox(),
+            child,(_onHover?widget.onHoverSuffix:widget.suffix)??const SizedBox())),
       ),
     );
   }

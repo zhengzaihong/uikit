@@ -11,6 +11,8 @@ class PagerExample extends StatefulWidget {
 
 class _PagerExampleState extends State<PagerExample> {
 
+  int currentPage = 2;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(child:  Scaffold(
@@ -22,6 +24,7 @@ class _PagerExampleState extends State<PagerExample> {
         child: Pager(
           totalCount: 1000,
           pageEach: 10,
+          currentPage: currentPage,
           pageIndicatorActiveColor: Colors.purple,
           pageIndicatorColor: Colors.grey,
           checkedPageColor: Colors.lightBlueAccent,
@@ -51,7 +54,11 @@ class _PagerExampleState extends State<PagerExample> {
           errorInputCallback: (){
             showToast("请输入正确的页码");
           },
-          pageChangeCallback: (totalPages, currentPageIndex) {
+          pageChange: (totalPages, currentPageIndex) {
+            currentPage = currentPageIndex;
+            setState(() {
+
+            });
             print("--------------totalPages:$totalPages,currentPageIndex:$currentPageIndex");
           },
         ),
