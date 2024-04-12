@@ -10,7 +10,7 @@ class KitMath{
 
   KitMath._();
 
-  ///将字符串解析成集合 贪心算法
+  ///将字符串解析成集合
   /// 待优化
   static List<String> parseStr(String? string) {
     if (StringUtils.isEmpty(string)) {

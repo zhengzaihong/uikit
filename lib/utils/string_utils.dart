@@ -1,3 +1,4 @@
+import 'dart:convert';
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -38,8 +39,18 @@ class StringUtils {
     return RegExp("[\\u4e00-\\u9fa5]+").hasMatch(str);
   }
 
-  static String nilToDef(String? value,String def) {
-    return value??def;
+  static String nilToDef(String? value,String def,{String? suffix,bool defSuffix = false}) {
+    final buffer = StringBuffer();
+    if(isEmpty(value)){
+      buffer.write(def);
+      if(defSuffix){
+        buffer.write(suffix??'');
+      }
+      return buffer.toString();
+    }
+    buffer.write(value);
+    buffer.write(suffix??'');
+    return buffer.toString();
   }
 
   /// 检查字符串是否空
@@ -71,13 +82,8 @@ class StringUtils {
     return false;
   }
 
-  bool hasEmptyStr(List<String?> list){
-    for (var str in list) {
-      if(isEmpty(str)){
-        return true;
-      }
-    }
-    return false;
+  static bool hasEmptyElement(List<String?> list){
+    return list.where((element) => isEmpty(element)).isNotEmpty;
   }
 }
 
@@ -91,9 +97,6 @@ extension StringExt on Object? {
 
   List<String> toList() {
     String str = _toStr(this);
-    if (StringUtils.isEmpty(str)) {
-      return [];
-    }
     return List.generate(str.length, (index) => str.substring(index, index + 1));
   }
 }

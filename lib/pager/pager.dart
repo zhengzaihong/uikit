@@ -39,6 +39,11 @@ class Pager extends StatefulWidget {
   ///是否开启首次进入则回调
   final bool isEnterCallback;
 
+  final String totalText;
+  final String prevText;
+  final String suffixText;
+
+
   final EdgeInsetsGeometry? inputContentPadding;
   final double inputHeight;
   final double inputWidth;
@@ -69,6 +74,9 @@ class Pager extends StatefulWidget {
     Key? key,
     required this.totalCount,
     required this.pageEach,
+    this.prevText = "前往",
+    this.suffixText = '页',
+    this.totalText = '共%s条',
     this.pageChange,
     this.currentPage = 1,
     this.errorInputCallback,
@@ -280,14 +288,14 @@ class _PagerState extends State<Pager> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _text("共${widget.totalCount}条"),
+        _text(widget.totalText.replaceAll("%s", widget.totalCount.toString())),
         ...pageItems.map((pageItem) {
           return pageItem;
         }).toList(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _text("前往"),
+            _text(widget.prevText),
             InputText(
               width: widget.inputWidth,
               contentPadding:
@@ -338,7 +346,7 @@ class _PagerState extends State<Pager> {
                 contentPadding: widget.inputContentPadding,
               ),
             ),
-            _text("页"),
+            _text(widget.suffixText),
           ],
         ),
       ],
