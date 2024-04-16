@@ -28,8 +28,10 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
       backgroundColor: Colors.white,
       body:Center(
         child: SelectionMenu(
-            popWidth: 200,
-            dropDownButtonBuilder: (isShow){
+            popWidth: 300,
+            // popCenter: true,
+            // barrierColor: Colors.black38,
+            buttonBuilder: (show){
             return Container(
               height: 40,
               width: 200,
@@ -42,7 +44,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(child:  Text(_checkedIndex==null?"请选择":'item $_checkedIndex')),
-                  Icon(isShow?Icons.arrow_drop_up_rounded:Icons.arrow_drop_down_rounded),
+                  Icon(show?Icons.arrow_drop_up_rounded:Icons.arrow_drop_down_rounded),
                 ],
               ),
             );
@@ -50,6 +52,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
           selectorBuilder: (context) {
             return Container(
               height: 200,
+              // margin: const EdgeInsets.only(top: 10),
               decoration: const BoxDecoration(
                   color: Colors.yellow
               ),

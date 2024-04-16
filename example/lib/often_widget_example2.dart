@@ -143,7 +143,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                           return e.fontIcon==null?null:SelectionMenu(
                                               popWidth: 200,
                                               barrierColor: Colors.transparent,
-                                              dropDownButtonBuilder: (isShow) {
+                                              buttonBuilder: (isShow) {
                                                 return Container(
                                                   height: 40,
                                                   width: 120,

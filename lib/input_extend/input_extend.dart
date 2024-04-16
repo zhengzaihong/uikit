@@ -27,7 +27,10 @@ typedef OnChangeInput<String> = void Function(String value, InputExtendState con
 
 typedef InputValueChanged<String> = void Function(String value, InputExtendState controller);
 
-typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds);
+typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds,InputExtendState controller);
+
+typedef OnCreate<T> = void Function(InputExtendState controller);
+typedef OnComplete<T> = void Function(InputExtendState controller);
 
 class InputExtend<T> extends StatefulWidget {
   ///自定义构建弹出窗样式
@@ -39,10 +42,15 @@ class InputExtend<T> extends StatefulWidget {
   ///自定义选中后样式
   final BuildCheckedBarStyle? buildCheckedBarStyle;
 
+  ///开始创建
+  final OnCreate? onCreate;
+  ///创建完成
+  final OnComplete? onComplete;
+
   ///已选择的显示项宽度
   final double? checkedItemWidth;
 
-  ///
+  ///输入文本样式
   final TextStyle inputTextStyle;
 
   ///输入框的背景样式
@@ -157,6 +165,8 @@ class InputExtend<T> extends StatefulWidget {
         this.checkedBarMaxHeight,
         this.checkedBarMinHeight,
         this.inputTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
+        this.onCreate,
+        this.onComplete,
         this.inputDecoration,
         this.physics,
         this.initCheckedValue,
@@ -261,6 +271,8 @@ class InputExtendState<T> extends State<InputExtend> {
   void initState() {
     super.initState();
 
+     widget.onCreate?.call(this);
+
     _editingController = widget.textEditingController?? TextEditingController();
     _scrollController = widget.scrollController?? ScrollController();
     _inputScrollController = widget.inputScrollController?? ScrollController();
@@ -284,6 +296,12 @@ class InputExtendState<T> extends State<InputExtend> {
         _onTextChangeCallBack(_editingController.text, true);
       }
     });
+
+    if(widget.onComplete!=null){
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        widget.onComplete?.call(this);
+      });
+    }
   }
 
   void setSearchData(List<T>? newData) {
@@ -603,7 +621,7 @@ class InputExtendState<T> extends State<InputExtend> {
                 onChanged: (text) async {
                   _onTextChangeCallBack(text, false);
                 },
-                decoration: widget.inputDecoration?.call(getCheckedData),
+                decoration: widget.inputDecoration?.call(getCheckedData,this),
               ))
         ],
       ),

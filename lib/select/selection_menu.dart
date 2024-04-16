@@ -12,14 +12,14 @@ import 'package:flutter/rendering.dart';
 final RouteObserver<ModalRoute<void>> dropDownButtonRouteObserver =
     RouteObserver<ModalRoute<void>>();
 
-typedef DropDownButtonBuilder<T> = Widget Function(bool isShow);
+typedef DropDownButtonBuilder<T> = Widget Function(bool show);
 typedef DropDownPopCreated = void Function();
 typedef DropDownPopShow = void Function();
 typedef DropDownPopDismiss = void Function();
 
 class SelectionMenu extends StatefulWidget {
   /// 下拉框构建器
-  final DropDownButtonBuilder? dropDownButtonBuilder;
+  final DropDownButtonBuilder? buttonBuilder;
 
   /// 下拉框创建
   final DropDownPopCreated? onCreated;
@@ -32,6 +32,9 @@ class SelectionMenu extends StatefulWidget {
 
   /// 是否开启鼠标悬浮
   final bool enableOnHover;
+
+  ///是否是居中模式 默认左对齐
+  final bool popCenter;
 
   /// 下拉框宽度 弹窗部分
   final double? popWidth;
@@ -79,41 +82,42 @@ class SelectionMenu extends StatefulWidget {
 
   const SelectionMenu(
       {required this.selectorBuilder,
-      required this.dropDownButtonBuilder,
+      required this.buttonBuilder,
       this.onCreated,
       this.onShow,
       this.onDismiss,
       this.enableOnHover = false,
       this.popWidth,
+      this.popCenter = false,
       this.elevation,
       this.shadowColor,
       this.barrierLabel,
       this.barrierColor,
       this.barrierDismissible = true,
       this.transitionDuration = const Duration(milliseconds: 200),
-        this.onDoubleTap,
-        this.onLongPress,
-        this.onTapDown,
-        this.onTapUp,
-        this.onTapCancel,
-        this.onHighlightChanged,
-        this.onHover,
-        this.mouseCursor,
-        this.focusColor,
-        this.hoverColor,
-        this.highlightColor,
-        this.overlayColor,
-        this.splashColor,
-        this.splashFactory,
-        this.radius,
-        this.borderRadius,
-        this.customBorder,
-        this.enableFeedback = true,
-        this.excludeFromSemantics = false,
-        this.focusNode,
-        this.canRequestFocus = true,
-        this.onFocusChange,
-        this.autofocus = false,
+      this.onDoubleTap,
+      this.onLongPress,
+      this.onTapDown,
+      this.onTapUp,
+      this.onTapCancel,
+      this.onHighlightChanged,
+      this.onHover,
+      this.mouseCursor,
+      this.focusColor,
+      this.hoverColor,
+      this.highlightColor,
+      this.overlayColor,
+      this.splashColor,
+      this.splashFactory,
+      this.radius,
+      this.borderRadius,
+      this.customBorder,
+      this.enableFeedback = true,
+      this.excludeFromSemantics = false,
+      this.focusNode,
+      this.canRequestFocus = true,
+      this.onFocusChange,
+      this.autofocus = false,
       Key? key})
       : super(key: key);
 
@@ -173,7 +177,6 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
         highlightColor: widget.highlightColor,
         overlayColor: widget.overlayColor,
         splashColor: widget.splashColor,
-
         splashFactory: widget.splashFactory,
         radius: widget.radius,
         borderRadius: widget.borderRadius,
@@ -184,7 +187,6 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
         canRequestFocus: widget.canRequestFocus,
         onFocusChange: widget.onFocusChange,
         autofocus: widget.autofocus,
-
         onHover: (hover) {
           if (hover && widget.enableOnHover) {
             _showSelection(context);
@@ -197,7 +199,7 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
           }
           _showSelection(context);
         },
-        child: widget.dropDownButtonBuilder?.call(_popShowIng),
+        child: widget.buttonBuilder?.call(_popShowIng),
       );
     });
   }
@@ -209,13 +211,10 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
 
     Offset offset = Offset(0.0, button.size.height);
     double centerX = 0;
-    bool isCustom = widget.popWidth == null;
-    if (!isCustom) {
+    if (widget.popWidth != null && widget.popCenter) {
       centerX = widget.popWidth! / 2 - button.size.width / 2;
-      if (centerX < 0) {
-        isCustom = false;
-      }
-    }
+      if(centerX < 0) centerX==0;
+   }
 
     RelativeRect position = RelativeRect.fromRect(
       Rect.fromPoints(
@@ -223,12 +222,10 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
         button.localToGlobal(button.size.bottomRight(Offset.zero) + offset,
             ancestor: overlay),
       ),
-      !isCustom
-          ? Offset.zero & overlay.size
-          : Rect.fromPoints(
-              Offset(centerX, 0),
-              Offset(widget.popWidth!, 0),
-            ),
+      Rect.fromPoints(
+        Offset(widget.popCenter?centerX:0, 0),
+        Offset(widget.popWidth!, 0),
+      ),
     );
 
     Navigator.of(context).push(_CustomPopupRoute(
