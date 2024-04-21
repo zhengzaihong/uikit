@@ -60,7 +60,7 @@ class _FunctionButtonState extends State<FunctionButton> {
   @override
   Widget build(BuildContext context) {
     final containerManger = FunctionContainer.of(context);
-    final checkeds = containerManger?.defaultCheckeds;
+    final checkeds = containerManger?.defaultChecks;
     final allow = containerManger?.allowMultipleChoice;
     final check = containerManger?.defaultCheck;
 

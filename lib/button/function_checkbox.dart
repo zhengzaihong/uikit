@@ -59,11 +59,11 @@ class _FunctionCheckBoxState extends State<FunctionCheckbox> {
   @override
   Widget build(BuildContext context) {
     final containerManger = FunctionContainer.of(context);
-    final checkeds = containerManger?.defaultCheckeds;
+    final checks= containerManger?.defaultChecks;
     final allow = containerManger?.allowMultipleChoice;
     final check = containerManger?.defaultCheck;
     if (allow!) {
-      checked = checkeds!.contains(widget.index);
+      checked = checks!.contains(widget.index);
     } else {
       checked = (check == widget.index);
     }

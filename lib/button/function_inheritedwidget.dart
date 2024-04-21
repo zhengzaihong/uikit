@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'function_container.dart';
 
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -11,25 +10,23 @@ import 'function_container.dart';
 /// create_time: 17:21
 /// describe:  组件共享数据的容器
 ///
-///
 class FunctionInheritedWidget extends InheritedWidget {
 
   ///多选选中id
-  List<int>? defaultCheckeds;
-
+  final List<int>? defaultChecks;
   ///单选
-  int defaultCheck;
+  final int defaultCheck;
 
   ///是否允许多选
-  bool allowMultipleChoice;
+  final bool allowMultipleChoice;
 
   ///状态管理
-  FunctionContainerState? mangerState;
+  final FunctionContainerState? mangerState;
 
-  FunctionInheritedWidget({
+  const FunctionInheritedWidget({
     Key? key,
     required Widget child,
-    this.defaultCheckeds=const [],
+    this.defaultChecks=const [],
     this.defaultCheck=0,
     this.allowMultipleChoice= false ,
     this.mangerState
@@ -39,7 +36,7 @@ class FunctionInheritedWidget extends InheritedWidget {
   @override
   bool updateShouldNotify(FunctionInheritedWidget oldWidget) {
     return allowMultipleChoice?
-    defaultCheckeds != oldWidget.defaultCheckeds:
+    defaultChecks != oldWidget.defaultChecks:
     defaultCheck != oldWidget.defaultCheck;
   }
 }

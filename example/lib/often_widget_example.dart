@@ -239,7 +239,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                   title("多选button 案例1"),
                   SizedBox(height: 60,child: FunctionContainer(
-                    defaultCheckeds: defaultCheckeds,
+                    defaultChecks: defaultCheckeds,
                     allowMultipleChoice: true, //多选
                     // mutualExclusionIndex: 1,
                     multipleCheckedChange: (list){
@@ -303,7 +303,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                   title("多选button 案例2"),
                   SizedBox(height: 60,child: FunctionContainer(
-                    defaultCheckeds: defaultCheckeds2,
+                    defaultChecks: defaultCheckeds2,
                     allowMultipleChoice: true, //多选
                     mutualExclusionIndex: 1,
                     multipleCheckedChange: (list){
@@ -313,67 +313,42 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         buffer.write(",");
                       }
                       defaultCheckeds2 = list as List<int>;
+                      print("------$defaultCheckeds2");
                       setState(() {
                       });
                       Toast.show("选中的按钮Id: ${buffer.toString()}");
                     },
-                    child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      ClickButton(
-                        title: "全选",
-                        index: 1,
-                        checkedBoxDecoration: checkBoxBg,
-                        unCheckedBoxDecoration: checkBoxBg,
-                        drawablePosition: PositionEnum.drawableLeft,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        drawablePressWidget:checkedIcon,
-                        drawableWidget: unCheckedIcon,
-                        width: 66,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      ClickButton(
-                        title: "CT",
-                        index: 2,
-                        checkedBoxDecoration: checkBoxBg,
-                        unCheckedBoxDecoration: checkBoxBg,
-                        drawablePosition: PositionEnum.drawableLeft,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        drawablePressWidget:checkedIcon,
-                        drawableWidget: unCheckedIcon,
-                        width: 66,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      ClickButton(
-                        title: "抽血",
-                        index: 3,
-                        checkedBoxDecoration: checkBoxBg,
-                        unCheckedBoxDecoration: checkBoxBg,
-                        drawablePosition: PositionEnum.drawableLeft,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        drawablePressWidget:checkedIcon,
-                        drawableWidget: unCheckedIcon,
-                        width: 66,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      ClickButton(
-                        title: "手术",
-                        index: 4,
-                        checkedBoxDecoration: checkBoxBg,
-                        unCheckedBoxDecoration: checkBoxBg,
-                        drawablePosition: PositionEnum.drawableLeft,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        drawablePressWidget:checkedIcon,
-                        drawableWidget: unCheckedIcon,
-                        width: 66,
-                        height: 30,
-                      )
-                    ]),
+                    child: LayoutBuilder(
+                      builder: (context,boxConstraints){
+                        int index = 0;
+                        return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                          ...["全选","CT","抽血","检查",'手术'].map((e){
+                            index++;
+                            return FunButtonBox(
+                              index: index,
+                              builderBox: (BuildContext context,FunButtonBoxState state, bool isCheck) {
+                                return CustomCheckBox(
+                                    key: ValueKey(isCheck),
+                                    text: Text(e,style: isCheck?checkedTextStyle:unCheckTextStyle),
+                                    activeColor: Colors.purple,
+                                    checkColor: Colors.red,
+                                    isChecked: isCheck,
+                                    useDefaultStyle: false,
+                                    iconLeft: true,
+                                    checkIcon: const Icon(
+                                        Icons.check_box, color: Colors.red),
+                                    uncheckedIcon: const Icon(
+                                      Icons.check_box_outline_blank,
+                                      color: Colors.grey,),
+                                    onChange: (v) {
+                                      state.updateChange();
+                                    });
+                              },
+                            );
+                          }).toList(),
+                        ]);
+                      },
+                    ),
                   )),
 
 
@@ -431,67 +406,6 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   )),
 
 
-                  title("图标组件"),
-                  SizedBox(height: 100,child:  FunctionContainer(
-                    defaultCheck: 0,
-                    singleCheckedChange: (id){
-                      Toast.show("图标组件下标: ${id.toString()}");
-                    },
-                    child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      ClickButton(
-                        title: "测试",
-                        index: 0,
-                        width: 100,
-                        height: 60,
-                        padding: const EdgeInsets.only(left: 5),
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
-                        drawableWidget: const Icon(Icons.call,color: Colors.red),
-                      ),
-                      const SizedBox(width: 10),
-                      ClickButton(
-                        title: "button1",
-                        index: 1,
-                        width: 100,
-                        height: 60,
-                        drawablePosition: PositionEnum.drawableLeft,
-                        padding: const EdgeInsets.only(left: 5),
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
-                        drawableWidget: const Icon(Icons.call,color: Colors.red),
-                      ),
-                      const SizedBox(width: 10),
-                      ClickButton(
-                        title: "button2",
-                        index: 2,
-                        width: 100,
-                        height: 60,
-                        drawablePosition: PositionEnum.drawableTop,
-                        padding: const EdgeInsets.only(left: 5),
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
-                        drawableWidget: const Icon(Icons.call,color: Colors.red),
-                      ),
-                      const SizedBox(width: 10),
-                      ClickButton(
-                        title: "button3",
-                        index: 3,
-                        width: 100,
-                        height: 60,
-                        drawablePosition: PositionEnum.drawableBottom,
-                        padding: const EdgeInsets.only(left: 5),
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        drawablePressWidget: const Icon(Icons.call,color: Colors.red),
-                        drawableWidget: const Icon(Icons.call,color: Colors.red),
-                      ),
-                    ]),
-                  )),
-
                   title("复选框"),
                   CustomCheckBox(
                     iconLeft: true,
@@ -529,7 +443,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                   title("多选的复选框"),
                   SizedBox(height: 60,child:  FunctionContainer(
-                    defaultCheckeds: defaultCheckboxIds,
+                    defaultChecks: defaultCheckboxIds,
                     allowMultipleChoice: true,
                     multipleCheckedChange: (list){
                       defaultCheckboxIds = list as List<int>;

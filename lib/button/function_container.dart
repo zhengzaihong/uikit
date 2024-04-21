@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'function_inheritedwidget.dart';
 
 
@@ -8,7 +7,7 @@ import 'function_inheritedwidget.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021/5/22
 /// create_time: 17:10
-/// describe: 容器组件，子组件可以为 ClickButton FunctionButton ,FunctionCheckbox,FunctionRadioButton等 button 包下组件
+/// describe: 容器组件，子组件可以为 FunButtonBox FunctionButton ,FunctionCheckbox,FunctionRadioButton等 button 包下组件
 ///
 class FunctionContainer extends StatefulWidget {
 
@@ -16,7 +15,7 @@ class FunctionContainer extends StatefulWidget {
   Widget child;
 
   ///默认选中的按钮--多选 allowMultipleChoice 启用
-  List<int>? defaultCheckeds;
+  List<int>? defaultChecks;
   ///默认选中的第一项按钮 --单选
   int defaultCheck;
 
@@ -30,7 +29,7 @@ class FunctionContainer extends StatefulWidget {
   Function(List checkeds)? multipleCheckedChange;
 
   ///是否开启首次选中即回调
-  bool enableFirstdefaultCheck;
+  bool enableFirstDefaultCheck;
 
   ///如果利用 FunctionContainer做tab 可用于是否启用切换
   bool enable;
@@ -41,14 +40,14 @@ class FunctionContainer extends StatefulWidget {
 
   FunctionContainer({
     Key? key,
-    this.defaultCheckeds,
+    this.defaultChecks,
     this.defaultCheck=0,
     required this.child,
     this.mutualExclusionIndex =-1,
     this.singleCheckedChange,
     this.allowMultipleChoice=false,
     this.multipleCheckedChange,
-    this.enableFirstdefaultCheck = false,
+    this.enableFirstDefaultCheck = false,
     this.enable = true,
     this.enableCallBack,
   }) : super(key: key);
@@ -71,7 +70,7 @@ class FunctionContainerState extends State<FunctionContainer> {
   @override
   Widget build(BuildContext context) {
 
-    if(widget.enableFirstdefaultCheck){
+    if(widget.enableFirstDefaultCheck){
       Future.delayed(const Duration(milliseconds: 100),(){
         updateChange(widget.defaultCheck);
       });
@@ -79,7 +78,7 @@ class FunctionContainerState extends State<FunctionContainer> {
 
     ///将最新的数据往下传递
     return FunctionInheritedWidget(
-      defaultCheckeds: widget.defaultCheckeds,
+      defaultChecks: widget.defaultChecks,
       child: widget.child,
       defaultCheck: widget.defaultCheck,
       allowMultipleChoice: widget.allowMultipleChoice,
@@ -92,35 +91,34 @@ class FunctionContainerState extends State<FunctionContainer> {
 
     if(widget.enable){
       setState(() {
-        if(widget.allowMultipleChoice && null!=widget.defaultCheckeds){
+        if(widget.allowMultipleChoice && null!=widget.defaultChecks){
 
            List<int> temp=[];
            if(widget.mutualExclusionIndex>=0){
-
              if(value == widget.mutualExclusionIndex){
-               widget.defaultCheckeds?.clear();
-               widget.defaultCheckeds?.add(value);
+               widget.defaultChecks?.clear();
+               widget.defaultChecks?.add(value);
              }else{
-               widget.defaultCheckeds?.remove(widget.mutualExclusionIndex);
+               widget.defaultChecks?.remove(widget.mutualExclusionIndex);
 
-               widget.defaultCheckeds!.contains(value)?
-               widget.defaultCheckeds!.remove(value):
-               widget.defaultCheckeds!.add(value);
+               widget.defaultChecks!.contains(value)?
+               widget.defaultChecks!.remove(value):
+               widget.defaultChecks!.add(value);
              }
 
-             for (var element in widget.defaultCheckeds!) {
+             for (var element in widget.defaultChecks!) {
                temp.add(element);
              }
 
            }else{
-             widget.defaultCheckeds!.contains(value)?
-             widget.defaultCheckeds!.remove(value):
-             widget.defaultCheckeds!.add(value);
-             for (var element in widget.defaultCheckeds!) {
+             widget.defaultChecks!.contains(value)?
+             widget.defaultChecks!.remove(value):
+             widget.defaultChecks!.add(value);
+             for (var element in widget.defaultChecks!) {
                temp.add(element);
              }
            }
-           widget.defaultCheckeds = temp;
+           widget.defaultChecks = temp;
            widget.multipleCheckedChange!(temp);
         }else{
           widget.defaultCheck = value;

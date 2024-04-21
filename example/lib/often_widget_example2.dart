@@ -108,7 +108,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                   ...tabs.map((e) => Row(
                                     children: [
                                       TextExtend(
-                                        e.name??'',
+                                        text:e.name??'',
                                         height: 40,
                                         width: 120,
                                         onTap: (){
@@ -232,7 +232,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                 shrinkWrap: true,
                                 itemBuilder: (context,index){
                                   return Center(child:  TextExtend(
-                                    "测试文本鼠标效果 item $index",
+                                    text: "测试文本鼠标效果 item $index",
                                     onTap: (){
 
                                     },
@@ -289,7 +289,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                   ..."1234".toList().map((e) => Row(
                                     children: [
                                       TextExtend(
-                                        "测试文本鼠标效果 item $e",
+                                        text:"测试文本鼠标效果 item $e",
                                         onTap: (){
 
                                           print("----------e:$e");
