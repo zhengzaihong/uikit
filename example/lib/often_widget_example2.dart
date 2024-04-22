@@ -139,7 +139,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                         ),
                                         alignment: Alignment.center,
                                         mainAxisAlignment: MainAxisAlignment.center,
-                                        buildCustomChild: (context, hover){
+                                        builder: (context,child, hover){
                                           return e.fontIcon==null?null:SelectionMenu(
                                               popWidth: 200,
                                               barrierColor: Colors.transparent,
@@ -315,7 +315,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                         onHoverPrefix: const Icon(Icons.access_alarm),
                                         onHoverSuffix:const Icon(Icons.account_circle,color: Colors.blue),
                                         suffix: const Icon(Icons.account_circle),
-                                        wrapperChild: (context,prefix,child,suffix){
+                                        customChildLayout: (context,prefix,child,suffix){
                                           ///添加自定义时，注意别忘了 return child信息
                                           return Center(child: Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -326,7 +326,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                             ],
                                           ));
                                         },
-                                        buildCustomChild: (context,isHover){
+                                        builder: (context,child,isHover){
                                           return  e=="4"? Container(
                                             height: 40,
                                             width: 220,
@@ -337,7 +337,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                             ),
                                             child: Text('StatsD',style: TextStyle(color: isHover?Colors.white:Colors.black),),
 
-                                          ):null;
+                                          ):child;
                                         },
                                         style: const TextStyle(
                                             fontSize: 14,

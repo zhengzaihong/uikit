@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 ///
 // 基础示例：
 //     TextExtend(
-//         "测试文本鼠标效果 item $index",
+//         text:"测试文本鼠标效果 item $index",
 //         onTap: (){
 //
 //         },
@@ -50,11 +50,11 @@ import 'package:flutter/material.dart';
 //         ),
 //       )
 
-///自定义内部子组件
-typedef BuildCustomChild = Widget? Function(BuildContext context, bool isHover);
+///自定义内部子组件 子组件需要单独实现样式配置
+typedef BuilderChild = Widget? Function(BuildContext context, Widget child, bool isHover);
 
 ///子组件内部对齐方式不满足时可重新改方法
-typedef WrapperChild = Widget Function(BuildContext context, Widget prefix, Widget child, Widget suffix);
+typedef CustomChildLayout = Widget Function(BuildContext context, Widget prefix, Widget child, Widget suffix);
 
 
 class TextExtend extends StatefulWidget {
@@ -69,8 +69,8 @@ class TextExtend extends StatefulWidget {
   final Widget? onHoverSuffix;
   final double? width;
   final double? height;
-  final BuildCustomChild? buildCustomChild;
-  final WrapperChild? wrapperChild;
+  final BuilderChild? builder;
+  final CustomChildLayout? customChildLayout;
 
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
@@ -144,8 +144,8 @@ class TextExtend extends StatefulWidget {
     this.onHoverPrefix,
     this.width,
     this.height,
-    this.buildCustomChild,
-    this.wrapperChild,
+    this.builder,
+    this.customChildLayout,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.max,
     this.crossAxisAlignment = CrossAxisAlignment.center,
@@ -211,22 +211,19 @@ class _TextExtendState extends State<TextExtend> {
 
   @override
   Widget build(BuildContext context) {
-    Widget? child;
-    if (widget.wrapperChild != null) {
-      child = widget.isSelectable
-          ? SelectableText(
-        widget.text ?? '',
-        style: _onHover
-            ? widget.onHoverStyle ?? widget.style
-            : widget.style,
-      )
-          : Text(
-        widget.text ?? '',
-        style: _onHover
-            ? widget.onHoverStyle ?? widget.style
-            : widget.style,
-      );
-    }
+    final child = widget.isSelectable
+        ? SelectableText(
+      widget.text ?? '',
+      style: _onHover
+          ? widget.onHoverStyle ?? widget.style
+          : widget.style,
+    )
+        : Text(
+      widget.text ?? '',
+      style: _onHover
+          ? widget.onHoverStyle ?? widget.style
+          : widget.style,
+    );
 
     return InkWell(
       onHover: (onHover) {
@@ -260,57 +257,57 @@ class _TextExtendState extends State<TextExtend> {
       onFocusChange: widget.onFocusChange,
       autofocus: widget.autofocus,
       child: Container(
-          width: widget.width,
-          height: widget.height,
-          alignment: _onHover
-              ? widget.onHoverAlignment ?? widget.alignment
-              : widget.alignment,
-          padding: _onHover
-              ? widget.onHoverPadding ?? widget.padding
-              : widget.padding,
-          color:
-          _onHover ? widget.onHoverColor ?? widget.color : widget.color,
-          decoration: _onHover
-              ? widget.onHoverDecoration ?? widget.decoration
-              : widget.decoration,
-          foregroundDecoration: _onHover
-              ? widget.onHoverForegroundDecoration ??
-              widget.foregroundDecoration
-              : widget.foregroundDecoration,
-          constraints: _onHover
-              ? widget.onHoverConstraints ?? widget.constraints
-              : widget.constraints,
-          margin: _onHover
-              ? widget.onHoverMargin ?? widget.margin
-              : widget.margin,
-          transform: _onHover
-              ? widget.onHoverTransform ?? widget.transform
-              : widget.transform,
-          transformAlignment: _onHover
-              ? widget.onHoverTransformAlignment ?? widget.transformAlignment
-              : widget.transformAlignment,
-          child: widget.buildCustomChild?.call(context, _onHover) ??
-              (widget.wrapperChild == null ? Row(
-                mainAxisAlignment: widget.mainAxisAlignment,
-                mainAxisSize: widget.mainAxisSize,
-                crossAxisAlignment: widget.crossAxisAlignment,
-                verticalDirection: widget.verticalDirection,
-                textDirection: widget.textDirection,
-                textBaseline: widget.textBaseline,
-                children: [
-                  (_onHover ? widget.onHoverPrefix : widget.prefix) ??
-                      const SizedBox(),
-                  child ?? const SizedBox(),
-                  (_onHover ? widget.onHoverSuffix : widget.suffix) ??
-                      const SizedBox(),
-                ],
-              ) : widget.wrapperChild == null ? child : widget.wrapperChild!(
-                  context,
-                  (_onHover ? widget.onHoverPrefix : widget.prefix) ??
-                      const SizedBox(),
-                  child ?? const SizedBox(),
-                  (_onHover?widget.onHoverSuffix:widget.suffix) ??
-                  const SizedBox())),
-    ),);
+        width: widget.width,
+        height: widget.height,
+        alignment: _onHover
+            ? widget.onHoverAlignment ?? widget.alignment
+            : widget.alignment,
+        padding: _onHover
+            ? widget.onHoverPadding ?? widget.padding
+            : widget.padding,
+        color:
+        _onHover ? widget.onHoverColor ?? widget.color : widget.color,
+        decoration: _onHover
+            ? widget.onHoverDecoration ?? widget.decoration
+            : widget.decoration,
+        foregroundDecoration: _onHover
+            ? widget.onHoverForegroundDecoration ??
+            widget.foregroundDecoration
+            : widget.foregroundDecoration,
+        constraints: _onHover
+            ? widget.onHoverConstraints ?? widget.constraints
+            : widget.constraints,
+        margin: _onHover
+            ? widget.onHoverMargin ?? widget.margin
+            : widget.margin,
+        transform: _onHover
+            ? widget.onHoverTransform ?? widget.transform
+            : widget.transform,
+        transformAlignment: _onHover
+            ? widget.onHoverTransformAlignment ?? widget.transformAlignment
+            : widget.transformAlignment,
+        child: widget.builder?.call(context, child,_onHover) ??
+            (widget.customChildLayout == null ? Row(
+              mainAxisAlignment: widget.mainAxisAlignment,
+              mainAxisSize: widget.mainAxisSize,
+              crossAxisAlignment: widget.crossAxisAlignment,
+              verticalDirection: widget.verticalDirection,
+              textDirection: widget.textDirection,
+              textBaseline: widget.textBaseline,
+              children: [
+                (_onHover ? widget.onHoverPrefix : widget.prefix) ??
+                    const SizedBox(),
+                child ,
+                (_onHover ? widget.onHoverSuffix : widget.suffix) ??
+                    const SizedBox(),
+              ],
+            ) : widget.customChildLayout == null ? child : widget.customChildLayout!(
+                context,
+                (_onHover ? widget.onHoverPrefix : widget.prefix) ??
+                    const SizedBox(),
+                child,
+                (_onHover?widget.onHoverSuffix:widget.suffix) ??
+                    const SizedBox())),
+      ),);
   }
 }
