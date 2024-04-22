@@ -117,7 +117,7 @@ class ClearStyleInput extends InputStyleFactory {
       alignLabelWithHint: alignLabelWithHint,
       constraints: constraints,
       suffixIcon: (state.getHasContent() && enableClear && state.getIsEnable())
-          ? InkWell(
+          ? GestureDetector(
             onTap: (() {
               state.clearContent();
             }),
