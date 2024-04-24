@@ -1,6 +1,5 @@
 
 import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -85,7 +84,7 @@ class InputExtend<T> extends StatefulWidget {
   ///点击非遮罩层是否关闭
   final bool barrierDismissible;
 
-  final PopConstraintBox? popConstraintBox;
+  final PopBox? popBox;
 
   final Duration duration;
   final Curve curve;
@@ -176,7 +175,7 @@ class InputExtend<T> extends StatefulWidget {
         this.autoClose = false,
         this.enableHasFocusCallBack = false,
         this.barrierDismissible = true,
-        this.popConstraintBox,
+        this.popBox,
         this.selectPopMarginTop = 0,
         this.textEditingController,
         this.inputScrollController,
@@ -258,7 +257,6 @@ class InputExtendState<T> extends State<InputExtend> {
   late final TextEditingController _editingController;
   late final ScrollController _scrollController;
   late final ScrollController _inputScrollController;
-  late final int intervalTime;
 
   int oldSize = 0;
 
@@ -422,8 +420,8 @@ class InputExtendState<T> extends State<InputExtend> {
   // ignore: unused_element
   List<double?> _setPopSize() {
     List<double?> sizeInfo = [];
-    if (widget.popConstraintBox != null) {
-      var boxSize = widget.popConstraintBox;
+    if (widget.popBox != null) {
+      var boxSize = widget.popBox;
 
       ///允许无线延伸
       bool? isLimit = boxSize?.limitSize;
@@ -445,7 +443,7 @@ class InputExtendState<T> extends State<InputExtend> {
 
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     var size = renderBox.size;
-    var popBox = widget.popConstraintBox;
+    var popBox = widget.popBox;
     return OverlayEntry(
         builder: (context) => Stack(
           children: [
@@ -657,15 +655,4 @@ class InputExtendState<T> extends State<InputExtend> {
       setState(() {});
     }
   }
-}
-
-///约束浮层的条件
-class PopConstraintBox {
-  double? width;
-  double? height;
-
-  ///limitSize 为真，则约束宽度无效，可无限延伸
-  final bool limitSize;
-
-  PopConstraintBox({this.width, this.height, this.limitSize = false});
 }

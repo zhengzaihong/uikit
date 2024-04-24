@@ -1,13 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_uikit_forzzh/edit_text/style/clear_style_input.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/normal_style_input.dart';
-import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
-
-import 'base/input_style_factory.dart';
+import '../uikitlib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -68,6 +63,8 @@ import 'base/input_style_factory.dart';
 typedef BuildInputDecorationStyle = InputDecoration Function(
     InputTextState state);
 
+typedef BuildPop<T> = Widget Function(BuildContext context, InputTextState controller);
+
 class InputText extends StatefulWidget {
   final Widget? title;
   ///设置为真 ，边框样式将取下
@@ -91,6 +88,22 @@ class InputText extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
+
+  ///是否是有焦点即显示 pop
+  final bool onFocusShowPop;
+  ///点击非遮罩层是否关闭
+  final bool barrierDismissible;
+  final BuildPop? buildPop;
+
+  final PopBox? popBox;
+  final double selectPopMarginTop;
+  final double? popElevation;
+  final Color? popColor;
+  final Color? popShadowColor;
+  final Color? popSurfaceTintColor;
+  final TextStyle? popChildTextStyle;
+  final BorderRadiusGeometry? popBorderRadius;
+  final ShapeBorder? popShape;
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -218,6 +231,20 @@ class InputText extends StatefulWidget {
         this.padding,
         this.margin,
         this.alignment = Alignment.centerLeft,
+
+        this.buildPop,
+        this.onFocusShowPop = false,
+        this.barrierDismissible = true,
+        this.popBox,
+        this.selectPopMarginTop = 0,
+        this.popElevation = 0.0,
+        this.popColor = Colors.transparent,
+        this.popShadowColor,
+        this.popSurfaceTintColor,
+        this.popChildTextStyle,
+        this.popBorderRadius,
+        this.popShape,
+
         required this.controller,
         this.cursorEnd = false,
         this.focusNode,
@@ -331,14 +358,35 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   bool _hasContent = false;
 
+  ///关联输入框，处理在组价在列表中跟随滚动
+  final LayerLink _layerLink = LayerLink();
+
+  OverlayEntry? _overlayEntry;
+
+  late FocusNode _focusNode;
+
   @override
   void initState() {
     super.initState();
+    _focusNode = widget.focusNode ?? FocusNode();
+    if(widget.onFocusShowPop && widget.buildPop!=null){
+      _focusNode.addListener(() {
+         if(_focusNode.hasFocus){
+           _addPop();
+         }
+      });
+    }
     if (StringUtils.isEmpty(widget.controller?.text)) {
       _hasContent = false;
     } else {
       _hasContent = true;
     }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -351,31 +399,36 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        widget.title ?? const SizedBox.shrink(),
-        widget.noBorder
-            ? Theme(
-            data: ThemeData(
-              primaryColor: Colors.transparent,
-              inputDecorationTheme: InputDecorationTheme(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(widget.bgRadius)),
-                      borderSide: const BorderSide(color: Colors.transparent)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(widget.bgRadius)),
-                      borderSide: const BorderSide(color: Colors.transparent))),
-            ),
-            child: widget.enableForm ? _createInputForm() : _createInput())
-            : widget.enableForm
-            ? _createInputForm()
-            : _createInput(),
-      ],
+
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          widget.title ?? const SizedBox.shrink(),
+          widget.noBorder
+              ? Theme(
+              data: ThemeData(
+                primaryColor: Colors.transparent,
+                inputDecorationTheme: InputDecorationTheme(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(widget.bgRadius)),
+                        borderSide: const BorderSide(color: Colors.transparent)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(widget.bgRadius)),
+                        borderSide: const BorderSide(color: Colors.transparent))),
+              ),
+              child: widget.enableForm ? _createInputForm() : _createInput())
+              : widget.enableForm
+              ? _createInputForm()
+              : _createInput(),
+        ],
+      ),
     );
+
   }
 
   Widget _createInput() {
@@ -717,6 +770,95 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       );
     }
     return widget.decoration!;
+  }
+
+
+
+  // ignore: unused_element
+  List<double?> _setPopSize() {
+    List<double?> sizeInfo = [];
+    if (widget.popBox != null) {
+      var boxSize = widget.popBox;
+
+      ///允许无线延伸
+      bool? isLimit = boxSize?.limitSize;
+      if (null != isLimit && isLimit) {
+        ///不限制宽高
+        sizeInfo.add(null);
+        sizeInfo.add(null);
+      } else {
+        ///设置约束条件
+        sizeInfo.add(boxSize?.width);
+        sizeInfo.add(boxSize?.height);
+      }
+    }
+    return sizeInfo;
+  }
+
+  ///创建搜索弹窗
+  OverlayEntry _createOverlayEntry() {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    var size = renderBox.size;
+    var popBox = widget.popBox;
+    return OverlayEntry(
+        builder: (context) => Stack(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: widget.barrierDismissible
+                  ? () {
+                _removePop();
+              } : null,
+              child: const SizedBox(
+                height: double.infinity,
+                width: double.infinity,
+              ),
+            ),
+            Positioned(
+              width: popBox == null
+                  ? size.width
+                  : popBox.limitSize
+                  ? null
+                  : popBox.width,
+              height: popBox?.height,
+              child: CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                offset: Offset(0.0, size.height + widget.selectPopMarginTop),
+                child: Material(
+                  elevation: widget.popElevation!,
+                  shadowColor: widget.popShadowColor,
+                  color: widget.popColor,
+                  shape: widget.popShape,
+                  borderRadius: widget.popBorderRadius,
+                  surfaceTintColor: widget.popSurfaceTintColor,
+                  textStyle: widget.popChildTextStyle,
+                  child:  widget.buildPop?.call(context, this),
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  void _addPop(){
+    if(null==_overlayEntry){
+      _overlayEntry = _createOverlayEntry();
+      Overlay.of(context)?.insert(_overlayEntry!);
+    }
+  }
+  void _removePop(){
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+  void notyOverlayDataChange() {
+    _overlayEntry?.markNeedsBuild();
+  }
+
+  void notyListUiChange() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _refresh(String text){

@@ -69,6 +69,36 @@ class _InputExampleState extends State<InputExample> {
           ),
 
 
+
+
+          InputText(
+            width: 300,
+            margin: const EdgeInsets.only(top: 30),
+            labelText: "常规输入框,此输入框不参与校验",
+            hintText: "请输入昵称",
+            inline: InlineStyle.normalStyle,
+            fillColor: Colors.grey.withAlpha(40),
+            cursorEnd: true,
+            suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
+            onChanged: (msg){
+              print("----------msg:$msg");
+            },
+            controller: TextEditingController(),
+            onFocusShowPop: true,
+            popBox: PopBox(
+              height: 300
+            ),
+            buildPop: (context,innerState){
+
+              return Container(
+                width: 200,
+                height: 300,
+                color: Colors.red,
+              );
+            },
+          ),
+
+
           Form(
               key: _formKey,
               onChanged: () {
