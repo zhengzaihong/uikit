@@ -60,10 +60,16 @@ import '../uikitlib.dart';
 //           //   contentPadding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
 //           // ),
 //         )
+
+
 typedef BuildInputDecorationStyle = InputDecoration Function(
     InputTextState state);
 
+/// 构建弹出层
 typedef BuildPop<T> = Widget Function(BuildContext context, InputTextState controller);
+
+///焦点监听
+typedef FocusListener<T> = Widget Function(BuildContext context, InputTextState controller,bool focus);
 
 class InputText extends StatefulWidget {
   final Widget? title;
@@ -91,12 +97,12 @@ class InputText extends StatefulWidget {
 
   ///是否是有焦点即显示 pop
   final bool onFocusShowPop;
-  ///点击非遮罩层是否关闭
-  final bool barrierDismissible;
+  ///焦点监听
+  final FocusListener? focusListener;
   final BuildPop? buildPop;
 
   final PopBox? popBox;
-  final double selectPopMarginTop;
+  final double marginTop;
   final double? popElevation;
   final Color? popColor;
   final Color? popShadowColor;
@@ -234,9 +240,9 @@ class InputText extends StatefulWidget {
 
         this.buildPop,
         this.onFocusShowPop = false,
-        this.barrierDismissible = true,
+        this.focusListener,
         this.popBox,
-        this.selectPopMarginTop = 0,
+        this.marginTop = 0,
         this.popElevation = 0.0,
         this.popColor = Colors.transparent,
         this.popShadowColor,
@@ -369,18 +375,19 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
   void initState() {
     super.initState();
     _focusNode = widget.focusNode ?? FocusNode();
-    if(widget.onFocusShowPop && widget.buildPop!=null){
-      _focusNode.addListener(() {
-         if(_focusNode.hasFocus){
-           _addPop();
-         }
-      });
-    }
-    if (StringUtils.isEmpty(widget.controller?.text)) {
-      _hasContent = false;
-    } else {
-      _hasContent = true;
-    }
+    _focusNode.addListener(() {
+      final hasFocus = _focusNode.hasFocus;
+      widget.focusListener?.call(context, this,hasFocus);
+      if(hasFocus && widget.buildPop!=null){
+        addPop();
+        return;
+      }
+      if(!hasFocus){
+        removePop();
+        return;
+      }
+    });
+    _hasContent = StringUtils.isNotEmpty(widget.controller?.text);
   }
 
   @override
@@ -443,7 +450,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
               width: widget.width,
               child: TextField(
                 controller: widget.controller,
-                focusNode: widget.focusNode,
+                focusNode:_focusNode,
                 style: widget.style,
                 scrollController: widget.scrollController,
                 keyboardType: widget.keyboardType,
@@ -503,7 +510,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       width: widget.width,
       child:TextField(
         controller: widget.controller,
-        focusNode: widget.focusNode,
+        focusNode:_focusNode,
         style: widget.style,
         scrollController: widget.scrollController,
         keyboardType: widget.keyboardType,
@@ -568,7 +575,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
               // width: widget.width,
               child: TextFormField(
                 controller: widget.controller,
-                focusNode: widget.focusNode,
+                focusNode:_focusNode,
                 style: widget.style,
                 scrollController: widget.scrollController,
                 keyboardType: widget.keyboardType,
@@ -634,7 +641,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       width: widget.width,
       child: TextFormField(
         controller: widget.controller,
-        focusNode: widget.focusNode,
+        focusNode:_focusNode,
         style: widget.style,
         scrollController: widget.scrollController,
         keyboardType: widget.keyboardType,
@@ -805,10 +812,15 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
           children: [
             GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: widget.barrierDismissible
-                  ? () {
-                _removePop();
-              } : null,
+              onTap: (){
+                if(_focusNode.hasFocus){
+                  _focusNode.unfocus();
+                  return;
+                }
+                if(!_focusNode.hasFocus){
+                  removePop();
+                }
+              },
               child: const SizedBox(
                 height: double.infinity,
                 width: double.infinity,
@@ -824,7 +836,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
               child: CompositedTransformFollower(
                 link: _layerLink,
                 showWhenUnlinked: false,
-                offset: Offset(0.0, size.height + widget.selectPopMarginTop),
+                offset: Offset(0.0, size.height + widget.marginTop),
                 child: Material(
                   elevation: widget.popElevation!,
                   shadowColor: widget.popShadowColor,
@@ -841,13 +853,13 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         ));
   }
 
-  void _addPop(){
+  void addPop(){
     if(null==_overlayEntry){
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context)?.insert(_overlayEntry!);
     }
   }
-  void _removePop(){
+  void removePop(){
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
@@ -874,8 +886,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     setState(() {
       widget.controller?.text = "";
       widget.onChanged?.call("");
-      // widget.onSubmitted?.call("");
-      // widget.onEditingComplete?.call();
       _hasContent = false;
     });
   }
