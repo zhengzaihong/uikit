@@ -382,10 +382,10 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         addPop();
         return;
       }
-      if(!hasFocus){
-        removePop();
-        return;
-      }
+      // if(!hasFocus){
+      //   removePop();
+      //   return;
+      // }
     });
     _hasContent = StringUtils.isNotEmpty(widget.controller?.text);
   }
