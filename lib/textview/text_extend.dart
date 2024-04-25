@@ -72,10 +72,19 @@ class TextExtend extends StatefulWidget {
   final BuilderChild? builder;
   final CustomChildLayout? customChildLayout;
 
+
+  final TextAlign? textAlign;
+  final TextDirection? textDirection;
+  final Locale? locale;
+  final bool? softWrap;
+  final TextOverflow? overflow;
+  final int? maxLines;
+  final String? semanticsLabel;
+  final TextWidthBasis? textWidthBasis;
+
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
   final CrossAxisAlignment crossAxisAlignment;
-  final TextDirection? textDirection;
   final VerticalDirection verticalDirection;
   final TextBaseline? textBaseline;
 
@@ -151,6 +160,15 @@ class TextExtend extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
+
+    this.locale,
+    this.softWrap,
+    this.overflow,
+    this.maxLines,
+    this.semanticsLabel,
+    this.textWidthBasis,
+    this.textAlign,
+
     this.textBaseline,
     this.alignment,
     this.padding,
@@ -209,17 +227,34 @@ class TextExtend extends StatefulWidget {
 class _TextExtendState extends State<TextExtend> {
   bool _onHover = false;
 
+
   @override
   Widget build(BuildContext context) {
     final child = widget.isSelectable
         ? SelectableText(
       widget.text ?? '',
+      textAlign: widget.textAlign,
+      textDirection: widget.textDirection,
+      // locale: widget.locale,
+      // softWrap: widget.softWrap,
+      // overflow: widget.overflow,
+      semanticsLabel: widget.semanticsLabel,
+      textWidthBasis: widget.textWidthBasis,
+      maxLines: widget.maxLines,
       style: _onHover
           ? widget.onHoverStyle ?? widget.style
           : widget.style,
     )
         : Text(
       widget.text ?? '',
+      textAlign: widget.textAlign,
+      textDirection: widget.textDirection,
+      locale: widget.locale,
+      softWrap: widget.softWrap,
+      overflow: widget.overflow,
+      semanticsLabel: widget.semanticsLabel,
+      textWidthBasis: widget.textWidthBasis,
+      maxLines: widget.maxLines,
       style: _onHover
           ? widget.onHoverStyle ?? widget.style
           : widget.style,
@@ -301,7 +336,7 @@ class _TextExtendState extends State<TextExtend> {
                 (_onHover ? widget.onHoverSuffix : widget.suffix) ??
                     const SizedBox(),
               ],
-            ) : widget.customChildLayout == null ? child : widget.customChildLayout!(
+            ) : widget.customChildLayout!(
                 context,
                 (_onHover ? widget.onHoverPrefix : widget.prefix) ??
                     const SizedBox(),
