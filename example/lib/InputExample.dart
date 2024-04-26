@@ -81,7 +81,6 @@ class _InputExampleState extends State<InputExample> {
             inline: InlineStyle.normalStyle,
             fillColor: Colors.grey.withAlpha(40),
             cursorEnd: true,
-            // barrierDismissible: false,
             suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
             onChanged: (msg){
               Future.delayed(const Duration(milliseconds: 500),(){
@@ -93,9 +92,10 @@ class _InputExampleState extends State<InputExample> {
             marginTop: 5,
             popBox: PopBox(
               // height: 300,
-              width: 300
+              width: 300,
             ),
             buildPop: (context,innerState){
+              ///flutter 原生方式刷新，或者你使用的状态管理刷新
               return ValueListenableBuilder<String>(
                   valueListenable: valueNotifier,
                   builder: (context,value,child){

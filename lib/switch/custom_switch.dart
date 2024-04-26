@@ -1,14 +1,14 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'switch_lib.dart';
 
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
 /// create_date: 2022/11/17
 /// create_time: 17:44
-/// describe: 开关按钮组件
+/// describe: 开关按钮组件, 支持ios风格和android风格
+/// 需自定义各种样式和效果请使用提供的 [ImageSwitch] 组件
 /// eg:
 //   CustomSwitch(
 //     isOpen: false,

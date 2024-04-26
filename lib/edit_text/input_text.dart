@@ -61,6 +61,81 @@ import '../uikitlib.dart';
 //           // ),
 //         )
 
+/// 自定义输入框内容跟随浮窗显示基础示例:
+/// 实现 buildPop 完成自定义样式
+//      InputText(
+//             width: 300,
+//             margin: const EdgeInsets.only(top: 1),
+//             hintText: "请输入搜索歌曲名",
+//             inline: InlineStyle.normalStyle,
+//             fillColor: Colors.grey.withAlpha(40),
+//             cursorEnd: true,
+//             suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
+//             onChanged: (msg){
+//               Future.delayed(const Duration(milliseconds: 500),(){
+//                 valueNotifier.value= "输入搜索需求：$msg";
+//               });
+//             },
+//             controller: TextEditingController(),
+//             onFocusShowPop: true,
+//             marginTop: 5,
+//             popBox: PopBox(
+//               // height: 300,
+//               width: 300,
+//             ),
+//             buildPop: (context,innerState){
+//               ///flutter 原生方式刷新，或者你使用的状态管理刷新
+//               return ValueListenableBuilder<String>(
+//                   valueListenable: valueNotifier,
+//                   builder: (context,value,child){
+//                     return Container(
+//                       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+//                       decoration: BoxDecoration(
+//                         color: Colors.white,
+//                         borderRadius: BorderRadius.circular(10),
+//                       ),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(value,style: const TextStyle(color: Colors.black,fontSize: 14),),
+//                           const SizedBox(height: 10,),
+//
+//                           const Text('歌手：',style: TextStyle(color: Colors.black,fontSize: 16),),
+//                           const SizedBox(height: 10,),
+//                           Wrap(
+//                             runSpacing: 10,
+//                             spacing: 10,
+//                             children: [
+//                               ...'张国荣,王力宏,周杰伦,林俊杰,陈奕迅,薛之谦,周笔畅,刘德华'.split(',').map((e) =>  ActionChip(
+//                                 backgroundColor: Colors.grey.withOpacity(0.1),
+//                                 label: Text(e),
+//                                 onPressed: () {
+//                                 },
+//                               )).toList()
+//                             ],
+//                           ),
+//                           const SizedBox(height: 20,),
+//                           const Text('热门歌曲：',style: TextStyle(color: Colors.black,fontSize: 16),),
+//                           const SizedBox(height: 10,),
+//                           Wrap(
+//                             runSpacing: 10,
+//                             spacing: 10,
+//                             children: [
+//                               ...'七里香,青花,白色风车,画沙,一个人,一千个彩虹'.split(',').map((e) =>  ActionChip(
+//                                 backgroundColor: Colors.grey.withOpacity(0.1),
+//                                 label: Text(e),
+//                                 onPressed: () {
+//                                 },
+//                               )).toList()
+//                             ],
+//                           ),
+//
+//                         ],
+//                       ),
+//                     );
+//                   });
+//             },
+//           ),
 
 typedef BuildInputDecorationStyle = InputDecoration Function(
     InputTextState state);
@@ -71,6 +146,8 @@ typedef BuildPop<T> = Widget Function(BuildContext context, InputTextState contr
 ///焦点监听
 typedef FocusListener<T> = Widget Function(BuildContext context, InputTextState controller,bool focus);
 
+/// 如是需要再输入框中显示选中项后的项内容，可使用提供的 [InputExtend] 组件实现
+///
 class InputText extends StatefulWidget {
   final Widget? title;
   ///设置为真 ，边框样式将取下
