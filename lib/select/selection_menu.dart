@@ -8,7 +8,47 @@ import 'package:flutter/rendering.dart';
 /// create_date: 2024-02-01
 /// create_time: 14:58
 /// describe: 极简系统下拉框，可高度自定义，且规避系统组件的使用麻烦，SelectionMenu不关心数据。
-///
+/// eg:
+//     SelectionMenu(
+//         popWidth: 200,
+//         buttonBuilder: (show){
+//           return Container(
+//             height: 40,
+//             width: 200,
+//             alignment: Alignment.center,
+//             padding: const EdgeInsets.only(left: 10, right: 10),
+//             decoration: BoxDecoration(
+//               color: Colors.grey.withOpacity(0.2),
+//               borderRadius: BorderRadius.circular(10),
+//             ),
+//             child: const Text("请选择"),
+//           );
+//         },
+//         selectorBuilder: (context) {
+//           return Container(
+//             height: 200,
+//             margin: const EdgeInsets.only(top: 3),
+//             padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+//             decoration:  BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(5),
+//             ),
+//             child: ListView.separated(
+//               itemCount: 20,
+//               itemBuilder: (context, index) {
+//                 return GestureDetector(
+//                   onTap: (){
+//                     ///todo update ui ...
+//                   },
+//                   child: Text("item $index",style: TextStyle(fontSize: 16,color: Colors.black),),
+//                 );
+//               }, separatorBuilder: (BuildContext context, int index) {
+//               return const Divider();
+//             },),
+//           );
+//         }
+//     )
+
 final RouteObserver<ModalRoute<void>> dropDownButtonRouteObserver =
     RouteObserver<ModalRoute<void>>();
 
