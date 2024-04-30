@@ -2,8 +2,7 @@ library flutter_uikit_forzzh;
 
 /// UI package  界面组件
 export 'button/button_lib.dart';
-export 'bubble/bubble.dart';
-export 'bubble/newbubble/bubble_lib.dart';
+export 'bubble/bubble_lib.dart';
 export 'calendar/calendar_lib.dart';
 export 'checkbox/custom_checkbox.dart';
 export 'often/time_view.dart';

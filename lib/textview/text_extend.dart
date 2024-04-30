@@ -88,6 +88,7 @@ class TextExtend extends StatefulWidget {
   final VerticalDirection verticalDirection;
   final TextBaseline? textBaseline;
 
+  //alignment: Alignment.center 需要  mainAxisSize: MainAxisSize.min,
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
   final Color? color;

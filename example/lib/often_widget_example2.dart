@@ -52,6 +52,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   Stack(
                     children: [
                       Align(
@@ -362,9 +363,6 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                               ),
                             ),
 
-
-
-
                             const SizedBox(height: 20),
                             GestureDetector(
                               behavior: HitTestBehavior.deferToChild,
@@ -415,6 +413,17 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                 ],
                               ),
                             ),
+
+                            const SizedBox(height: 20),
+
+                            ZTooltip(
+                                tip: Container(
+                                  width: 200,
+                                  height: 50,
+                                  color: Colors.redAccent,
+                                ),
+                                enabledOnHover: true,
+                                child: Text('查看')),
 
 
                           ],

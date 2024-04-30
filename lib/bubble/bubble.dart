@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/bubble/bubble_arrow_direction.dart';
 
-enum BubbleArrowDirection { top, bottom, right, left, topLeft }
 
 
 ///
