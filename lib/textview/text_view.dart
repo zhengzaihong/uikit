@@ -115,6 +115,17 @@ class _TextViewState extends State<TextView> {
   }
 
   Widget createButtonStyle() {
+    final child =  Text(widget.title,
+        maxLines: widget.maxLines,
+        semanticsLabel: widget.semanticsLabel,
+        strutStyle: widget.strutStyle,
+        textAlign: widget.textAlign,
+        textDirection: widget.textDirection,
+        locale: widget.locale,
+        softWrap: widget.softWrap,
+        overflow:widget.overflow,
+        textScaleFactor: widget.textScaleFactor,
+        style: style);
     if (iconWidget != null) {
       switch (widget.drawablePosition) {
         case PositionEnum.drawableLeft:
@@ -126,17 +137,7 @@ class _TextViewState extends State<TextView> {
                 children: [
                   iconWidget!,
                   SizedBox(width: widget.drawPadding),
-                  Text(widget.title,
-                      maxLines: widget.maxLines,
-                      semanticsLabel: widget.semanticsLabel,
-                      strutStyle: widget.strutStyle,
-                      textAlign: widget.textAlign,
-                      textDirection: widget.textDirection,
-                      locale: widget.locale,
-                      softWrap: widget.softWrap,
-                      overflow:widget.overflow,
-                      textScaleFactor: widget.textScaleFactor,
-                      style: style)
+                  child
                 ]);
           }
         case PositionEnum.drawableRight:
@@ -146,17 +147,7 @@ class _TextViewState extends State<TextView> {
                 crossAxisAlignment: widget.crossAxisAlignment,
                 mainAxisAlignment: widget.mainAxisAlignment,
                 children: [
-                  Text(widget.title,
-                      maxLines: widget.maxLines,
-                      semanticsLabel: widget.semanticsLabel,
-                      strutStyle: widget.strutStyle,
-                      textAlign: widget.textAlign,
-                      textDirection: widget.textDirection,
-                      locale: widget.locale,
-                      softWrap: widget.softWrap,
-                      overflow:widget.overflow,
-                      textScaleFactor: widget.textScaleFactor,
-                      style: style),
+                  child,
                   SizedBox(width: widget.drawPadding),
                   iconWidget!,
                 ]);
@@ -170,17 +161,7 @@ class _TextViewState extends State<TextView> {
               children: [
                 iconWidget!,
                 SizedBox(height: widget.drawPadding),
-                Text(widget.title,
-                    maxLines: widget.maxLines,
-                    semanticsLabel: widget.semanticsLabel,
-                    strutStyle: widget.strutStyle,
-                    textAlign: widget.textAlign,
-                    textDirection: widget.textDirection,
-                    locale: widget.locale,
-                    softWrap: widget.softWrap,
-                    overflow:widget.overflow,
-                    textScaleFactor: widget.textScaleFactor,
-                    style: style)
+                child
               ],
             );
           }
@@ -191,17 +172,7 @@ class _TextViewState extends State<TextView> {
               crossAxisAlignment: widget.crossAxisAlignment,
               mainAxisAlignment: widget.mainAxisAlignment,
               children: [
-                Text(widget.title,
-                    maxLines: widget.maxLines,
-                    semanticsLabel: widget.semanticsLabel,
-                    strutStyle: widget.strutStyle,
-                    textAlign: widget.textAlign,
-                    textDirection: widget.textDirection,
-                    locale: widget.locale,
-                    softWrap: widget.softWrap,
-                    overflow:widget.overflow,
-                    textScaleFactor: widget.textScaleFactor,
-                    style: style),
+                child,
                 SizedBox(height: widget.drawPadding),
                 iconWidget!
               ],
@@ -209,6 +180,6 @@ class _TextViewState extends State<TextView> {
           }
       }
     }
-    return Text(widget.title, style: style);
+    return child;
   }
 }

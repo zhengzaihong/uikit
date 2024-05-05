@@ -57,6 +57,16 @@ typedef DropDownPopCreated = void Function();
 typedef DropDownPopShow = void Function();
 typedef DropDownPopDismiss = void Function();
 
+///弹出层相对下拉框的对齐方式
+enum AlignType {
+  /// 左对齐
+  left,
+  /// 居中
+  center,
+  /// 右对齐
+  right,
+}
+
 class SelectionMenu extends StatefulWidget {
   /// 下拉框构建器
   final DropDownButtonBuilder? buttonBuilder;
@@ -73,17 +83,19 @@ class SelectionMenu extends StatefulWidget {
   /// 是否开启鼠标悬浮
   final bool enableOnHover;
 
-  ///是否是居中模式 默认左对齐
-  final bool popCenter;
-
   /// 下拉框宽度 弹窗部分
   final double? popWidth;
 
   /// 下拉框样式构件 弹出部分
   final WidgetBuilder selectorBuilder;
 
+
+  /// Material 背景样式
+  final BorderRadiusGeometry? materialBorderRadius;
+  final Color? color;
+  final ShapeBorder? shape;
   /// 阴影
-  final double? elevation;
+  final double elevation;
 
   /// 阴影颜色
   final Color? shadowColor;
@@ -95,6 +107,9 @@ class SelectionMenu extends StatefulWidget {
 
   /// 动画时间
   final Duration transitionDuration;
+
+  ///对齐方式
+  final AlignType alignType;
 
   final GestureTapCallback? onDoubleTap;
   final GestureLongPressCallback? onLongPress;
@@ -128,13 +143,16 @@ class SelectionMenu extends StatefulWidget {
       this.onDismiss,
       this.enableOnHover = false,
       this.popWidth,
-      this.popCenter = false,
-      this.elevation,
+      this.materialBorderRadius,
+      this.color = Colors.transparent,
+      this.shape,
+      this.elevation = 0.0,
       this.shadowColor,
       this.barrierLabel,
       this.barrierColor,
       this.barrierDismissible = true,
       this.transitionDuration = const Duration(milliseconds: 200),
+      this.alignType = AlignType.left,
       this.onDoubleTap,
       this.onLongPress,
       this.onTapDown,
@@ -251,7 +269,7 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
 
     Offset offset = Offset(0.0, button.size.height);
     double centerX = 0;
-    if (widget.popWidth != null && widget.popCenter) {
+    if (widget.popWidth != null && widget.alignType == AlignType.center) {
       centerX = widget.popWidth! / 2 - button.size.width / 2;
       if(centerX < 0) centerX==0;
    }
@@ -259,11 +277,17 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
     RelativeRect position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(offset, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero) + offset,
+        button.localToGlobal(button.size.bottomLeft(Offset.zero) + offset,
             ancestor: overlay),
       ),
-      Rect.fromPoints(
-        Offset(widget.popCenter?centerX:0, 0),
+      widget.alignType == AlignType.right?Rect.fromPoints(
+        Offset(-(button.size.width-widget.popWidth!), 0),
+        Offset(widget.popWidth!, 0),
+      ): widget.alignType == AlignType.center?Rect.fromPoints(
+        Offset(centerX, 0),
+        Offset(widget.popWidth!, 0),
+      ): Rect.fromPoints(
+        const Offset(0, 0),
         Offset(widget.popWidth!, 0),
       ),
     );
@@ -273,6 +297,9 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
         popWidth: widget.popWidth,
         builder: widget.selectorBuilder,
         elevation: widget.elevation,
+        color: widget.color,
+        shape: widget.shape,
+        materialBorderRadius: widget.materialBorderRadius,
         shadowColor: widget.shadowColor,
         barrierColor: widget.barrierColor,
         barrierDismissible: widget.barrierDismissible,
@@ -285,8 +312,14 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
 class _CustomPopupRoute<T> extends PopupRoute<T> {
   final WidgetBuilder builder;
   final RelativeRect position;
-  final double? elevation;
+  final double elevation;
   final Color? shadowColor;
+
+  /// Material 背景样式
+  final BorderRadiusGeometry? materialBorderRadius;
+  final Color? color;
+  final ShapeBorder? shape;
+
   @override
   final String? barrierLabel;
   @override
@@ -295,18 +328,22 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
   final bool barrierDismissible;
   @override
   final Duration transitionDuration;
+
   final double? popWidth;
 
   _CustomPopupRoute({
     required this.builder,
     required this.position,
     required this.barrierLabel,
-    this.elevation,
+    this.elevation = 0.0,
     this.shadowColor,
     this.barrierColor,
     this.barrierDismissible = true,
     this.transitionDuration = const Duration(milliseconds: 200),
     this.popWidth,
+    this.materialBorderRadius,
+    this.color,
+    this.shape,
   });
 
   @override
@@ -327,9 +364,14 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
           animation: animation,
           builder: (context, child) {
             return Material(
+                color: color,
+                elevation: elevation,
+                shadowColor: shadowColor,
+                shape: shape,
+                borderRadius: materialBorderRadius,
                 child: _HeightFactorBox(
-              heightFactor: heightFactorTween.evaluate(animation),
-              child: child,
+                heightFactor: heightFactorTween.evaluate(animation),
+                child: child,
             ));
           },
           child: SizedBox(

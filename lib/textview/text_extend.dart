@@ -61,7 +61,7 @@ class TextExtend extends StatefulWidget {
   final TextStyle? style;
   final TextStyle? onHoverStyle;
   final String? text;
-  final bool enabledOnHover;
+  final bool canOnHover;
   final bool isSelectable;
   final Widget? prefix;
   final Widget? suffix;
@@ -144,7 +144,7 @@ class TextExtend extends StatefulWidget {
 
   const TextExtend({this.text,
     this.onHover,
-    this.enabledOnHover = true,
+    this.canOnHover = true,
     this.style,
     this.onHoverStyle,
     this.isSelectable = false,
@@ -264,7 +264,7 @@ class _TextExtendState extends State<TextExtend> {
     return InkWell(
       onHover: (onHover) {
         widget.onHover?.call(onHover);
-        if (widget.enabledOnHover) {
+        if (widget.canOnHover) {
           setState(() {
             _onHover = onHover;
           });

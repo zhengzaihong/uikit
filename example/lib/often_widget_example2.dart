@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
-import 'package:uikit_example/utils/font_utils.dart';
 
 import 'bean/tab_type_bean.dart';
+import 'utils/toast.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -53,8 +53,109 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
+                  const SizedBox(height: 20),
+
+                  ZTooltip(
+                      color: Colors.black54,
+                      width: 220,
+                      height: 60,
+                      fixedTip: true,
+                      duration: const Duration(
+                          milliseconds: 500
+                      ),
+                      length: 100,
+                      buildTip: (tip) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+                        child: Row(
+                          children: [
+                            ...['翻译','查询','下载','取消']
+                                .map((e) =>GestureDetector(
+                              onTap: (){
+
+                                RenderBox renderBox = tip.context.findRenderObject() as RenderBox;
+                                final offset = renderBox.localToGlobal(Offset.zero);
+                                Toast.showCustomPoint(
+                                buildToastPoint: (context,style){
+                                  return Positioned(
+                                    child:style.call(context,'点击了$e'),
+                                    left: offset.dx, top: offset.dy+60,);
+                                });
+
+                                tip.close();
+                              },
+                              child:  Row(
+                                children: [
+                                  Text(e,style: TextStyle(color: Colors.white,fontSize: 16)),
+                                  Visibility(
+                                      visible: e != '取消',
+                                      child: Container(
+                                        margin: EdgeInsets.only(left: 10,top: 4,right: 10),
+                                        color: Colors.white,
+                                        height: 15,
+                                        width: 1,
+                                      ))
+                                ],
+                              ),
+                            )).toList(),
+                          ],
+                        ),
+                      ),
+                      //需要自定义位置可实现该方法。
+                      layout: (zTooltip,offset,child,size){
+                        return Positioned(
+                            left: offset.dx,
+                            top: offset.dy+size.height,
+                            child: child);
+                      },
+                      child: TextExtend(
+                        text: "自定义Tooltip组件",
+                        onTap: (){
+
+                        },
+                        mainAxisSize: MainAxisSize.min,
+                        isSelectable: false,
+                        padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                        onHoverPadding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                        borderRadius: BorderRadius.circular(50),
+                        splashColor: Colors.purple,
+                        highlightColor: Colors.purple,
+                        prefix:const Icon(Icons.access_alarm) ,
+                        onHoverPrefix: const Icon(Icons.access_alarm),
+                        onHoverSuffix:const Icon(Icons.account_circle,color: Colors.blue),
+                        suffix: const Icon(Icons.account_circle),
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                color: Colors.purple,
+                                width: 1
+                            )
+                        ),
+                        onHoverDecoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                                color: Colors.white,
+                                width: 1
+                            )
+                        ),
+                        style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold
+                        ),
+                        onHoverStyle: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold
+                        ),
+                      )
+                    // child: const Text('自定义Tooltip组件')
+                  ),
+
                   Stack(
                     children: [
+
                       Align(
                         alignment: Alignment.center,
                         child: Column(
@@ -413,17 +514,6 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                 ],
                               ),
                             ),
-
-                            const SizedBox(height: 20),
-
-                            ZTooltip(
-                                tip: Container(
-                                  width: 200,
-                                  height: 50,
-                                  color: Colors.redAccent,
-                                ),
-                                enabledOnHover: true,
-                                child: Text('查看')),
 
 
                           ],

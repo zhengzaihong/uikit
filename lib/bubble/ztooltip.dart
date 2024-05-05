@@ -2,11 +2,133 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/bubble/bubble_arrow_direction.dart';
 import 'bubble.dart';
 
+///
+/// create_user: zhengzaihong
+/// email:1096877329@qq.com
+/// create_date: 2024-04-30
+/// create_time: 14:37
+/// describe: 自定义任何可响应的提示组件
+///eg:
+//        ZTooltip(
+//           color: Colors.black54,
+//           width: 220,
+//           height: 60,
+//           fixedTip: true,
+//           duration: const Duration(
+//               milliseconds: 500
+//           ),
+//           length: 100,
+//           buildTip: (tip) => Padding(
+//             padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+//             child: Row(
+//               children: [
+//                 ...['翻译','查询','下载','取消']
+//                     .map((e) =>GestureDetector(
+//                   onTap: (){
+//
+//                     RenderBox renderBox = tip.context.findRenderObject() as RenderBox;
+//                     final offset = renderBox.localToGlobal(Offset.zero);
+//                     Toast.showCustomPoint(
+//                     buildToastPoint: (context,style){
+//                       return Positioned(
+//                         child:style.call(context,'点击了$e'),
+//                         left: offset.dx, top: offset.dy+60,);
+//                     });
+//
+//                     tip.close();
+//                   },
+//                   child:  Row(
+//                     children: [
+//                       Text(e,style: TextStyle(color: Colors.white,fontSize: 16)),
+//                       Visibility(
+//                           visible: e != '取消',
+//                           child: Container(
+//                             margin: EdgeInsets.only(left: 10,top: 4,right: 10),
+//                             color: Colors.white,
+//                             height: 15,
+//                             width: 1,
+//                           ))
+//                     ],
+//                   ),
+//                 )).toList(),
+//               ],
+//             ),
+//           ),
+//           //需要自定义位置可实现该方法。
+//           layout: (zTooltip,offset,child,size){
+//             return Positioned(
+//                 left: offset.dx,
+//                 top: offset.dy+size.height,
+//                 child: child);
+//           },
+//         child: const Text('自定义Tooltip组件')
+//       ),
+
+
+typedef BuildTip = Widget Function(ZTooltipState zTooltip);
+
+// 自定义 tip的显示位置
+// @param zTooltip   ZTooltip组件实例
+// @param offset  组件相对于父组件的偏移
+// @param child   tip组件
+// @param parentSize 父组件大小
+typedef TipViewLayout = Positioned Function(ZTooltipState zTooltip, Offset offset, Widget child,Size parentSize);
+
 class ZTooltip extends StatefulWidget {
 
-  final Widget? tip;
+  //提示窗组件外部自定义
+  final BuildTip? buildTip;
+
+  //tip组件是否固定
+  final bool fixedTip;
+
+  //鼠标离开多少时间后消失tip
+  final Duration duration;
+
+  //可自定义显示位置
+  final TipViewLayout? layout;
+
+  //正常显示的组件
   final Widget child;
-  final bool enabledOnHover;
+
+  //是否激活鼠标响应 tip
+  final bool canOnHover;
+
+  // tip尖角位置
+  final BubbleArrowDirection? position;
+
+  // tip 尖角高度
+  final double arrHeight;
+
+  // tip尖角角度
+  final double arrAngle;
+
+  // tip圆角半径
+  final double arrowRadius;
+
+  // tip宽度
+  final double? width;
+
+  // tip高度
+  final double? height;
+
+  // tip边距
+  final double length;
+
+  // tip颜色
+  final Color? color;
+
+  // tip边框颜色
+  final Color borderColor;
+
+  // tip边框宽度
+  final double strokeWidth;
+
+  // tip填充样式
+  final PaintingStyle style;
+
+  // 子 Widget 与起泡间距
+  final double innerPadding;
 
   final GestureTapCallback? onTap;
   final GestureTapDownCallback? onTapDown;
@@ -40,74 +162,97 @@ class ZTooltip extends StatefulWidget {
   final FocusNode? focusNode;
   final bool canRequestFocus;
 
-  const ZTooltip({
-    required this.child,
-    this.tip,
-    this.enabledOnHover = true,
-    this.onTap,
-    this.onTapDown,
-    this.onTapUp,
-    this.onTapCancel,
-    this.onDoubleTap,
-    this.onLongPress,
-    this.onSecondaryTap,
-    this.onSecondaryTapDown,
-    this.onSecondaryTapUp,
-    this.onSecondaryTapCancel,
-    this.onHighlightChanged,
-    this.onHover,
-    this.mouseCursor,
-    this.containedInkWell = false,
-    this.highlightShape = BoxShape.circle,
-    this.radius,
-    this.borderRadius,
-    this.customBorder,
-    this.focusColor,
-    this.hoverColor,
-    this.highlightColor,
-    this.overlayColor,
-    this.splashColor,
-    this.splashFactory,
-    this.enableFeedback = true,
-    this.excludeFromSemantics = false,
-    this.focusNode,
-    this.canRequestFocus = true,
-    this.onFocusChange,
-    this.autofocus = false,
-    Key? key}):super(key: key);
+  const ZTooltip(
+      {required this.child,
+       this.buildTip,
+        this.fixedTip = false,
+        this.duration = const Duration(seconds: 0),
+      this.layout,
+      this.width,
+      this.height,
+      this.color,
+      this.position,
+      this.length = 1,
+      this.arrHeight = 12.0,
+      this.arrAngle = 60.0,
+      this.arrowRadius = 10.0,
+      this.strokeWidth = 4.0,
+      this.style = PaintingStyle.fill,
+      this.borderColor = Colors.transparent,
+      this.innerPadding = 6.0,
+      this.canOnHover = true,
+      this.onTap,
+      this.onTapDown,
+      this.onTapUp,
+      this.onTapCancel,
+      this.onDoubleTap,
+      this.onLongPress,
+      this.onSecondaryTap,
+      this.onSecondaryTapDown,
+      this.onSecondaryTapUp,
+      this.onSecondaryTapCancel,
+      this.onHighlightChanged,
+      this.onHover,
+      this.mouseCursor,
+      this.containedInkWell = false,
+      this.highlightShape = BoxShape.circle,
+      this.radius,
+      this.borderRadius,
+      this.customBorder,
+      this.focusColor,
+      this.hoverColor,
+      this.highlightColor,
+      this.overlayColor,
+      this.splashColor,
+      this.splashFactory,
+      this.enableFeedback = true,
+      this.excludeFromSemantics = false,
+      this.focusNode,
+      this.canRequestFocus = true,
+      this.onFocusChange,
+      this.autofocus = false,
+      Key? key})
+      : super(key: key);
 
   @override
-  State<ZTooltip> createState() => _ZTooltipState();
+  State<ZTooltip> createState() => ZTooltipState();
 }
 
-class _ZTooltipState extends State<ZTooltip> {
-
+class ZTooltipState extends State<ZTooltip> {
   bool _onHover = false;
   OverlayEntry? _overlayEntry;
-  Offset? _target;
 
-  void _showTooltip({Offset? target}) {
-    if(_overlayEntry!=null){
+  void _showTooltip({required RenderBox renderBox}) {
+    if (_overlayEntry != null) {
       return;
     }
-    _target = target;
+   final target = renderBox.localToGlobal(Offset.zero);
+    final parentSize = renderBox.size;
     _overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: _target!.dx+60,
-        top: _target!.dy,
-        child: SizedBox(
-          width: 100,
-          height: 40,
-          child: Bubble(
-            width: 200,
-            height: 40,
-            length: 30,
-            color:Colors.tealAccent.withOpacity(0.7),
-            position:BubbleArrowDirection.top,
-            child: widget.tip,
-          ),
-        ),
-      ),
+      builder: (context) {
+        final child = Bubble(
+          width: widget.width ?? 100,
+          height: widget.height ?? 50,
+          length: widget.length,
+          radius: widget.arrowRadius,
+          color: widget.color ?? Colors.white,
+          position: widget.position ?? BubbleArrowDirection.top,
+          arrAngle: widget.arrAngle,
+          arrHeight: widget.arrHeight,
+          borderColor: widget.borderColor,
+          strokeWidth: widget.strokeWidth,
+          style: widget.style,
+          innerPadding: widget.innerPadding,
+          child: widget.buildTip?.call(this)??const SizedBox()
+        );
+        final tipView = widget.layout?.call(this, target, child,parentSize) ??
+            Positioned(
+              left: target.dx,
+              top: target.dy+parentSize.height,
+              child: child,
+            );
+        return tipView;
+      },
     );
 
     Overlay.of(context)?.insert(_overlayEntry!);
@@ -118,26 +263,40 @@ class _ZTooltipState extends State<ZTooltip> {
     _overlayEntry = null;
   }
 
+  void close(){
+    Future.delayed(widget.duration,(){
+      _hideTooltip();
+    });
+  }
+
+  @override
+  void dispose() {
+    _hideTooltip();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onHover: (onHover) {
         widget.onHover?.call(onHover);
-        if (widget.enabledOnHover) {
+        if (widget.canOnHover) {
           setState(() {
             _onHover = onHover;
-            if(_onHover){
-              ///获取当前控件在屏幕上的坐标
+            if (_onHover && _overlayEntry == null) {
+              //获取当前控件在屏幕上的坐标
               RenderBox renderBox = context.findRenderObject() as RenderBox;
-              Offset _target = renderBox.localToGlobal(Offset.zero);
-              _showTooltip(target: _target);
+              _showTooltip(renderBox: renderBox);
               return;
             }
-            _hideTooltip();
+            if(widget.fixedTip){
+              return;
+            }
+            close();
           });
         }
       },
-      onTap: widget.onTap??() {},
+      onTap: widget.onTap ?? () {},
       onTapDown: widget.onTapDown,
       onTapUp: widget.onTapUp,
       onTapCancel: widget.onTapCancel,

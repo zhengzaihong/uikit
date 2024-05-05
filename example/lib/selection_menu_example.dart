@@ -31,6 +31,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
             popWidth: 300,
             // popCenter: true,
             // barrierColor: Colors.black38,
+            alignType: AlignType.left,
             buttonBuilder: (show){
             return Container(
               height: 40,
@@ -52,7 +53,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
           selectorBuilder: (context) {
             return Container(
               height: 200,
-              // margin: const EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 10),
               decoration: const BoxDecoration(
                   color: Colors.yellow
               ),

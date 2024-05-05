@@ -18,6 +18,9 @@ enum ToastPosition {
   top,
 }
 
+typedef BuildToastPoint = Positioned Function(
+    BuildContext context, BuildToastStyle style);
+
 class Toast {
   Toast._();
 
@@ -47,30 +50,30 @@ class Toast {
 
   static final List<OverlayEntryManger> _overlayEntryMangers = [];
 
-
   ///toast全局样式基础配置，使用内部的方式，外部传参控制
   ///当需要多种样式请使用 globalBuildToastStyle 或者 show时 传入样式
-  static EdgeInsetsGeometry? _globalToastMargin = const EdgeInsets.only(left: 10, right: 10);
-  static EdgeInsetsGeometry? _globalToastPadding = const EdgeInsets.all(10);
+  static EdgeInsetsGeometry? _globalToastMargin =
+      const EdgeInsets.only(left: 10, right: 10);
+  static EdgeInsetsGeometry? _globalToastPadding = const EdgeInsets.fromLTRB(10, 15, 10, 15);
   static AlignmentGeometry? _globalToastAlignment = Alignment.center;
-  static TextStyle? _globalToastTextStyle =const TextStyle(
+  static TextStyle? _globalToastTextStyle = const TextStyle(
       decoration: TextDecoration.none, color: Colors.white, fontSize: 16);
   static BoxDecoration? _globalToastDecoration = const BoxDecoration(
     color: Colors.black38,
     borderRadius: BorderRadius.all(Radius.circular(30)),
   );
 
-  void initBaseStyle({
-    EdgeInsetsGeometry? globalToastMargin,
-    EdgeInsetsGeometry? globalToastPadding,
-    AlignmentGeometry? globalToastAlignment,
-    TextStyle? globalToastTextStyle,
-    BoxDecoration? globalToastDecoration}) {
-    _globalToastMargin = globalToastMargin?? _globalToastMargin;
-    _globalToastPadding = globalToastPadding?? _globalToastPadding;
-    _globalToastAlignment = globalToastAlignment?? _globalToastAlignment;
-    _globalToastTextStyle = globalToastTextStyle?? _globalToastTextStyle;
-    _globalToastDecoration = globalToastDecoration?? _globalToastDecoration;
+  void initBaseStyle(
+      {EdgeInsetsGeometry? globalToastMargin,
+      EdgeInsetsGeometry? globalToastPadding,
+      AlignmentGeometry? globalToastAlignment,
+      TextStyle? globalToastTextStyle,
+      BoxDecoration? globalToastDecoration}) {
+    _globalToastMargin = globalToastMargin ?? _globalToastMargin;
+    _globalToastPadding = globalToastPadding ?? _globalToastPadding;
+    _globalToastAlignment = globalToastAlignment ?? _globalToastAlignment;
+    _globalToastTextStyle = globalToastTextStyle ?? _globalToastTextStyle;
+    _globalToastDecoration = globalToastDecoration ?? _globalToastDecoration;
   }
 
   Toast._internal() {
@@ -148,6 +151,44 @@ class Toast {
     return manger;
   }
 
+  ///显示自定义坐标的吐司
+  static Future<OverlayEntryManger?> showCustomPoint({
+    BuildContext? context,
+    BuildToastStyle? buildToastStyle,
+    required BuildToastPoint buildToastPoint,
+    int? showTime,
+  }) async {
+    ///防止多次弹出，外部设置间隔时间 默认2秒
+    if (_instance._startedTime != null &&
+        DateTime.now().difference(_instance._startedTime!).inMilliseconds <
+            _instance.intervalTime) {
+      return null;
+    }
+
+    buildToastStyle = buildToastStyle ?? _instance.globalBuildToastStyle;
+    _instance._startedTime = DateTime.now();
+    var _overlayEntry = OverlayEntry(
+        builder: (BuildContext context) =>
+            buildToastPoint.call(context, buildToastStyle!));
+
+    ///获取OverlayState
+    if (context == null) {
+      ///创建和显示顶层OverlayEntry
+      navigatorState.currentState?.overlay?.insert(_overlayEntry);
+    } else {
+      var overlayState = Overlay.of(context);
+      overlayState?.insert(_overlayEntry);
+    }
+    var manger = OverlayEntryManger(_overlayEntry);
+    _overlayEntryMangers.add(manger);
+    manger
+        .start(showTime ?? _instance.showTime, _instance._startedTime!)
+        .then((value) {
+      _overlayEntryMangers.remove(value);
+    });
+    return manger;
+  }
+
   ///设置toast位置
   static double _calToastPosition(context, ToastPosition position) {
     double backResult;
@@ -188,5 +229,6 @@ class OverlayEntryManger {
 
   void cancel() {
     overlayEntry?.remove();
+    overlayEntry = null;
   }
 }

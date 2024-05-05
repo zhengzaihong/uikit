@@ -19,7 +19,7 @@
  13. 新增 MarqueeView 跑马灯组件
  14. 新增 InfiniteLevelsMenus 无限层级菜单，简化使用逻辑
  15. 新增 InputText 极简输入框,支持实时表单校验,支持 TextField和 TextFormField全部属性。
-     InputText 新增输入浮窗效果见下说明和代码看示例
+     InputText 新增输入联动浮窗效果见下说明和代码看示例
  16. 新增 FloatExpendButton 悬浮菜单按钮
  17. 新增 CustomAnimatedBottomBar 底部菜单
  18. 新增分页组件 Pager.
@@ -28,6 +28,7 @@
  21. 新增 MousePopupButton 鼠标右键弹出窗组件，再Web端使用
  22. 新增 Shimmer 微光加载效果
  23. 新增 ImageSwitch 可高度自定义开关按钮组件
+ 24. 新增 ZTooltip 任何组件可响应提示的组件
 
   ...持续更新中....
 
@@ -78,6 +79,9 @@
 ## 可高度自定义开关按钮组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/image_switch.gif)
 
+
+## 可自定义样式的提示组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/ztooltip.gif)
 
 
 ## 可高度自定义的选择下拉框组件：

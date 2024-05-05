@@ -1,4 +1,3 @@
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -7,14 +6,11 @@
 /// describe: 数据处理相关语法糖
 ///
 
-
 /// future 数据滤空
 extension Unwrap<T> on Future<T?> {
   Future<T> unwrap() => then(
-        (value) => value != null
-        ? Future<T>.value(value)
-        : Future.any([]),
-  );
+        (value) => value != null ? Future<T>.value(value) : Future.any([]),
+      );
 }
 
 ///数据流滤空
@@ -29,8 +25,6 @@ extension Unwrap<T> on Future<T?> {
 extension UnwrapStream<T> on Stream<T?> {
   Stream<T> unwrap() => where((event) => event != null).cast();
 }
-
-
 
 /// 数据展平
 //  final flat = [
@@ -51,10 +45,10 @@ extension Flatten<T extends Object> on Iterable<T> {
         }
       }
     }
+
     return _flatten(this);
   }
 }
-
 
 /// 数据追加
 // const Iterable<int> values = [10, 20, 30];
@@ -63,9 +57,9 @@ extension Flatten<T extends Object> on Iterable<T> {
 
 extension InlineAdd<T> on Iterable<T> {
   Iterable<T> operator +(T other) => followedBy([other]);
+
   Iterable<T> operator &(Iterable<T> other) => followedBy(other);
 }
-
 
 /// Map 1数据过滤
 // const Map<String, int> people = {'John': 20, 'Mary': 21, 'Peter': 22};
@@ -75,8 +69,8 @@ extension InlineAdd<T> on Iterable<T> {
 
 extension DetailedWhere<K, V> on Map<K, V> {
   Map<K, V> where(bool Function(K key, V value) f) => Map<K, V>.fromEntries(
-    entries.where((entry) => f(entry.key, entry.value)),
-  );
+        entries.where((entry) => f(entry.key, entry.value)),
+      );
 
   Map<K, V> whereKey(bool Function(K key) f) =>
       {...where((key, value) => f(key))};
@@ -84,7 +78,6 @@ extension DetailedWhere<K, V> on Map<K, V> {
   Map<K, V> whereValue(bool Function(V value) f) =>
       {...where((key, value) => f(value))};
 }
-
 
 /// Map 2数据过滤
 //  const Map<String, int> people = {
@@ -99,8 +92,8 @@ extension DetailedWhere<K, V> on Map<K, V> {
 
 extension Filter<K, V> on Map<K, V> {
   Iterable<MapEntry<K, V>> filter(
-      bool Function(MapEntry<K, V> entry) f,
-      ) sync* {
+    bool Function(MapEntry<K, V> entry) f,
+  ) sync* {
     for (final entry in entries) {
       if (f(entry)) {
         yield entry;
@@ -126,6 +119,55 @@ extension Filter<K, V> on Map<K, V> {
 
 extension Merge<K, V> on Map<K, V> {
   Map<K, V> merge(Map<K, V> other) => {...this}..addEntries(
-    other.entries,
-  );
+      other.entries,
+    );
+}
+
+extension ListExtensions<E> on List<E> {
+
+  void forEachIndexed(void Function(int index, E element) action) {
+    for (var index = 0; index < length; index++) {
+      action(index, this[index]);
+    }
+  }
+
+  void forEachWhile(bool Function(E element) action) {
+    for (var index = 0; index < length; index++) {
+      if (!action(this[index])) break;
+    }
+
+    void forEachIndexedWhile(bool Function(int index, E element) action) {
+      for (var index = 0; index < length; index++) {
+        if (!action(index, this[index])) break;
+      }
+    }
+
+    Iterable<R> mapIndexed<R>(R Function(int index, E element) convert) sync* {
+      for (var index = 0; index < length; index++) {
+        yield convert(index, this[index]);
+      }
+    }
+
+    Iterable<E> whereIndexed(bool Function(int index, E element) test) sync* {
+      for (var index = 0; index < length; index++) {
+        var element = this[index];
+        if (test(index, element)) yield element;
+      }
+    }
+
+    Iterable<E> whereNotIndexed(
+        bool Function(int index, E element) test) sync* {
+      for (var index = 0; index < length; index++) {
+        var element = this[index];
+        if (!test(index, element)) yield element;
+      }
+    }
+
+    Iterable<R> expandIndexed<R>(
+        Iterable<R> Function(int index, E element) expand) sync* {
+      for (var index = 0; index < length; index++) {
+        yield* expand(index, this[index]);
+      }
+    }
+  }
 }
