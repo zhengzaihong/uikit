@@ -40,7 +40,6 @@
 
 
 ## 日历组件：
-
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/calendar.gif)
 
 
@@ -57,7 +56,7 @@
 ## 可伸展的悬浮按钮
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/float_button.gif)
 
-## 仿web前端 js菜单
+## 仿web前端 js菜单：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend2.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/TextExtend3.gif)
@@ -72,6 +71,7 @@
 ## 微光加载效果：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
 
+
 ## 弹窗组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/popwindow.gif)
 
@@ -80,24 +80,23 @@
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/image_switch.gif)
 
 
-## 可自定义样式的提示组件：
+## 可自定义样式的提示组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/ztooltip.gif)
 
 
-## 可高度自定义的选择下拉框组件：
+## 可高度自定义的选择下拉框组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu.gif)
 
-
-## WEB 中鼠标右键弹窗组件：
+## WEB 中鼠标右键弹窗组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/MousePopupButton-Web.gif)
 
-## 进度条组件：
+## 进度条组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/progressbar.gif)
 
-## 无限层级菜单：
+## 无限层级菜单
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
 
-## 表格组件：
+## 表格组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/table_scroller.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/tabview1.png)
 
