@@ -8,7 +8,7 @@
  2. 输入框搜索组件，支持Flutter 中 TextField 全部属性
  3. 进度条组件(条形和圆形)
  4. 评分组件
- 5. 吐司提示,可完全自定义
+ 5. 吐司提示,可完全自定义(支持样式定制，定点位置，队列等)
  6. 浮窗PopupWindow组件
  7. 城市picker
  8. 复选框，单选，气泡,抽屉组件等
@@ -25,6 +25,7 @@
  18. 新增分页组件 Pager.
  19. 新增选择下拉框菜单 SelectionMenu 可高度自定义，且不关注数据本身。
  20. 新增 TextExtend 文本拓展组件，支持web 前端js菜单效果。
+      新增弹性动画效果
  21. 新增 MousePopupButton 鼠标右键弹出窗组件，再Web端使用
  22. 新增 Shimmer 微光加载效果
  23. 新增 ImageSwitch 可高度自定义开关按钮组件
@@ -60,6 +61,7 @@
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend2.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/TextExtend3.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/text_extend4.gif)
 
 ## 城市选择器：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)
@@ -67,6 +69,8 @@
 
 ## 可定制的Toast：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
 
 ## 微光加载效果：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)

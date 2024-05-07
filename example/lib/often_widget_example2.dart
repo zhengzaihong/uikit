@@ -52,6 +52,61 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 20),
+                  TextExtend(
+                    text: "有动画的TextExtend",
+                    onTap: (){
+
+                    },
+                    animation: true,
+                    mainAxisSize: MainAxisSize.min,
+                    isSelectable: false,
+                    padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                    onHoverPadding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                    borderRadius: BorderRadius.circular(50),
+                    splashColor: Colors.purple,
+                    highlightColor: Colors.purple,
+                    prefix:const Icon(Icons.access_alarm) ,
+                    onHoverPrefix: const Icon(Icons.access_alarm),
+                    onHoverSuffix:const Icon(Icons.account_circle,color: Colors.blue),
+                    suffix: const Icon(Icons.account_circle),
+                    decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                            color: Colors.white,
+                            width: 1
+                        )
+                    ),
+                    onHoverDecoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                            color: Colors.white,
+                            width: 1
+                        ),
+                       boxShadow: [
+                         ///只底部显示发光阴影
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 10),
+                        ),
+                       ]
+                    ),
+                    style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold
+                    ),
+                    onHoverStyle: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+
 
                   const SizedBox(height: 20),
 
@@ -525,7 +580,5 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
             )),),
     );
   }
-
-
-
 }
+

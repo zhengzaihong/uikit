@@ -123,7 +123,8 @@ extension Merge<K, V> on Map<K, V> {
     );
 }
 
-extension ListExtensions<E> on List<E> {
+// 集合相关表达式 语法糖
+extension ListExt<E> on List<E> {
 
   void forEachIndexed(void Function(int index, E element) action) {
     for (var index = 0; index < length; index++) {
@@ -131,43 +132,42 @@ extension ListExtensions<E> on List<E> {
     }
   }
 
+  void forEachIndexedWhile(bool Function(int index, E element) action) {
+    for (var index = 0; index < length; index++) {
+      if (!action(index, this[index])) break;
+    }
+  }
+
+  Iterable<R> mapIndexed<R>(R Function(int index, E element) convert) sync* {
+    for (var index = 0; index < length; index++) {
+      yield convert(index, this[index]);
+    }
+  }
+
+  Iterable<E> whereIndexed(bool Function(int index, E element) test) sync* {
+    for (var index = 0; index < length; index++) {
+      var element = this[index];
+      if (test(index, element)) yield element;
+    }
+  }
+
+  Iterable<E> whereNotIndexed(
+      bool Function(int index, E element) test) sync* {
+    for (var index = 0; index < length; index++) {
+      var element = this[index];
+      if (!test(index, element)) yield element;
+    }
+  }
+
+  Iterable<R> expandIndexed<R>(
+      Iterable<R> Function(int index, E element) expand) sync* {
+    for (var index = 0; index < length; index++) {
+      yield* expand(index, this[index]);
+    }
+  }
   void forEachWhile(bool Function(E element) action) {
     for (var index = 0; index < length; index++) {
       if (!action(this[index])) break;
-    }
-
-    void forEachIndexedWhile(bool Function(int index, E element) action) {
-      for (var index = 0; index < length; index++) {
-        if (!action(index, this[index])) break;
-      }
-    }
-
-    Iterable<R> mapIndexed<R>(R Function(int index, E element) convert) sync* {
-      for (var index = 0; index < length; index++) {
-        yield convert(index, this[index]);
-      }
-    }
-
-    Iterable<E> whereIndexed(bool Function(int index, E element) test) sync* {
-      for (var index = 0; index < length; index++) {
-        var element = this[index];
-        if (test(index, element)) yield element;
-      }
-    }
-
-    Iterable<E> whereNotIndexed(
-        bool Function(int index, E element) test) sync* {
-      for (var index = 0; index < length; index++) {
-        var element = this[index];
-        if (!test(index, element)) yield element;
-      }
-    }
-
-    Iterable<R> expandIndexed<R>(
-        Iterable<R> Function(int index, E element) expand) sync* {
-      for (var index = 0; index < length; index++) {
-        yield* expand(index, this[index]);
-      }
     }
   }
 }

@@ -8,7 +8,6 @@ import 'package:flutter_uikit_forzzh/button/function_inheritedwidget.dart';
 /// create_date: 2022/6/1
 /// create_time: 9:40
 /// describe: 封装一个功能按钮组件 背景切换 功能组件 顶层需要FunctionContainer包装
-/// 支持 上下左右 添加其他元素的组件
 ///
 
 typedef BuilderBox = Widget Function(BuildContext context,FunButtonBoxState state,bool isCheck);

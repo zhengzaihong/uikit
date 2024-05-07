@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/drawer/smart_drawer.dart';
 import 'package:flutter_uikit_forzzh/often/time_view.dart';
 import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 
 class ToastExample extends StatefulWidget {
@@ -131,36 +134,26 @@ class _ToastExampleState extends State<ToastExample> {
                         child: const Text("自定义样式toast",style: TextStyle(color: Colors.white)))),
 
 
+
                 InkWell(
                     onTap: (){
-                      ///事件toast
-                        Toast.show( "点我打开侧边栏",
-                          buildToastStyle: (context,msg ){
-                        return Material(
-                          color: Colors.transparent ,
-                          child: InkWell(
-                              onTap: (){
-                                Scaffold.of(mContext).openEndDrawer();
-                              },
-                              child:  Container(
-                                  width: MediaQuery.of(mContext).size.width/3,
-                                  height: 40,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.withAlpha(200),
-                                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  ),
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(Icons.ac_unit_rounded,size: 20,color: Colors.deepPurple),
-                                        const SizedBox(width: 5),
-                                        Text(msg,style: const TextStyle(
-                                            decoration: TextDecoration.none,
-                                            color: Colors.white,fontSize: 12)),
-                                        const SizedBox(width: 5),
-                                      ]))),);
-                      });
+                      final r = Random().nextInt(2000);
+                      Toast.showQueueToast(
+                        "消息随机数：${r.toString()}",
+
+                        ///内部有默认样式，可自定义设置toast的样式
+                        buildToastStyle: (context,msg){
+                          return Container(
+                            height: 40,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Text(msg,style: const TextStyle(color: Colors.white,fontSize: 16)),
+                          );
+                        }
+                      );
                     },
                     child: Container(
                         width: 200,
@@ -171,12 +164,48 @@ class _ToastExampleState extends State<ToastExample> {
                           color: Colors.lightBlue.withAlpha(200),
                           borderRadius: const BorderRadius.all(Radius.circular(15)),
                         ),
-                        child: const Text("可响应点击事件的Toast",style: TextStyle(color: Colors.white)))),
+                        child: const Text("支持自定义样式的队列toast",style: TextStyle(color: Colors.white)))),
+
+
+               LayoutBuilder(
+                   builder: (context,box){
+                    return  InkWell(
+                     onTap: (){
+                       ///自定义位置 任意组件同理
+                       RenderBox renderBox = context.findRenderObject() as RenderBox;
+                       final offset = renderBox.localToGlobal(Offset.zero);
+                       Toast.showCustomPoint(
+                           showTime: 3000,
+                           buildToastPoint: (context,style){
+                             return Positioned(
+                               child:Bubble(
+                                 color: Colors.white,
+                                 width: 200,
+                                 height: 50,
+                                 length: 80,
+                                 position: BubbleArrowDirection.top,
+                                 child:const Text("自定义位置Toast",style: TextStyle(color: Colors.redAccent,fontSize: 16)),
+                               ),
+                               left: offset.dx, top: offset.dy+60,);
+                           });
+
+                     },
+                     child: Container(
+                         width: 200,
+                         height: 40,
+                         margin: const EdgeInsets.all(20),
+                         alignment: Alignment.center,
+                         decoration: BoxDecoration(
+                           color: Colors.lightBlue.withAlpha(200),
+                           borderRadius: const BorderRadius.all(Radius.circular(15)),
+                         ),
+                         child: const Text("根据坐标显示Toast",style: TextStyle(color: Colors.white)))
+                 );
+                }),
 
 
                 InkWell(
                     onTap: () async{
-
                      overlayEntryManger = await Toast.show("",
                           showTime: 11*1000,
                           buildToastStyle: (context,_){

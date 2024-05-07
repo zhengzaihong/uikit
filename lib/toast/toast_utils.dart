@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/utils/responsive.dart';
 
@@ -50,11 +51,17 @@ class Toast {
 
   static final List<OverlayEntryManger> _overlayEntryMangers = [];
 
+  /// 队列方式显示 toast
+  static final Queue<ToastTaskQueue> _queueTask = Queue<ToastTaskQueue>();
+  static OverlayEntry? _queueTaskOverlay;
+  static final _valueListenable = ValueNotifier(_queueTask.length);
+
   ///toast全局样式基础配置，使用内部的方式，外部传参控制
   ///当需要多种样式请使用 globalBuildToastStyle 或者 show时 传入样式
   static EdgeInsetsGeometry? _globalToastMargin =
       const EdgeInsets.only(left: 10, right: 10);
-  static EdgeInsetsGeometry? _globalToastPadding = const EdgeInsets.fromLTRB(10, 15, 10, 15);
+  static EdgeInsetsGeometry? _globalToastPadding =
+      const EdgeInsets.fromLTRB(10, 15, 10, 15);
   static AlignmentGeometry? _globalToastAlignment = Alignment.center;
   static TextStyle? _globalToastTextStyle = const TextStyle(
       decoration: TextDecoration.none, color: Colors.white, fontSize: 16);
@@ -189,6 +196,84 @@ class Toast {
     return manger;
   }
 
+  ///支持队列的方式显示多个 toast
+  ///默认自下向上退出
+  static void showQueueToast(
+    String msg, {
+    BuildContext? context,
+    BuildToastStyle? buildToastStyle,
+    Duration showTime = const Duration(milliseconds: 2000),
+    Duration animationTime = const Duration(milliseconds: 600),
+    Offset startOffset = const Offset(0, 0),
+    Offset endOffset = const Offset(0, -100),
+    ScalingFactor mobile = const ScalingFactor(0.7, 0.7),
+    ScalingFactor tablet = const ScalingFactor(0.5, 0.8),
+    ScalingFactor desktop = const ScalingFactor(0.3, 0.8),
+    SizedBox divider = const SizedBox(height: 10),
+  }) {
+
+    buildToastStyle = buildToastStyle ?? _instance.globalBuildToastStyle;
+
+    ToastTaskQueue(
+        msg: msg,
+        queue: _queueTask,
+        showTime: showTime,
+        animationTime: animationTime,
+        startOffset: startOffset,
+        endOffset: endOffset,
+        valueListenable: _valueListenable,
+        );
+    if (_queueTaskOverlay == null) {
+      _queueTaskOverlay = OverlayEntry(builder: (BuildContext context) {
+        return ValueListenableBuilder<num>(
+            valueListenable: _valueListenable,
+            builder: (context, value, child) {
+              final tasks = ListView.separated(
+                  itemCount: _queueTask.length,
+                  physics: const PageScrollPhysics(),
+                  separatorBuilder: (BuildContext context, int index)=>divider,
+                  itemBuilder: (context, index) {
+                    final task = _queueTask.elementAt(index);
+                    return ToastTaskView(
+                      key: ValueKey(task),
+                      task:task,
+                      style:buildToastStyle!,
+                      callBack:() {
+                        _queueTaskOverlay?.remove();
+                        _queueTaskOverlay = null;
+                      },
+                    );
+                  });
+              final size = MediaQuery.of(context).size;
+              return Center(
+                child: Responsive(
+                    mobile: SizedBox(
+                      width: size.width * mobile.horizontal,
+                      height: size.height*mobile.vertical,
+                      child: tasks,
+                    ),
+                    tablet: SizedBox(
+                      width: size.width * tablet.horizontal,
+                      height: size.height*tablet.vertical,
+                      child: tasks,
+                    ),
+                    desktop: SizedBox(
+                      width: size.width * desktop.horizontal,
+                      height: size.height*desktop.vertical,
+                      child: tasks,
+                    )),
+              );
+            });
+      });
+      if (context == null) {
+        navigatorState.currentState?.overlay?.insert(_queueTaskOverlay!);
+        return;
+      }
+      var overlayState = Overlay.of(context);
+      overlayState?.insert(_queueTaskOverlay!);
+    }
+  }
+
   ///设置toast位置
   static double _calToastPosition(context, ToastPosition position) {
     double backResult;
@@ -230,5 +315,109 @@ class OverlayEntryManger {
   void cancel() {
     overlayEntry?.remove();
     overlayEntry = null;
+  }
+}
+
+///在屏幕上的缩放比例
+class ScalingFactor{
+  final double horizontal;
+  final double vertical;
+  const ScalingFactor(this.horizontal,this.vertical);
+}
+
+class ToastTaskQueue {
+  String msg;
+  Queue queue;
+  Duration showTime;
+  Duration animationTime;
+  Offset startOffset;
+  Offset endOffset;
+
+  ValueNotifier<num> valueListenable;
+
+  ToastTaskQueue({
+    required this.msg,
+    required this.queue,
+    required this.showTime,
+    required this.animationTime,
+    required this.startOffset,
+    required this.endOffset,
+    required this.valueListenable,
+  }) {
+    queue.add(this);
+    valueListenable.notifyListeners();
+  }
+}
+
+class ToastTaskView extends StatefulWidget {
+
+  final ToastTaskQueue task;
+  final BuildToastStyle style;
+  final Function? callBack;
+
+  const ToastTaskView({required this.task, required this.style, this.callBack, Key? key}) : super(key: key);
+
+  @override
+  State<ToastTaskView> createState() => _ToastTaskViewState();
+
+}
+
+class _ToastTaskViewState extends State<ToastTaskView> with SingleTickerProviderStateMixin {
+
+  late AnimationController _animationController;
+  late Animation<double> _opacityAnimation;
+  late Animation<Offset> _positionAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: widget.task.animationTime,
+      vsync: this,
+    );
+    _opacityAnimation =
+        Tween<double>(begin: 1.0, end: 0.0).animate(_animationController);
+    _positionAnimation =
+        Tween<Offset>(begin:widget.task.startOffset, end: widget.task.endOffset)
+            .animate(_animationController);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(widget.task.showTime, () {
+        if (mounted) {
+          _animationController.forward();
+        }
+      });
+    });
+    _animationController.addListener(() {
+      if (_animationController.isCompleted) {
+        final taskQueue = widget.task.queue;
+        taskQueue.remove(widget.task);
+        if (taskQueue.isEmpty) {
+          widget.callBack?.call();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _opacityAnimation.value,
+          child: Transform.translate(
+            offset: _positionAnimation.value,
+            child: widget.style.call(context, widget.task.msg),
+          ),
+        );
+      },
+    );
   }
 }

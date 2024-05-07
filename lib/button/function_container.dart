@@ -7,7 +7,8 @@ import 'function_inheritedwidget.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021/5/22
 /// create_time: 17:10
-/// describe: 容器组件，子组件可以为 FunButtonBox FunctionButton ,FunctionCheckbox,FunctionRadioButton等 button 包下组件
+/// describe: 容器组件，子组件为 FunButtonBox 下组件
+/// ps:0.18开始 FunctionButton ,FunctionCheckbox,FunctionRadioButton 由  FunButtonBox取代
 ///
 class FunctionContainer extends StatefulWidget {
 

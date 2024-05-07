@@ -202,106 +202,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     },
                   ),
 
-
-                  title("单选button"),
-                  SizedBox(height: 60,child:  FunctionContainer(
-                    defaultCheck: 0,
-                    singleCheckedChange: (checked) {
-                      Toast.show(checked==1?"已启用":"已禁用");
-                    },
-                    child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      FunctionButton(
-                        "启用",
-                        1,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      FunctionButton(
-                        "禁用",
-                        2,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
-                        height: 30,
-                      )
-                    ]),
-                  )),
-
-
-
-                  title("多选button 案例1"),
-                  SizedBox(height: 60,child: FunctionContainer(
-                    defaultChecks: defaultCheckeds,
-                    allowMultipleChoice: true, //多选
-                    // mutualExclusionIndex: 1,
-                    multipleCheckedChange: (list){
-                      StringBuffer buffer  = StringBuffer();
-                      for (var element in list) {
-                        buffer.write(element);
-                        buffer.write(",");
-                      }
-                      defaultCheckeds = list as List<int>;
-                      setState(() {
-                      });
-                      Toast.show("选中的按钮Id: ${buffer.toString()}");
-                    },
-                    child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      FunctionButton(
-                        "按钮1",
-                        1,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      FunctionButton(
-                        "按钮2",
-                        2,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      FunctionButton(
-                        "按钮3",
-                        3,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
-                        height: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      FunctionButton(
-                        "按钮4",
-                        4,
-                        checkedTextStyle: checkedTextStyle,
-                        unCheckTextStyle: unCheckTextStyle,
-                        checkedBoxDecoration: checkedBoxDecoration,
-                        unCheckedBoxDecoration: unCheckedBoxDecoration,
-                        width: 50,
-                        height: 30,
-                      )
-                    ]),
-                  )),
-
-
-                  title("多选button 案例2"),
+                  title("多选button 案例"),
                   SizedBox(height: 60,child: FunctionContainer(
                     defaultChecks: defaultCheckeds2,
                     allowMultipleChoice: true, //多选
@@ -326,7 +227,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                             index++;
                             return FunButtonBox(
                               index: index,
-                              builderBox: (BuildContext context,FunButtonBoxState state, bool isCheck) {
+                              builderBox: (context,state, isCheck) {
                                 return CustomCheckBox(
                                     key: ValueKey(isCheck),
                                     text: Text(e,style: isCheck?checkedTextStyle:unCheckTextStyle),
@@ -363,45 +264,63 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start, children: [
-                      FunctionRadioButton(
-                        title: "无",
+                      FunButtonBox(
                         index: 0,
-                        width: 85,
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        checkedIconWidget: checkedIconWidget,
-                        unCheckedWidget: unCheckedWidget,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('化学品',style: textBlodStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: checkedIconWidget,
+                              uncheckedIcon:unCheckedWidget,
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
                       ),
                       const SizedBox(width: 10),
-                      FunctionRadioButton(
-                        title: "化学品",
+                      FunButtonBox(
                         index: 1,
-                        width: 85,
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        checkedIconWidget: checkedIconWidget,
-                        unCheckedWidget: unCheckedWidget,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('毒物',style: textBlodStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: checkedIconWidget,
+                              uncheckedIcon:unCheckedWidget,
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
                       ),
                       const SizedBox(width: 10),
-                      FunctionRadioButton(
-                        title: "毒物",
+                      FunButtonBox(
                         index: 2,
-                        width: 85,
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        checkedIconWidget: checkedIconWidget,
-                        unCheckedWidget: unCheckedWidget,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('射线',style: textBlodStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: checkedIconWidget,
+                              uncheckedIcon:unCheckedWidget,
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
                       ),
                       const SizedBox(width: 10),
-                      FunctionRadioButton(
-                        title: "射线",
-                        index: 3,
-                        width: 85,
-                        checkedTextStyle: textBlodStyle,
-                        unCheckTextStyle: textBlodStyle,
-                        checkedIconWidget: checkedIconWidget,
-                        unCheckedWidget: unCheckedWidget,
-                      ),
                     ]),
                   )),
 
@@ -453,122 +372,135 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                       Toast.show("选中的CheckBox: ${list.toString()}");
                     },
                     child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      FunctionCheckbox(
-                          index: 0,
-                          iconLeft: true,
-                          uncheckedIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/nor_icon_16@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/sel_icon_13@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkedText: const Text("item1",
-                              style: TextStyle(
-                                  color: Colors.lightBlue,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)),
-                          unCheckedText: const Text("item1",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)
-                          )),
+
+                      FunButtonBox(
+                        index: 0,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('item1',style: isCheck?checkedTextStyle:unCheckTextStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/sel_icon_13@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              uncheckedIcon:Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/nor_icon_16@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
+                      ),
+
 
                       const SizedBox(width: 10),
-                      FunctionCheckbox(
-                          index: 1,
-                          iconLeft: true,
-                          uncheckedIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/nor_icon_16@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/sel_icon_13@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkedText: const Text("item2",
-                              style: TextStyle(
-                                  color: Colors.lightBlue,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)),
-                          unCheckedText: const Text("item2",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)
-                          )),
+                      FunButtonBox(
+                        index: 1,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('item2',style: isCheck?checkedTextStyle:unCheckTextStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/sel_icon_13@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              uncheckedIcon:Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/nor_icon_16@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
+                      ),
+
                       const SizedBox(width: 10),
-                      FunctionCheckbox(
-                          index: 2,
-                          iconLeft: true,
-                          uncheckedIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/nor_icon_16@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/sel_icon_13@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkedText: const Text("item3",
-                              style: TextStyle(
-                                  color: Colors.lightBlue,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)),
-                          unCheckedText: const Text("item3",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)
-                          )),
+                      FunButtonBox(
+                        index: 2,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('item3',style: isCheck?checkedTextStyle:unCheckTextStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/sel_icon_13@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              uncheckedIcon:Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/nor_icon_16@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
+                      )
+                      ,
                       const SizedBox(width: 10),
-                      FunctionCheckbox(
-                          index: 3,
-                          iconLeft: true,
-                          uncheckedIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/nor_icon_16@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkIcon: Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                "images/sel_icon_13@2x.png",
-                                width: 25,
-                                height: 25,
-                              )),
-                          checkedText: const Text("item4",
-                              style: TextStyle(
-                                  color: Colors.lightBlue,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)),
-                          unCheckedText: const Text("item4",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500)
-                          )),
+                      FunButtonBox(
+                        index: 3,
+                        builderBox: (context,state, isCheck) {
+                          return CustomCheckBox(
+                              key: ValueKey(isCheck),
+                              text: Text('item4',style: isCheck?checkedTextStyle:unCheckTextStyle),
+                              activeColor: Colors.purple,
+                              checkColor: Colors.red,
+                              isChecked: isCheck,
+                              useDefaultStyle: false,
+                              iconLeft: true,
+                              checkIcon: Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/sel_icon_13@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              uncheckedIcon:Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Image.asset(
+                                    "images/nor_icon_16@2x.png",
+                                    width: 25,
+                                    height: 25,
+                                  )),
+                              onChange: (v) {
+                                state.updateChange();
+                              });
+                        },
+                      )
+                      ,
                     ]),
                   )),
 

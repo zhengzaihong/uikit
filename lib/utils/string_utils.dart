@@ -61,10 +61,7 @@ class StringUtils {
     return false;
   }
   static bool isNotEmpty(String? string) {
-    if (null == string || string.isEmpty ) {
-      return false;
-    }
-    return true;
+    return !isEmpty(string);
   }
 
   static bool isEmptyObj(Object? obj) {
@@ -87,7 +84,7 @@ class StringUtils {
   }
 }
 
-extension StringExt on Object? {
+extension StringExtension on Object? {
 
   String _toStr(Object? value) {
     return null == value ? "" : value.toString();
@@ -98,5 +95,13 @@ extension StringExt on Object? {
   List<String> toList() {
     String str = _toStr(this);
     return List.generate(str.length, (index) => str.substring(index, index + 1));
+  }
+
+  num toNum(){
+    try{
+      return num.parse(str());
+    }catch(e){
+      return 0;
+    }
   }
 }
