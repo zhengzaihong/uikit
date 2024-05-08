@@ -101,7 +101,7 @@ extension StringExtension on Object? {
     try{
       return num.parse(str());
     }catch(e){
-      return 0;
+      return -1;
     }
   }
 }

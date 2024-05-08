@@ -142,7 +142,7 @@ class _ToastExampleState extends State<ToastExample> {
                         "消息随机数：${r.toString()}",
 
                         ///内部有默认样式，可自定义设置toast的样式
-                        buildToastStyle: (context,msg){
+                          buildStyle: (context,task){
                           return Container(
                             height: 40,
                             alignment: Alignment.center,
@@ -150,7 +150,7 @@ class _ToastExampleState extends State<ToastExample> {
                               color: Colors.redAccent,
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: Text(msg,style: const TextStyle(color: Colors.white,fontSize: 16)),
+                            child: Text(task.msg,style: const TextStyle(color: Colors.white,fontSize: 16)),
                           );
                         }
                       );

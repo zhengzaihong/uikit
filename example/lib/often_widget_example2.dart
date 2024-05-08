@@ -53,6 +53,20 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
+
+                  RotatingView(
+                      speed: const Duration(milliseconds: 2000),
+                      child: Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(50)
+                    ),
+                    child: const Text("旋转的View"))),
+                  const SizedBox(height: 20),
+
                   TextExtend(
                     text: "有动画的TextExtend",
                     onTap: (){
@@ -140,11 +154,11 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                               },
                               child:  Row(
                                 children: [
-                                  Text(e,style: TextStyle(color: Colors.white,fontSize: 16)),
+                                  Text(e,style: const TextStyle(color: Colors.white,fontSize: 16)),
                                   Visibility(
                                       visible: e != '取消',
                                       child: Container(
-                                        margin: EdgeInsets.only(left: 10,top: 4,right: 10),
+                                        margin: const EdgeInsets.only(left: 10,top: 4,right: 10),
                                         color: Colors.white,
                                         height: 15,
                                         width: 1,

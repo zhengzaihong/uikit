@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:flutter_uikit_forzzh/utils/responsive.dart';
 
 ///
@@ -11,6 +12,7 @@ import 'package:flutter_uikit_forzzh/utils/responsive.dart';
 ///
 
 typedef BuildToastStyle = Widget Function(BuildContext context, String msg);
+typedef BuildToastQueueStyle = Widget Function(BuildContext context, ToastTaskQueue queue);
 
 ///toast的显示位置
 enum ToastPosition {
@@ -40,6 +42,8 @@ class Toast {
 
   ///构建toast样式，外部自定义方式
   BuildToastStyle? globalBuildToastStyle;
+
+  BuildToastQueueStyle? globalBuildToastQueueStyle;
 
   /// 开启一个新toast的当前时间，用于对比是否已经展示了足够时间
   DateTime? _startedTime;
@@ -84,33 +88,35 @@ class Toast {
   }
 
   Toast._internal() {
-    globalBuildToastStyle ??= (context, msg) {
-      return Responsive(
-        mobile: Container(
-            width: MediaQuery.of(context).size.width,
-            margin: _globalToastMargin,
-            padding: _globalToastPadding,
-            alignment: _globalToastAlignment,
-            decoration: _globalToastDecoration,
-            child: Text(msg, style: _globalToastTextStyle)),
-        tablet: Container(
-            width: MediaQuery.of(context).size.width / 2,
-            margin: _globalToastMargin,
-            padding: _globalToastPadding,
-            alignment: _globalToastAlignment,
-            decoration: _globalToastDecoration,
-            child: Text(msg, style: _globalToastTextStyle)),
-        desktop: Container(
-            width: MediaQuery.of(context).size.width / 3,
-            margin: _globalToastMargin,
-            padding: _globalToastPadding,
-            alignment: _globalToastAlignment,
-            decoration: _globalToastDecoration,
-            child: Text(msg, style: _globalToastTextStyle)),
-      );
-    };
+    globalBuildToastStyle ??= (context, msg) =>_baseStyle(context, msg);
+    globalBuildToastQueueStyle ??= (context, task) =>_baseStyle(context, task.msg);
   }
 
+  Widget _baseStyle(context, msg){
+    return Responsive(
+      mobile: Container(
+          width: MediaQuery.of(context).size.width,
+          margin: _globalToastMargin,
+          padding: _globalToastPadding,
+          alignment: _globalToastAlignment,
+          decoration: _globalToastDecoration,
+          child: Text(msg, style: _globalToastTextStyle)),
+      tablet: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          margin: _globalToastMargin,
+          padding: _globalToastPadding,
+          alignment: _globalToastAlignment,
+          decoration: _globalToastDecoration,
+          child: Text(msg, style: _globalToastTextStyle)),
+      desktop: Container(
+          width: MediaQuery.of(context).size.width / 3,
+          margin: _globalToastMargin,
+          padding: _globalToastPadding,
+          alignment: _globalToastAlignment,
+          decoration: _globalToastDecoration,
+          child: Text(msg, style: _globalToastTextStyle)),
+    );
+  }
   ///显示一个吐司
   static Future<OverlayEntryManger?> show(
     String msg, {
@@ -197,25 +203,26 @@ class Toast {
   }
 
   ///支持队列的方式显示多个 toast
-  ///默认自下向上退出
+  ///默认自下向上退出 显示的宽高受最大 ScalingFactor 缩放因子决定
   static void showQueueToast(
     String msg, {
+    bool status = true,
     BuildContext? context,
-    BuildToastStyle? buildToastStyle,
+    BuildToastQueueStyle? buildStyle,
     Duration showTime = const Duration(milliseconds: 2000),
     Duration animationTime = const Duration(milliseconds: 600),
     Offset startOffset = const Offset(0, 0),
     Offset endOffset = const Offset(0, -100),
     ScalingFactor mobile = const ScalingFactor(0.7, 0.7),
-    ScalingFactor tablet = const ScalingFactor(0.5, 0.8),
-    ScalingFactor desktop = const ScalingFactor(0.3, 0.8),
+    ScalingFactor tablet = const ScalingFactor(0.5, 0.7),
+    ScalingFactor desktop = const ScalingFactor(0.3, 0.7),
     SizedBox divider = const SizedBox(height: 10),
   }) {
 
-    buildToastStyle = buildToastStyle ?? _instance.globalBuildToastStyle;
-
+    final toastStyle = buildStyle ?? _instance.globalBuildToastQueueStyle;
     ToastTaskQueue(
         msg: msg,
+        status: status,
         queue: _queueTask,
         showTime: showTime,
         animationTime: animationTime,
@@ -237,7 +244,7 @@ class Toast {
                     return ToastTaskView(
                       key: ValueKey(task),
                       task:task,
-                      style:buildToastStyle!,
+                      style:toastStyle!,
                       callBack:() {
                         _queueTaskOverlay?.remove();
                         _queueTaskOverlay = null;
@@ -327,6 +334,7 @@ class ScalingFactor{
 
 class ToastTaskQueue {
   String msg;
+  bool status;
   Queue queue;
   Duration showTime;
   Duration animationTime;
@@ -337,6 +345,7 @@ class ToastTaskQueue {
 
   ToastTaskQueue({
     required this.msg,
+    required this.status,
     required this.queue,
     required this.showTime,
     required this.animationTime,
@@ -352,7 +361,7 @@ class ToastTaskQueue {
 class ToastTaskView extends StatefulWidget {
 
   final ToastTaskQueue task;
-  final BuildToastStyle style;
+  final BuildToastQueueStyle style;
   final Function? callBack;
 
   const ToastTaskView({required this.task, required this.style, this.callBack, Key? key}) : super(key: key);
@@ -407,17 +416,24 @@ class _ToastTaskViewState extends State<ToastTaskView> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Opacity(
-          opacity: _opacityAnimation.value,
-          child: Transform.translate(
-            offset: _positionAnimation.value,
-            child: widget.style.call(context, widget.task.msg),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return Opacity(
+                opacity: _opacityAnimation.value,
+                child: Transform.translate(
+                  offset: _positionAnimation.value,
+                  child: widget.style.call(context, widget.task),
+                ),
+              );
+            },
           ),
-        );
-      },
+        )
+      ],
     );
   }
 }
