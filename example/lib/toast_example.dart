@@ -145,6 +145,7 @@ class _ToastExampleState extends State<ToastExample> {
                           buildStyle: (context,task){
                           return Container(
                             height: 40,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               color: Colors.redAccent,
