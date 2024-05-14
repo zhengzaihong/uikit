@@ -64,7 +64,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(50)
                     ),
-                    child: const Text("旋转的View"))),
+                    child:const Text("旋转的View"))),
                   const SizedBox(height: 20),
 
                   TextExtend(
