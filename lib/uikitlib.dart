@@ -27,6 +27,7 @@ export 'pager/pager.dart';
 export 'select/selection_menu.dart';
 export 'loading/shimmer_loading.dart';
 export 'package:flutter_uikit_forzzh/drag/drag_box.dart';
+export 'radar/radar_lib.dart';
 
 
 /// Utils package 工具包

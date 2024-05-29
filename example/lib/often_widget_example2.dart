@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 import 'bean/tab_type_bean.dart';
-import 'utils/toast.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -52,7 +51,38 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 200),
+
+                 Center(child:SizedBox(
+                   width: 150,
+                   height: 150,
+                   child: CustomPaint(
+                     painter: RadarNDimensionsChart(
+                       cycleRadius: 22,
+                       data:[
+                         RadarBean(20, '认知', bgColor:Colors.blue,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                         RadarBean(30, '心理', bgColor:Colors.green,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                         RadarBean(40, '运动', bgColor:Colors.red,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                         RadarBean(50, '活力', bgColor:Colors.yellow,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                         RadarBean(60, '感官', bgColor:Colors.purple,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                       ],
+                     ),
+                   ),
+                 ),),
+
+                  const SizedBox(height: 200),
+                 Center(child:Radar5DimensionsChart(
+                     radius: 70,
+                     padding: 12,
+                     bottomPadding: 10,
+                     data:[
+                       RadarBean(20, '认知', bgColor:Colors.blue,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                       RadarBean(30, '心理', bgColor:Colors.green,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                       RadarBean(40, '运动', bgColor:Colors.red,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                       RadarBean(50, '活力', bgColor:Colors.yellow,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                       RadarBean(60, '感官', bgColor:Colors.purple,textStyle: TextStyle(color: Colors.white,fontSize: 13)),
+                     ]
+                 ),),
 
                   RotatingView(
                       speed: const Duration(milliseconds: 2000),
