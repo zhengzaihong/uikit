@@ -27,6 +27,9 @@ class Radar5DimensionsChart extends StatefulWidget {
   final List<RadarBean> data;
 
   final double cycleRadius;
+  final Paint? zeroToPointPaint;
+  final Paint? pentagonPaint;
+  final Paint? contentPaint;
 
   const Radar5DimensionsChart({
     required this.data,
@@ -34,6 +37,9 @@ class Radar5DimensionsChart extends StatefulWidget {
     this.padding = 10,
     this.bottomPadding = 8,
     this.cycleRadius=22,
+    this.zeroToPointPaint,
+    this.pentagonPaint,
+    this.contentPaint,
     Key? key}):super(key: key);
 
   @override
@@ -66,19 +72,19 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
     ];
 
     ///原点到5个定点的连线
-    zeroToPointPaint = Paint()
+    zeroToPointPaint = widget.zeroToPointPaint?? Paint()
       ..style = PaintingStyle.stroke
       ..color = Colors.lightBlueAccent.withOpacity(0.3)
       ..strokeWidth = 0.5;
 
     ///5层五边形画笔
-    pentagonPaint = Paint()
+    pentagonPaint = widget.pentagonPaint?? Paint()
       ..color = Colors.white.withOpacity(0.1)
       ..strokeWidth = 1
       ..style = PaintingStyle.fill;
 
     ///覆盖内容颜色
-    contentPaint = Paint()
+    contentPaint = widget.contentPaint??Paint()
       ..color = Colors.lightBlue.withAlpha(100)
       ..strokeWidth = 2
       ..style = PaintingStyle.fill;

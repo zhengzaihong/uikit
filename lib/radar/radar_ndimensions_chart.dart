@@ -9,7 +9,74 @@ import 'package:flutter_uikit_forzzh/radar/radar_bean.dart';
 /// create_time: 14:42
 /// describe: N维度雷达图
 ///
-class RadarNDimensionsChart extends CustomPainter {
+
+class RadarNDimensionsChart extends StatefulWidget {
+
+  final List<RadarBean> data;
+  final int maxDataValue;
+  final Paint? gridPaint;
+  final Paint? dataPaint;
+  final Paint? labelBackgroundPaint;
+  final double cycleRadius;
+  final int dimension;
+
+  const RadarNDimensionsChart(
+      {required this.data,
+      this.maxDataValue = 100,
+      this.cycleRadius = 22,
+      this.dimension = 5,
+        this.gridPaint,
+        this.dataPaint,
+        this.labelBackgroundPaint,
+      Key? key})
+      : super(key: key);
+
+  @override
+  State<RadarNDimensionsChart> createState() => _RadarNDimensionsChartState();
+}
+
+class _RadarNDimensionsChartState extends State<RadarNDimensionsChart> {
+
+  late Paint gridPaint;
+  late Paint dataPaint;
+  late Paint labelBackgroundPaint;
+
+  @override
+  void initState() {
+    super.initState();
+
+    gridPaint = widget.gridPaint??Paint()
+      ..color = Colors.grey
+      ..style = PaintingStyle.stroke;
+
+    dataPaint = widget.dataPaint?? Paint()
+    ..color = Colors.green.withOpacity(0.5)
+    ..style = PaintingStyle.fill;
+
+    labelBackgroundPaint = widget.labelBackgroundPaint?? Paint()
+    ..color = Colors.white
+    ..style = PaintingStyle.fill;
+
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: RadarNDimensionsPainter(
+        data: widget.data,
+        maxDataValue: widget.maxDataValue,
+        cycleRadius: widget.cycleRadius,
+        dimension: widget.dimension,
+        gridPaint: gridPaint,
+        dataPaint: dataPaint,
+        labelBackgroundPaint: labelBackgroundPaint,
+      ),
+    );
+  }
+}
+
+class RadarNDimensionsPainter extends  CustomPainter {
 
   final List<RadarBean> data;
   final int maxDataValue;
@@ -17,17 +84,17 @@ class RadarNDimensionsChart extends CustomPainter {
   final Paint dataPaint;
   final Paint labelBackgroundPaint;
   final double cycleRadius;
+  final int dimension;
 
-  RadarNDimensionsChart({required this.data, this.maxDataValue = 100,this.cycleRadius = 22})
-      : gridPaint = Paint()
-          ..color = Colors.grey
-          ..style = PaintingStyle.stroke,
-        dataPaint = Paint()
-          ..color = Colors.green.withOpacity(0.5)
-          ..style = PaintingStyle.fill,
-        labelBackgroundPaint = Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.fill;
+  RadarNDimensionsPainter({
+    required this.data,
+    required this.maxDataValue,
+    required this.cycleRadius,
+    required this.dimension,
+    required this.gridPaint,
+    required this.dataPaint,
+    required this.labelBackgroundPaint,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -36,7 +103,7 @@ class RadarNDimensionsChart extends CustomPainter {
     final radius = min(size.width / 2, size.height / 2);
 
     /// 绘制网格
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= dimension; i++) {
       final r = radius * i / 5;
       final path = Path();
       for (int j = 0; j < data.length; j++) {
@@ -103,3 +170,7 @@ class RadarNDimensionsChart extends CustomPainter {
     return false;
   }
 }
+
+
+
+
