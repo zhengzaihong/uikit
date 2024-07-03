@@ -30,6 +30,7 @@
  22. 新增 Shimmer 微光加载效果
  23. 新增 ImageSwitch 可高度自定义开关按钮组件
  24. 新增 ZTooltip 任何组件可响应提示的组件
+ 25. 新增 5维和N维雷达组件
 
   ...持续更新中....
 
@@ -39,6 +40,9 @@
 
 ## 更多效果请查看demo
 
+
+## 雷达组件：
+| ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png ) | ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png) |
 
 ## 日历组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/calendar.gif)

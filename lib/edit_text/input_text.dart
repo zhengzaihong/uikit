@@ -292,7 +292,11 @@ class InputText extends StatefulWidget {
   final FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
 
+
   // final String? initialValue;
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
+  final CrossAxisAlignment crossAxisAlignment;
   const InputText(
       {
         this.inline = InlineStyle.clearStyle,
@@ -430,6 +434,9 @@ class InputText extends StatefulWidget {
         this.onSaved,
         this.validator,
         // this.initialValue,
+        this.mainAxisAlignment = MainAxisAlignment.start,
+        this.mainAxisSize = MainAxisSize.max,
+        this.crossAxisAlignment = CrossAxisAlignment.center,
         Key? key})
       : super(key: key);
 
@@ -487,8 +494,9 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     return CompositedTransformTarget(
       link: _layerLink,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: widget.crossAxisAlignment,
+        mainAxisAlignment:widget.mainAxisAlignment,
+        mainAxisSize: widget.mainAxisSize,
         children: [
           widget.title ?? const SizedBox.shrink(),
           widget.noBorder

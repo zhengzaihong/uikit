@@ -8,13 +8,19 @@ import 'package:flutter/material.dart';
 /// describe: 五维图数据
 ///
 class RadarBean {
-  double score;
+  num score;
   String name;
   Color bgColor;
   TextStyle textStyle;
+  TextStyle scoreTextStyle;
+  num emptyScoreGrid = 0;
 
-  RadarBean(this.score, this.name,
-      {this.bgColor = Colors.white,
-      this.textStyle = const TextStyle(color: Colors.black,
-          fontSize: 12)});
+  RadarBean(
+    this.score,
+    this.name, {
+    this.bgColor = Colors.white,
+    this.textStyle = const TextStyle(color: Colors.black, fontSize: 12),
+    this.scoreTextStyle = const TextStyle(color: Colors.white, fontSize: 12),
+    this.emptyScoreGrid = 10,
+  });
 }

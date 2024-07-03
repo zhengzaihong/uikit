@@ -13,6 +13,13 @@ import 'package:flutter_uikit_forzzh/radar/radar_ndimensions_chart.dart';
 /// create_time: 14:42
 /// describe: 5维度雷达图   N维 使用[RadarNDimensionsChart]
 ///
+
+enum RadarType {
+  inner,
+  normal,
+  none,
+}
+
 class Radar5DimensionsChart extends StatefulWidget {
 
   ///半径
@@ -20,9 +27,7 @@ class Radar5DimensionsChart extends StatefulWidget {
 
   ///文字和图像的间距
   final double padding;
-
-  ///最下面两个的间距
-  final double bottomPadding;
+  final double titleMargin;
 
   final List<RadarBean> data;
 
@@ -30,16 +35,18 @@ class Radar5DimensionsChart extends StatefulWidget {
   final Paint? zeroToPointPaint;
   final Paint? pentagonPaint;
   final Paint? contentPaint;
+  final RadarType radarType;
 
   const Radar5DimensionsChart({
     required this.data,
     this.radius = 70,
     this.padding = 10,
-    this.bottomPadding = 8,
+    this.titleMargin = 10,
     this.cycleRadius=22,
     this.zeroToPointPaint,
     this.pentagonPaint,
     this.contentPaint,
+    this.radarType = RadarType.normal,
     Key? key}):super(key: key);
 
   @override
@@ -72,23 +79,27 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
     ];
 
     ///原点到5个定点的连线
-    zeroToPointPaint = widget.zeroToPointPaint?? Paint()
-      ..style = PaintingStyle.stroke
-      ..color = Colors.lightBlueAccent.withOpacity(0.3)
-      ..strokeWidth = 0.5;
+    zeroToPointPaint = widget.zeroToPointPaint??(
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..color = Colors.white.withOpacity(0.3)
+          ..strokeWidth = 0.5
+    );
 
     ///5层五边形画笔
-    pentagonPaint = widget.pentagonPaint?? Paint()
-      ..color = Colors.white.withOpacity(0.1)
+    pentagonPaint = widget.pentagonPaint??(Paint()
+      ..color = Colors.grey.withOpacity(0.1)
       ..strokeWidth = 1
-      ..style = PaintingStyle.fill;
+      ..style = PaintingStyle.fill);
 
     ///覆盖内容颜色
-    contentPaint = widget.contentPaint??Paint()
-      ..color = Colors.lightBlue.withAlpha(100)
-      ..strokeWidth = 2
-      ..style = PaintingStyle.fill;
+    contentPaint = widget.contentPaint??(
+        Paint()
+          ..color = Colors.grey.withAlpha(100)
+          ..strokeWidth = 2
+          ..style = PaintingStyle.fill
 
+    );
 
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 1))
       ..addListener(() {
@@ -102,8 +113,16 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
 
   List<Offset> convertPoint(List<Offset> points, List<RadarBean> score, double scale) {
     List<Offset> list = [];
-    for (int i = 0; i < points.length; i++) {
-      list.add(points[i].scale(score[i].score * scale / 100, score[i].score * scale / 100));
+    if(widget.radarType == RadarType.none){
+      for (int i = 0; i < points.length; i++) {
+        final score = widget.data[i].emptyScoreGrid;
+        list.add(points[i].scale(score * scale / 100,score * scale / 100));
+      }
+    }else{
+      for (int i = 0; i < points.length; i++) {
+        final score = widget.data[i].score;
+        list.add(points[i].scale(score * scale / 100,score * scale / 100));
+      }
     }
     return list;
   }
@@ -118,10 +137,12 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
           values:values,
           radius: widget.radius!,
           padding: widget.padding,
-          bottomPadding: widget.bottomPadding,
+          titleMargin: widget.titleMargin,
           zeroToPointPaint: zeroToPointPaint,
           pentagonPaint: pentagonPaint,
-          contentPaint: contentPaint),
+          contentPaint: contentPaint,
+          radarType: widget.radarType
+      ),
     );
   }
 }
@@ -131,13 +152,14 @@ class RadarMapPainter extends CustomPainter {
   double radius;
   double cycleRadius;
   double padding;
-  double bottomPadding;
+  double titleMargin;
   Paint zeroToPointPaint;
   Paint pentagonPaint;
   Paint contentPaint;
   List<RadarBean> data;
   AnimationController animationController;
   ValueNotifier<List<Offset>> values;
+  RadarType radarType;
 
   RadarMapPainter(
       {
@@ -147,10 +169,11 @@ class RadarMapPainter extends CustomPainter {
         required this.radius,
         required this.cycleRadius,
         required this.padding,
-        required this.bottomPadding,
+        required this.titleMargin,
         required this.zeroToPointPaint,
         required this.pentagonPaint,
-        required this.contentPaint
+        required this.contentPaint,
+        required this.radarType
       })
       : super(repaint: values);
 
@@ -203,63 +226,170 @@ class RadarMapPainter extends CustomPainter {
 
   ///根据位置来绘制文字
   void drawTextByPosition(List<Offset> points, Canvas canvas,Size size) {
+
+    if(radarType == RadarType.none){
+      for (int i = 0; i < points.length; i++) {
+        final offset = points[i];
+        TextStyle textStyle = data[i].textStyle;
+        double textSize = textStyle.fontSize??12;
+        final labelBackgroundPaint = Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.fill;
+        switch (i) {
+          case 0:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx, offset.dy-padding- cycleRadius - titleMargin-textSize),data[i],canvas);
+            break;
+          case 1:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx+cycleRadius/2+padding, offset.dy-cycleRadius),data[i],canvas);
+            break;
+          case 2:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx, offset.dy+padding),data[i],canvas);
+            break;
+          case 3:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx, offset.dy+padding),data[i],canvas);
+            break;
+          case 4:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx-cycleRadius/2 -padding, offset.dy-cycleRadius),data[i],canvas);
+            break;
+          default:
+        }
+      }
+      return;
+    }
+
+    if(radarType == RadarType.normal){
+      for (int i = 0; i < points.length; i++) {
+        final offset = points[i];
+        TextStyle textStyle = data[i].textStyle;
+        double textSize = textStyle.fontSize??12;
+        final labelBackgroundPaint = Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.fill;
+
+        switch (i) {
+          case 0:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx, offset.dy-padding- cycleRadius - titleMargin-textSize),data[i],canvas);
+            canvas.drawCircle(Offset(offset.dx, offset.dy -padding - cycleRadius/2), cycleRadius, labelBackgroundPaint);
+            layoutScore(Offset(offset.dx, offset.dy-padding - cycleRadius/2),data[i],canvas);
+            break;
+          case 1:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx+cycleRadius/2+padding, offset.dy-cycleRadius),data[i],canvas);
+            canvas.drawCircle(Offset(offset.dx+cycleRadius/2+padding, offset.dy - cycleRadius/2+textSize+titleMargin), cycleRadius, labelBackgroundPaint);
+            layoutScore(Offset(offset.dx+cycleRadius/2+padding, offset.dy - cycleRadius/2+textSize+titleMargin),data[i],canvas);
+            break;
+          case 2:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx, offset.dy+padding),data[i],canvas);
+            canvas.drawCircle(Offset(offset.dx, offset.dy+padding + cycleRadius/2+titleMargin+textSize), cycleRadius, labelBackgroundPaint);
+            layoutScore(Offset(offset.dx, offset.dy+padding +  cycleRadius/2+titleMargin+textSize),data[i],canvas);
+            break;
+          case 3:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx, offset.dy+padding),data[i],canvas);
+            canvas.drawCircle(Offset(offset.dx, offset.dy+padding + cycleRadius/2+titleMargin+textSize), cycleRadius, labelBackgroundPaint);
+            layoutScore(Offset(offset.dx, offset.dy+padding +  cycleRadius/2+titleMargin+textSize),data[i],canvas);
+            break;
+          case 4:
+            labelBackgroundPaint.color = data[i].bgColor;
+            layoutTitle(Offset(offset.dx-cycleRadius/2 -padding, offset.dy-cycleRadius),data[i],canvas);
+            canvas.drawCircle(Offset(offset.dx-cycleRadius/2 - padding, offset.dy - cycleRadius/2+textSize+titleMargin), cycleRadius, labelBackgroundPaint);
+            layoutScore(Offset(offset.dx-cycleRadius/2-padding, offset.dy - cycleRadius/2+textSize+titleMargin),data[i],canvas);
+            break;
+          default:
+        }
+      }
+      return;
+    }
+
     for (int i = 0; i < points.length; i++) {
+      final offset = points[i];
+      final labelBackgroundPaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.fill;
+
       switch (i) {
         case 0:
-          points[i] -= Offset(0, padding * 2);
+          labelBackgroundPaint.color = data[i].bgColor;
+          canvas.drawCircle(
+              Offset(offset.dx, offset.dy - padding - cycleRadius / 2),
+              cycleRadius,
+              labelBackgroundPaint);
+          layoutText(Offset(offset.dx, offset.dy - padding - cycleRadius / 2),
+              data[i], canvas);
           break;
         case 1:
-          points[i] += Offset(padding, -padding);
+          labelBackgroundPaint.color = data[i].bgColor;
+          canvas.drawCircle(Offset(offset.dx + padding+cycleRadius/2, offset.dy-cycleRadius/2), cycleRadius,
+              labelBackgroundPaint);
+          layoutText(Offset(offset.dx + padding+cycleRadius/2, offset.dy-cycleRadius/2), data[i], canvas);
           break;
         case 2:
-          points[i] += Offset(bottomPadding, padding);
+          labelBackgroundPaint.color = data[i].bgColor;
+          canvas.drawCircle(Offset(offset.dx + padding, offset.dy+cycleRadius/2+padding), cycleRadius,
+              labelBackgroundPaint);
+          layoutText(Offset(offset.dx + padding, offset.dy+cycleRadius/2+padding), data[i], canvas);
           break;
         case 3:
-          points[i] += Offset(-bottomPadding, padding);
+          labelBackgroundPaint.color = data[i].bgColor;
+          canvas.drawCircle(Offset(offset.dx-padding, offset.dy+cycleRadius/2+padding), cycleRadius,
+              labelBackgroundPaint);
+          layoutText(Offset(offset.dx-padding, offset.dy+cycleRadius/2+padding), data[i], canvas);
           break;
         case 4:
-          points[i] -= Offset(padding, padding);
+          labelBackgroundPaint.color = data[i].bgColor;
+          canvas.drawCircle(Offset(offset.dx - padding-cycleRadius/2, offset.dy-cycleRadius/2), cycleRadius,
+              labelBackgroundPaint);
+          layoutText(Offset(offset.dx - padding-cycleRadius/2, offset.dy-cycleRadius/2), data[i], canvas);
           break;
         default:
       }
-      drawText(canvas, points[i], data[i].textStyle, i,size);
     }
   }
 
 
-  void drawText(Canvas canvas, Offset offset, TextStyle style, int i,Size size)  {
-    final labelBackgroundPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-    switch (i) {
-      case 0:
-        labelBackgroundPaint.color = data[i].bgColor;
-        canvas.drawCircle(offset.translate(0, -5), cycleRadius, labelBackgroundPaint);
-        layoutText(Offset(offset.dx, offset.dy-5),data[i],canvas);
-        break;
-      case 1:
-        labelBackgroundPaint.color = data[i].bgColor;
-        canvas.drawCircle(offset.translate(15, 10), cycleRadius, labelBackgroundPaint);
-        layoutText(Offset(offset.dx+15, offset.dy+10),data[i],canvas);
-        break;
-      case 2:
-        labelBackgroundPaint.color = data[i].bgColor;
-        canvas.drawCircle(offset.translate(10, 10), cycleRadius, labelBackgroundPaint);
-        layoutText(Offset(offset.dx+10, offset.dy+10),data[i],canvas);
-        break;
-      case 3:
-        labelBackgroundPaint.color = data[i].bgColor;
-        canvas.drawCircle(offset.translate(5, 15), cycleRadius, labelBackgroundPaint);
-        layoutText(Offset(offset.dx+5, offset.dy+15),data[i],canvas);
-        break;
-      case 4:
-        labelBackgroundPaint.color = data[i].bgColor;
-        canvas.drawCircle(offset.translate(-15, 10), cycleRadius, labelBackgroundPaint);
-        layoutText(Offset(offset.dx-15, offset.dy+10),data[i],canvas);
-        break;
-      default:
-    }
+  void layoutTitle(Offset offset,RadarBean bean,Canvas canvas){
+    final scoreTextPainter = TextPainter(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: bean.name,
+        style: bean.textStyle,
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    scoreTextPainter.layout();
+    final scoreOffset = Offset(
+      offset.dx - scoreTextPainter.width / 2,
+      offset.dy - scoreTextPainter.height / 2,
+    );
+    scoreTextPainter.paint(canvas, scoreOffset);
   }
+
+  void layoutScore(Offset offset,RadarBean bean,Canvas canvas){
+    final scoreTextPainter = TextPainter(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: "${bean.score}",
+        style: bean.scoreTextStyle,
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    scoreTextPainter.layout();
+    final scoreOffset = Offset(
+      offset.dx - scoreTextPainter.width / 2,
+      offset.dy - scoreTextPainter.height / 2,
+    );
+    scoreTextPainter.paint(canvas, scoreOffset);
+  }
+
+
+
 
   void layoutText(Offset offset,RadarBean bean,Canvas canvas){
     final scoreTextPainter = TextPainter(
@@ -277,8 +407,6 @@ class RadarMapPainter extends CustomPainter {
     );
     scoreTextPainter.paint(canvas, scoreOffset);
   }
-
-
 
   void drawZeroToPoint(List<Offset> points, Canvas canvas) {
     for (var element in points) {

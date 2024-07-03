@@ -45,17 +45,23 @@ class _RadarNDimensionsChartState extends State<RadarNDimensionsChart> {
   void initState() {
     super.initState();
 
-    gridPaint = widget.gridPaint??Paint()
-      ..color = Colors.grey
-      ..style = PaintingStyle.stroke;
+    gridPaint = widget.gridPaint??(
+        Paint()
+          ..color = Colors.grey
+          ..style = PaintingStyle.stroke
+    );
 
-    dataPaint = widget.dataPaint?? Paint()
-    ..color = Colors.green.withOpacity(0.5)
-    ..style = PaintingStyle.fill;
+    dataPaint = widget.dataPaint??(
+        Paint()
+          ..color = Colors.green.withOpacity(0.5)
+          ..style = PaintingStyle.fill
+    );
 
-    labelBackgroundPaint = widget.labelBackgroundPaint?? Paint()
-    ..color = Colors.white
-    ..style = PaintingStyle.fill;
+    labelBackgroundPaint = widget.labelBackgroundPaint??(
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.fill
+    );
 
   }
 

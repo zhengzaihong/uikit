@@ -65,10 +65,10 @@ class _InputExampleState extends State<InputExample> {
             fillColor: Colors.grey.withAlpha(40),
             cursorEnd: true,
             suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 20, color: Colors.grey),
+            controller: TextEditingController(),
             onChanged: (msg){
               print("----------msg:$msg");
-            },
-            controller: TextEditingController(),
+            }.inputThrottle(milliseconds: 500),
           ),
 
 
@@ -171,9 +171,9 @@ class _InputExampleState extends State<InputExample> {
                       LengthLimitingTextInputFormatter(11),
                     ],
                     onChanged: (msg){
-
-                      print("----------msg1111:$msg");
+                      print("----------msg-:$msg");
                     },
+
                     controller: TextEditingController(),
                     validator: const InputValidation(
                         mustFill: true,
