@@ -42,7 +42,8 @@
 
 
 ## 雷达组件：
-| ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png ) | ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png) |
+![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png ) 
+![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png)
 
 ## 日历组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/calendar.gif)
