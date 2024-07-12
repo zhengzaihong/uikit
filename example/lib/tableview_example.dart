@@ -20,13 +20,13 @@ class _TableViewExampleState extends State<TableViewExample> {
     }
   }
 
-  Widget _cellBuilder(String title,double flex){
+  Widget _cellBuilder(String title,double flex,RowStyleParam styleParam){
     return   Container(
-      width: flex-1,
+      width: flex*1,
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        border: Border(left: BorderSide(color: Colors.red,width: 1)),
-      ),
+      decoration: styleParam.enableDivider? const BoxDecoration(
+        border: Border(left: BorderSide(color: Colors.cyanAccent,width: 1)),
+      ):null,
       child:Row(
         children: [
           Expanded(child: Center(child: Text(title,style: const TextStyle(fontSize: 14,color: Colors.black)),)),
@@ -52,44 +52,116 @@ class _TableViewExampleState extends State<TableViewExample> {
             const SizedBox(height: 30),
             Expanded(child:  Container(
               margin: const EdgeInsets.only(left: 100,right: 100),
-              child: TableView<TestBean>(
-                enableDivider: true,
-                enableTopDivider: true,
-                enableBottomDivider: true,
-                dividerColor: Colors.red,
-                doubleScroll: true,
+              child: TableViewExtend<TestBean>(
+                enableDivider: false,
+                dividerColor: Colors.cyanAccent,
+                // enableFixHeaderColumn: true,
+                // enableFixFootColumn: true,
                 tableDatas: list,
-                cellColumnCount: 6,
-                minCellWidth:50,
+                minCellWidth:80,
                 shrinkWrap: true,
-                cellWidthFlex: const [1,3,1,1,2,4],
-                buildTableHeaderStyle: (context,rowWidth,flex){
+                fixCellHeaderWidthFlex: [1],
+                buildFixHeaderTableHeaderStyle: (context,rowStyle){
                   return Container(
-                    width: rowWidth,
+                    width: rowStyle.rowWidth,
                     height: 40,
-                    decoration: const BoxDecoration(
+                    margin: EdgeInsets.only(top: 1),
+                    decoration: BoxDecoration(
                       color: Colors.lightBlueAccent,
-                      border: Border(right: BorderSide(color: Colors.red,width: 1),top: BorderSide(color: Colors.red,width: 1)),
                     ),
                     child: Row(
                       children: [
-                        _cellBuilder("姓名",flex[0]),
+                        _cellBuilder("姓名",rowStyle.cellWidth![0],rowStyle),
+                      ],
+                    ),
+                  );
+                },
+                fixHeaderRowStyle: (rowStyle){
+                  TestBean bean = rowStyle.data;
+                  return IntrinsicHeight(
+                    child: Container(
+                      width: rowStyle.rowWidth,
+                      constraints: const BoxConstraints(
+                        minHeight: 40,
+                      ),
+                      child:Column(
+                        children: [ Expanded(child: Row(
+                          children: [
+                            _cellBuilder(bean.name!, rowStyle.cellWidth![0],rowStyle),
+                          ],
+                        ))],
+                      ),
+                    ),
+                  );
+                },
 
-                        _cellBuilder("年龄",flex[1]),
-                        _cellBuilder("生日",flex[2]),
-                        _cellBuilder("身份证",flex[3]),
-                        _cellBuilder("电话号码",flex[4]),
-                        _cellBuilder("住址",flex[5]),
+                fixCellFootWidthFlex: [1,],
+                buildFixFootTableHeaderStyle: (context,rowStyle){
+                  final cellsWidth = rowStyle.cellWidth!;
+                  return Container(
+                    width: rowStyle.rowWidth,
+                    height: 40,
+                    margin: EdgeInsets.only(top: 1),
+                    decoration:  BoxDecoration(
+                      color: Colors.lightBlueAccent,
+                    ),
+                    child: Row(
+                      children: [
+                        _cellBuilder("电话",cellsWidth[0],rowStyle),
+                      ],
+                    ),
+                  );
+                },
+                fixFootRowStyle: (rowStyle){
+                  TestBean bean = rowStyle.data!;
+                  final cellsWidth = rowStyle.cellWidth!;
+                  final rowWidth = rowStyle.rowWidth;
+                  return IntrinsicHeight(
+                    child: Container(
+                      width: rowWidth,
+                      constraints: const BoxConstraints(
+                        minHeight: 40,
+                      ),
+                      child:Row(
+                        children: [
+                          // _cellBuilder(bean.phone!, cellsWidth[0],rowStyle),
+                          Expanded(child: Center(child: Text("title",style: const TextStyle(fontSize: 14,color: Colors.black)),)),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+
+                cellWidthFlex: const [1,3,1,1,2,4],
+                buildTableHeaderStyle: (context,rowStyle){
+                  final flex = rowStyle.cellWidth!;
+                  final rowWidth = rowStyle.rowWidth;
+                  return Container(
+                    width: rowWidth,
+                    height: 40,
+                    margin: const EdgeInsets.only(top: 1),
+                    decoration: const BoxDecoration(
+                      color: Colors.lightBlueAccent),
+                    child: Row(
+                      children: [
+                        _cellBuilder("姓名",flex[0],rowStyle),
+                        _cellBuilder("年龄",flex[1],rowStyle),
+                        _cellBuilder("生日",flex[2],rowStyle),
+                        _cellBuilder("身份证",flex[3],rowStyle),
+                        _cellBuilder("电话号码",flex[4],rowStyle),
+                        _cellBuilder("住址",flex[5],rowStyle),
 
                       ],
                     ),
                   );
                 },
-                buildRowStyle: (data,index,rowWidth,flex){
-                  TestBean bean = data;
+                buildRowStyle: (rowStyle){
+                  TestBean bean = rowStyle.data!;
+                  final flex = rowStyle.cellWidth!;
+                  final rowWidth = rowStyle.rowWidth;
+                  int index = rowStyle.index!;
                   return GestureDetector(
                     onTap: (){
-                      print(index);
                     },
                     child: IntrinsicHeight(
                       child: Container(
@@ -97,20 +169,15 @@ class _TableViewExampleState extends State<TableViewExample> {
                         constraints: const BoxConstraints(
                           minHeight: 40,
                         ),
-                        decoration: const BoxDecoration(
-                          border: Border(right: BorderSide(color: Colors.red,width: 1)),
-                        ),
-                        child:Column(
-                          children: [ Expanded(child: Row(
-                            children: [
-                              _cellBuilder(bean.name!, flex[0]),
-                              _cellBuilder(bean.age!, flex[1]),
-                              _cellBuilder(bean.birth!, flex[2]),
-                              _cellBuilder(bean.card!, flex[3]),
-                              _cellBuilder(bean.phone!, flex[4]),
-                              _cellBuilder(index%2==0?bean.address!:'sssssss', flex[5]),
-                            ],
-                          ))],
+                        child:Row(
+                          children: [
+                            _cellBuilder(bean.name!, flex[0],rowStyle),
+                            _cellBuilder(bean.age!, flex[1],rowStyle),
+                            _cellBuilder(bean.birth!, flex[2],rowStyle),
+                            _cellBuilder(bean.card!, flex[3],rowStyle),
+                            _cellBuilder(bean.phone!, flex[4],rowStyle),
+                            _cellBuilder(index%2==0?bean.address!:'sssssss', flex[5]-1,rowStyle),
+                          ],
                         ),
                       ),
                     ),
@@ -120,7 +187,7 @@ class _TableViewExampleState extends State<TableViewExample> {
 
             const SizedBox(height: 30),
             Row(children: const [
-              Expanded(child:  Center(child:  Text("放射科检查报告单",style: TextStyle(color: Colors.black,
+              Expanded(child:  Center(child:  Text("放射科检查报告单(垂直滑动表格)",style: TextStyle(color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.w500))))
             ]),
@@ -178,7 +245,9 @@ class _TableViewExampleState extends State<TableViewExample> {
                 ];
                 return rowDatas;
               },
-              buildRowStyle: (data,index,rowWidth,flex){
+              buildRowStyle: (rowStyle){
+                final index = rowStyle.index;
+                final data = rowStyle.data;
                 switch(index){
                 ///第一行
                   case 1:

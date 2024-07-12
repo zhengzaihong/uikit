@@ -15,7 +15,7 @@ export 'input_extend/inputlib.dart';
 export 'edit_text/edit_text_lib.dart';
 export 'src/position_enum.dart';
 export 'textview/textview_lib.dart';
-export 'table/tableview.dart';
+export 'table/tableview_lib.dart';
 export 'blur/Blur.dart';
 export 'textview/marquee_view.dart';
 export 'Infinite/infinite_levels_menus.dart';
