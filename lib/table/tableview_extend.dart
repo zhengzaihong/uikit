@@ -44,6 +44,7 @@ class TableViewExtend<T> extends StatefulWidget {
   final bool shrinkWrap;
 
   final bool enableDivider;
+  final bool gridDivider;
 
   ///纵向分割线  横向分割线在 TabRow配置
   final Color dividerColor;
@@ -76,6 +77,7 @@ class TableViewExtend<T> extends StatefulWidget {
         this.bodyDecoration,
         this.headerDecoration,
         this.enableDivider = false,
+        this.gridDivider = false,
         this.preDealData,
         this.shrinkWrap = true,
         this.dividerColor = Colors.black,
@@ -176,38 +178,18 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
 
     _itemCount = datas.length;
 
-    _titleController?.addListener(() {
-      _contentHorizontalController?.jumpTo(_titleController?.offset??0);
-    });
-    _contentHorizontalController?.addListener(() {
-      _titleController?.jumpTo(_contentHorizontalController?.offset??0);
-    });
+    // _titleController?.addListener(bindTitleListener);
+    _contentHorizontalController?.addListener(bindHorizontalListener);
 
-    _contentVerticalController?.addListener(() {
-      _fixHeaderContentController?.jumpTo(_contentVerticalController?.offset??0);
-      _fixFootContentController?.jumpTo(_contentVerticalController?.offset??0);
-    });
 
+    _contentVerticalController?.addListener(bindContentListener);
 
     if(widget.enableFixHeaderColumn){
-      _fixHeaderTitleController?.addListener((){
-        _contentHorizontalController?.jumpTo(_fixHeaderTitleController?.offset??0);
-      });
-      _fixHeaderContentController?.addListener((){
-        _contentVerticalController?.jumpTo(_fixHeaderContentController?.offset??0);
-      });
+      _fixHeaderContentController?.addListener(bindHeaderListener);
     }
-
     if(widget.enableFixFootColumn){
-      _fixFootTitleController?.addListener((){
-        _contentHorizontalController?.jumpTo(_fixFootTitleController?.offset??0);
-      });
-      _fixFootContentController?.addListener((){
-        _contentVerticalController?.jumpTo(_fixFootContentController?.offset??0);
-      });
+      _fixFootContentController?.addListener(bindFooterListener);
     }
-
-
     cellWidthFlex = widget.cellWidthFlex ?? [];
     fixCellHeaderWidthFlex = widget.fixCellHeaderWidthFlex ?? [];
     fixCellFootWidthFlex = widget.fixCellFootWidthFlex ?? [];
@@ -226,6 +208,62 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
       widget.handlerControllerCallBack?.call(handlerController);
     });
 
+  }
+
+  void bindTitleListener() {
+    _contentHorizontalController?.removeListener(bindHorizontalListener);
+    _contentHorizontalController?.jumpTo(_titleController?.offset??0);
+    _contentHorizontalController?.addListener(bindHorizontalListener);
+  }
+
+  void bindHorizontalListener() {
+    _titleController?.removeListener(bindTitleListener);
+    _titleController?.jumpTo(_contentHorizontalController?.offset??0);
+    _titleController?.addListener(bindTitleListener);
+  }
+
+  void bindHeaderListener(){
+    _contentVerticalController?.removeListener(bindContentListener);
+    _fixFootContentController?.removeListener(bindFooterListener);
+
+    scrollContent(_fixHeaderContentController?.offset??0);
+    scrollFooter(_fixHeaderContentController?.offset??0);
+
+    _contentVerticalController?.addListener(bindContentListener);
+    _fixFootContentController?.addListener(bindFooterListener);
+  }
+
+  void bindContentListener(){
+    _fixHeaderContentController?.removeListener(bindHeaderListener);
+    _fixFootContentController?.removeListener(bindFooterListener);
+
+    scrollHeader(_contentVerticalController?.offset??0);
+    scrollFooter(_contentVerticalController?.offset??0);
+
+    _fixHeaderContentController?.addListener(bindHeaderListener);
+    _fixFootContentController?.addListener(bindFooterListener);
+  }
+
+  void bindFooterListener(){
+    _fixHeaderContentController?.removeListener(bindHeaderListener);
+    _contentVerticalController?.removeListener(bindContentListener);
+
+    scrollHeader(_fixFootContentController?.offset??0);
+    scrollContent(_fixFootContentController?.offset??0);
+
+    _fixHeaderContentController?.addListener(bindHeaderListener);
+    _contentVerticalController?.addListener(bindContentListener);
+  }
+
+  void scrollContent(double offset){
+    _contentVerticalController?.jumpTo(offset);
+  }
+
+  void scrollHeader(double offset){
+    _fixHeaderContentController?.jumpTo(offset);
+  }
+  void scrollFooter(double offset){
+    _fixFootContentController?.jumpTo(offset);
   }
 
 
@@ -291,26 +329,24 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
           Expanded(
               child: DecoratedBox(
                 decoration: widget.headerDecoration??BoxDecoration(
-                  border:widget.enableDivider? Border(
-                      top: BorderSide(color:widget.dividerColor,width:1),
-                      bottom: BorderSide(color:widget.dividerColor,width:1),
-                      right: BorderSide(color:widget.dividerColor,width:1),
-                      left: BorderSide(color:widget.dividerColor,width:1)):null,
+                  border:widget.enableDivider && widget.gridDivider? Border(
+                      top: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                      bottom: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                      right: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                      left: BorderSide(color:widget.dividerColor,width:widget.dividerSize)):null,
                 ),
                 child: SingleChildScrollView(
                   controller: _titleController,
                   scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                      width: _horizontalTotalWidth,
-                      child: widget.buildTableHeaderStyle?.call(
-                          context,
-                          RowStyleParam(
-                              enableDivider: widget.enableDivider,
-                              rowWidth: _horizontalTotalWidth,
-                              cellWidth: cellWidthFlex!
-                                  .map((e) => e * widget.minCellWidth)
-                                  .toList())
-                      )),
+                  child: widget.buildTableHeaderStyle?.call(
+                      context,
+                      RowStyleParam(
+                          enableDivider: widget.enableDivider,
+                          rowWidth: _horizontalTotalWidth,
+                          cellWidth: cellWidthFlex!
+                              .map((e) => e * widget.minCellWidth)
+                              .toList())
+                  ),
                 ),
               )),
         ],
@@ -318,30 +354,34 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
       Expanded(
           child: DecoratedBox(
             decoration: widget.bodyDecoration??BoxDecoration(
-              border:widget.enableDivider? Border(
+              border:widget.enableDivider  && widget.gridDivider? Border(
                   top: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                   bottom: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                   right: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                   left: BorderSide(color:widget.dividerColor,width:widget.dividerSize)):null,
             ),
-            child: SingleChildScrollView(
-              controller: _contentVerticalController,
-              child: SingleChildScrollView(
+            child:GestureDetector(
+              // onHorizontalDragUpdate: (details) {
+              //   final newScrollOffset = _contentHorizontalController!.offset - details.delta.dx;
+              //   _contentHorizontalController!.jumpTo(newScrollOffset);
+              // },
+              child:  SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 controller: _contentHorizontalController,
                 physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
                   width: _horizontalTotalWidth,
+                  height: box.maxHeight,
                   child: ListView.separated(
                       itemCount: _itemCount,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _contentVerticalController,
+                      // physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final rowStyleParam = RowStyleParam(
                             enableDivider: widget.enableDivider,
                             rowWidth: _horizontalTotalWidth,
                             data: datas[index],
-                            index:  index,
+                            index: index,
                             cellWidth: cellWidthFlex!
                                 .map((e) =>
                             e * widget.minCellWidth)
@@ -386,7 +426,7 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                     width: width,
                     child: DecoratedBox(
                       decoration: widget.headerDecoration??BoxDecoration(
-                        border:widget.enableDivider? Border(
+                        border:widget.enableDivider  && widget.gridDivider? Border(
                           top:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                           bottom:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                           left: getBorderSide(header,isLeft: true),
@@ -425,7 +465,7 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                   ),
                   child:DecoratedBox(
                     decoration: widget.bodyDecoration??BoxDecoration(
-                      border:widget.enableDivider? Border(
+                      border:widget.enableDivider  && widget.gridDivider? Border(
                           top:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                           bottom:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                           left: getBorderSide(header,isLeft: true),
@@ -447,7 +487,7 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                                   .map((e) =>
                               e * widget.minCellWidth)
                                   .toList());
-                          return widget.buildRowStyle(rowStyleParam);
+                          return rowStyle(rowStyleParam);
                         },
                         separatorBuilder: (context, index) {
                           final divider = Container(

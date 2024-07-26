@@ -1,9 +1,11 @@
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.9.10'
     repositories {
-        maven { url 'https://maven.google.com' }
         google()
         mavenCentral()
+        maven {
+            url "https://jitpack.io"
+        }
         maven {
             url "https://storage.flutter-io.cn/download.flutter.io"
         }
@@ -11,16 +13,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://maven.google.com' }
         google()
         mavenCentral()
+        maven {
+            url "https://jitpack.io"
+        }
         maven {
             url "https://storage.flutter-io.cn/download.flutter.io"
         }

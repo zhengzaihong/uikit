@@ -74,6 +74,8 @@ class TextExtend extends StatefulWidget {
   final Widget? suffix;
   final Widget? onHoverSuffix;
 
+  //最长文本长度
+  final int? maxLength;
   // 组件宽高
   final double? width;
   final double? height;
@@ -169,6 +171,7 @@ class TextExtend extends StatefulWidget {
     this.prefix,
     this.onHoverSuffix,
     this.onHoverPrefix,
+    this.maxLength,
     this.width,
     this.height,
     this.builder,
@@ -277,9 +280,13 @@ class _TextExtendState extends State<TextExtend>  with SingleTickerProviderState
 
   @override
   Widget build(BuildContext context) {
+    String text = widget.text??'';
+    if(widget.maxLength!=null&& text.length>widget.maxLength!){
+      text = text.substring(0,widget.maxLength!);
+    }
     final child = widget.isSelectable
         ? SelectableText(
-      widget.text ?? '',
+      text,
       textAlign: widget.textAlign,
       textDirection: widget.textDirection,
       // locale: widget.locale,
@@ -293,7 +300,7 @@ class _TextExtendState extends State<TextExtend>  with SingleTickerProviderState
           : widget.style,
     )
         : Text(
-      widget.text ?? '',
+      text,
       textAlign: widget.textAlign,
       textDirection: widget.textDirection,
       locale: widget.locale,
