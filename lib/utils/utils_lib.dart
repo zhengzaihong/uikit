@@ -10,3 +10,4 @@ export 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 export 'package:flutter_uikit_forzzh/utils/keyboard.dart';
 export 'package:flutter_uikit_forzzh/utils/data_sugar.dart';
 export 'package:flutter_uikit_forzzh/utils/input_ext.dart';
+export 'package:flutter_uikit_forzzh/utils/event_notifier.dart';

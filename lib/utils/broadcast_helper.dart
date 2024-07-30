@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'event_notifier.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -7,6 +8,8 @@ import 'dart:collection';
 /// create_date: 2022/7/20
 /// create_time: 10:10
 /// describe: 全局 订阅模式
+///  此方式已不在推荐使用，未来即将删除
+///  使用 [EventNotifier]代替 事件投递
 ///
 class BroadcastHelper {
 
