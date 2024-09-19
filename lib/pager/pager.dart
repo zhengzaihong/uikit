@@ -16,6 +16,8 @@ import 'package:flutter_uikit_forzzh/edit_text/outline_input_text_border.dart';
 ///
 
 enum PagerItemTypes { prev, next, ellipsis, number }
+enum PagerInputType { input ,select,none}
+
 typedef PageChangeCallback = void Function(int totalPages, dynamic currentPage);
 
 class Pager extends StatefulWidget {
@@ -38,6 +40,10 @@ class Pager extends StatefulWidget {
 
   ///是否开启首次进入则回调
   final bool isEnterCallback;
+
+  final PagerInputType pagerInputType;
+
+  final List<int>? pageSizeList;
 
   final String totalText;
   final String prevText;
@@ -69,6 +75,7 @@ class Pager extends StatefulWidget {
   final double pageTextSize;
   final double pageIndicatorHeight;
   final Color checkedPageColor;
+  final BoxDecoration? checkedPageBoxDecoration;
 
   const Pager({
     Key? key,
@@ -77,6 +84,7 @@ class Pager extends StatefulWidget {
     this.prevText = "前往",
     this.suffixText = '页',
     this.totalText = '共%s条',
+    this.pagerInputType = PagerInputType.input,
     this.pageChange,
     this.currentPage = 1,
     this.errorInputCallback,
@@ -85,6 +93,7 @@ class Pager extends StatefulWidget {
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color:Colors.black),
+    this.pageSizeList,
     this.sideDiff = 2,
     this.showEllipsis = false,
     this.prevColor,
@@ -110,6 +119,7 @@ class Pager extends StatefulWidget {
     this.pageIndicatorColor = Colors.grey,
     this.pageIndicatorActiveColor = Colors.black,
     this.checkedPageColor = Colors.black,
+    this.checkedPageBoxDecoration,
     this.pageTextSize = 14,
     this.pageIndicatorHeight = 30,
   }):super(key: key);
@@ -265,6 +275,8 @@ class _PagerState extends State<Pager> {
       pageTextSize: widget.pageTextSize,
       pageIndicatorHeight: widget.pageIndicatorHeight,
       checkedPageColor: widget.checkedPageColor,
+      checkedPageBoxDecoration:widget.checkedPageBoxDecoration,
+      currentPageIndex:currentPageIndex
     );
   }
 
@@ -292,65 +304,74 @@ class _PagerState extends State<Pager> {
         ...pageItems.map((pageItem) {
           return pageItem;
         }).toList(),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _text(widget.prevText),
-            InputText(
-              width: widget.inputWidth,
-              contentPadding:
-              const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              controller: pageInputController,
-              allLineBorder: widget.outlineInputTextBorder,
-              scrollPadding: const EdgeInsets.all(0),
-              enableClear: false,
-              style: widget.inputTextStyle,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly
-              ],
-              onSubmitted: (text){
-                try{
-                  int index = int.parse(text);
-                  if(index > totalPages){
-                    widget.errorInputCallback?.call();
-                    return;
-                  }
-                  if(index <= 0){
-                    widget.errorInputCallback?.call();
-                    return;
-                  }
-                  setState(() {
-                    if(index-1<=0){
-                      index = 1;
-                    }
-                    currentPageIndex = index-1;
-                    widget.pageChange?.call(totalPages,index);
-                  });
-                }catch(e){
-                  widget.errorInputCallback?.call();
-                }
-              },
-              decoration: InputDecoration(
-                hintText: widget.inputHintText,
-                hintStyle: widget.inputHintTextStyle,
-                isCollapsed: true,
-                filled: widget.inputBgColor != null,
-                fillColor: widget.inputBgColor,
-                isDense: true,
-                enabledBorder: widget.outlineInputTextBorder,
-                border: widget.outlineInputTextBorder,
-                focusedBorder: widget.outlineInputTextBorder,
-                errorBorder: widget.outlineInputTextBorder,
-                focusedErrorBorder: widget.outlineInputTextBorder,
-                contentPadding: widget.inputContentPadding,
-              ),
-            ),
-            _text(widget.suffixText),
-          ],
-        ),
+        _buildPageInputType(),
       ],
     );
+  }
+
+
+  Widget _buildPageInputType(){
+    if(widget.pagerInputType == PagerInputType.input){
+      return  Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _text(widget.prevText),
+          InputText(
+            width: widget.inputWidth,
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            controller: pageInputController,
+            allLineBorder: widget.outlineInputTextBorder,
+            scrollPadding: const EdgeInsets.all(0),
+            enableClear: false,
+            style: widget.inputTextStyle,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            onSubmitted: (text){
+              try{
+                int index = int.parse(text);
+                if(index > totalPages){
+                  widget.errorInputCallback?.call();
+                  return;
+                }
+                if(index <= 0){
+                  widget.errorInputCallback?.call();
+                  return;
+                }
+                setState(() {
+                  if(index-1<=0){
+                    index = 1;
+                  }
+                  currentPageIndex = index-1;
+                  widget.pageChange?.call(totalPages,index);
+                });
+              }catch(e){
+                widget.errorInputCallback?.call();
+              }
+            },
+            decoration: InputDecoration(
+              hintText: widget.inputHintText,
+              hintStyle: widget.inputHintTextStyle,
+              isCollapsed: true,
+              filled: widget.inputBgColor != null,
+              fillColor: widget.inputBgColor,
+              isDense: true,
+              enabledBorder: widget.outlineInputTextBorder,
+              border: widget.outlineInputTextBorder,
+              focusedBorder: widget.outlineInputTextBorder,
+              errorBorder: widget.outlineInputTextBorder,
+              focusedErrorBorder: widget.outlineInputTextBorder,
+              contentPadding: widget.inputContentPadding,
+            ),
+          ),
+          _text(widget.suffixText),
+        ],
+      ) ;
+    }
+    return const SizedBox();
   }
 }
 
@@ -358,6 +379,7 @@ class PagerIndicator extends StatefulWidget {
 
   final PagerItemTypes type;
   final int? index;
+  final int? currentPageIndex;
   final bool isFocused;
   final BoxBorder? focusBorder;
   final double borderRadius;
@@ -366,16 +388,19 @@ class PagerIndicator extends StatefulWidget {
   final double pageTextSize;
   final double pageIndicatorHeight;
   final Color checkedPageColor;
+  final BoxDecoration? checkedPageBoxDecoration;
 
   const PagerIndicator({
     required this.type,
     this.index,
+    this.currentPageIndex,
     this.isFocused = false,
     this.focusBorder,
     this.borderRadius = 10,
     this.pageIndicatorColor = Colors.grey,
     this.pageIndicatorActiveColor = Colors.black,
     this.checkedPageColor = Colors.black,
+    this.checkedPageBoxDecoration,
     this.pageTextSize = 14,
     this.pageIndicatorHeight = 30,
     Key? key,
@@ -411,18 +436,23 @@ class _PagerIndicatorState extends State<PagerIndicator> {
         height: widget.pageIndicatorHeight,
         padding: EdgeInsets.symmetric(
             horizontal: widget.type == PagerItemTypes.ellipsis ? 0 : 10),
-        decoration: BoxDecoration(
+        decoration: widget.checkedPageBoxDecoration==null? BoxDecoration(
           border: widget.type == PagerItemTypes.ellipsis
               ? null
               : widget.isFocused?( widget.focusBorder??  Border.all(
               color:Colors.black)):null,
           borderRadius:  BorderRadius.all(Radius.circular(widget.borderRadius)),
-        ),
+        )
+        : ( widget.type == PagerItemTypes.next ||
+            widget.type == PagerItemTypes.ellipsis ||
+            widget.type == PagerItemTypes.prev ||
+            widget.index != widget.currentPageIndex
+        )?null:widget.checkedPageBoxDecoration,
         child: Center(
           child: Text(
             itemName,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: widget.pageTextSize,
               color: widget.index == null
                   ? (widget.type == PagerItemTypes.ellipsis
                   ? widget.pageIndicatorActiveColor

@@ -33,7 +33,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: Toast.navigatorState,
-      navigatorObservers: <NavigatorObserver>[dropDownButtonRouteObserver],
       builder: (context, child) => Scaffold(
         body: GestureDetector(
           onTap: () {

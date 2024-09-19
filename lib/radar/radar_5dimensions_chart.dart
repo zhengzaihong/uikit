@@ -237,23 +237,23 @@ class RadarMapPainter extends CustomPainter {
           ..style = PaintingStyle.fill;
         switch (i) {
           case 0:
-            labelBackgroundPaint.color = data[i].bgColor;
+            // labelBackgroundPaint.color = data[i].bgColor;
             layoutTitle(Offset(offset.dx, offset.dy-padding- cycleRadius - titleMargin-textSize),data[i],canvas);
             break;
           case 1:
-            labelBackgroundPaint.color = data[i].bgColor;
+            // labelBackgroundPaint.color = data[i].bgColor;
             layoutTitle(Offset(offset.dx+cycleRadius/2+padding, offset.dy-cycleRadius),data[i],canvas);
             break;
           case 2:
-            labelBackgroundPaint.color = data[i].bgColor;
+            // labelBackgroundPaint.color = data[i].bgColor;
             layoutTitle(Offset(offset.dx, offset.dy+padding),data[i],canvas);
             break;
           case 3:
-            labelBackgroundPaint.color = data[i].bgColor;
+            // labelBackgroundPaint.color = data[i].bgColor;
             layoutTitle(Offset(offset.dx, offset.dy+padding),data[i],canvas);
             break;
           case 4:
-            labelBackgroundPaint.color = data[i].bgColor;
+            // labelBackgroundPaint.color = data[i].bgColor;
             layoutTitle(Offset(offset.dx-cycleRadius/2 -padding, offset.dy-cycleRadius),data[i],canvas);
             break;
           default:
@@ -308,6 +308,7 @@ class RadarMapPainter extends CustomPainter {
       return;
     }
 
+    // RadarType.inner
     for (int i = 0; i < points.length; i++) {
       final offset = points[i];
       final labelBackgroundPaint = Paint()

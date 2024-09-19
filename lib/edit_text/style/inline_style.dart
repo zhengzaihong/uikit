@@ -12,7 +12,5 @@ enum InlineStyle {
 
   normalStyle,
 
-  none,
-
   ///todo
 }

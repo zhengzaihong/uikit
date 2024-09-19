@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/table/tableview_lib.dart';
+import 'package:flutter_uikit_forzzh/widgets/overscrollbehavior.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -178,7 +179,7 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
 
     _itemCount = datas.length;
 
-    // _titleController?.addListener(bindTitleListener);
+    _titleController?.addListener(bindTitleListener);
     _contentHorizontalController?.addListener(bindHorizontalListener);
 
 
@@ -335,17 +336,20 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                       right: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                       left: BorderSide(color:widget.dividerColor,width:widget.dividerSize)):null,
                 ),
-                child: SingleChildScrollView(
-                  controller: _titleController,
-                  scrollDirection: Axis.horizontal,
-                  child: widget.buildTableHeaderStyle?.call(
-                      context,
-                      RowStyleParam(
-                          enableDivider: widget.enableDivider,
-                          rowWidth: _horizontalTotalWidth,
-                          cellWidth: cellWidthFlex!
-                              .map((e) => e * widget.minCellWidth)
-                              .toList())
+                child: ScrollConfiguration(
+                  behavior: OverScrollBehavior(),
+                  child: SingleChildScrollView(
+                    controller: _titleController,
+                    scrollDirection: Axis.horizontal,
+                    child: widget.buildTableHeaderStyle?.call(
+                        context,
+                        RowStyleParam(
+                            enableDivider: widget.enableDivider,
+                            rowWidth: _horizontalTotalWidth,
+                            cellWidth: cellWidthFlex!
+                                .map((e) => e * widget.minCellWidth)
+                                .toList())
+                    ),
                   ),
                 ),
               )),
@@ -365,38 +369,45 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
               //   final newScrollOffset = _contentHorizontalController!.offset - details.delta.dx;
               //   _contentHorizontalController!.jumpTo(newScrollOffset);
               // },
-              child:  SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: _contentHorizontalController,
-                physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  width: _horizontalTotalWidth,
-                  height: box.maxHeight,
-                  child: ListView.separated(
-                      itemCount: _itemCount,
-                      controller: _contentVerticalController,
-                      // physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final rowStyleParam = RowStyleParam(
-                            enableDivider: widget.enableDivider,
-                            rowWidth: _horizontalTotalWidth,
-                            data: datas[index],
-                            index: index,
-                            cellWidth: cellWidthFlex!
-                                .map((e) =>
-                            e * widget.minCellWidth)
-                                .toList());
-                        return widget.buildRowStyle(rowStyleParam);
-                      },
-                      separatorBuilder: (context, index) {
-                        final divider = Container(
-                          height: widget.dividerSize,
-                          color: widget.dividerColor,
-                        );
-                        return widget.enableDivider
-                            ? divider
-                            : const SizedBox();
-                      }),
+              child: ScrollConfiguration(
+                behavior: OverScrollBehavior(),
+                child:  SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  controller: _contentHorizontalController,
+                  physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    width: _horizontalTotalWidth,
+                    height: box.maxHeight,
+                    child:ScrollConfiguration(
+                      behavior:OverScrollBehavior() ,
+                      child:  ListView.separated(
+                          itemCount: _itemCount,
+                          controller: _contentVerticalController,
+                          // physics: ClampingScrollPhysics(),
+                          // physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final rowStyleParam = RowStyleParam(
+                                enableDivider: widget.enableDivider,
+                                rowWidth: _horizontalTotalWidth,
+                                data: datas[index],
+                                index: index,
+                                cellWidth: cellWidthFlex!
+                                    .map((e) =>
+                                e * widget.minCellWidth)
+                                    .toList());
+                            return widget.buildRowStyle(rowStyleParam);
+                          },
+                          separatorBuilder: (context, index) {
+                            final divider = Container(
+                              height: widget.dividerSize,
+                              color: widget.dividerColor,
+                            );
+                            return widget.enableDivider
+                                ? divider
+                                : const SizedBox();
+                          }),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -472,32 +483,36 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                           right:getBorderSide(header,isLeft: false),
                           ):null,
                     ),
-                    child:  ListView.separated(
-                        itemCount: _itemCount,
-                        shrinkWrap: true,
-                        controller: contentController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final rowStyleParam = RowStyleParam(
-                              enableDivider: widget.enableDivider,
-                              rowWidth: _horizontalTotalWidth,
-                              data: datas[index],
-                              index:index,
-                              cellWidth: cellWidthFlex!
-                                  .map((e) =>
-                              e * widget.minCellWidth)
-                                  .toList());
-                          return rowStyle(rowStyleParam);
-                        },
-                        separatorBuilder: (context, index) {
-                          final divider = Container(
-                            height: widget.dividerSize,
-                            color: widget.dividerColor,
-                          );
-                          return widget.enableDivider
-                              ? divider
-                              : const SizedBox();
-                        }),
+                    child:ScrollConfiguration(
+                      behavior:OverScrollBehavior() ,
+                      child: ListView.separated(
+                          itemCount: _itemCount,
+                          shrinkWrap: true,
+                          controller: contentController,
+                          // physics: const AlwaysScrollableScrollPhysics(),
+                          // physics: ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final rowStyleParam = RowStyleParam(
+                                enableDivider: widget.enableDivider,
+                                rowWidth: _horizontalTotalWidth,
+                                data: datas[index],
+                                index:index,
+                                cellWidth: cellWidthFlex!
+                                    .map((e) =>
+                                e * widget.minCellWidth)
+                                    .toList());
+                            return rowStyle(rowStyleParam);
+                          },
+                          separatorBuilder: (context, index) {
+                            final divider = Container(
+                              height: widget.dividerSize,
+                              color: widget.dividerColor,
+                            );
+                            return widget.enableDivider
+                                ? divider
+                                : const SizedBox();
+                          }),
+                    ),
                   )))
         ],
       ),

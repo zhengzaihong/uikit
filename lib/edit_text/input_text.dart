@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
-import 'package:flutter_uikit_forzzh/edit_text/style/normal_style_input.dart';
 import '../uikitlib.dart';
 
 ///
@@ -144,7 +143,12 @@ typedef BuildInputDecorationStyle = InputDecoration Function(
 typedef BuildPop<T> = Widget Function(BuildContext context, InputTextState controller);
 
 ///焦点监听
-typedef FocusListener<T> = Widget Function(BuildContext context, InputTextState controller,bool focus);
+typedef FocusListener<T> = void Function(BuildContext context, InputTextState controller,bool focus);
+
+/// 构建自定样式删除  suffixIcon 实现
+typedef ClearBuilder<T> = Widget Function(BuildContext context, InputTextState controller,);
+
+
 
 /// 如是需要再输入框中显示选中项后的项内容，可使用提供的 [InputExtend] 组件实现
 ///
@@ -157,9 +161,14 @@ class InputText extends StatefulWidget {
   /// 是否使用表单输入框
   final bool enableForm;
   /// 输入框末尾的删除按钮样式 enableClear为真是生效
-  final Widget clearIcon;
+  final Widget? clearIcon;
+
   /// 是否开启删除按钮
   final bool enableClear;
+
+  ///需要额外自定义删除框样式。
+  final ClearBuilder? clearBuilder;
+
   /// 所有边框的样式
   final InputBorder? allLineBorder;
 
@@ -235,6 +244,7 @@ class InputText extends StatefulWidget {
   final Clip clipBehavior;
   final String? restorationId;
   final bool scribbleEnabled;
+  final bool enableInteractiveSelection;
   final bool enableIMEPersonalizedLearning;
 
   final Widget? icon;
@@ -305,11 +315,8 @@ class InputText extends StatefulWidget {
         this.bgRadius = 10,
         this.enableForm = false,
         this.enableClear = true,
-        this.clearIcon = const Icon(
-          Icons.cancel,
-          size: 20.0,
-          color: Colors.grey,
-        ),
+        this.clearIcon =  const Icon(Icons.cancel,size: 20,color: Colors.grey),
+        this.clearBuilder,
         this.allLineBorder = const OutlineInputBorder(
             gapPadding: 0,
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -339,8 +346,7 @@ class InputText extends StatefulWidget {
         this.keyboardType = TextInputType.text,
         this.textInputAction = TextInputAction.done,
         this.textCapitalization = TextCapitalization.none,
-        this.style =
-        const TextStyle(fontSize: 14, color:Color(0xff222222)),
+        this.style = const TextStyle(fontSize: 14, color:Color(0xff222222)),
         this.strutStyle,
         this.textAlign = TextAlign.start,
         this.textAlignVertical,
@@ -380,6 +386,7 @@ class InputText extends StatefulWidget {
         this.clipBehavior = Clip.hardEdge,
         this.restorationId,
         this.scribbleEnabled = true,
+        this.enableInteractiveSelection = true,
         this.enableIMEPersonalizedLearning = true,
         this.icon,
         this.iconColor,
@@ -426,7 +433,7 @@ class InputText extends StatefulWidget {
         this.focusedErrorBorder,
         this.disabledBorder,
         this.enabledBorder,
-        this.border,
+        this.border = const OutlineInputBorder(borderSide: BorderSide.none),
         this.semanticCounterText,
         this.alignLabelWithHint,
         this.constraints,
@@ -435,7 +442,7 @@ class InputText extends StatefulWidget {
         this.validator,
         // this.initialValue,
         this.mainAxisAlignment = MainAxisAlignment.start,
-        this.mainAxisSize = MainAxisSize.max,
+        this.mainAxisSize = MainAxisSize.min,
         this.crossAxisAlignment = CrossAxisAlignment.center,
         Key? key})
       : super(key: key);
@@ -455,13 +462,28 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   late FocusNode _focusNode;
 
+  late InlineStyle inlineStyle;
+
   @override
   void initState() {
     super.initState();
+    inlineStyle = widget.inline;
     _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
       widget.focusListener?.call(context, this,hasFocus);
+      if(widget.inline == InlineStyle.clearStyle){
+        ///非外部自定义 走内部实现策略，否则外部调用者维护样式
+       setState(() {
+         if(mounted && widget.clearBuilder == null){
+           if(hasFocus){
+             inlineStyle = InlineStyle.clearStyle;
+           }else{
+             inlineStyle = InlineStyle.normalStyle;
+           }
+         }
+       });
+      }
       if(hasFocus && widget.buildPop!=null){
         addPop();
         return;
@@ -490,7 +512,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-
     return CompositedTransformTarget(
       link: _layerLink,
       child: Column(
@@ -520,82 +541,17 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         ],
       ),
     );
-
   }
 
   Widget _createInput() {
-    return widget.width == null
-        ? Row(
-      children: [
-        Expanded(
-            child: Container(
-              alignment: widget.alignment,
-              padding: widget.padding,
-              margin: widget.margin,
-              width: widget.width,
-              child: TextField(
-                controller: widget.controller,
-                focusNode:_focusNode,
-                style: widget.style,
-                scrollController: widget.scrollController,
-                keyboardType: widget.keyboardType,
-                textInputAction: widget.textInputAction,
-                textCapitalization: widget.textCapitalization,
-                strutStyle: widget.strutStyle,
-                textAlign: widget.textAlign,
-                textAlignVertical: widget.textAlignVertical,
-                textDirection: widget.textDirection,
-                autofocus: widget.autofocus,
-                cursorColor: widget.cursorColor,
-                obscuringCharacter: widget.obscuringCharacter,
-                obscureText: widget.obscureText,
-                autocorrect: widget.autocorrect,
-                enableSuggestions: widget.enableSuggestions,
-                maxLines: widget.maxLines,
-                minLines: widget.minLines,
-                expands: widget.expands,
-                readOnly: widget.readOnly,
-                toolbarOptions: widget.toolbarOptions,
-                showCursor: widget.showCursor,
-                maxLength: widget.maxLength,
-                maxLengthEnforcement: widget.maxLengthEnforcement,
-                onEditingComplete: widget.onEditingComplete,
-                onAppPrivateCommand: widget.onAppPrivateCommand,
-                inputFormatters: widget.inputFormatters,
-                enabled: widget.enabled,
-                cursorWidth: widget.cursorWidth,
-                cursorHeight: widget.cursorHeight,
-                cursorRadius: widget.cursorRadius,
-                keyboardAppearance: widget.keyboardAppearance,
-                scrollPadding: widget.scrollPadding,
-                selectionControls: widget.selectionControls,
-                onTap: widget.onTap,
-                mouseCursor: widget.mouseCursor,
-                buildCounter: widget.buildCounter,
-                scrollPhysics: widget.scrollPhysics,
-                autofillHints: widget.autofillHints,
-                clipBehavior: widget.clipBehavior,
-                restorationId: widget.restorationId,
-                scribbleEnabled: widget.scribbleEnabled,
-                enableIMEPersonalizedLearning:
-                widget.enableIMEPersonalizedLearning,
-                onSubmitted: widget.onSubmitted,
-                onChanged: (text) {
-                  _refresh(text);
-                },
-                decoration: buildDefaultInputDecoration(),
-              ),
-            ))
-      ],
-    )
-        : Container(
+    final input = Container(
       alignment: widget.alignment,
       padding: widget.padding,
       margin: widget.margin,
       width: widget.width,
-      child:TextField(
+      child: TextField(
         controller: widget.controller,
-        focusNode:_focusNode,
+        focusNode: _focusNode,
         style: widget.style,
         scrollController: widget.scrollController,
         keyboardType: widget.keyboardType,
@@ -606,6 +562,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         textAlignVertical: widget.textAlignVertical,
         textDirection: widget.textDirection,
         autofocus: widget.autofocus,
+        cursorColor: widget.cursorColor,
         obscuringCharacter: widget.obscuringCharacter,
         obscureText: widget.obscureText,
         autocorrect: widget.autocorrect,
@@ -616,7 +573,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         readOnly: widget.readOnly,
         toolbarOptions: widget.toolbarOptions,
         showCursor: widget.showCursor,
-        cursorColor: widget.cursorColor,
         maxLength: widget.maxLength,
         maxLengthEnforcement: widget.maxLengthEnforcement,
         onEditingComplete: widget.onEditingComplete,
@@ -637,6 +593,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         clipBehavior: widget.clipBehavior,
         restorationId: widget.restorationId,
         scribbleEnabled: widget.scribbleEnabled,
+        enableInteractiveSelection: widget.enableInteractiveSelection,
         enableIMEPersonalizedLearning:
         widget.enableIMEPersonalizedLearning,
         onSubmitted: widget.onSubmitted,
@@ -646,80 +603,12 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         decoration: buildDefaultInputDecoration(),
       ),
     );
+    return widget.width != null ? input : Row(children: [Expanded(child: input)],);
   }
 
+
   Widget _createInputForm() {
-    return widget.width == null
-        ? Row(
-      children: [
-        Expanded(
-            child: Container(
-              alignment: widget.alignment,
-              padding: widget.padding,
-              margin: widget.margin,
-              // width: widget.width,
-              child: TextFormField(
-                controller: widget.controller,
-                focusNode:_focusNode,
-                style: widget.style,
-                scrollController: widget.scrollController,
-                keyboardType: widget.keyboardType,
-                textInputAction: widget.textInputAction,
-                textCapitalization: widget.textCapitalization,
-                strutStyle: widget.strutStyle,
-                textAlign: widget.textAlign,
-                textAlignVertical: widget.textAlignVertical,
-                textDirection: widget.textDirection,
-                autofocus: widget.autofocus,
-                obscuringCharacter: widget.obscuringCharacter,
-                obscureText: widget.obscureText,
-                autocorrect: widget.autocorrect,
-                enableSuggestions: widget.enableSuggestions,
-                maxLines: widget.maxLines,
-                minLines: widget.minLines,
-                expands: widget.expands,
-                readOnly: widget.readOnly,
-                toolbarOptions: widget.toolbarOptions,
-                showCursor: widget.showCursor,
-                cursorColor: widget.cursorColor,
-                maxLength: widget.maxLength,
-                maxLengthEnforcement: widget.maxLengthEnforcement,
-                onEditingComplete: widget.onEditingComplete,
-                inputFormatters: widget.inputFormatters,
-                enabled: widget.enabled,
-                cursorWidth: widget.cursorWidth,
-                cursorHeight: widget.cursorHeight,
-                cursorRadius: widget.cursorRadius,
-                keyboardAppearance: widget.keyboardAppearance,
-                scrollPadding: widget.scrollPadding,
-                selectionControls: widget.selectionControls,
-                onTap: widget.onTap,
-                mouseCursor: widget.mouseCursor,
-                buildCounter: widget.buildCounter,
-                scrollPhysics: widget.scrollPhysics,
-                autofillHints: widget.autofillHints,
-                restorationId: widget.restorationId,
-                enableIMEPersonalizedLearning:
-                widget.enableIMEPersonalizedLearning,
-                // initialValue: widget.initialValue,
-                validator: (value) {
-                  return widget.validator?.call(value);
-                },
-                onFieldSubmitted: (text) {
-                  widget.onFieldSubmitted?.call(text);
-                },
-                onSaved: (text) {
-                  widget.onSaved?.call(text);
-                },
-                onChanged: (text) {
-                  _refresh(text);
-                },
-                decoration: buildDefaultInputDecoration(),
-              ),
-            ))
-      ],
-    )
-        : Container(
+    final inputForm =  Container(
       alignment: widget.alignment,
       padding: widget.padding,
       margin: widget.margin,
@@ -747,12 +636,12 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         readOnly: widget.readOnly,
         toolbarOptions: widget.toolbarOptions,
         showCursor: widget.showCursor,
+        cursorColor: widget.cursorColor,
         maxLength: widget.maxLength,
         maxLengthEnforcement: widget.maxLengthEnforcement,
         onEditingComplete: widget.onEditingComplete,
         inputFormatters: widget.inputFormatters,
         enabled: widget.enabled,
-        cursorColor: widget.cursorColor,
         cursorWidth: widget.cursorWidth,
         cursorHeight: widget.cursorHeight,
         cursorRadius: widget.cursorRadius,
@@ -765,6 +654,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         scrollPhysics: widget.scrollPhysics,
         autofillHints: widget.autofillHints,
         restorationId: widget.restorationId,
+        enableInteractiveSelection:widget.enableInteractiveSelection ,
         enableIMEPersonalizedLearning:
         widget.enableIMEPersonalizedLearning,
         // initialValue: widget.initialValue,
@@ -783,6 +673,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         decoration: buildDefaultInputDecoration(),
       ),
     );
+    return widget.width != null ? inputForm:Row(children: [Expanded(child: inputForm)],);
   }
 
   InputBorder? _buildBorder(InputBorder? inputBorderType){
@@ -794,26 +685,30 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     }
     return widget.allLineBorder;
   }
-  InputDecoration buildDefaultInputDecoration() {
+  InputDecoration? buildDefaultInputDecoration() {
     if (widget.decoration == null) {
-
-      InputStyleFactory? factory;
-      if(widget.inline == InlineStyle.clearStyle){
-        factory = ClearStyleInput();
+      Widget? suffixIcon;
+      if(inlineStyle == InlineStyle.clearStyle){
+          if(widget.clearBuilder!=null){
+            suffixIcon = widget.clearBuilder!(context,this);
+          }else{
+            suffixIcon = (getHasContent() && widget.enableClear && getIsEnable())
+                ? GestureDetector(
+              onTap: (() {
+                clearContent();
+              }),
+              child: widget.clearIcon,
+            ) : const Text("");
+          }
       }
-      if(widget.inline == InlineStyle.normalStyle){
-        factory = NormalStyleInput();
+      if(inlineStyle == InlineStyle.normalStyle){
+        suffixIcon = widget.suffixIcon;
       }
-
-      factory ??= ClearStyleInput();
-      return factory.build(
-        this,
-        clearIcon:widget.clearIcon ,
-        enableClear: widget.enableClear,
+      return InputDecoration(
+        suffixIcon:suffixIcon,
         fillColor: widget.fillColor,
         filled: widget.filled,
         border: widget.border,
-        allLineBorder: _buildBorder(widget.allLineBorder),
         focusedBorder: _buildBorder(widget.focusedBorder),
         enabledBorder:_buildBorder(widget.enabledBorder),
         disabledBorder: _buildBorder(widget.disabledBorder),
@@ -845,7 +740,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         prefixText: widget.prefixText,
         prefixStyle: widget.prefixStyle,
         prefixIconColor: widget.prefixIconColor,
-        suffixIcon: widget.suffixIcon,
         suffix: widget.suffix,
         suffixText: widget.suffixText,
         suffixStyle: widget.suffixStyle,
@@ -861,7 +755,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         constraints: widget.constraints,
       );
     }
-    return widget.decoration!;
+    return widget.decoration;
   }
 
 
@@ -980,6 +874,10 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
   }
   bool getHasContent() {
     return _hasContent;
+  }
+
+  bool isFocus() {
+    return _focusNode.hasFocus;
   }
 
   @override

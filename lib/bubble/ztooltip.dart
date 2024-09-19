@@ -79,6 +79,9 @@ class ZTooltip extends StatefulWidget {
   //提示窗组件外部自定义
   final BuildTip? buildTip;
 
+  //是否启用气泡
+  final bool enableBubble;
+
   //tip组件是否固定
   final bool fixedTip;
 
@@ -165,6 +168,7 @@ class ZTooltip extends StatefulWidget {
   const ZTooltip(
       {required this.child,
        this.buildTip,
+       this.enableBubble = true,
         this.fixedTip = false,
         this.duration = const Duration(seconds: 0),
       this.layout,
@@ -230,7 +234,7 @@ class ZTooltipState extends State<ZTooltip> {
     final parentSize = renderBox.size;
     _overlayEntry = OverlayEntry(
       builder: (context) {
-        final child = Bubble(
+        final child =widget.enableBubble? Bubble(
           width: widget.width ?? 100,
           height: widget.height ?? 50,
           length: widget.length,
@@ -244,7 +248,8 @@ class ZTooltipState extends State<ZTooltip> {
           style: widget.style,
           innerPadding: widget.innerPadding,
           child: widget.buildTip?.call(this)??const SizedBox()
-        );
+        ):widget.buildTip?.call(this)??const SizedBox();
+
         final tipView = widget.layout?.call(this, target, child,parentSize) ??
             Positioned(
               left: target.dx,

@@ -378,7 +378,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                           return e.fontIcon==null?null:SelectionMenu(
                                               popWidth: 200,
                                               barrierColor: Colors.transparent,
-                                              buttonBuilder: (isShow) {
+                                              buttonBuilder: (show){
                                                 return Container(
                                                   height: 40,
                                                   width: 120,
@@ -391,7 +391,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                                               color: hover?Colors.white:Colors.black,
                                                               fontWeight: FontWeight.bold,
                                                               fontSize: 18)),
-                                                      Icon(isShow
+                                                      Icon(show
                                                           ? Icons.arrow_drop_up_rounded
                                                           : Icons.arrow_drop_down_rounded),
                                                     ],

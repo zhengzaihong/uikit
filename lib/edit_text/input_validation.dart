@@ -17,12 +17,12 @@ class InputValidation {
   final String? format;
   final String? emptyTip;
   final List? formatValues;
-  final bool? mobilePhone;
+  final RegExp? regExp;
 
   const InputValidation({ this.mustFill = true,
     this.minLength,
     this.maxLength,
-    this.mobilePhone,
+    this.regExp,
     this.errorMsg,
     this.format,
     this.emptyTip = "输入不能为空",
@@ -34,28 +34,33 @@ class InputValidation {
         (value == null || value.isEmpty)) {
       return emptyTip;
     }
-    if (mobilePhone != null && mobilePhone != false) {
-      if (StringUtils.isEmpty(value)) {
+    if (regExp != null) {
+      if (StringUtils.isEmpty(value) && mustFill!) {
+        return emptyTip;
+      }
+      if(StringUtils.isNotEmpty(value) && !mustFill! && !regExp!.hasMatch(value)) {
         return errorMsg;
       }
-      if (value
-          .toString()
-          .length != 11) {
+
+      if (mustFill! && !regExp!.hasMatch(value)) {
         return errorMsg;
       }
+      return null;
     }
 
     if (format == null && errorMsg != null) {
       if (minLength != null && value.length < minLength) {
         return errorMsg;
-      } else if (maxLength != null && value.length > maxLength) {
+      }
+      if (maxLength != null && value.length > maxLength) {
         return errorMsg;
       }
     }
     if (format != null) {
       if (minLength != null && value.length < minLength) {
         return _strFormat();
-      } else if (maxLength != null && value.length > maxLength) {
+      }
+      if (maxLength != null && value.length > maxLength) {
         return _strFormat();
       }
     }

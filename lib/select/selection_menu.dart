@@ -49,13 +49,11 @@ import 'package:flutter/rendering.dart';
 //         }
 //     )
 
-final RouteObserver<ModalRoute<void>> dropDownButtonRouteObserver =
-    RouteObserver<ModalRoute<void>>();
-
 typedef DropDownButtonBuilder<T> = Widget Function(bool show);
-typedef DropDownPopCreated = void Function();
-typedef DropDownPopShow = void Function();
-typedef DropDownPopDismiss = void Function();
+typedef DropDownPopCreated = void Function(bool isShowPop);
+typedef DropDownPopShow = void Function(SelectionMenuState menu,bool isShowPop);
+typedef DropDownPopDismiss =void Function(SelectionMenuState menu,bool isShowPop);
+typedef LayoutSelectPop = RelativeRect Function(RenderBox button,RenderBox overlay);
 
 ///弹出层相对下拉框的对齐方式
 enum AlignType {
@@ -83,12 +81,13 @@ class SelectionMenu extends StatefulWidget {
   /// 是否开启鼠标悬浮
   final bool enableOnHover;
 
-  /// 下拉框宽度 弹窗部分
-  final double? popWidth;
+  ///当设置的宽度小于 父组件宽度时， 是否匹配父组件宽度，默认true
+  final bool matchParentWidth;
 
   /// 下拉框样式构件 弹出部分
   final WidgetBuilder selectorBuilder;
-
+  /// 自定义下拉框位置
+  final LayoutSelectPop? layoutSelectPop;
 
   /// Material 背景样式
   final BorderRadiusGeometry? materialBorderRadius;
@@ -96,6 +95,15 @@ class SelectionMenu extends StatefulWidget {
   final ShapeBorder? shape;
   /// 阴影
   final double elevation;
+  /// 下拉框宽度 弹窗部分
+  final double popWidth;
+  ///窗口高度
+  final double popHeight;
+  ///垂直 边距
+  final double vMargin;
+  ///水平边距
+  final double hMargin;
+
 
   /// 阴影颜色
   final Color? shadowColor;
@@ -138,11 +146,16 @@ class SelectionMenu extends StatefulWidget {
   const SelectionMenu(
       {required this.selectorBuilder,
       required this.buttonBuilder,
+      this.layoutSelectPop,
       this.onCreated,
       this.onShow,
       this.onDismiss,
       this.enableOnHover = false,
-      this.popWidth,
+      this.matchParentWidth = true,
+      this.popWidth = 0,
+      this.hMargin = 0,
+      this.vMargin = 0,
+      this.popHeight = 200,
       this.materialBorderRadius,
       this.color = Colors.transparent,
       this.shape,
@@ -180,121 +193,162 @@ class SelectionMenu extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SelectionMenu> createState() => _SelectionMenuState();
+  State<SelectionMenu> createState() => SelectionMenuState();
 }
 
-class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
+class SelectionMenuState extends State<SelectionMenu>{
+
   bool _popShowIng = false;
-  StateSetter? _innerStateSetter;
+  final GlobalKey _rootKey = GlobalKey();
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    dropDownButtonRouteObserver.subscribe(this, ModalRoute.of(context)!);
-  }
 
-  @override
-  void dispose() {
-    dropDownButtonRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPush() {
-    widget.onCreated?.call();
-  }
-
-  @override
   void didPushNext() {
-    widget.onShow?.call();
     _popShowIng = true;
-    _innerStateSetter?.call(() {});
+    refresh();
+    widget.onShow?.call(this,_popShowIng);
   }
 
-  @override
   void didPopNext() {
-    widget.onDismiss?.call();
     _popShowIng = false;
-    _innerStateSetter?.call(() {});
+    refresh();
+    widget.onDismiss?.call(this,_popShowIng);
+  }
+
+  void refresh(){
+    if(mounted){
+      setState(() {
+
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(builder: (context, onState) {
-      _innerStateSetter = onState;
-      return InkWell(
-        onDoubleTap: widget.onDoubleTap,
-        onLongPress: widget.onLongPress,
-        onTapDown: widget.onTapDown,
-        onTapUp: widget.onTapUp,
-        onTapCancel: widget.onTapCancel,
-        onHighlightChanged: widget.onHighlightChanged,
-        mouseCursor: widget.mouseCursor,
-        focusColor: widget.focusColor,
-        hoverColor: widget.hoverColor,
-        highlightColor: widget.highlightColor,
-        overlayColor: widget.overlayColor,
-        splashColor: widget.splashColor,
-        splashFactory: widget.splashFactory,
-        radius: widget.radius,
-        borderRadius: widget.borderRadius,
-        customBorder: widget.customBorder,
-        enableFeedback: widget.enableFeedback,
-        excludeFromSemantics: widget.excludeFromSemantics,
-        focusNode: widget.focusNode,
-        canRequestFocus: widget.canRequestFocus,
-        onFocusChange: widget.onFocusChange,
-        autofocus: widget.autofocus,
-        onHover: (hover) {
-          if (hover && widget.enableOnHover) {
-            _showSelection(context);
-            return;
-          }
-        },
-        onTap: () {
-          if (_popShowIng) {
-            return;
-          }
+    return InkWell(
+      key:_rootKey,
+      onDoubleTap: widget.onDoubleTap,
+      onLongPress: widget.onLongPress,
+      onTapDown: widget.onTapDown,
+      onTapUp: widget.onTapUp,
+      onTapCancel: widget.onTapCancel,
+      onHighlightChanged: widget.onHighlightChanged,
+      mouseCursor: widget.mouseCursor,
+      focusColor: widget.focusColor,
+      hoverColor: widget.hoverColor,
+      highlightColor: widget.highlightColor,
+      overlayColor: widget.overlayColor,
+      splashColor: widget.splashColor,
+      splashFactory: widget.splashFactory,
+      radius: widget.radius,
+      borderRadius: widget.borderRadius,
+      customBorder: widget.customBorder,
+      enableFeedback: widget.enableFeedback,
+      excludeFromSemantics: widget.excludeFromSemantics,
+      focusNode: widget.focusNode,
+      canRequestFocus: widget.canRequestFocus,
+      onFocusChange: widget.onFocusChange,
+      autofocus: widget.autofocus,
+      onHover: (hover) {
+        if (hover && widget.enableOnHover) {
           _showSelection(context);
-        },
-        child: widget.buttonBuilder?.call(_popShowIng),
-      );
-    });
+          return;
+        }
+      },
+      onTap: () {
+        if (_popShowIng) {
+          return;
+        }
+        _showSelection(context);
+      },
+      child: widget.buttonBuilder?.call(_popShowIng),
+    );
   }
 
   void _showSelection(BuildContext context) {
-    final RenderBox button = context.findRenderObject()! as RenderBox;
-    final RenderBox overlay =
-        Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
 
-    Offset offset = Offset(0.0, button.size.height);
+    RenderBox overlay = _rootKey.currentContext!.findRenderObject()! as RenderBox;
+    final RenderBox button = context.findRenderObject()! as RenderBox;
+    Size screenSize = MediaQuery.of(context).size;
+
+    var buttonWidth = button.size.width;
+    double customWidth = widget.popWidth;
+    if(widget.matchParentWidth &&  customWidth < buttonWidth){
+      customWidth = buttonWidth;
+    }
+
+
+    //判断是否超出屏幕高度
+    bool isOutHeight = false;
+    Offset offsetWH = button.localToGlobal(Offset.zero);
+    if (offsetWH.dy + widget.popHeight+widget.vMargin >= screenSize.height) {
+      isOutHeight = true;
+    }
+    Offset? offset;
+    if(isOutHeight){
+      offset = Offset(offsetWH.dx, offsetWH.dy - widget.popHeight  -widget.vMargin);
+    }else{
+      overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
+      offset = Offset(0, button.size.height);
+    }
+
+    //判断是否超出屏幕宽度
+    bool isOutWidth = false;
+    if (offsetWH.dx + customWidth + widget.hMargin >= screenSize.width) {
+      isOutWidth = true;
+    }
+    if(isOutWidth){
+      offset = Offset(offset.dx -widget.hMargin - customWidth + buttonWidth  , offset.dy);
+    }
+
     double centerX = 0;
-    if (widget.popWidth != null && widget.alignType == AlignType.center) {
-      centerX = widget.popWidth! / 2 - button.size.width / 2;
+    if (widget.alignType == AlignType.center) {
+      centerX = customWidth / 2 - buttonWidth / 2;
       if(centerX < 0) centerX==0;
    }
 
-    RelativeRect position = RelativeRect.fromRect(
+
+    RelativeRect position = widget.layoutSelectPop==null? RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(offset, ancestor: overlay),
-        button.localToGlobal(button.size.bottomLeft(Offset.zero) + offset,
-            ancestor: overlay),
+        button.localToGlobal( offset, ancestor: overlay),
+        // button.localToGlobal(button.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
       ),
       widget.alignType == AlignType.right?Rect.fromPoints(
-        Offset(-(button.size.width-widget.popWidth!), 0),
-        Offset(widget.popWidth!, 0),
+         isOutWidth?const Offset(0, 0):Offset(-buttonWidth+widget.popWidth , 0),
+         isOutWidth? Offset(customWidth, 0):Offset(-buttonWidth+customWidth, 0),
+        // Offset(widget.popWidth, 0),
       ): widget.alignType == AlignType.center?Rect.fromPoints(
         Offset(centerX, 0),
-        Offset(widget.popWidth!, 0),
+        Offset(customWidth, 0),
       ): Rect.fromPoints(
         const Offset(0, 0),
-        Offset(widget.popWidth!, 0),
+        const Offset(0, 0),
       ),
-    );
+    ):widget.layoutSelectPop!.call(button,overlay);
+
+    // RelativeRect position = widget.layoutSelectPop==null? RelativeRect.fromRect(
+    //   Rect.fromPoints(
+    //     button.localToGlobal(offset, ancestor: overlay),
+    //     button.localToGlobal( offset, ancestor: overlay),
+    //     // button.localToGlobal(button.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
+    //   ),
+    //   widget.alignType == AlignType.right?Rect.fromPoints(
+    //     Offset(-(button.size.width-widget.popWidth), 0),
+    //     Offset(widget.popWidth, 0),
+    //   ): widget.alignType == AlignType.center?Rect.fromPoints(
+    //     Offset(centerX, 0),
+    //     Offset(widget.popWidth, 0),
+    //   ): Rect.fromPoints(
+    //     const Offset(0, 0),
+    //     Offset(widget.popWidth, 0),
+    //   ),
+    // ):widget.layoutSelectPop!.call(button,overlay);
 
     Navigator.of(context).push(_CustomPopupRoute(
         position: position,
-        popWidth: widget.popWidth,
+        menuState: this,
+        popWidth:customWidth,
+        popHeight: widget.popHeight,
         builder: widget.selectorBuilder,
         elevation: widget.elevation,
         color: widget.color,
@@ -310,11 +364,12 @@ class _SelectionMenuState extends State<SelectionMenu> with RouteAware {
 }
 
 class _CustomPopupRoute<T> extends PopupRoute<T> {
+
+  final SelectionMenuState menuState;
   final WidgetBuilder builder;
   final RelativeRect position;
   final double elevation;
   final Color? shadowColor;
-
   /// Material 背景样式
   final BorderRadiusGeometry? materialBorderRadius;
   final Color? color;
@@ -330,21 +385,38 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
   final Duration transitionDuration;
 
   final double? popWidth;
+  final double? popHeight;
 
   _CustomPopupRoute({
     required this.builder,
     required this.position,
     required this.barrierLabel,
+    required this.menuState,
     this.elevation = 0.0,
     this.shadowColor,
     this.barrierColor,
     this.barrierDismissible = true,
     this.transitionDuration = const Duration(milliseconds: 200),
     this.popWidth,
+    this.popHeight,
     this.materialBorderRadius,
     this.color,
     this.shape,
   });
+
+  @override
+  bool didPop(T? result) {
+    menuState.didPopNext();
+    return super.didPop(result);
+  }
+
+  @override
+  TickerFuture didPush() {
+    menuState.didPushNext();
+    return super.didPush();
+  }
+
+
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
@@ -376,6 +448,7 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
           },
           child: SizedBox(
             width: popWidth,
+            height:popHeight,
             child: builder(context),
           ),
         ),

@@ -78,7 +78,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
       }
       if (widget.allExpand == false) {
         closeAll();
-        return;
+        // return;
       }
       if (_lastClickItem != null) {
         ///根据当前选中的层级查询所在父层级

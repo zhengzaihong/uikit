@@ -8,16 +8,16 @@ import 'package:flutter/material.dart';
 ///
 class PopRoute extends PopupRoute {
 
-  final Widget _child;
+  final Duration _duration = const Duration(milliseconds: 200);
 
-  PopRoute({
-    required Widget child,
-  }):
-        _child = child;
+  Widget child;
 
+  Color? bgColor;
+
+  PopRoute({required this.child, this.bgColor});
 
   @override
-  Color? get barrierColor => null;
+  Color? get barrierColor => bgColor??const Color(0x77000000);
 
   @override
   bool get barrierDismissible => true;
@@ -26,17 +26,66 @@ class PopRoute extends PopupRoute {
   String? get barrierLabel => null;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 0);
-  
-  @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-    return _child;
-  }
-
-  @override
-  Widget buildTransitions (BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
     return child;
   }
 
+  @override
+  Duration get transitionDuration => _duration;
+
+  static showPop({required BuildContext context, required Widget child,double? left, double? top}) {
+    Navigator.push(
+      context,
+      PopRoute(
+        child: Popup(
+          left: left,
+          top: top,
+          child: child,
+        ),
+      ),
+    );
+  }
 }
+
+class Popup extends StatelessWidget {
+  final Widget child;
+  final double? left; //距离左边位置
+  final double? top; //距离上面位置
+
+  const Popup({Key? key,
+    required this.child,
+    this.left,
+    this.top,
+  }):super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.transparent,
+            ),
+            Positioned(
+              left: left,
+              top: top,
+              child: GestureDetector(
+                  child: child,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// 使用规范: 外部请不要将 TimeViewState 持久化。
 ///
 
-typedef Builder = Widget Function(BuildContext context, TimeViewState controller, int time);
+typedef BuildChild = Widget Function(BuildContext context, TimeViewState controller, int time);
 typedef BuildCompleter = void Function(BuildContext context, TimeViewState controller);
 
 class TimeView extends StatefulWidget {
@@ -18,7 +18,7 @@ class TimeView extends StatefulWidget {
   final int countdown;
 
   ///返回子控件的回调
-  final Builder? builder;
+  final BuildChild? builder;
 
   ///时间单位
   final Duration duration;
@@ -77,11 +77,14 @@ class TimeViewState extends State<TimeView> {
     if(_timer!=null){
       return;
     }
+    _currentTime = widget.countdown -1;
+    notyChange();
+
     _timer = Timer.periodic(widget.duration, (timer) {
       if (_currentTime == 1) {
         cancelTimer();
       }
-      _currentTime = widget.countdown - timer.tick;
+      _currentTime = widget.countdown - timer.tick-1;
       notyChange();
     });
   }

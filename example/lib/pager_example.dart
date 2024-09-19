@@ -21,46 +21,50 @@ class _PagerExampleState extends State<PagerExample> {
       ),
       backgroundColor: Colors.white,
       body:Center(
-        child: Pager(
-          totalCount: 1000,
-          pageEach: 10,
-          currentPage: currentPage,
-          pageIndicatorActiveColor: Colors.purple,
-          pageIndicatorColor: Colors.grey,
-          checkedPageColor: Colors.lightBlueAccent,
-          pageIndicatorHeight: 30,
-          pageTextSize: 18,
-          showEllipsis: true,
-          sideDiff: 1,
-          focusBorder: Border.all(
-            color: Colors.lightBlueAccent,
-          ),
-          textStyle: const TextStyle(
-            color: Colors.purple,
-            fontSize: 18,
-            fontWeight: FontWeight.bold
-          ),
-          inputTextStyle: const TextStyle(
-            color: Colors.lightBlueAccent,
-          ),
-          inputContentPadding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-          outlineInputTextBorder: const OutlineInputTextBorder(
-            borderSide: BorderSide(
+        child: SizedBox(
+          height: 40,
+          child: Pager(
+            totalCount: 1000,
+            pageEach: 10,
+            pagerInputType: PagerInputType.none,
+            currentPage: currentPage,
+            pageIndicatorActiveColor: Colors.purple,
+            pageIndicatorColor: Colors.grey,
+            checkedPageColor: Colors.lightBlueAccent,
+            pageIndicatorHeight: 30,
+            pageTextSize: 18,
+            showEllipsis: true,
+            sideDiff: 1,
+            focusBorder: Border.all(
+              color: Colors.lightBlueAccent,
+            ),
+            textStyle: const TextStyle(
+                color: Colors.purple,
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+            ),
+            inputTextStyle: const TextStyle(
+              color: Colors.lightBlueAccent,
+            ),
+            inputContentPadding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+            outlineInputTextBorder: const OutlineInputTextBorder(
+              borderSide: BorderSide(
                 color: Colors.lightBlueAccent,
                 width: 1.0,
+              ),
+              childBorderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            childBorderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          errorInputCallback: (){
-            showToast("请输入正确的页码");
-          },
-          pageChange: (totalPages, currentPageIndex) {
-            currentPage = currentPageIndex;
-            setState(() {
+            errorInputCallback: (){
+              showToast("请输入正确的页码");
+            },
+            pageChange: (totalPages, currentPageIndex) {
+              currentPage = currentPageIndex;
+              setState(() {
 
-            });
-            print("--------------totalPages:$totalPages,currentPageIndex:$currentPageIndex");
-          },
+              });
+              print("--------------totalPages:$totalPages,currentPageIndex:$currentPageIndex");
+            },
+          ),
         ),
       ),
     ));
