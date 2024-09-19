@@ -217,14 +217,15 @@ class _PagerState extends State<Pager> {
     int minIndex = min(currentPageIndex + widget.sideDiff, totalPages - 2);
      /// 居中模式
     for (; index <= minIndex; index++) {
+
       indexesBetweenEllipses.add(index);
     }
     
-    if(currentPageIndex < totalPages - 2 - widget.sideDiff){
-      for (int i = 0; i <  widget.sideDiff; i++) {
-        indexesBetweenEllipses.add(totalPages - 2 -  widget.sideDiff-i);
-      }
-    }
+    // if(currentPageIndex < totalPages - 2 - widget.sideDiff){
+    //   for (int i = 0; i <  widget.sideDiff; i++) {
+    //     indexesBetweenEllipses.add(totalPages - 2 -  widget.sideDiff-i);
+    //   }
+    // }
 
     for (var i = 0; i < indexesBetweenEllipses.length; i++) {
       int index = indexesBetweenEllipses[i];

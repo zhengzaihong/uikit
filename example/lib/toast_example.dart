@@ -2,9 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/drawer/smart_drawer.dart';
-import 'package:flutter_uikit_forzzh/often/time_view.dart';
-import 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 
@@ -86,7 +83,8 @@ class _ToastExampleState extends State<ToastExample> {
                 InkWell(
                     onTap: (){
                       Toast.show("常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast11111");
-                    }, child: Container(
+                    },
+                    child: Container(
                     width: 200,
                     height: 40,
                     margin: const EdgeInsets.all(20),
@@ -100,7 +98,8 @@ class _ToastExampleState extends State<ToastExample> {
                 InkWell(
                     onTap: (){
 
-                      ///自定义样式toast
+
+                      // /自定义样式toast
                       Toast.show( "自定义样式toast",buildToastStyle: (context,msg){
                         return Container(
                             margin: const EdgeInsets.all(20),

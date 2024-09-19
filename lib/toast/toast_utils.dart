@@ -13,6 +13,7 @@ import 'package:flutter_uikit_forzzh/utils/responsive.dart';
 
 typedef BuildToastStyle = Widget Function(BuildContext context, String msg);
 typedef BuildToastQueueStyle = Widget Function(BuildContext context, ToastTaskQueue queue);
+typedef BuildOverlayStyle = OverlayEntry Function();
 
 ///toast的显示位置
 enum ToastPosition {
@@ -66,7 +67,7 @@ class Toast {
       const EdgeInsets.only(left: 10, right: 10);
   static EdgeInsetsGeometry? _globalToastPadding =
       const EdgeInsets.fromLTRB(10, 15, 10, 15);
-  static AlignmentGeometry? _globalToastAlignment = Alignment.center;
+  static AlignmentGeometry? _globalToastAlignment = Alignment.topCenter;
   static TextStyle? _globalToastTextStyle = const TextStyle(
       decoration: TextDecoration.none, color: Colors.white, fontSize: 16);
   static BoxDecoration? _globalToastDecoration = const BoxDecoration(
@@ -124,6 +125,8 @@ class Toast {
     BuildToastStyle? buildToastStyle,
     ToastPosition? position,
     int? showTime,
+    BuildOverlayStyle? buildOverlayStyle,
+    Color? backgroundColor = Colors.transparent,
   }) async {
     ///防止多次弹出，外部设置间隔时间 默认2秒
     if (_instance._startedTime != null &&
@@ -134,17 +137,31 @@ class Toast {
 
     buildToastStyle = buildToastStyle ?? _instance.globalBuildToastStyle;
     _instance._startedTime = DateTime.now();
-    var _overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => Positioned(
-              top: _calToastPosition(
-                  context, position ?? _instance.globalPosition),
-              child: Container(
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: buildToastStyle?.call(context, msg))),
-            ));
+    final _overlayEntry = buildOverlayStyle?.call()?? OverlayEntry(
+        builder: (BuildContext context){
+          Size size = MediaQuery.of(context).size;
+          return SizedBox(
+            width:size.width,
+            height: size.height,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: _calToastPosition(
+                      context, position ?? _instance.globalPosition),
+                  child:Material(
+                    color: backgroundColor,
+                    child: Center(
+                      child:  Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: buildToastStyle?.call(context, msg)),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
 
     ///获取OverlayState
     if (context == null) {
@@ -162,6 +179,61 @@ class Toast {
       _overlayEntryMangers.remove(value);
     });
     return manger;
+  }
+
+
+  ///模板代码,外部可参考定制自己的各种状态样式
+  static void showStatus(
+      String msg, {
+        bool status = true,
+        BuildContext? context,
+        double? width,
+        double? height,
+        double radius = 10,
+        Color? bgColor = Colors.white,
+        Color? toastBgColor = const Color(0x77000000),
+        Color? iconColorSuccess = const Color(0xFF3EC3CF),
+        Color? iconColorError = Colors.redAccent,
+        double? iconSize = 26,
+        TextStyle? textStyle = const TextStyle(color: Colors.black),
+        int? showTime,
+        EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+        EdgeInsetsGeometry margin = const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+      }) {
+    Toast.show(msg,
+        context: context,
+        buildOverlayStyle: (){
+      return OverlayEntry(
+          builder: (BuildContext context){
+            Size size = MediaQuery.of(context).size;
+            return SizedBox(
+              width:size.width,
+              height: size.height,
+              child: Material(
+                color: toastBgColor,
+                child: Center(
+                  child: Container(
+                    width: width,
+                    height: height,
+                    padding: padding,
+                    margin: margin,
+                    decoration: BoxDecoration(
+                        color: bgColor,
+                        borderRadius: BorderRadius.all(Radius.circular(radius))),
+                    child:Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(status?Icons.check_circle_outline:Icons.error_outline, size: iconSize, color: status?iconColorSuccess:iconColorError),
+                        const SizedBox(width: 5,),
+                        Flexible(child: Text(msg, style: textStyle))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          });
+    });
   }
 
   ///显示自定义坐标的吐司

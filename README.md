@@ -35,14 +35,14 @@
 
   ...持续更新中....
 
-
+本次版本：分页组件优化，SelectionMenu下拉框支持屏幕边界计算显示，InputText输入框优化等
 
 
 
 ## 更多效果请查看demo
 
 
-## 雷达组件：
+## 雷达组件 5-N维：
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png ) 
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png)
 
@@ -96,6 +96,7 @@
 
 ## 可高度自定义的选择下拉框组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu2.jpg)
 
 ## WEB 中鼠标右键弹窗组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/MousePopupButton-Web.gif)
