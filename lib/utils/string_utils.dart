@@ -55,7 +55,7 @@ class StringUtils {
 
   /// 检查字符串是否空
   static bool isEmpty(String? string) {
-    return (null == string || string.isEmpty)? true : false;
+    return (null == string || string.isEmpty);
   }
 
   static bool isNotEmpty(String? string) {
@@ -77,7 +77,16 @@ class StringUtils {
     return false;
   }
 
-  static bool hasEmptyElement(List<String?> list){
+
+  //如果第一项为空则返回第二项
+  static String fts(String? a, String? b) {
+    if(isEmpty(a)){
+      return b??'';
+    }
+    return a??'';
+  }
+
+  static bool isEmptyInList(List<String?> list){
     return list.where((element) => isEmpty(element)).isNotEmpty;
   }
 }
@@ -95,11 +104,11 @@ extension StringExtension on Object? {
     return List.generate(str.length, (index) => str.substring(index, index + 1));
   }
 
-  num toNum(){
+  num toNum({num def = -1}){
     try{
       return num.parse(str());
     }catch(e){
-      return -1;
+      return def;
     }
   }
 }

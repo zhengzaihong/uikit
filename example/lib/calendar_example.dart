@@ -11,7 +11,6 @@ class CalendarExample extends StatefulWidget {
 class _CalendarExampleState extends State<CalendarExample> {
 
 
-
   Widget createDateWidget(DateTime? dateTime) {
     var checkedText = const TextStyle(
       color: Colors.black54,
@@ -30,8 +29,7 @@ class _CalendarExampleState extends State<CalendarExample> {
     super.initState();
 
     var config = CalendarHelper.getConfig();
-    config.calendarWidth=480;
-
+    config.calendarWidth = 480;
 
     config.callBackStartTime = (dateTime) {
       return createDateWidget(dateTime);
@@ -42,13 +40,10 @@ class _CalendarExampleState extends State<CalendarExample> {
     };
     config.dayTextSize = 14;
     config.sureButtonWidth=200;
-
-   WidgetsBinding.instance.addPostFrameCallback((callback){
-     _openCalendar();
-    });
   }
 
-  String selectDate = "请选中时间";
+  String selectDate = "日期选择器 style1";
+  String selectDate2 = "日期选择器 style2";
 
   
   @override
@@ -60,13 +55,34 @@ class _CalendarExampleState extends State<CalendarExample> {
       ),
       body: LayoutBuilder(
         builder: (context,_){
-          return GestureDetector(
-            onTap: (){
-              _openCalendar();
-            },
-            child: Container(
-              child: Center(child: Text(selectDate,style: const TextStyle(fontSize: 14,color: Colors.red))),
-                color: Colors.white),
+          return Column(
+            children: [
+              const SizedBox(height: 40,),
+              GestureDetector(
+                  onTap: (){
+                   DatePicker.simpleDatePicker(context,
+                       width: 300,
+                       height: 470,
+                       startDate: DateModel(1992, 3, 31),
+                       endDate: DateModel(2002, 10, 31),
+                       callBack: (date1,data2){
+                        setState(() {
+                          selectDate = "开始时间：${date1?.year}--${date1?.month}--${date1?.day}   " + "结束时间：${data2?.year}--${data2?.month}--${data2?.day}";
+                        });
+                   });
+                  },
+                child:  Center(child: Text(selectDate,style: const TextStyle(fontSize: 20,color: Colors.red))),
+              ),
+
+
+             const SizedBox(height: 40,),
+             GestureDetector(
+               onTap: (){
+                 _openCalendar();
+               },
+               child:  Center(child: Text(selectDate2,style: const TextStyle(fontSize: 20,color: Colors.red))),
+             )
+            ],
           );
       }),
     );
@@ -80,10 +96,10 @@ class _CalendarExampleState extends State<CalendarExample> {
           print("---${startTime.year}--${startTime.month}--${startTime.day}->");
           print("---${endTime.year}--${endTime.month}--${endTime.day}->");
 
-          selectDate = "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
+          selectDate2 = "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
               "结束时间：${endTime.year}--${endTime.month}--${endTime.day}";
 
-          Toast.show(selectDate);
+          Toast.show(selectDate2);
 
           setState(() {
 
@@ -91,3 +107,4 @@ class _CalendarExampleState extends State<CalendarExample> {
         });
   }
 }
+

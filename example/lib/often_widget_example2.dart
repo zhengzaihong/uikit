@@ -35,6 +35,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
     TabTypeBean(name: "刷新",id: 4),
     TabTypeBean(name: "更多操作",id: 5,fontIcon: 0xe669),
   ];
+  final zTooltipController = ZTooltipController();
 
 
 
@@ -68,54 +69,54 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                    ),
                  ),),
 
-                  const SizedBox(height: 200),
-
-                  Center(child: SizedBox(
-                    width: 400,
-                    height: 400,
-                    child:  Radar5DimensionsChart(
-                        radius: 70,
-                        padding: 20,
-                        cycleRadius: 20,
-                        radarType: RadarType.normal,
-                        zeroToPointPaint: Paint()
-                          ..style = PaintingStyle.stroke
-                          ..color = Colors.purpleAccent.withOpacity(0.3)
-                          ..strokeWidth = 0.5,
-                        contentPaint: Paint()
-                          ..color = Colors.redAccent.withAlpha(100)
-                          ..strokeWidth = 2
-                          ..style = PaintingStyle.fill,
-                        pentagonPaint: Paint()
-                          ..color = Colors.cyanAccent.withOpacity(0.1)
-                          ..strokeWidth = 1
-                          ..style = PaintingStyle.fill,
-                        data:[
-                          RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(55, '心理', bgColor:Colors.green,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(30, '运动', bgColor:Colors.red,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(20, '活力', bgColor:Colors.yellow,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(10, '感官', bgColor:Colors.purple,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                        ]
-                    ),
-                  ),),
-                  Center(child: SizedBox(
-                    width: 400,
-                    height: 400,
-                    child:  Radar5DimensionsChart(
-                        radius: 70,
-                        padding: 20,
-                        cycleRadius: 30,
-                        radarType: RadarType.inner,
-                        data:[
-                          RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(55, '心理', bgColor:Colors.green,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(30, '运动', bgColor:Colors.red,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(20, '活力', bgColor:Colors.yellow,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                          RadarBean(10, '感官', bgColor:Colors.purple,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                        ]
-                    ),
-                  ),),
+                  // const SizedBox(height: 200),
+                  //
+                  // Center(child: SizedBox(
+                  //   width: 400,
+                  //   height: 400,
+                  //   child:  Radar5DimensionsChart(
+                  //       radius: 70,
+                  //       padding: 20,
+                  //       cycleRadius: 20,
+                  //       radarType: RadarType.normal,
+                  //       zeroToPointPaint: Paint()
+                  //         ..style = PaintingStyle.stroke
+                  //         ..color = Colors.purpleAccent.withOpacity(0.3)
+                  //         ..strokeWidth = 0.5,
+                  //       contentPaint: Paint()
+                  //         ..color = Colors.redAccent.withAlpha(100)
+                  //         ..strokeWidth = 2
+                  //         ..style = PaintingStyle.fill,
+                  //       pentagonPaint: Paint()
+                  //         ..color = Colors.cyanAccent.withOpacity(0.1)
+                  //         ..strokeWidth = 1
+                  //         ..style = PaintingStyle.fill,
+                  //       data:[
+                  //         RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(55, '心理', bgColor:Colors.green,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(30, '运动', bgColor:Colors.red,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(20, '活力', bgColor:Colors.yellow,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(10, '感官', bgColor:Colors.purple,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //       ]
+                  //   ),
+                  // ),),
+                  // Center(child: SizedBox(
+                  //   width: 400,
+                  //   height: 400,
+                  //   child:  Radar5DimensionsChart(
+                  //       radius: 70,
+                  //       padding: 20,
+                  //       cycleRadius: 30,
+                  //       radarType: RadarType.inner,
+                  //       data:[
+                  //         RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(55, '心理', bgColor:Colors.green,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(30, '运动', bgColor:Colors.red,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(20, '活力', bgColor:Colors.yellow,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //         RadarBean(10, '感官', bgColor:Colors.purple,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                  //       ]
+                  //   ),
+                  // ),),
 
 
                   RotatingView(
@@ -193,28 +194,29 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                       width: 220,
                       height: 60,
                       fixedTip: true,
+                      canOnHover: false,
+                      controller: zTooltipController,
                       duration: const Duration(
                           milliseconds: 500
                       ),
                       length: 100,
-                      buildTip: (tip) => Padding(
+                      buildTip: () => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
                         child: Row(
                           children: [
                             ...['翻译','查询','下载','取消']
                                 .map((e) =>GestureDetector(
                               onTap: (){
-
-                                RenderBox renderBox = tip.context.findRenderObject() as RenderBox;
+                                RenderBox renderBox = zTooltipController.getRenderBox()!;
                                 final offset = renderBox.localToGlobal(Offset.zero);
                                 Toast.showCustomPoint(
-                                buildToastPoint: (context,style){
-                                  return Positioned(
-                                    child:style.call(context,'点击了$e'),
-                                    left: offset.dx, top: offset.dy+60,);
-                                });
+                                    buildToastPoint: (context,style){
+                                      return Positioned(
+                                        child:style.call(context,'点击了$e'),
+                                        left: offset.dx, top: offset.dy+60,);
+                                    });
 
-                                tip.close();
+                                zTooltipController.close();
                               },
                               child:  Row(
                                 children: [
@@ -234,7 +236,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                         ),
                       ),
                       //需要自定义位置可实现该方法。
-                      layout: (zTooltip,offset,child,size){
+                      layout: (offset,child,size){
                         return Positioned(
                             left: offset.dx,
                             top: offset.dy+size.height,
@@ -243,7 +245,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                       child: TextExtend(
                         text: "自定义Tooltip组件",
                         onTap: (){
-
+                          zTooltipController.toggle();
                         },
                         mainAxisSize: MainAxisSize.min,
                         isSelectable: false,

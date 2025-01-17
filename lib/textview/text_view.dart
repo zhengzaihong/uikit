@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/src/position_enum.dart';
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -182,4 +180,11 @@ class _TextViewState extends State<TextView> {
     }
     return child;
   }
+}
+
+enum PositionEnum {
+  drawableLeft,
+  drawableTop,
+  drawableRight,
+  drawableBottom,
 }

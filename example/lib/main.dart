@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/InputExample.dart';
+import 'package:uikit_example/StackCardDemo.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/often_widget_example2.dart';
 import 'package:uikit_example/pager_example.dart';
@@ -10,7 +11,6 @@ import 'calendar_example.dart';
 import 'city_picker_example.dart';
 import 'input_extend_example.dart';
 import 'often_widget_example.dart';
-import 'pop_window_example.dart';
 import 'progressbar_example.dart';
 import 'selection_menu_example.dart';
 import 'toast_example.dart';
@@ -74,7 +74,6 @@ class _MyAppState extends State<MyApp> {
       createMenu("进度条", context,const ProgressBarExample()),
       createMenu("toast", context,const ToastExample()),
       createMenu("城市选择", context,const CityPickerExample()),
-      createMenu("popwindow",context, const PopWindowExample()),
       createMenu("日历",context, const CalendarExample()),
       createMenu("输入框",context,  const InputExample()),
       createMenu("输入框拓展",context, const InputExtendExample()),
@@ -83,6 +82,7 @@ class _MyAppState extends State<MyApp> {
       createMenu("仿系统下拉框",context, const SelectionMenuExample()),
       createMenu("分页组件",context, const PagerExample()),
       createMenu("微光加载效果",context, const ShimmerLoadingExample()),
+      createMenu("堆叠卡片", context,const StackCardDemo()),
       createMenu("常用小组件",context, const OftenWidgetExample()),
       createMenu("常用小组件2",context, const OftenWidgetExample2()),
     ];

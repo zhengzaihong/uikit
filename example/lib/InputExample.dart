@@ -76,7 +76,7 @@ class _InputExampleState extends State<InputExample> {
                   // height: 300,
                   width: 300,
                 ),
-                buildPop: (context,innerState){
+                buildPop: (context){
                   ///flutter 原生方式刷新，或者你使用的状态管理刷新
                   return ValueListenableBuilder<String>(
                       valueListenable: valueNotifier,
@@ -199,11 +199,11 @@ class _InputExampleState extends State<InputExample> {
                       ),
 
 
-
                       InputText(
                         margin: const EdgeInsets.only(left: 50,right: 50,top: 50),
                         enableForm: true,
                         hintText: "请输入描述",
+                        inputController: InputController(),
                         controller: TextEditingController(),
                         fillColor: Colors.grey.withAlpha(40),
                         validator: const InputValidation(

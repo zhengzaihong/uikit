@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
-import '../uikitlib.dart';
+
+import '../pop/pop_box.dart';
+import '../utils/string_utils.dart';
+import 'controller/input_controller.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -75,6 +78,7 @@ import '../uikitlib.dart';
 //                 valueNotifier.value= "输入搜索需求：$msg";
 //               });
 //             },
+//             inputController: InputController(),
 //             controller: TextEditingController(),
 //             onFocusShowPop: true,
 //             marginTop: 5,
@@ -82,7 +86,7 @@ import '../uikitlib.dart';
 //               // height: 300,
 //               width: 300,
 //             ),
-//             buildPop: (context,innerState){
+//             buildPop: (context){
 //               ///flutter 原生方式刷新，或者你使用的状态管理刷新
 //               return ValueListenableBuilder<String>(
 //                   valueListenable: valueNotifier,
@@ -136,17 +140,16 @@ import '../uikitlib.dart';
 //             },
 //           ),
 
-typedef BuildInputDecorationStyle = InputDecoration Function(
-    InputTextState state);
+typedef BuildInputDecorationStyle = InputDecoration Function();
 
 /// 构建弹出层
-typedef BuildPop<T> = Widget Function(BuildContext context, InputTextState controller);
+typedef BuildPop<T> = Widget Function(BuildContext context);
 
 ///焦点监听
-typedef FocusListener<T> = void Function(BuildContext context, InputTextState controller,bool focus);
+typedef FocusListener<T> = void Function(BuildContext context,bool focus);
 
 /// 构建自定样式删除  suffixIcon 实现
-typedef ClearBuilder<T> = Widget Function(BuildContext context, InputTextState controller,);
+typedef ClearBuilder<T> = Widget Function(BuildContext context);
 
 
 
@@ -186,6 +189,8 @@ class InputText extends StatefulWidget {
   ///焦点监听
   final FocusListener? focusListener;
   final BuildPop? buildPop;
+  ///输入框弹出层相关控制
+  final InputController? inputController;
 
   final PopBox? popBox;
   final double marginTop;
@@ -309,6 +314,8 @@ class InputText extends StatefulWidget {
   final CrossAxisAlignment crossAxisAlignment;
   const InputText(
       {
+        required this.controller,
+        this.inputController,
         this.inline = InlineStyle.clearStyle,
         this.title,
         this.noBorder = false,
@@ -338,8 +345,6 @@ class InputText extends StatefulWidget {
         this.popChildTextStyle,
         this.popBorderRadius,
         this.popShape,
-
-        required this.controller,
         this.cursorEnd = false,
         this.focusNode,
         this.decoration,
@@ -467,11 +472,12 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     super.initState();
+    widget.inputController?.bind(this);
     inlineStyle = widget.inline;
     _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
-      widget.focusListener?.call(context, this,hasFocus);
+      widget.focusListener?.call(context,hasFocus);
       if(widget.inline == InlineStyle.clearStyle){
         ///非外部自定义 走内部实现策略，否则外部调用者维护样式
        setState(() {
@@ -498,6 +504,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   @override
   void dispose() {
+    widget.inputController?.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -507,6 +514,10 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     super.didUpdateWidget(oldWidget);
     if(widget.cursorEnd){
       widget.controller?.selection = TextSelection.collapsed(offset: widget.controller?.text.length??0);
+    }
+    if (widget.inputController != null &&
+        oldWidget.inputController != widget.inputController) {
+      widget.inputController?.bind(this);
     }
   }
 
@@ -690,7 +701,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       Widget? suffixIcon;
       if(inlineStyle == InlineStyle.clearStyle){
           if(widget.clearBuilder!=null){
-            suffixIcon = widget.clearBuilder!(context,this);
+            suffixIcon = widget.clearBuilder!(context);
           }else{
             suffixIcon = (getHasContent() && widget.enableClear && getIsEnable())
                 ? GestureDetector(
@@ -824,7 +835,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
                   borderRadius: widget.popBorderRadius,
                   surfaceTintColor: widget.popSurfaceTintColor,
                   textStyle: widget.popChildTextStyle,
-                  child:  widget.buildPop?.call(context, this),
+                  child:  widget.buildPop?.call(context),
                 ),
               ),
             ),
@@ -882,4 +893,14 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
 
   @override
   bool get wantKeepAlive => true;
+
+  void setText(String text) {
+    _refresh(text);
+    widget.controller?.text = text;
+    widget.controller?.selection = TextSelection.collapsed(offset: text.length);
+  }
+
+  TextEditingController? getTextEditingController() {
+    return widget.controller;
+  }
 }

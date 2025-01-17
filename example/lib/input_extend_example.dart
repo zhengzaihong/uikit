@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/input_extend/controller/input_extend_controller.dart';
 import 'package:flutter_uikit_forzzh/input_extend/input_extend.dart';
 import 'package:flutter_uikit_forzzh/toast/toast_lib.dart';
 import 'package:uikit_example/utils/font_utils.dart';
@@ -31,6 +32,7 @@ class InputExtendDemo extends StatelessWidget {
   List<String> checkeds = [];
 
   FocusNode focusNode = FocusNode();
+  InputExtendController inputExtendController = InputExtendController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +52,14 @@ class InputExtendDemo extends StatelessWidget {
                   checkedItemWidth: 80,
                   checkedBarMaxWidth: 240,
                   autoClose: true,
-                  enableMultipleChoice: false,
+                  enableMultipleChoice: true,
                   enableClickClear: true,
                   barrierDismissible: true,
                   ///真实项目一般都是对象(bean) 填充对象即可
                   initCheckedValue: checkeds,
                   focusNode: focusNode,
-                  inputDecoration: (data,c) {
+                  controller: inputExtendController,
+                  inputDecoration: (data) {
                     return InputDecoration(
                       hintText: "输入搜索名称",
                       filled: true,
@@ -77,7 +80,7 @@ class InputExtendDemo extends StatelessWidget {
                       ),
                     );
                   },
-                  onChanged: (text, controller) {
+                  onChanged: (text) {
                     ///模拟接口数据
                     List<String> datas = [];
                     int max = Random().nextInt(15);
@@ -86,11 +89,11 @@ class InputExtendDemo extends StatelessWidget {
                     }
 
                     ///无论是同步还是异步 拿到数据后setSearchData填充数据
-                    controller.setSearchData(datas);
+                    inputExtendController.setSearchData(datas);
                   },
 
                   ///自定义选中后样式
-                  buildCheckedBarStyle: (element, controller) {
+                  buildCheckedBarStyle: (element) {
                     return Container(
                         width: 80,
                         height: 30,
@@ -105,7 +108,7 @@ class InputExtendDemo extends StatelessWidget {
                             ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                             ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                             ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                            controller.setCheckChange(data: element);
+                            inputExtendController.setCheckChange(data: element);
                           },
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +120,7 @@ class InputExtendDemo extends StatelessWidget {
                   },
 
                   ///自定义构建弹出窗样式
-                  buildSelectPop: (context, srcs, controller) {
+                  buildSelectPop: (context, srcs) {
                     return Container(
                       margin: const EdgeInsets.only(top: 10),
                       decoration: const BoxDecoration(
@@ -136,10 +139,10 @@ class InputExtendDemo extends StatelessWidget {
                               itemCount: srcs.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                var data = controller.getSearchData[index];
+                                var data = inputExtendController.getSearchData[index];
                                 // bool hasValue = controller.isChecked(index);
 
-                                bool hasValue = controller.isCheckedVO((item) {
+                                bool hasValue = inputExtendController.isCheckedVO((item) {
                                   return item == "item$index";
                                 });
 
@@ -150,7 +153,7 @@ class InputExtendDemo extends StatelessWidget {
                                       ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                                       ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                                       ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
-                                      controller.setCheckChange(data: data);
+                                      inputExtendController.setCheckChange(data: data);
                                     },
                                     child: Container(
                                         height: 40,

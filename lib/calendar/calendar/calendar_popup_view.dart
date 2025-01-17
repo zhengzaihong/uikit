@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/calendar/calendar_config.dart';
+import 'package:flutter_uikit_forzzh/calendar/calendar/calendar_config.dart';
+
 import 'custom_calendar.dart';
 
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/bubble/bubble_arrow_direction.dart';
-import 'bubble.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -14,11 +13,12 @@ import 'bubble.dart';
 //           width: 220,
 //           height: 60,
 //           fixedTip: true,
+//           controller: controller,
 //           duration: const Duration(
 //               milliseconds: 500
 //           ),
 //           length: 100,
-//           buildTip: (tip) => Padding(
+//           buildTip: () => Padding(
 //             padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
 //             child: Row(
 //               children: [
@@ -35,7 +35,7 @@ import 'bubble.dart';
 //                         left: offset.dx, top: offset.dy+60,);
 //                     });
 //
-//                     tip.close();
+//                     controller.close();
 //                   },
 //                   child:  Row(
 //                     children: [
@@ -55,7 +55,7 @@ import 'bubble.dart';
 //             ),
 //           ),
 //           //需要自定义位置可实现该方法。
-//           layout: (zTooltip,offset,child,size){
+//           layout: (offset,child,size){
 //             return Positioned(
 //                 left: offset.dx,
 //                 top: offset.dy+size.height,
@@ -64,17 +64,18 @@ import 'bubble.dart';
 //         child: const Text('自定义Tooltip组件')
 //       ),
 
-
-typedef BuildTip = Widget Function(ZTooltipState zTooltip);
+typedef BuildTip = Widget Function();
 
 // 自定义 tip的显示位置
 // @param zTooltip   ZTooltip组件实例
 // @param offset  组件相对于父组件的偏移
 // @param child   tip组件
 // @param parentSize 父组件大小
-typedef TipViewLayout = Positioned Function(ZTooltipState zTooltip, Offset offset, Widget child,Size parentSize);
+typedef TipViewLayout = Positioned Function(
+    Offset offset, Widget child, Size parentSize);
 
 class ZTooltip extends StatefulWidget {
+  final ZTooltipController? controller;
 
   //提示窗组件外部自定义
   final BuildTip? buildTip;
@@ -167,10 +168,11 @@ class ZTooltip extends StatefulWidget {
 
   const ZTooltip(
       {required this.child,
-       this.buildTip,
-       this.enableBubble = true,
-        this.fixedTip = false,
-        this.duration = const Duration(seconds: 0),
+      this.controller,
+      this.buildTip,
+      this.enableBubble = true,
+      this.fixedTip = false,
+      this.duration = const Duration(seconds: 0),
       this.layout,
       this.width,
       this.height,
@@ -226,34 +228,41 @@ class ZTooltipState extends State<ZTooltip> {
   bool _onHover = false;
   OverlayEntry? _overlayEntry;
 
+  @override
+  void initState() {
+    super.initState();
+    widget.controller?.bind(this);
+  }
+
   void _showTooltip({required RenderBox renderBox}) {
     if (_overlayEntry != null) {
       return;
     }
-   final target = renderBox.localToGlobal(Offset.zero);
+    final target = renderBox.localToGlobal(Offset.zero);
     final parentSize = renderBox.size;
     _overlayEntry = OverlayEntry(
       builder: (context) {
-        final child =widget.enableBubble? Bubble(
-          width: widget.width ?? 100,
-          height: widget.height ?? 50,
-          length: widget.length,
-          radius: widget.arrowRadius,
-          color: widget.color ?? Colors.white,
-          position: widget.position ?? BubbleArrowDirection.top,
-          arrAngle: widget.arrAngle,
-          arrHeight: widget.arrHeight,
-          borderColor: widget.borderColor,
-          strokeWidth: widget.strokeWidth,
-          style: widget.style,
-          innerPadding: widget.innerPadding,
-          child: widget.buildTip?.call(this)??const SizedBox()
-        ):widget.buildTip?.call(this)??const SizedBox();
+        final child = widget.enableBubble
+            ? Bubble(
+                width: widget.width ?? 100,
+                height: widget.height ?? 50,
+                length: widget.length,
+                radius: widget.arrowRadius,
+                color: widget.color ?? Colors.white,
+                position: widget.position ?? BubbleArrowDirection.top,
+                arrAngle: widget.arrAngle,
+                arrHeight: widget.arrHeight,
+                borderColor: widget.borderColor,
+                strokeWidth: widget.strokeWidth,
+                style: widget.style,
+                innerPadding: widget.innerPadding,
+                child: widget.buildTip?.call() ?? const SizedBox())
+            : widget.buildTip?.call() ?? const SizedBox();
 
-        final tipView = widget.layout?.call(this, target, child,parentSize) ??
+        final tipView = widget.layout?.call(target, child, parentSize) ??
             Positioned(
               left: target.dx,
-              top: target.dy+parentSize.height,
+              top: target.dy + parentSize.height,
               child: child,
             );
         return tipView;
@@ -263,13 +272,22 @@ class ZTooltipState extends State<ZTooltip> {
     Overlay.of(context)?.insert(_overlayEntry!);
   }
 
+  @override
+  void didUpdateWidget(covariant ZTooltip oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != null &&
+        oldWidget.controller != widget.controller) {
+      widget.controller?.bind(this);
+    }
+  }
+
   void _hideTooltip() {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
 
-  void close(){
-    Future.delayed(widget.duration,(){
+  void close() {
+    Future.delayed(widget.duration, () {
       _hideTooltip();
     });
   }
@@ -280,25 +298,29 @@ class ZTooltipState extends State<ZTooltip> {
     super.dispose();
   }
 
+  void toggle(bool onHover) {
+    setState(() {
+      _onHover = onHover;
+      if (_onHover && _overlayEntry == null) {
+        //获取当前控件在屏幕上的坐标
+        RenderBox renderBox = context.findRenderObject() as RenderBox;
+        _showTooltip(renderBox: renderBox);
+        return;
+      }
+      if (widget.fixedTip) {
+        return;
+      }
+      close();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onHover: (onHover) {
         widget.onHover?.call(onHover);
         if (widget.canOnHover) {
-          setState(() {
-            _onHover = onHover;
-            if (_onHover && _overlayEntry == null) {
-              //获取当前控件在屏幕上的坐标
-              RenderBox renderBox = context.findRenderObject() as RenderBox;
-              _showTooltip(renderBox: renderBox);
-              return;
-            }
-            if(widget.fixedTip){
-              return;
-            }
-            close();
-          });
+          toggle(onHover);
         }
       },
       onTap: widget.onTap ?? () {},
@@ -325,5 +347,41 @@ class ZTooltipState extends State<ZTooltip> {
       autofocus: widget.autofocus,
       child: widget.child,
     );
+  }
+}
+
+class ZTooltipController {
+
+  ZTooltipState? _state;
+
+  ZTooltipState? get state => _state;
+
+  bool onHover = false;
+
+  void bind(ZTooltipState state) {
+    _state = state;
+  }
+
+  void dispose() {
+    _state = null;
+  }
+
+  void toggle(){
+    onHover = !onHover;
+    _state?.toggle(onHover);
+  }
+
+  RenderBox? getRenderBox() {
+    final obj = _state?.context.findRenderObject();
+    if (obj != null) {
+      return obj as RenderBox;
+    }
+    return null;
+  }
+
+  void close() {
+    if (_state != null) {
+      _state?.close();
+    }
   }
 }

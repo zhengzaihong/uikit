@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
+import 'controller/input_extend_controller.dart';
+
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -13,25 +15,27 @@ import 'package:flutter_uikit_forzzh/uikitlib.dart';
 /// describe: 输入框拓展带自动检索组件
 ///
 
-typedef BuildSelectPop<T> = Widget Function(
-    BuildContext context, List<T> src, InputExtendState controller);
+typedef BuildSelectPop<T> = Widget Function(BuildContext context, List<T> src);
 
 typedef Compare<T> = bool Function(List<T> data);
 
 typedef CompareVO<T> = bool Function(T item);
 
-typedef BuildCheckedBarStyle<T> = Widget? Function(T checkDatas, InputExtendState controller);
+typedef BuildCheckedBarStyle<T> = Widget? Function(T checkDatas);
 
-typedef OnChangeInput<String> = void Function(String value, InputExtendState controller);
+typedef OnChangeInput<String> = void Function(String value);
 
-typedef InputValueChanged<String> = void Function(String value, InputExtendState controller);
+typedef InputValueChanged<String> = void Function(String value);
 
-typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds,InputExtendState controller);
+typedef InputDecorationStyle<T> = InputDecoration Function(List<T> checkeds);
 
-typedef OnCreate<T> = void Function(InputExtendState controller);
-typedef OnComplete<T> = void Function(InputExtendState controller);
+typedef OnCreate<T> = void Function();
+typedef OnComplete<T> = void Function();
 
 class InputExtend<T> extends StatefulWidget {
+
+  final InputExtendController? controller;
+
   ///自定义构建弹出窗样式
   final BuildSelectPop buildSelectPop;
 
@@ -154,6 +158,7 @@ class InputExtend<T> extends StatefulWidget {
   const InputExtend(
       { required this.buildSelectPop,
         required this.onChanged,
+        this.controller,
         this.buildCheckedBarStyle,
         this.focusNode,
         this.duration = const Duration(milliseconds: 300),
@@ -241,12 +246,9 @@ class InputExtend<T> extends StatefulWidget {
 
 class InputExtendState<T> extends State<InputExtend> {
 
-  late final FocusNode _focusNode;
+  late  FocusNode _focusNode;
 
-  ///提供给外部的控制器
-  late InputExtendState _controller;
-
-  late final BuildContext _buildContext;
+  late  BuildContext _buildContext;
 
   ///搜索的数据
   List<T> _searchResultData = [];
@@ -254,9 +256,9 @@ class InputExtendState<T> extends State<InputExtend> {
   ///已选择数据
   List<T> _checkedData = [];
 
-  late final TextEditingController _editingController;
-  late final ScrollController _scrollController;
-  late final ScrollController _inputScrollController;
+  late  TextEditingController _editingController;
+  late  ScrollController _scrollController;
+  late  ScrollController _inputScrollController;
 
   int oldSize = 0;
 
@@ -265,11 +267,14 @@ class InputExtendState<T> extends State<InputExtend> {
 
   OverlayEntry? _overlayEntry;
 
+  StateSetter? _checkedBoxState;
+
   @override
   void initState() {
     super.initState();
 
-     widget.onCreate?.call(this);
+    widget.controller?.bind(this);
+     widget.onCreate?.call();
 
     _editingController = widget.textEditingController?? TextEditingController();
     _scrollController = widget.scrollController?? ScrollController();
@@ -287,7 +292,6 @@ class InputExtendState<T> extends State<InputExtend> {
       oldSize = _checkedData.length;
     }
 
-    _controller = this;
     _buildContext = context;
     _focusNode.addListener(() {
       if (_focusNode.hasFocus && widget.enableHasFocusCallBack) {
@@ -297,8 +301,17 @@ class InputExtendState<T> extends State<InputExtend> {
 
     if(widget.onComplete!=null){
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        widget.onComplete?.call(this);
+        widget.onComplete?.call();
       });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant InputExtend oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != null &&
+        oldWidget.controller != widget.controller) {
+      widget.controller?.bind(this);
     }
   }
 
@@ -365,7 +378,7 @@ class InputExtendState<T> extends State<InputExtend> {
     }
 
     if (widget.buildCheckedBarStyle != null) {
-      final offset = _checkedData.length * widget.checkedItemWidth! +
+      final offset = _checkedData.length * widget.checkedItemWidth!+
           widget.checkedItemWidth! * 10 +
           _editingController.text.length;
 
@@ -388,7 +401,10 @@ class InputExtendState<T> extends State<InputExtend> {
     notyOverlayDataChange();
 
     ///刷新输入框组件
-    notyListUiChange();
+    // notyListUiChange();
+    notyCheckedBoxChange();
+
+
 
     if (widget.autoClose) {
       _removePop();
@@ -410,6 +426,10 @@ class InputExtendState<T> extends State<InputExtend> {
 
   void closePop(){
     _removePop();
+  }
+
+  TextEditingController? getTextEditingController() {
+    return widget.textEditingController;
   }
 
   void setText(String text) {
@@ -481,7 +501,7 @@ class InputExtendState<T> extends State<InputExtend> {
                   borderRadius: widget.popBorderRadius,
                   surfaceTintColor: widget.popSurfaceTintColor,
                   textStyle: widget.popChildTextStyle,
-                  child:  widget.buildSelectPop.call(_buildContext, getSearchData, _controller),
+                  child:  widget.buildSelectPop.call(_buildContext, getSearchData),
                 ),
               ),
             ),
@@ -494,7 +514,7 @@ class InputExtendState<T> extends State<InputExtend> {
     List<Widget> widgets = [];
     for (var element in _checkedData) {
       final widgetItem =
-      widget.buildCheckedBarStyle?.call(element, _controller);
+      widget.buildCheckedBarStyle?.call(element);
       if (null != widgetItem) {
         widgets.add(widgetItem);
       }
@@ -504,10 +524,10 @@ class InputExtendState<T> extends State<InputExtend> {
 
   @override
   void dispose() {
-    _editingController.dispose();
-    _inputScrollController.dispose();
-    _focusNode.dispose();
-    _scrollController.dispose();
+    // _editingController.dispose();
+    // _inputScrollController.dispose();
+    // _focusNode.dispose();
+    // _scrollController.dispose();
     super.dispose();
   }
 
@@ -535,8 +555,6 @@ class InputExtendState<T> extends State<InputExtend> {
 
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
@@ -550,16 +568,19 @@ class InputExtendState<T> extends State<InputExtend> {
                 maxHeight: widget.checkedBarMaxHeight ?? 40,
                 minHeight: widget.checkedBarMinHeight ?? 0,
                 minWidth: widget.checkedBarMinWidth ?? 0),
-            child: _checkedData.isEmpty
-                ? const SizedBox.shrink()
-                : SingleChildScrollView(
-              physics: widget.physics,
+            child: SingleChildScrollView(
+              physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: createCheckedWidget(),
+              child: StatefulBuilder(
+                builder: (context,state) {
+                  _checkedBoxState = state;
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: createCheckedWidget(),
+                  );
+                },
               ),
             ),
           )
@@ -614,12 +635,12 @@ class InputExtendState<T> extends State<InputExtend> {
                 scribbleEnabled: widget.scribbleEnabled,
                 enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
                 onSubmitted:(text){
-                  widget.onSubmitted?.call(text,this);
+                  widget.onSubmitted?.call(text);
                 },
                 onChanged: (text) async {
                   _onTextChangeCallBack(text, false);
                 },
-                decoration: widget.inputDecoration?.call(getCheckedData,this),
+                decoration: widget.inputDecoration?.call(getCheckedData),
               ))
         ],
       ),
@@ -633,7 +654,7 @@ class InputExtendState<T> extends State<InputExtend> {
     }else{
       _addPop();
     }
-    widget.onChanged.call(text, _controller);
+    widget.onChanged.call(text);
   }
 
   void _addPop(){
@@ -653,6 +674,11 @@ class InputExtendState<T> extends State<InputExtend> {
   void notyListUiChange() {
     if (mounted) {
       setState(() {});
+    }
+  }
+  void notyCheckedBoxChange() {
+    if (mounted) {
+      _checkedBoxState?.call((){});
     }
   }
 }

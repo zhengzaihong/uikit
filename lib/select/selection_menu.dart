@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -51,8 +52,8 @@ import 'package:flutter/rendering.dart';
 
 typedef DropDownButtonBuilder<T> = Widget Function(bool show);
 typedef DropDownPopCreated = void Function(bool isShowPop);
-typedef DropDownPopShow = void Function(SelectionMenuState menu,bool isShowPop);
-typedef DropDownPopDismiss =void Function(SelectionMenuState menu,bool isShowPop);
+typedef DropDownPopShow = void Function(bool isShowPop);
+typedef DropDownPopDismiss =void Function(bool isShowPop);
 typedef LayoutSelectPop = RelativeRect Function(RenderBox button,RenderBox overlay);
 
 ///弹出层相对下拉框的对齐方式
@@ -66,6 +67,9 @@ enum AlignType {
 }
 
 class SelectionMenu extends StatefulWidget {
+
+  final SelectionMenuController? controller;
+
   /// 下拉框构建器
   final DropDownButtonBuilder? buttonBuilder;
 
@@ -80,6 +84,9 @@ class SelectionMenu extends StatefulWidget {
 
   /// 是否开启鼠标悬浮
   final bool enableOnHover;
+
+  /// 是否开启点击
+  final bool enableClick;
 
   ///当设置的宽度小于 父组件宽度时， 是否匹配父组件宽度，默认true
   final bool matchParentWidth;
@@ -146,11 +153,13 @@ class SelectionMenu extends StatefulWidget {
   const SelectionMenu(
       {required this.selectorBuilder,
       required this.buttonBuilder,
+      this.controller,
       this.layoutSelectPop,
       this.onCreated,
       this.onShow,
       this.onDismiss,
       this.enableOnHover = false,
+      this.enableClick = true,
       this.matchParentWidth = true,
       this.popWidth = 0,
       this.hMargin = 0,
@@ -201,26 +210,37 @@ class SelectionMenuState extends State<SelectionMenu>{
   bool _popShowIng = false;
   final GlobalKey _rootKey = GlobalKey();
 
+  @override
+  void initState() {
+    super.initState();
+    widget.controller?.bind(this);
+  }
 
   void didPushNext() {
     _popShowIng = true;
     refresh();
-    widget.onShow?.call(this,_popShowIng);
+    widget.onShow?.call(_popShowIng);
   }
 
   void didPopNext() {
     _popShowIng = false;
     refresh();
-    widget.onDismiss?.call(this,_popShowIng);
+    widget.onDismiss?.call(_popShowIng);
   }
 
   void refresh(){
     if(mounted){
       setState(() {
-
       });
     }
   }
+  void closePop(){
+    if(mounted){
+      Navigator.pop(context);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -255,6 +275,9 @@ class SelectionMenuState extends State<SelectionMenu>{
         }
       },
       onTap: () {
+        if(!widget.enableClick){
+          return;
+        }
         if (_popShowIng) {
           return;
         }
@@ -360,6 +383,16 @@ class SelectionMenuState extends State<SelectionMenu>{
         transitionDuration: widget.transitionDuration,
         barrierLabel:
             MaterialLocalizations.of(context).modalBarrierDismissLabel));
+  }
+
+
+  @override
+  void didUpdateWidget(covariant SelectionMenu oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != null &&
+        oldWidget.controller != widget.controller) {
+      widget.controller?.bind(this);
+    }
   }
 }
 
@@ -559,4 +592,41 @@ class _HeightFactorBox extends SingleChildRenderObjectWidget {
       BuildContext context, _RenderHeightFactorBox renderObject) {
     renderObject.heightFactor = heightFactor ?? 1.0;
   }
+}
+
+
+class SelectionMenuController{
+  SelectionMenuController();
+
+  SelectionMenuState? _state;
+
+
+  void bind(SelectionMenuState state) {
+    _state = state;
+  }
+
+  SelectionMenuState? getState() {
+    return _state;
+  }
+
+  RenderBox? getRenderBox() {
+    final obj = _state?.context.findRenderObject();
+    if (obj != null) {
+      return obj as RenderBox;
+    }
+    return null;
+  }
+
+  void dispose() {
+    _state = null;
+  }
+
+  void refresh() {
+    _state?.refresh();
+  }
+
+  void closePop() {
+    _state?.closePop();
+  }
+
 }

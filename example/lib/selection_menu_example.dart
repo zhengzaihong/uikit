@@ -19,6 +19,9 @@ class SelectionMenuExample extends StatefulWidget {
 class _SelectionMenuExampleState extends State<SelectionMenuExample> {
 
   int? _checkedIndex;
+
+  SelectionMenuController controller = SelectionMenuController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(child:  Scaffold(
@@ -186,6 +189,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                   popWidth: 300,
                   elevation: 2,
                   popHeight: 200,
+                  controller: controller,
                   buttonBuilder: (show){
                     return Container(
                       height: 40,
@@ -204,11 +208,11 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                       ),
                     );
                   },
-                  onShow: (menu,show){
-                    menu.refresh();
+                  onShow: (show){
+                    controller.refresh();
                   },
-                  onDismiss: (menu,show){
-                    menu.refresh();
+                  onDismiss: (show){
+                    controller.refresh();
                   },
                   selectorBuilder: (context) {
                     return ListView.separated(

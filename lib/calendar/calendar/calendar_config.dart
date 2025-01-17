@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'function_type.dart';
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -10,6 +9,8 @@ import 'function_type.dart';
 ///
 /// 待优化
 ///
+
+typedef CallBackWidget = Widget Function(DateTime? dateTime);
 class CalendarConfig{
 
   ///日历宽高
