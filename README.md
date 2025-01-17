@@ -53,6 +53,9 @@
 ## 日历组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/calendar.gif)
 
+## 日期组件：
+![](https://github.com/zhengzaihong/uikit/blob/master/images/date_picker.png)
+
 
 ## 极简输入框支持TextField 和TextFormField全部属性，支持实时表单校验
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text.gif)
@@ -75,7 +78,6 @@
 
 ## 城市选择器：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/date_picker.png)
 
 
 ## 可定制的Toast：
