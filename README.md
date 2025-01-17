@@ -89,10 +89,6 @@
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
 
 
-## 弹窗组件：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/popwindow.gif)
-
-
 ## 可高度自定义开关按钮组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/image_switch.gif)
 
