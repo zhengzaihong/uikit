@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
-
 import 'bean/tab_type_bean.dart';
 
 ///
@@ -69,37 +68,37 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                    ),
                  ),),
 
-                  // const SizedBox(height: 200),
-                  //
-                  // Center(child: SizedBox(
-                  //   width: 400,
-                  //   height: 400,
-                  //   child:  Radar5DimensionsChart(
-                  //       radius: 70,
-                  //       padding: 20,
-                  //       cycleRadius: 20,
-                  //       radarType: RadarType.normal,
-                  //       zeroToPointPaint: Paint()
-                  //         ..style = PaintingStyle.stroke
-                  //         ..color = Colors.purpleAccent.withOpacity(0.3)
-                  //         ..strokeWidth = 0.5,
-                  //       contentPaint: Paint()
-                  //         ..color = Colors.redAccent.withAlpha(100)
-                  //         ..strokeWidth = 2
-                  //         ..style = PaintingStyle.fill,
-                  //       pentagonPaint: Paint()
-                  //         ..color = Colors.cyanAccent.withOpacity(0.1)
-                  //         ..strokeWidth = 1
-                  //         ..style = PaintingStyle.fill,
-                  //       data:[
-                  //         RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                  //         RadarBean(55, '心理', bgColor:Colors.green,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                  //         RadarBean(30, '运动', bgColor:Colors.red,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                  //         RadarBean(20, '活力', bgColor:Colors.yellow,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                  //         RadarBean(10, '感官', bgColor:Colors.purple,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
-                  //       ]
-                  //   ),
-                  // ),),
+                  const SizedBox(height: 200),
+
+                  Center(child: SizedBox(
+                    width: 400,
+                    height: 400,
+                    child:  Radar5DimensionsChart(
+                        radius: 70,
+                        padding: 20,
+                        cycleRadius: 20,
+                        radarType: RadarType.normal,
+                        showScore: false,
+                        zeroToPointPaint: Paint()
+                          ..style = PaintingStyle.stroke
+                          ..color = Colors.cyanAccent.withOpacity(0.3)
+                          ..strokeWidth = 0.5,
+                        contentPaint: Paint()
+                          ..color = Colors.cyanAccent.withAlpha(100)
+                          ..strokeWidth = 2
+                          ..style = PaintingStyle.fill,
+                        pentagonPaint: Paint()
+                          ..color = Colors.cyanAccent.withOpacity(0.1)
+                          ..strokeWidth = 1,
+                        data:[
+                          RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                          RadarBean(55, '心理', bgColor:Colors.green,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                          RadarBean(30, '运动', bgColor:Colors.red,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                          RadarBean(20, '活力', bgColor:Colors.yellow,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                          RadarBean(10, '感官', bgColor:Colors.purple,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
+                        ]
+                    ),
+                  ),),
                   // Center(child: SizedBox(
                   //   width: 400,
                   //   height: 400,

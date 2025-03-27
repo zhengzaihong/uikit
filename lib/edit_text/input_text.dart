@@ -169,6 +169,9 @@ class InputText extends StatefulWidget {
   /// 是否开启删除按钮
   final bool enableClear;
 
+  /// 是否固定清空按钮，否则失去焦点则不显示
+  final bool fixClearIcon;
+
   ///需要额外自定义删除框样式。
   final ClearBuilder? clearBuilder;
 
@@ -322,6 +325,7 @@ class InputText extends StatefulWidget {
         this.bgRadius = 10,
         this.enableForm = false,
         this.enableClear = true,
+        this.fixClearIcon = false,
         this.clearIcon =  const Icon(Icons.cancel,size: 20,color: Colors.grey),
         this.clearBuilder,
         this.allLineBorder = const OutlineInputBorder(
@@ -458,7 +462,7 @@ class InputText extends StatefulWidget {
 
 class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin{
 
-  bool _hasContent = false;
+  // bool _hasContent = false;
 
   ///关联输入框，处理在组价在列表中跟随滚动
   final LayerLink _layerLink = LayerLink();
@@ -480,15 +484,15 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       widget.focusListener?.call(context,hasFocus);
       if(widget.inline == InlineStyle.clearStyle){
         ///非外部自定义 走内部实现策略，否则外部调用者维护样式
-       setState(() {
-         if(mounted && widget.clearBuilder == null){
+       if(mounted && widget.clearBuilder == null && !widget.fixClearIcon ){
+         setState(() {
            if(hasFocus){
              inlineStyle = InlineStyle.clearStyle;
            }else{
              inlineStyle = InlineStyle.normalStyle;
            }
-         }
-       });
+         });
+       }
       }
       if(hasFocus && widget.buildPop!=null){
         addPop();
@@ -499,7 +503,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
       //   return;
       // }
     });
-    _hasContent = StringUtils.isNotEmpty(widget.controller?.text);
   }
 
   @override
@@ -703,11 +706,11 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
           if(widget.clearBuilder!=null){
             suffixIcon = widget.clearBuilder!(context);
           }else{
-            suffixIcon = (getHasContent() && widget.enableClear && getIsEnable())
+            suffixIcon = (widget.enableClear && getIsEnable() && getHasContent())
                 ? GestureDetector(
-              onTap: (() {
+              onTap:() {
                 clearContent();
-              }),
+              },
               child: widget.clearIcon,
             ) : const Text("");
           }
@@ -867,7 +870,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     if(mounted){
       setState(() {
          widget.onChanged?.call(text);
-        _hasContent = text.isNotEmpty;
       });
     }
   }
@@ -876,7 +878,6 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     setState(() {
       widget.controller?.text = "";
       widget.onChanged?.call("");
-      _hasContent = false;
     });
   }
 
@@ -884,7 +885,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
     return widget.enabled ?? true;
   }
   bool getHasContent() {
-    return _hasContent;
+    return StringUtils.isNotEmpty(widget.controller?.text);
   }
 
   bool isFocus() {

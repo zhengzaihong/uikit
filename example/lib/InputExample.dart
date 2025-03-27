@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
+import 'package:flutter_uikit_forzzh/select/drop_position.dart';
+import 'package:flutter_uikit_forzzh/select/selection_menu_form.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/city_picker_example.dart';
 
@@ -30,6 +32,12 @@ class _InputExampleState extends State<InputExample> {
   late OutlineInputBorder focusedBorder;
 
   ValueNotifier<String> valueNotifier = ValueNotifier<String>("输入搜索需求：");
+
+  int? _checkedIndex;
+
+  SelectionMenuFormController selectionMenuFormController = SelectionMenuFormController();
+
+  ValueNotifier<FormTips> formTips = ValueNotifier(FormTips.none);
 
   @override
   void initState() {
@@ -131,6 +139,7 @@ class _InputExampleState extends State<InputExample> {
               ),
               Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.always,
                   onChanged: () {
                     _formKey.currentState!.validate();
                   },
@@ -196,6 +205,77 @@ class _InputExampleState extends State<InputExample> {
                         focusedBorder: focusedBorder,
                         focusedErrorBorder: focusedErrorBorder,
                         errorBorder: errorBorder,
+                      ),
+
+                      const SizedBox(height: 30),
+                      SelectionMenuForm(
+                          popWidth: 30,
+                          alignType: AlignType.center,
+                          controller: selectionMenuFormController,
+                          valueNotifier: formTips,
+                          warningTips: const Text('这是一条警告信息',style: TextStyle(color: Colors.yellow)),
+                          errorTips: const Text('这是错误信息',style: TextStyle(color: Colors.red),),
+                          validator: (value) {
+                            if (_checkedIndex  == null) {
+                              return(formTips.value = FormTips.warning).toString();
+                            }
+                            if (_checkedIndex  == 1) {
+                              return (formTips.value = FormTips.error).toString();
+                            }
+                            formTips.value = FormTips.none;
+                            return null;
+                          },
+                          buttonBuilder: (show){
+                            return Container(
+                              height: 40,
+                              width: 200,
+                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Expanded(child:  Text(_checkedIndex==null?"请选择":'item $_checkedIndex')),
+                                  Icon(show?Icons.arrow_drop_up_rounded:Icons.arrow_drop_down_rounded),
+                                ],
+                              ),
+                            );
+                          },
+                          selectorBuilder: (context) {
+                            return Container(
+                              height: 200,
+                              margin: const EdgeInsets.only(top: 10),
+                              decoration: const BoxDecoration(
+                                  color: Colors.yellow
+                              ),
+                              child: ListView.separated(
+                                itemCount: 20,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: (){
+                                      if(index == 0){
+                                        _checkedIndex = null;
+                                      }else{
+                                        _checkedIndex = index;
+                                      }
+                                      selectionMenuFormController.validator();
+                                      Navigator.pop(context);
+                                    },
+                                    child: 'item $_checkedIndex' == 'item $index' ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("item $index",style: const TextStyle(color: Colors.red),),
+                                        const Icon(Icons.check,color: Colors.red,)
+                                      ],
+                                    ) : Text("item $index"),
+                                  );
+                                }, separatorBuilder: (BuildContext context, int index) {
+                                return const Divider();
+                              },),
+                            );
+                          }
                       ),
 
 

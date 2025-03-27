@@ -62,6 +62,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   var unCheckedIcon = Image.asset("images/nor_icon_16@2x.png",width: 20,height: 20,);
 
 
+  TimeViewController controller = TimeViewController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,8 +128,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   RatingBar(
                     value: ratingBarCount,
                     size: 20,
-                    nomalImage: "images/wjx.png",
-                    selectImage: "images/wjx1.png",
+                    normalImage: Image.asset("images/wjx.png",width: 20,height: 20,),
+                    selectImage: Image.asset("images/wjx1.png",width: 20,height: 20,),
                     selectAble: true,
                     half: true,
                     maxRating: 5,
@@ -508,10 +510,11 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   title("倒计时控件"),
                   TimeView(
                     countdown: 1000,
+                    controller: controller,
                     duration: const Duration(
-                        milliseconds: 100
+                        seconds: 1
                     ),
-                    builder: (context, controller, time) {
+                    builder: (context, time) {
                       if (!controller.isStart()) {
                         return InkWell(
                             onTap: () {

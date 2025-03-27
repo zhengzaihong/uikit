@@ -25,10 +25,10 @@ class RatingBar extends StatefulWidget {
   final double padding;
 
   ///非选中的星星图片
-  final String nomalImage;
+  final Widget normalImage;
 
   /// 选中时的图片
-  final String selectImage;
+  final Widget selectImage;
 
   /// 是否能够点击和滑动
   final bool selectAble;
@@ -44,8 +44,8 @@ class RatingBar extends StatefulWidget {
       this.count = 5,
       this.value = 0,
       this.size = 20,
-      this.nomalImage = "",
-      this.selectImage = "",
+      required this.normalImage,
+      required this.selectImage,
       this.padding = 3,
       this.selectAble = false,
       this.half = false,
@@ -135,11 +135,8 @@ class _RatingBarState extends State<RatingBar> {
     int full = fullStars();
     List<Widget> children = [];
     for (int i = 0; i < full; i++) {
-      children.add(Image.asset(
-        widget.selectImage,
-        height: widget.size,
-        width: widget.size,
-      ));
+      children.add(
+        widget.selectImage);
       if (i < widget.count - 1) {
         children.add(
           SizedBox(
@@ -151,9 +148,7 @@ class _RatingBarState extends State<RatingBar> {
     if (full < widget.count) {
       children.add(ClipRect(
         clipper: SMClipper(rating: star() * widget.size),
-        child: Image.asset(widget.selectImage,
-            height: widget.size, width: widget.size),
-      ));
+        child: widget.selectImage));
     }
 
     return children;
@@ -162,11 +157,9 @@ class _RatingBarState extends State<RatingBar> {
   List<Widget> buildNomalRow() {
     List<Widget> children = [];
     for (int i = 0; i < widget.count; i++) {
-      children.add(Image.asset(
-        widget.nomalImage,
-        height: widget.size,
-        width: widget.size,
-      ));
+      children.add(
+        widget.normalImage,
+      );
       if (i < widget.count - 1) {
         children.add(SizedBox(
           width: widget.padding,

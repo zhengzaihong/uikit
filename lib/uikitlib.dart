@@ -25,7 +25,7 @@ export 'switch/switch_lib.dart';
 export 'line/line_lib.dart';
 export 'drawer/drawer_lib.dart';
 export 'pager/pager.dart';
-export 'select/selection_menu.dart';
+export 'select/select_lib.dart';
 export 'loading/shimmer_loading.dart';
 export 'drag/drag_box.dart';
 export 'radar/radar_lib.dart';

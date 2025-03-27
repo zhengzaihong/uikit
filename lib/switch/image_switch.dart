@@ -1,31 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-/// 开关默认width
-const double _kDefaultWidth = 80;
-
-/// 开关默认height
-const double _kDefaultHeight = 30;
-
-/// 开启状态下默认颜色
-const Color _kDefaultActiveColor = Colors.blueAccent;
-
-/// 关闭状态下默认颜色
-const Color _kDefaultInactiveColor = Colors.white;
-
-
-/// 默认过度动画时长
-const Duration _kDefaultDuration = Duration(milliseconds: 800);
-
-typedef BuilderSwitch = Widget Function(
-    BuildContext context,
-    AnimationController controller,
-    Animation<Color?> colorTrackAnimation,
-    Animation<Color?> colorThumbAnimation,
-    Animation<Alignment> alignmentAnimation,
-    );
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -52,6 +27,29 @@ typedef BuilderSwitch = Widget Function(
 //     print('-------v:$v');
 //   },
 // )
+
+/// 开关默认width
+const double _kDefaultWidth = 80;
+
+/// 开关默认height
+const double _kDefaultHeight = 30;
+
+/// 开启状态下默认颜色
+const Color _kDefaultActiveColor = Colors.blueAccent;
+
+/// 关闭状态下默认颜色
+const Color _kDefaultInactiveColor = Colors.white;
+
+/// 默认过度动画时长
+const Duration _kDefaultDuration = Duration(milliseconds: 800);
+
+typedef BuilderSwitch = Widget Function(
+    BuildContext context,
+    AnimationController controller,
+    Animation<Color?> colorTrackAnimation,
+    Animation<Color?> colorThumbAnimation,
+    Animation<Alignment> alignmentAnimation,
+    );
 
 class ImageSwitch extends StatefulWidget {
   const ImageSwitch({

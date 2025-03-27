@@ -14,7 +14,7 @@ class ToastExample extends StatefulWidget {
 }
 
 class _ToastExampleState extends State<ToastExample> {
-
+  TimeViewController controller = TimeViewController();
   OverlayEntryManger? overlayEntryManger;
   @override
   void initState() {
@@ -231,7 +231,8 @@ class _ToastExampleState extends State<ToastExample> {
                                   top: 25,
                                   child: TimeView(
                                     countdown: 10,
-                                    builder: (context, controller, time) {
+                                    controller: controller,
+                                    builder: (context, time) {
                                       if (!controller.isStart()) {
                                         controller.startTimer();
                                       }

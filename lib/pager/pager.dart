@@ -13,7 +13,48 @@ import 'package:flutter_uikit_forzzh/edit_text/style/outline_input_text_border.d
 /// create_time: 16:57
 /// describe: 分页组件
 /// 2024-04-09 修改页码非1开始问题。
-///
+/// eg:
+//      Pager(
+//           key: ValueKey(DateTime.now().microsecondsSinceEpoch),
+//           pagerInputType: PagerInputType.none,
+//           totalCount: provider.patientListEntity.total ?? 0,
+//           pageEach: provider.pageSize,
+//           currentPage: provider.pageNumber,
+//           pageIndicatorActiveColor: Colors.black,
+//           pageIndicatorColor: Colors.grey,
+//           checkedPageColor: Colors.black,
+//           checkedPageBoxDecoration: BoxDecoration(
+//               color: ColorsUtil.color_3EC3CF,
+//               borderRadius: BorderRadius.all(Radius.circular(10))
+//           ),
+//           pageIndicatorHeight: 30,
+//           pageTextSize: 26.sp,
+//           showEllipsis: true,
+//           sideDiff: 1,
+//           focusBorder: Border.all(color:ColorsUtil.color_3EC3CF),
+//           textStyle: TextStyle(
+//             color: Colors.black,
+//             fontSize: 26.sp,
+//           ),
+//           inputContentPadding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+//           outlineInputTextBorder: const OutlineInputTextBorder(
+//             borderSide: BorderSide(
+//               color:ColorsUtil.color_3EC3CF,
+//               width: 1.0,
+//             ),
+//             childBorderRadius: BorderRadius.all(Radius.circular(10)),
+//           ),
+//           errorInputCallback: (){
+//             showToast("请输入正确的页码");
+//           },
+//           pageChange: (totalPages, currentPageIndex) {
+//             if(provider.pageNumber == currentPageIndex){
+//               return;
+//             }
+//             provider.pageNumber = currentPageIndex;
+//             provider.getPatientList();
+//           },
+//         ),
 
 enum PagerItemTypes { prev, next, ellipsis, number }
 enum PagerInputType { input ,select,none}
@@ -31,7 +72,7 @@ class Pager extends StatefulWidget {
   final Function()? errorInputCallback;
   /// 文本样式
   final TextStyle? textStyle;
-  /// 左右边距
+  /// 左右边距 ....
   final int sideDiff;
   /// 是否显示省略号
   final bool showEllipsis;

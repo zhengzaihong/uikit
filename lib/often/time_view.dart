@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 /// 使用规范: 外部请不要将 TimeViewState 持久化。
 ///
 
-typedef BuildChild = Widget Function(BuildContext context, TimeViewState controller, int time);
-typedef BuildCompleter = void Function(BuildContext context, TimeViewState controller);
+typedef BuildChild = Widget Function(BuildContext context, int time);
+typedef BuildCompleter = void Function(BuildContext context);
 
 class TimeView extends StatefulWidget {
   /// 倒计时的秒数
@@ -27,13 +27,16 @@ class TimeView extends StatefulWidget {
 
   final BuildCompleter? buildCompleter;
 
+  final TimeViewController? controller;
+
   const TimeView(
-      { required this.countdown,
-        required this.builder,
-        this.enableCancel = false,
-        this.duration = const Duration(seconds: 1),
-        this.buildCompleter,
-        Key? key})
+      {required this.countdown,
+      required this.builder,
+      this.controller,
+      this.enableCancel = false,
+      this.duration = const Duration(seconds: 1),
+      this.buildCompleter,
+      Key? key})
       : super(key: key);
 
   @override
@@ -47,44 +50,40 @@ class TimeViewState extends State<TimeView> {
   /// 当前倒计时的时间
   int _currentTime = 0;
 
-  ///提供给外部的控制器
-  late TimeViewState _controller;
-
   @override
   void initState() {
     super.initState();
-    _controller = this;
+    widget.controller?.bind(this);
     _currentTime = widget.countdown;
-    if(widget.buildCompleter!=null){
+    if (widget.buildCompleter != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        widget.buildCompleter?.call(context,this);
+        widget.buildCompleter?.call(context);
       });
     }
   }
 
-
-  bool isStart(){
-    return _timer!=null && _currentTime!=0;
+  bool isStart() {
+    return _timer != null && _currentTime != 0;
   }
 
   /// 启动倒计时的计时器。
   void startTimer() {
-    if(widget.enableCancel){
-      if(_timer!=null){
+    if (widget.enableCancel) {
+      if (_timer != null) {
         cancelTimer();
       }
     }
-    if(_timer!=null){
+    if (_timer != null) {
       return;
     }
-    _currentTime = widget.countdown -1;
+    _currentTime = widget.countdown - 1;
     notyChange();
 
     _timer = Timer.periodic(widget.duration, (timer) {
       if (_currentTime == 1) {
         cancelTimer();
       }
-      _currentTime = widget.countdown - timer.tick-1;
+      _currentTime = widget.countdown - timer.tick - 1;
       notyChange();
     });
   }
@@ -111,7 +110,50 @@ class TimeViewState extends State<TimeView> {
   }
 
   @override
+  void didUpdateWidget(TimeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != null &&
+        oldWidget.controller != widget.controller) {
+      widget.controller?.bind(this);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return widget.builder!.call(context, _controller, _currentTime);
+    return widget.builder!.call(context, _currentTime);
+  }
+}
+
+class TimeViewController {
+  TimeViewState? _state;
+
+  TimeViewState? get state => _state;
+
+  void bind(TimeViewState state) {
+    _state = state;
+  }
+
+  void dispose() {
+    _state = null;
+  }
+
+  RenderBox? getRenderBox() {
+    final obj = _state?.context.findRenderObject();
+    if (obj != null) {
+      return obj as RenderBox;
+    }
+    return null;
+  }
+
+  void startTimer() {
+    _state?.startTimer();
+  }
+
+  void cancelTimer() {
+    _state?.cancelTimer();
+  }
+
+  bool isStart() {
+    return _state?.isStart() ?? false;
   }
 }

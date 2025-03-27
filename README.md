@@ -21,9 +21,9 @@
      InputText 新增输入联动浮窗效果见下说明和代码看示例
 *  新增 FloatExpendButton 悬浮菜单按钮
 *  InputExtend 输入框搜索组件，支持Flutter 中 TextField 全部属性
-*  新增 CustomAnimatedBottomBar 底部菜单
 *  新增分页组件 Pager.
 *  新增选择下拉框菜单 SelectionMenu 可高度自定义，且不关注数据本身。
+*  新增 SelectionMenuForm 可进行实时选择校验的下拉框。
 *  新增 TextExtend 文本拓展组件，支持web前端js菜单效果。
       新增弹性动画效果
 *  新增 MousePopupButton 鼠标右键弹出窗组件，Web端使用
