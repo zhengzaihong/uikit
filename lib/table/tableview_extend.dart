@@ -294,12 +294,12 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
             child: widget.enableFixFootColumn? Theme(data: ThemeData(
                 scrollbarTheme: ScrollbarThemeData(
                   radius: const Radius.circular(0),
-                  thickness: MaterialStateProperty.all(0),
-                  thumbColor: MaterialStateProperty.all(Colors.transparent),
-                  trackColor: MaterialStateProperty.all(Colors.transparent),
-                  trackBorderColor: MaterialStateProperty.all(Colors.transparent),
-                  thumbVisibility: MaterialStateProperty.all(false),
-                  trackVisibility: MaterialStateProperty.all(false),
+                  thickness: WidgetStateProperty.all(0),
+                  thumbColor: WidgetStateProperty.all(Colors.transparent),
+                  trackColor: WidgetStateProperty.all(Colors.transparent),
+                  trackBorderColor: WidgetStateProperty.all(Colors.transparent),
+                  thumbVisibility: WidgetStateProperty.all(false),
+                  trackVisibility: WidgetStateProperty.all(false),
                 )
             ), child: buildCenterTable()):buildCenterTable()
         ),
@@ -466,12 +466,12 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                   data: ThemeData(
                       scrollbarTheme: ScrollbarThemeData(
                         radius: const Radius.circular(0),
-                        thickness: MaterialStateProperty.all(0),
-                        thumbColor: MaterialStateProperty.all(Colors.transparent),
-                        trackColor: MaterialStateProperty.all(Colors.transparent),
-                        trackBorderColor: MaterialStateProperty.all(Colors.transparent),
-                        thumbVisibility: MaterialStateProperty.all(false),
-                        trackVisibility: MaterialStateProperty.all(false),
+                        thickness: WidgetStateProperty.all(0),
+                        thumbColor: WidgetStateProperty.all(Colors.transparent),
+                        trackColor: WidgetStateProperty.all(Colors.transparent),
+                        trackBorderColor: WidgetStateProperty.all(Colors.transparent),
+                        thumbVisibility: WidgetStateProperty.all(false),
+                        trackVisibility: WidgetStateProperty.all(false),
                       )
                   ),
                   child:DecoratedBox(

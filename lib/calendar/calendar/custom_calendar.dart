@@ -250,117 +250,114 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
           Expanded(
             child: AspectRatio(
               aspectRatio: 1.0,
-              child: Container(
-                child: Stack(
-                  children: <Widget>[
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: startDate != null && endDate != null
+                          ? getIsItStartAndEndDate(date) ||
+                          getIsInRange(date)
+                          ? calendarConfig.inRangeColor
+                          : Colors.transparent
+                          : Colors.transparent,
 
-                    Container(
-                      decoration: BoxDecoration(
-                        color: startDate != null && endDate != null
-                            ? getIsItStartAndEndDate(date) ||
-                            getIsInRange(date)
-                            ? calendarConfig.inRangeColor
-                            : Colors.transparent
-                            : Colors.transparent,
-
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: isStartDateRadius(date)
-                              ? calendarConfig.successionRadius
-                              : const Radius.circular(0.0),
-                          topLeft: isStartDateRadius(date)
-                              ? calendarConfig.successionRadius
-                              : const Radius.circular(0.0),
-                          topRight: isEndDateRadius(date)
-                              ? calendarConfig.successionRadius
-                              : const Radius.circular(0.0),
-                          bottomRight: isEndDateRadius(date)
-                              ? calendarConfig.successionRadius
-                              : const Radius.circular(0.0),
-                        ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: isStartDateRadius(date)
+                            ? calendarConfig.successionRadius
+                            : const Radius.circular(0.0),
+                        topLeft: isStartDateRadius(date)
+                            ? calendarConfig.successionRadius
+                            : const Radius.circular(0.0),
+                        topRight: isEndDateRadius(date)
+                            ? calendarConfig.successionRadius
+                            : const Radius.circular(0.0),
+                        bottomRight: isEndDateRadius(date)
+                            ? calendarConfig.successionRadius
+                            : const Radius.circular(0.0),
                       ),
                     ),
+                  ),
 
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius:
-                            calendarConfig.dayClickBackRadius,
-                        onTap: () {
-                          if (currentMonthDate.month == date.month) {
-                            if (widget.minimumDate != null &&
-                                widget.maximumDate != null) {
-                              final DateTime newminimumDate = DateTime(
-                                  widget.minimumDate!.year,
-                                  widget.minimumDate!.month,
-                                  widget.minimumDate!.day - 1);
-                              final DateTime newmaximumDate = DateTime(
-                                  widget.maximumDate!.year,
-                                  widget.maximumDate!.month,
-                                  widget.maximumDate!.day + 1);
-                              if (date.isAfter(newminimumDate) &&
-                                  date.isBefore(newmaximumDate)) {
-                                onDateClick(date);
-                              }
-                            } else if (widget.minimumDate != null) {
-                              final DateTime newminimumDate = DateTime(
-                                  widget.minimumDate!.year,
-                                  widget.minimumDate!.month,
-                                  widget.minimumDate!.day - 1);
-                              if (date.isAfter(newminimumDate)) {
-                                onDateClick(date);
-                              }
-                            } else if (widget.maximumDate != null) {
-                              final DateTime newmaximumDate = DateTime(
-                                  widget.maximumDate!.year,
-                                  widget.maximumDate!.month,
-                                  widget.maximumDate!.day + 1);
-                              if (date.isBefore(newmaximumDate)) {
-                                onDateClick(date);
-                              }
-                            } else {
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius:
+                          calendarConfig.dayClickBackRadius,
+                      onTap: () {
+                        if (currentMonthDate.month == date.month) {
+                          if (widget.minimumDate != null &&
+                              widget.maximumDate != null) {
+                            final DateTime newminimumDate = DateTime(
+                                widget.minimumDate!.year,
+                                widget.minimumDate!.month,
+                                widget.minimumDate!.day - 1);
+                            final DateTime newmaximumDate = DateTime(
+                                widget.maximumDate!.year,
+                                widget.maximumDate!.month,
+                                widget.maximumDate!.day + 1);
+                            if (date.isAfter(newminimumDate) &&
+                                date.isBefore(newmaximumDate)) {
                               onDateClick(date);
                             }
+                          } else if (widget.minimumDate != null) {
+                            final DateTime newminimumDate = DateTime(
+                                widget.minimumDate!.year,
+                                widget.minimumDate!.month,
+                                widget.minimumDate!.day - 1);
+                            if (date.isAfter(newminimumDate)) {
+                              onDateClick(date);
+                            }
+                          } else if (widget.maximumDate != null) {
+                            final DateTime newmaximumDate = DateTime(
+                                widget.maximumDate!.year,
+                                widget.maximumDate!.month,
+                                widget.maximumDate!.day + 1);
+                            if (date.isBefore(newmaximumDate)) {
+                              onDateClick(date);
+                            }
+                          } else {
+                            onDateClick(date);
                           }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: getIsItStartAndEndDate(date)
+                              ? calendarConfig.cycleBgColor
+                              : Colors.transparent,
+                          borderRadius:  calendarConfig.dayClickBackRadius,
+                          border: Border.all(
                             color: getIsItStartAndEndDate(date)
-                                ? calendarConfig.cycleBgColor
+                                ? calendarConfig.cycleSlidColor
                                 : Colors.transparent,
-                            borderRadius:  calendarConfig.dayClickBackRadius,
-                            border: Border.all(
-                              color: getIsItStartAndEndDate(date)
-                                  ? calendarConfig.cycleSlidColor
-                                  : Colors.transparent,
-                              width: calendarConfig.cycleWidth,
-                            ),
-                            boxShadow: getIsItStartAndEndDate(date)
-                                ? <BoxShadow>[
-                                 calendarConfig.boxShadow
-                            ]
-                                : null,
+                            width: calendarConfig.cycleWidth,
                           ),
-                          child: Center(
-                            child: Text(
-                              '${date.day}',
-                              style: TextStyle(
-                                  color: getIsItStartAndEndDate(date)
-                                      ? calendarConfig.startAndEndDayTextColor
-                                      : currentMonthDate.month == date.month
-                                      ? calendarConfig.currentMonthTextColor
-                                      : calendarConfig.otherMonthTextColor,
-                                  fontSize:
-                                  calendarConfig.dayTextSize,
-                                  fontWeight: getIsItStartAndEndDate(date)
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
-                            ),
+                          boxShadow: getIsItStartAndEndDate(date)
+                              ? <BoxShadow>[
+                               calendarConfig.boxShadow
+                          ]
+                              : null,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${date.day}',
+                            style: TextStyle(
+                                color: getIsItStartAndEndDate(date)
+                                    ? calendarConfig.startAndEndDayTextColor
+                                    : currentMonthDate.month == date.month
+                                    ? calendarConfig.currentMonthTextColor
+                                    : calendarConfig.otherMonthTextColor,
+                                fontSize:
+                                calendarConfig.dayTextSize,
+                                fontWeight: getIsItStartAndEndDate(date)
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -42,7 +42,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
     this.selectedIndex = 0,
     this.showElevation = true,
     this.iconSize = 24,
-    this.backgroundColor,
+    this.backgroundColor = Colors.white,
     this.itemCornerRadius = 28,
     this.containerHeight = 48,
     this.animationDuration = const Duration(milliseconds: 200),
@@ -67,11 +67,9 @@ class CustomAnimatedBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? Theme.of(context).bottomAppBarColor;
-
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: bgColor,
+        color: backgroundColor,
         boxShadow: [
           if (showElevation)
             const BoxShadow(
@@ -95,7 +93,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
                   item: item,
                   iconSize: iconSize,
                   isSelected: index == selectedIndex,
-                  backgroundColor: bgColor,
+                  backgroundColor: backgroundColor!,
                   itemCornerRadius: itemCornerRadius,
                   animationDuration: animationDuration,
                   curve: curve,

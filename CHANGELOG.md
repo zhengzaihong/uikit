@@ -1,4 +1,4 @@
 
-## 0.2.1
-- 新增组件和优化
+## 0.2.2
+- New components and version optimization
 - 

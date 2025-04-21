@@ -274,7 +274,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                               var cellBean =  (data as RowBean).cells[index];
                               if(cellBean.isTitle){
                                 return TabSpaceText(
-                                    contents: KitMath.parseStr((cellBean.name).toString()),
+                                    contents: KitMath.parseStrPlus((cellBean.name).toString()),
                                     padding: const EdgeInsets.only(left: 10,right: 10),
                                     style: const TextStyle(fontSize: 14,color: Colors.black));
                               }
@@ -301,7 +301,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                               var cellBean =  (data as RowBean).cells[index];
                               if(cellBean.isTitle){
                                 return TabSpaceText(
-                                    contents: KitMath.parseStr((cellBean.name).toString()),
+                                    contents: KitMath.parseStrPlus((cellBean.name).toString()),
                                     padding: const EdgeInsets.only(left: 10,right: 10),
                                     style: const TextStyle(fontSize: 14,color: Colors.black));
                               }
@@ -325,7 +325,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                           var cellBean =  (data as RowBean).cells[index];
                           if(cellBean.isTitle){
                             return TabSpaceText(
-                                contents: KitMath.parseStr((cellBean.name).toString()),
+                                contents: KitMath.parseStrPlus((cellBean.name).toString()),
                                 padding: const EdgeInsets.only(left: 10,right: 10),
                                 style: const TextStyle(fontSize: 14,color: Colors.black));
                           }

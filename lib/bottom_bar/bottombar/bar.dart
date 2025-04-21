@@ -16,22 +16,22 @@ import 'style/react_tab_style.dart';
 import 'style/styles.dart';
 
 /// Default size of the curve line.
-const double CONVEX_SIZE = 80;
+const double convex_size = 80;
 
 /// Default height of the AppBar.
-const double BAR_HEIGHT = 50;
+const double bar_height = 50;
 
 /// Default distance that the child's top edge is inset from the top of the stack.
-const double CURVE_TOP = -25;
+const double curve_top = -25;
 
 /// Default size for active tab.
-const double ACTION_LAYOUT_SIZE = 60;
+const double action_layout_size = 60;
 
 /// Default size for active icon in tab.
-const double ACTION_INNER_BUTTON_SIZE = 40;
+const double action_inner_button_size = 40;
 
 /// Default elevation of [ConvexAppBar].
-const double ELEVATION = 2;
+const double elevation = 2;
 
 /// Tab styles.
 enum TabStyle {
@@ -522,7 +522,7 @@ class ConvexAppBarState extends State<ConvexAppBar>
     final convexIndex = isFixed() ? (widget.count ~/ 2) : _currentIndex;
     final active = isFixed() ? convexIndex == _currentIndex : true;
 
-    final height = (widget.height ?? BAR_HEIGHT) + additionalBottomPadding;
+    final height = (widget.height ?? bar_height) + additionalBottomPadding;
     final width = MediaQuery.of(context).size.width;
     var percent = isFixed()
         ? const AlwaysStoppedAnimation<double>(0.5)
@@ -539,18 +539,18 @@ class ConvexAppBarState extends State<ConvexAppBar>
       clipBehavior: Clip.none,
       alignment: Alignment.bottomCenter,
       children: <Widget>[
-        Container(
+        SizedBox(
           height: height,
           width: width,
           child: CustomPaint(
             painter: ConvexPainter(
-              top: widget.top ?? CURVE_TOP,
-              width: widget.curveSize ?? CONVEX_SIZE,
-              height: widget.curveSize ?? CONVEX_SIZE,
+              top: widget.top ?? curve_top,
+              width: widget.curveSize ?? convex_size,
+              height: widget.curveSize ?? convex_size,
               color: widget.backgroundColor ?? Colors.blue,
               shadowColor: widget.shadowColor ?? Colors.black38,
               gradient: widget.gradient,
-              sigma: widget.elevation ?? ELEVATION,
+              sigma: widget.elevation ?? elevation,
               leftPercent: percent,
               textDirection: textDirection,
               cornerRadius: widget.cornerRadius,
@@ -559,7 +559,7 @@ class ConvexAppBarState extends State<ConvexAppBar>
         ),
         _barContent(height, additionalBottomPadding, convexIndex),
         Positioned.fill(
-          top: widget.top ?? CURVE_TOP,
+          top: widget.top ?? curve_top,
           bottom: additionalBottomPadding,
           child: FractionallySizedBox(
               widthFactor: factor,

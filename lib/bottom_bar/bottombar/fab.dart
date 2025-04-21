@@ -20,10 +20,10 @@ import 'painter.dart';
 
 /// Single convex button widget
 class ConvexButton extends StatelessWidget {
-  static const _DEFAULT_SIZE = 60.0;
-  static const _DEFAULT_TOP = 50.0;
-  static const _DEFAULT_SIGMA = 2.0;
-  static const _DEFAULT_THICKNESS = 4.0;
+  static const _default_size = 60.0;
+  static const _default_top = 50.0;
+  static const _default_sigma = 2.0;
+  static const _default_thickness = 4.0;
 
   /// Size of convex shape, should be lager than [top]
   final double? size;
@@ -70,7 +70,7 @@ class ConvexButton extends StatelessWidget {
     Color? backgroundColor,
     VoidCallback? onTap,
   }) {
-    thickness = thickness ?? _DEFAULT_THICKNESS;
+    thickness = thickness ?? _default_thickness;
     var fab = Container(
       margin: EdgeInsets.only(bottom: thickness),
       decoration: BoxDecoration(
@@ -94,15 +94,15 @@ class ConvexButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.bottomCenter, children: <Widget>[
       SizedBox(
-        height: thickness ?? _DEFAULT_THICKNESS,
+        height: thickness ?? _default_thickness,
         width: double.infinity,
         child: CustomPaint(
           painter: ConvexPainter(
-            top: -(top ?? _DEFAULT_TOP),
-            width: size ?? _DEFAULT_SIZE,
-            height: size ?? _DEFAULT_SIZE,
+            top: -(top ?? _default_top),
+            width: size ?? _default_size,
+            height: size ?? _default_size,
             color: backgroundColor ?? Colors.grey[50]!,
-            sigma: sigma ?? _DEFAULT_SIGMA,
+            sigma: sigma ?? _default_sigma,
             leftPercent: const AlwaysStoppedAnimation<double>(0.5),
           ),
         ),

@@ -44,7 +44,7 @@ class CustomCheckBox extends StatefulWidget {
   final Color? activeColor;
   final Color? checkColor;
 
-  final MaterialStateProperty<Color?>? fillColor;
+  final WidgetStateProperty<Color?>? fillColor;
   final BorderSide? side;
   final double? splashRadius;
 

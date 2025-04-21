@@ -76,10 +76,11 @@ class KitMath {
     if (StringUtils.isEmpty(string)) {
       return [];
     }
-    RegExp regExp = reg?? RegExp(r'[\u4e00-\u9fa5]' + // 单个中文字符
-            r'|[a-zA-Z]+' + // 连续英文单词
-            r'|\d+' + // 连续数字
-            r'|[，。,.]' // 标点符号，这里加上逗号句号（可扩展）
+    RegExp regExp = reg?? RegExp(
+            r'[\u4e00-\u9fa5]'
+            r'|[a-zA-Z]+'
+            r'|\d+'
+            r'|[，。,.]'
         );
     // 使用allMatches
     Iterable<RegExpMatch> matches = regExp.allMatches(string!);

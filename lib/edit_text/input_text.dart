@@ -225,7 +225,7 @@ class InputText extends StatefulWidget {
   final int? minLines;
   final bool expands;
   final bool readOnly;
-  final ToolbarOptions? toolbarOptions;
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
   final bool? showCursor;
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
@@ -361,7 +361,7 @@ class InputText extends StatefulWidget {
         this.textAlignVertical,
         this.textDirection,
         this.readOnly = false,
-        this.toolbarOptions,
+        this.contextMenuBuilder,
         this.showCursor,
         this.autofocus = false,
         this.obscuringCharacter = '•',
@@ -585,7 +585,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         minLines: widget.minLines,
         expands: widget.expands,
         readOnly: widget.readOnly,
-        toolbarOptions: widget.toolbarOptions,
+        contextMenuBuilder: widget.contextMenuBuilder,
         showCursor: widget.showCursor,
         maxLength: widget.maxLength,
         maxLengthEnforcement: widget.maxLengthEnforcement,
@@ -648,7 +648,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
         minLines: widget.minLines,
         expands: widget.expands,
         readOnly: widget.readOnly,
-        toolbarOptions: widget.toolbarOptions,
+        contextMenuBuilder: widget.contextMenuBuilder,
         showCursor: widget.showCursor,
         cursorColor: widget.cursorColor,
         maxLength: widget.maxLength,
@@ -849,7 +849,7 @@ class InputTextState extends State<InputText> with AutomaticKeepAliveClientMixin
   void addPop(){
     if(null==_overlayEntry){
       _overlayEntry = _createOverlayEntry();
-      Overlay.of(context)?.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
     }
   }
   void removePop(){

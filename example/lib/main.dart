@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
-import 'package:uikit_example/InputExample.dart';
-import 'package:uikit_example/StackCardDemo.dart';
+import 'package:uikit_example/input_example.dart';
+import 'package:uikit_example/stack_card_demo.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
 import 'package:uikit_example/often_widget_example2.dart';
 import 'package:uikit_example/pager_example.dart';

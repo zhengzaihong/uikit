@@ -16,7 +16,7 @@ class TextView extends StatefulWidget {
   final Locale? locale;
   final bool? softWrap;
   final TextOverflow? overflow;
-  final double? textScaleFactor;
+  final TextScaler? textScaler;
   final int? maxLines;
   final String? semanticsLabel;
   final Color highlightColor;
@@ -63,7 +63,7 @@ class TextView extends StatefulWidget {
     this.locale,
     this.softWrap,
     this.overflow,
-    this.textScaleFactor,
+    this.textScaler,
     this.maxLines,
     this.semanticsLabel,
     this.crossAxisAlignment = CrossAxisAlignment.center,
@@ -122,7 +122,7 @@ class _TextViewState extends State<TextView> {
         locale: widget.locale,
         softWrap: widget.softWrap,
         overflow:widget.overflow,
-        textScaleFactor: widget.textScaleFactor,
+        textScaler: widget.textScaler,
         style: style);
     if (iconWidget != null) {
       switch (widget.drawablePosition) {

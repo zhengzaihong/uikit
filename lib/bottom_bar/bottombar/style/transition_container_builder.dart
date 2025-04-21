@@ -96,39 +96,35 @@ class FlipBuilder extends TransitionContainerBuilder {
 
   @override
   Widget build(Animation animation) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Transform(
-            alignment: Alignment.bottomCenter,
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)
-              ..translate(0.0, (cos(animation.value) * (height / 2)),
-                  ((height / 2) * sin(animation.value)))
-              ..rotateX(-(pi / 2) + animation.value),
-            child: Container(
-              child: Center(child: bottomChild),
-            ),
-          ),
-          animation.value < (85 * pi / 180)
-              ? Transform(
+    return Stack(
+      children: <Widget>[
+        Transform(
+          alignment: Alignment.bottomCenter,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..translate(0.0, (cos(animation.value) * (height / 2)),
+                ((height / 2) * sin(animation.value)))
+            ..rotateX(-(pi / 2) + animation.value),
+          child: Center(child: bottomChild),
+        ),
+        animation.value < (85 * pi / 180)
+            ? Transform(
+                alignment: Alignment.bottomCenter,
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..translate(
+                    0.0,
+                    -(height / 2) * sin(animation.value),
+                    ((height / 2) * cos(animation.value)),
+                  )
+                  ..rotateX(animation.value),
+                child: Container(
                   alignment: Alignment.bottomCenter,
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.001)
-                    ..translate(
-                      0.0,
-                      -(height / 2) * sin(animation.value),
-                      ((height / 2) * cos(animation.value)),
-                    )
-                    ..rotateX(animation.value),
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Center(child: topChild),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
+                  child: Center(child: topChild),
+                ),
+              )
+            : Container(),
+      ],
     );
   }
 }

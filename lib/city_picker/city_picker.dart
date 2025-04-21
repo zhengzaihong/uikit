@@ -76,8 +76,8 @@ class _CityPickerViewState extends State<CityPickerView> {
     if (datas.isNotEmpty) {
       if (provinceIndex == null) {
         provinceIndex = 0;
-        result.province = provinces[provinceIndex!]['label'];
-        result.provinceCode = provinces[provinceIndex!]['value'].toString();
+        result.province = datas[provinceIndex!]['label'];
+        result.provinceCode = datas[provinceIndex!]['value'].toString();
       }
       return datas;
     }

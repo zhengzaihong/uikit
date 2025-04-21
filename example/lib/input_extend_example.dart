@@ -21,18 +21,19 @@ class _InputExtendExampleState extends State<InputExtendExample> {
         title: const Text("输入搜索框扩展"),
       ),
       backgroundColor: Colors.teal,
-      body: InputExtendDemo(),
+      body: _InputExtendDemo(),
     );
   }
 }
 
-class InputExtendDemo extends StatelessWidget {
-  InputExtendDemo({Key? key}) : super(key: key);
+@immutable
+class _InputExtendDemo extends StatelessWidget {
+  _InputExtendDemo({Key? key}) : super(key: key);
 
-  List<String> checkeds = [];
+  final List<String> checkeds = [];
 
-  FocusNode focusNode = FocusNode();
-  InputExtendController inputExtendController = InputExtendController();
+  final FocusNode focusNode = FocusNode();
+  final InputExtendController inputExtendController = InputExtendController();
 
   @override
   Widget build(BuildContext context) {

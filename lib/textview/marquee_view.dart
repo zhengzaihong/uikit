@@ -81,7 +81,7 @@ class _MarqueeViewState extends State<MarqueeView>
        WidgetsBinding widgetsBinding = WidgetsBinding.instance;
        widgetsBinding.addPostFrameCallback((callback) {
          _timer = Timer.periodic(Duration(seconds: widget.interval), (timer) {
-           index += _myKey.currentContext?.size?.height?.toInt()??0;
+           index += _myKey.currentContext?.size?.height.toInt()??0;
            if ((index - (_myKey.currentContext?.size?.height.toInt()??0)).toDouble() >
                _controller.position.maxScrollExtent) {
              _controller.jumpTo(_controller.position.minScrollExtent);

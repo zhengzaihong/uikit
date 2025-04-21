@@ -34,13 +34,13 @@ class CityResult {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> datas = new Map<String, dynamic>();
-    datas['province'] = this.province;
-    datas['city'] = this.city;
-    datas['area'] = this.area;
-    datas['provinceCode'] = this.provinceCode;
-    datas['cityCode'] = this.cityCode;
-    datas['areaCode'] = this.areaCode;
+    final Map<String, dynamic> datas = <String, dynamic>{};
+    datas['province'] = province;
+    datas['city'] = city;
+    datas['area'] = area;
+    datas['provinceCode'] = provinceCode;
+    datas['cityCode'] = cityCode;
+    datas['areaCode'] = areaCode;
 
     return datas;
   }

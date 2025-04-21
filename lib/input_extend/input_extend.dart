@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
-import 'controller/input_extend_controller.dart';
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -115,7 +113,7 @@ class InputExtend<T> extends StatefulWidget {
   final int? minLines;
   final bool expands;
   final bool readOnly;
-  final ToolbarOptions? toolbarOptions;
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
   final bool? showCursor;
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
@@ -193,7 +191,7 @@ class InputExtend<T> extends StatefulWidget {
         this.textAlignVertical,
         this.textDirection,
         this.readOnly = false,
-        this.toolbarOptions,
+        this.contextMenuBuilder,
         this.showCursor,
         this.autofocus = false,
         this.obscuringCharacter = '•',
@@ -609,7 +607,7 @@ class InputExtendState<T> extends State<InputExtend> {
                 minLines: widget.minLines,
                 expands: widget.expands,
                 readOnly: widget.readOnly,
-                toolbarOptions: widget.toolbarOptions,
+                contextMenuBuilder: widget.contextMenuBuilder,
                 showCursor: widget.showCursor,
                 maxLength: widget.maxLength,
                 maxLengthEnforcement: widget.maxLengthEnforcement,
@@ -660,7 +658,7 @@ class InputExtendState<T> extends State<InputExtend> {
   void _addPop(){
     if(null==_overlayEntry){
       _overlayEntry = _createOverlayEntry();
-      Overlay.of(context)?.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
     }
   }
   void _removePop(){

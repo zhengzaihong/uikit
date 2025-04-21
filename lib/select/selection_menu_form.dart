@@ -164,13 +164,13 @@ class SelectionMenuForm<T> extends FormField<T> {
   final Color? focusColor;
   final Color? hoverColor;
   final Color? highlightColor;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final Color? splashColor;
   final InteractiveInkFeatureFactory? splashFactory;
   final double? radius;
   final BorderRadius? borderRadius;
   final ShapeBorder? customBorder;
-  final bool? enableFeedback;
+  final bool enableFeedback;
   final bool excludeFromSemantics;
   final FocusNode? focusNode;
   final bool canRequestFocus;

@@ -64,7 +64,7 @@ class _MousePopupButtonState<T> extends State<MousePopupButton<T>> {
         position = details.globalPosition;
       },
       onLongPress: () {
-        overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox?;
+        overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
         showPopupMenu();
       },
       child: Listener(
@@ -73,7 +73,7 @@ class _MousePopupButtonState<T> extends State<MousePopupButton<T>> {
           if (event.buttons == 2) {
             position = event.position;
             overlay =
-                Overlay.of(context)!.context.findRenderObject() as RenderBox?;
+                Overlay.of(context).context.findRenderObject() as RenderBox?;
             showPopupMenu();
           }
         },
