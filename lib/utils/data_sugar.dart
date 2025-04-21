@@ -125,7 +125,6 @@ extension Merge<K, V> on Map<K, V> {
 
 // 集合相关表达式 语法糖
 extension ListExt<E> on List<E> {
-
   void forEachIndexed(void Function(int index, E element) action) {
     for (var index = 0; index < length; index++) {
       action(index, this[index]);
@@ -151,8 +150,50 @@ extension ListExt<E> on List<E> {
     }
   }
 
-  Iterable<E> whereNotIndexed(
-      bool Function(int index, E element) test) sync* {
+  E? firstWhereOrNull(bool Function(E element) test) {
+    for (var element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
+
+  E? firstWhereIndexedOrNull(bool Function(int index, E element) test) {
+    var index = 0;
+    for (var element in this) {
+      if (test(index++, element)) return element;
+    }
+    return null;
+  }
+
+  E? get firstOrNull {
+    var iterator = this.iterator;
+    if (iterator.moveNext()) return iterator.current;
+    return null;
+  }
+
+  E? lastWhereOrNull(bool Function(E element) test) {
+    E? result;
+    for (var element in this) {
+      if (test(element)) result = element;
+    }
+    return result;
+  }
+
+  E? lastWhereIndexedOrNull(bool Function(int index, E element) test) {
+    E? result;
+    var index = 0;
+    for (var element in this) {
+      if (test(index++, element)) result = element;
+    }
+    return result;
+  }
+
+  E? get lastOrNull {
+    if (isEmpty) return null;
+    return last;
+  }
+
+  Iterable<E> whereNotIndexed(bool Function(int index, E element) test) sync* {
     for (var index = 0; index < length; index++) {
       var element = this[index];
       if (!test(index, element)) yield element;
@@ -165,6 +206,7 @@ extension ListExt<E> on List<E> {
       yield* expand(index, this[index]);
     }
   }
+
   void forEachWhile(bool Function(E element) action) {
     for (var index = 0; index < length; index++) {
       if (!action(this[index])) break;

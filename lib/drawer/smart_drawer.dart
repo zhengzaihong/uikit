@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -12,34 +13,37 @@ class SmartDrawer extends StatefulWidget {
   final Widget child;
   final String? semanticLabel;
   final double? widthPercent;
+  final double? width;
   final DrawerCallback? callback;
   final BoxDecoration? decoration;
+
   const SmartDrawer({
     Key? key,
     this.elevation = 0.0,
     required this.child,
     this.semanticLabel,
-    this.widthPercent=0.35,
+    this.widthPercent = 0.35,
+    this.width,
     this.decoration,
     this.callback,
-  })  :
-        super(key: key);
+  }) : super(key: key);
+
   @override
   _SmartDrawerState createState() => _SmartDrawerState();
 }
 
 class _SmartDrawerState extends State<SmartDrawer> {
-
   @override
   void initState() {
-    if(widget.callback!=null){
+    if (widget.callback != null) {
       widget.callback!(true);
     }
     super.initState();
   }
+
   @override
   void dispose() {
-    if(widget.callback!=null){
+    if (widget.callback != null) {
       widget.callback!(false);
     }
     super.dispose();
@@ -55,9 +59,18 @@ class _SmartDrawerState extends State<SmartDrawer> {
         break;
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
-        label = widget.semanticLabel ?? MaterialLocalizations.of(context).drawerLabel;
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        label = widget.semanticLabel ??
+            MaterialLocalizations.of(context).drawerLabel;
     }
-    final double _width = MediaQuery.of(context).size.width * widget.widthPercent!;
+    double _width;
+    if (widget.width != null) {
+      _width = widget.width!;
+    } else {
+      _width = MediaQuery.of(context).size.width * widget.widthPercent!;
+    }
     return Semantics(
       scopesRoute: true,
       namesRoute: true,
@@ -68,9 +81,9 @@ class _SmartDrawerState extends State<SmartDrawer> {
         child: Material(
           color: Colors.transparent,
           elevation: widget.elevation,
-          child: widget.decoration ==null?widget.child:Container(
-            decoration: widget.decoration,
-            child: widget.child),
+          child: widget.decoration == null
+              ? widget.child
+              : Container(decoration: widget.decoration, child: widget.child),
         ),
       ),
     );

@@ -11,6 +11,7 @@ import 'event_notifier.dart';
 ///  此方式已不在推荐使用，未来即将删除
 ///  使用 [EventNotifier]代替 事件投递
 ///
+@deprecated
 class BroadcastHelper {
 
   static final StreamController<Object?> _streamController = StreamController();

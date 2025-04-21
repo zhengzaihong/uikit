@@ -1,25 +1,7 @@
-
-
 import 'dart:async';
 
-/// 输入框防抖 防止频繁调用
+/// 防抖
 extension ThrottleExtension on Function {
-
-  void Function(String? text) inputThrottle({int milliseconds = 500}) {
-    var isAllowed = true;
-    Timer? throttleTimer;
-    return (text) {
-      if (!isAllowed) return;
-      isAllowed = false;
-      this(text);
-      throttleTimer?.cancel();
-      throttleTimer = Timer(Duration(milliseconds: milliseconds), () {
-        isAllowed = true;
-      });
-    };
-  }
-
-
   void Function() throttle({int milliseconds = 500}) {
     var isAllowed = true;
     Timer? throttleTimer;
@@ -34,26 +16,41 @@ extension ThrottleExtension on Function {
     };
   }
 
-  void Function(dynamic value) throttle1({int milliseconds = 500}) {
+  void Function(T t) throttle1<T>({int milliseconds = 500}) {
     var isAllowed = true;
     Timer? throttleTimer;
-    return (value) {
+    return (t) {
       if (!isAllowed) return;
       isAllowed = false;
-      this();
+      this(t);
       throttleTimer?.cancel();
       throttleTimer = Timer(Duration(milliseconds: milliseconds), () {
         isAllowed = true;
       });
     };
   }
-  void Function(dynamic value1,dynamic value2) throttle2({int milliseconds = 500}) {
+
+  void Function(T t, E e) throttle2<T, E>({int milliseconds = 500}) {
     var isAllowed = true;
     Timer? throttleTimer;
-    return (value1,value2,) {
+    return (t, e) {
       if (!isAllowed) return;
       isAllowed = false;
-      this();
+      this(t,e);
+      throttleTimer?.cancel();
+      throttleTimer = Timer(Duration(milliseconds: milliseconds), () {
+        isAllowed = true;
+      });
+    };
+  }
+
+  void Function(T t, E e, G g) throttle3<T, E, G>({int milliseconds = 500}) {
+    var isAllowed = true;
+    Timer? throttleTimer;
+    return (t, e, g) {
+      if (!isAllowed) return;
+      isAllowed = false;
+      this(t,e,g);
       throttleTimer?.cancel();
       throttleTimer = Timer(Duration(milliseconds: milliseconds), () {
         isAllowed = true;

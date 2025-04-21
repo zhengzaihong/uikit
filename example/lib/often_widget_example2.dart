@@ -34,7 +34,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
     TabTypeBean(name: "刷新",id: 4),
     TabTypeBean(name: "更多操作",id: 5,fontIcon: 0xe669),
   ];
-  final zTooltipController = ZTooltipController();
+  final zTooltipController = ZToolTipController();
 
 
 

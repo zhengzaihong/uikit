@@ -150,7 +150,7 @@ class _InputExampleState extends State<InputExample> {
                         width: 300,
                         margin: const EdgeInsets.only(top: 30),
                         // enableForm: f,
-                        obscureText: true,
+                        obscureText: false,
                         noBorder: true,
                         hintText: "请输入手机号",
                         showCursor: true,
@@ -161,7 +161,7 @@ class _InputExampleState extends State<InputExample> {
                         ],
                         onChanged: (msg){
                           print("----------msg-:$msg");
-                        },
+                        }.throttle1(milliseconds: 4000),
 
                         controller: TextEditingController(),
                         validator: const InputValidation(
@@ -175,12 +175,6 @@ class _InputExampleState extends State<InputExample> {
                         focusedBorder: focusedBorder,
                         focusedErrorBorder: focusedErrorBorder,
                         errorBorder: errorBorder,
-                      ),
-                      TextFormField(
-                        controller: TextEditingController(text: "3333"),
-                      ),
-                      TextField(
-                        controller: TextEditingController(text: "222222"),
                       ),
 
                       const SizedBox(height: 30),

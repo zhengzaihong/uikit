@@ -75,7 +75,7 @@ typedef TipViewLayout = Positioned Function(
     Offset offset, Widget child, Size parentSize);
 
 class ZTooltip extends StatefulWidget {
-  final ZTooltipController? controller;
+  final ZToolTipController? controller;
 
   //提示窗组件外部自定义
   final BuildTip? buildTip;
@@ -350,7 +350,7 @@ class ZTooltipState extends State<ZTooltip> {
   }
 }
 
-class ZTooltipController {
+class ZToolTipController {
 
   ZTooltipState? _state;
 

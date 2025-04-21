@@ -8,12 +8,11 @@ import 'package:flutter/material.dart';
 /// describe: 一直转动view
 ///
 class RotatingView extends StatefulWidget {
-
   final Widget child;
   final Duration? speed;
 
   const RotatingView(
-      { required this.child,
+      {required this.child,
         this.speed = const Duration(seconds: 2),
         Key? key})
       : super(key: key);
@@ -22,8 +21,8 @@ class RotatingView extends StatefulWidget {
   State<RotatingView> createState() => _RotatingViewState();
 }
 
-class _RotatingViewState extends State<RotatingView>
-    with SingleTickerProviderStateMixin {
+class _RotatingViewState extends State<RotatingView> with SingleTickerProviderStateMixin {
+
   late AnimationController _controller;
   late Animation<double> _animation;
 
