@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 /// create_time: 9:35
 /// describe: 颜色工具
 ///
-
 
 ///#FFE6E6E6(argb) 格式转 dart 颜色
 Color parseColorStr(String? colorStr) {
@@ -20,6 +18,21 @@ Color parseColorStr(String? colorStr) {
 
 ///Colors.red/0xFFF44336 转 #FFF44336
 String colorToStr(Color color) {
-  String hexString = '#${color.value.toRadixString(16).substring(2)}'; // 转换为 16 进制字符串
-  return hexString;
+  try {
+    return '#${color.toARGB32().toRadixString(16).substring(2)}';
+  } catch (e) {
+    return '#${color.value.toRadixString(16).substring(2)}';
+  }
+}
+
+extension ColorExtension on Color {
+  
+  ///设置透明度 0.0-1.0 之间
+  Color setOpacity(double opacity){
+    try {
+      return withValues(alpha: opacity*255);
+    } catch (e) {
+      return withOpacity(opacity);
+    }
+  }
 }

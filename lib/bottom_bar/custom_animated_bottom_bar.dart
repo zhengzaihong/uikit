@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -139,7 +140,7 @@ class _ItemWidget extends StatelessWidget {
         curve: curve,
         decoration: BoxDecoration(
           color:
-          isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,
+          isSelected ? item.activeColor.setOpacity(0.2) : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius),
         ),
         child: SingleChildScrollView(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -341,11 +342,11 @@ class _LinearPainter extends CustomPainter {
     _paintBackground.color = backgroundColor;
 
     _paintLine.color =
-    progress == 0 ? progressColor.withOpacity(0.0) : progressColor;
+    progress == 0 ? progressColor.setOpacity(0.0) : progressColor;
 
     if (progressBorderColor != null) {
       _paintLineBorder.color = progress == 0
-          ? progressBorderColor!.withOpacity(0.0)
+          ? progressBorderColor!.setOpacity(0.0)
           : progressBorderColor!;
     }
   }

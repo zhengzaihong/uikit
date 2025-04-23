@@ -197,7 +197,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     inactiveTrackColor: Color(0xFFB3B3B3),
                     onChange: (value) {
                       checked = value;
-                      print("-----checked：$checked");
+                      debugPrint("-----checked：$checked");
                       setState(() {
 
                       });
@@ -216,7 +216,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         buffer.write(",");
                       }
                       defaultCheckeds2 = list as List<int>;
-                      print("------$defaultCheckeds2");
+                      debugPrint("------$defaultCheckeds2");
                       setState(() {
                       });
                       Toast.show("选中的按钮Id: ${buffer.toString()}");
@@ -332,7 +332,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     iconLeft: true,
                     isChecked: true,
                     onChange: (checked) {
-                      print("------------>${checked}");
+                      debugPrint("------------>${checked}");
                     },
                     uncheckedIcon: Container(
                         margin: const EdgeInsets.only(right: 10),
@@ -531,7 +531,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                                     BorderRadius.all(Radius.circular(10))),
                                 child: const Text("获取验证码",style: TextStyle(color: Colors.white,fontSize: 16))));
                       } else {
-                        print("--------请$time秒后再试");
+                        debugPrint("--------请$time秒后再试");
                       }
 
 

@@ -121,12 +121,12 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                     allExpand: isAllExpand,
                     defaultExpand: _lastClickItem,
                     buildComplete: (state,item){
-                      print("---------------------buildComplete-----${item?.title}");
+                      debugPrint("---------------------buildComplete-----${item?.title}");
                     },
                     buildMenuItem:(state,isCurrent,data,lv){
                       return  GestureDetector(
                           onTap: (){
-                            print("---点击:${data.title}--层级：$lv");
+                            debugPrint("---点击:${data.title}--层级：$lv");
                             _lastClickItem = data;
                             state.setItem(data);
                           },

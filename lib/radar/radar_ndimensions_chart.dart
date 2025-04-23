@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/radar/radar_bean.dart';
+import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -53,7 +54,7 @@ class _RadarNDimensionsChartState extends State<RadarNDimensionsChart> {
 
     dataPaint = widget.dataPaint??(
         Paint()
-          ..color = Colors.green.withOpacity(0.5)
+          ..color = Colors.green.setOpacity(0.5)
           ..style = PaintingStyle.fill
     );
 

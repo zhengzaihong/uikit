@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/uikitlib.dart';
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
@@ -43,7 +43,7 @@ class CalendarConfig{
 
   ///连续选中的 开始时间和结束时间的 背景阴影效果
   BoxShadow boxShadow = BoxShadow(
-      color: Colors.grey.withOpacity(0.6),
+      color: Colors.grey.setOpacity(0.6),
       blurRadius: 4,
       offset: const Offset(0, 0));
 
@@ -52,7 +52,7 @@ class CalendarConfig{
   /// 本月的日期文本颜色
   Color currentMonthTextColor = Colors.black;
   /// 非本月的日期颜色
-  Color otherMonthTextColor = Colors.grey.withOpacity(0.6);
+  Color otherMonthTextColor = Colors.grey.setOpacity(0.6);
 
   ///日期的字体大小
   double dayTextSize = 16.0;
@@ -66,7 +66,7 @@ class CalendarConfig{
   Color calendarBgColor = Colors.white;
 
   ///背景阴影
-  Color boxShadowColor = Colors.grey.withOpacity(0.2);
+  Color boxShadowColor = Colors.grey.setOpacity(0.2);
 
   ///背景阴影偏移
   Offset boxShadowOffset = const Offset(4, 4);
@@ -99,7 +99,7 @@ class CalendarConfig{
         fontWeight: FontWeight.w100,
         fontSize: 16,
         color:
-        Colors.lightBlue.withOpacity(0.8)),
+        Colors.lightBlue.setOpacity(0.8)),
   );
 
   ///顶部结束时间文字样式
@@ -107,7 +107,7 @@ class CalendarConfig{
         fontWeight: FontWeight.w100,
         fontSize: 16,
         color:
-        Colors.lightBlue.withOpacity(0.8)),
+        Colors.lightBlue.setOpacity(0.8)),
   );
 
 
@@ -212,7 +212,7 @@ class CalendarConfig{
         Radius.circular(24.0)),
     boxShadow: <BoxShadow>[
       BoxShadow(
-        color: Colors.grey.withOpacity(0.6),
+        color: Colors.grey.setOpacity(0.6),
         blurRadius: 8,
         offset: const Offset(4, 4),
       ),

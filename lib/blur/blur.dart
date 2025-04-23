@@ -2,6 +2,7 @@ library blur;
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -42,7 +43,7 @@ class Blur extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: Container(
                 decoration: BoxDecoration(
-                  color: blurColor.withOpacity(colorOpacity),
+                  color: blurColor.setOpacity(colorOpacity),
                 ),
                 alignment: alignment,
                 child: overlay,
@@ -94,7 +95,7 @@ extension FrostExtension on Widget {
         width: width,
         padding: padding,
         child: height == null || width == null ? this : const SizedBox.shrink(),
-        color: frostColor.withOpacity(frostOpacity),
+        color: frostColor.setOpacity(frostOpacity),
       ),
       alignment: alignment,
       overlay: Padding(

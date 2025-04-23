@@ -10,7 +10,7 @@ import 'dart:math' as math;
 /// describe: 圆形进度条
 ///
 
-enum ArcType { half, full, full_reversed }
+enum ArcType { half, full, fullReversed }
 
 enum CircularStrokeCap { butt, round, square }
 
@@ -332,7 +332,7 @@ class _CycleProgressBarState extends State<CycleProgressBar>
 
 _ArcAngles _getStartAngleFixedMargin(ArcType arcType) {
   double fixedStartAngle, startAngleFixedMargin;
-  if (arcType == ArcType.full_reversed) {
+  if (arcType == ArcType.fullReversed) {
     fixedStartAngle = 399;
     startAngleFixedMargin = 312 / fixedStartAngle;
   } else if (arcType == ArcType.full) {

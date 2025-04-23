@@ -131,7 +131,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                       children: [
                         GestureDetector(
                           onTap: (){
-                            print("-------------bean.phone:${bean.phone}");
+                            debugPrint("-------------bean.phone:${bean.phone}");
                           },
                           child: _cellBuilder(bean.phone!, cellsWidth[0],rowStyle),
                         ),
@@ -170,7 +170,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                 final rowWidth = rowStyle.rowWidth;
                 int index = rowStyle.index!;
                 double sum = flex.reduce((value, element) => value+element);
-                print("----------rowWidth--${rowWidth}---sum--$sum");
+                debugPrint("----------rowWidth--${rowWidth}---sum--$sum");
                 return IntrinsicHeight(
                   child: Container(
                     width: rowWidth,

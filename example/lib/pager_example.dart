@@ -62,7 +62,7 @@ class _PagerExampleState extends State<PagerExample> {
               setState(() {
 
               });
-              print("--------------totalPages:$totalPages,currentPageIndex:$currentPageIndex");
+              debugPrint("--------------totalPages:$totalPages,currentPageIndex:$currentPageIndex");
             },
           ),
         ),

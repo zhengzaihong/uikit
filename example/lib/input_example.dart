@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
-import 'package:flutter_uikit_forzzh/select/drop_position.dart';
-import 'package:flutter_uikit_forzzh/select/selection_menu_form.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 import 'package:uikit_example/city_picker_example.dart';
 
@@ -108,7 +106,7 @@ class _InputExampleState extends State<InputExample> {
                                 spacing: 10,
                                 children: [
                                   ...'张国荣,王力宏,周杰伦,林俊杰,陈奕迅,薛之谦,周笔畅,刘德华'.split(',').map((e) =>  ActionChip(
-                                    backgroundColor: Colors.grey.withOpacity(0.1),
+                                    backgroundColor: Colors.grey.setOpacity(0.1),
                                     label: Text(e),
                                     onPressed: () {
                                     },
@@ -123,7 +121,7 @@ class _InputExampleState extends State<InputExample> {
                                 spacing: 10,
                                 children: [
                                   ...'七里香,青花,白色风车,画沙,一个人,一千个彩虹'.split(',').map((e) =>  ActionChip(
-                                    backgroundColor: Colors.grey.withOpacity(0.1),
+                                    backgroundColor: Colors.grey.setOpacity(0.1),
                                     label: Text(e),
                                     onPressed: () {
                                     },
@@ -160,7 +158,7 @@ class _InputExampleState extends State<InputExample> {
                           LengthLimitingTextInputFormatter(11),
                         ],
                         onChanged: (msg){
-                          print("----------msg-:$msg");
+                          debugPrint("----------msg-:$msg");
                         }.throttle1(milliseconds: 4000),
 
                         controller: TextEditingController(),
@@ -225,7 +223,7 @@ class _InputExampleState extends State<InputExample> {
                               width: 200,
                               padding: const EdgeInsets.only(left: 10, right: 10),
                               decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.2),
+                                color: Colors.grey.setOpacity(0.2),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Row(
@@ -301,9 +299,9 @@ class _InputExampleState extends State<InputExample> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      print("验证通过");
+                      debugPrint("验证通过");
                     } else {
-                      print("验证失败");
+                      debugPrint("验证失败");
                     }
                   },
                   child: const Text('提交'),

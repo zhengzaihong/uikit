@@ -40,7 +40,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                   width: 200,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.setOpacity(0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Row(
@@ -90,7 +90,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                   width: 200,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.setOpacity(0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Row(
@@ -140,7 +140,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.setOpacity(0.2),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(
@@ -196,7 +196,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                       width: 200,
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.grey.setOpacity(0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Row(
@@ -247,7 +247,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                       width: 200,
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.grey.setOpacity(0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Row(
@@ -303,7 +303,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.setOpacity(0.2),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(
@@ -358,7 +358,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.setOpacity(0.2),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(

@@ -26,7 +26,7 @@ class CityPickerExample extends StatelessWidget {
               List datas = json.decode(cityStr) as List;
               CityResult res =
               await PickerHelper.showPicker(context, datas: datas);
-              print("--${res.provinceCode}-----${res.cityCode}----" +
+              debugPrint("--${res.provinceCode}-----${res.cityCode}----" +
                   "${res.areaCode}");
             },
             child: Container(
@@ -68,12 +68,12 @@ class CityPickerExample extends StatelessWidget {
                           ]),
                       decoration: BoxDecoration(
                         border: Border(
-                            bottom: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1)),
+                            bottom: BorderSide(color: Colors.grey.setOpacity(0.1), width: 1)),
                       ),
                     );
 
                   }).then((value){
-                        print("----------------------${value.toString()}");
+                debugPrint("----------------------${value.toString()}");
               });
             },
             child: Container(

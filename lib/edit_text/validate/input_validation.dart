@@ -1,4 +1,5 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 
 ///
@@ -74,7 +75,7 @@ class InputValidation {
     if (format!.contains("%s")) {
       var list = format!.split("%s");
       if (list.length - 1 != formatValues!.length) {
-        print("InputValidation 校验中占位符和填充内容长度不匹配~");
+        debugPrint("InputValidation 校验中占位符和填充内容长度不匹配~");
         return errorMsg ?? "";
       }
       StringBuffer buffer = StringBuffer();

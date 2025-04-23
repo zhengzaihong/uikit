@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/radar/radar_bean.dart';
 import 'package:flutter_uikit_forzzh/radar/radar_ndimensions_chart.dart';
+import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -90,13 +91,13 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
     zeroToPointPaint = widget.zeroToPointPaint??(
         Paint()
           ..style = PaintingStyle.stroke
-          ..color = Colors.white.withOpacity(0.3)
+          ..color = Colors.white.setOpacity(0.3)
           ..strokeWidth = 0.5
     );
 
     ///5层五边形画笔
     pentagonPaint = widget.pentagonPaint??(Paint()
-      ..color = Colors.grey.withOpacity(0.1)
+      ..color = Colors.grey.setOpacity(0.1)
       ..strokeWidth = 1
       ..style = PaintingStyle.fill);
 
