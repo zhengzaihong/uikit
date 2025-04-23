@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 ///
@@ -7,7 +9,6 @@ import 'package:flutter/material.dart';
 /// create_time: 9:35
 /// describe: 颜色工具
 ///
-
 ///#FFE6E6E6(argb) 格式转 dart 颜色
 Color parseColorStr(String? colorStr) {
   if (null == colorStr || colorStr.isEmpty) {
@@ -19,18 +20,19 @@ Color parseColorStr(String? colorStr) {
 ///Colors.red/0xFFF44336 转 #FFF44336
 String colorToStr(Color color) {
   try {
-    return '#${color.toARGB32().toRadixString(16).substring(2)}';
-  } catch (e) {
     return '#${color.value.toRadixString(16).substring(2)}';
+  } catch (e) {
+    return '#${color.toARGB32().toRadixString(16).substring(2)}';
   }
 }
 
 extension ColorExtension on Color {
-  
+
+  //如何在flutter中实现SDK直接的差异导致api 不一致的问题
   ///设置透明度 0.0-1.0 之间
   Color setOpacity(double opacity){
     try {
-      return withValues(alpha: opacity*255);
+      return withAlpha((255.0 * opacity).round());
     } catch (e) {
       return withOpacity(opacity);
     }

@@ -1,6 +1,6 @@
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.3.0
+      flutter_uikit_forzzh: ^0.2.1
 
 
 # flutter 常用组件ui库
