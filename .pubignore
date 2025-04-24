@@ -3,7 +3,6 @@
 .idea/
 .packages
 .pub/
-example/
 images/
 build/
 ios/.generated/
