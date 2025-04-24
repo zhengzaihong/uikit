@@ -18,21 +18,13 @@ Color parseColorStr(String? colorStr) {
 
 ///Colors.red/0xFFF44336 转 #FFF44336
 String colorToStr(Color color) {
-  try {
-    return '#${color.toARGB32().toRadixString(16).substring(2)}';
-  } catch (e) {
-    return '#${color.value.toRadixString(16).substring(2)}';
-  }
+  return '#${color.value.toRadixString(16).substring(2)}';
 }
 
 extension ColorExtension on Color {
-  
+
   ///设置透明度 0.0-1.0 之间
   Color setOpacity(double opacity){
-    try {
-      return withValues(alpha: opacity*255);
-    } catch (e) {
-      return withOpacity(opacity);
-    }
+    return withOpacity(opacity);
   }
 }
