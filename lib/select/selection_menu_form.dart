@@ -36,7 +36,7 @@ import 'drop_position.dart';
 // 			  width: 200,
 // 			  padding: const EdgeInsets.only(left: 10, right: 10),
 // 			  decoration: BoxDecoration(
-// 				color: Colors.grey.setOpacity(0.2),
+// 				color: Colors.grey.setAlpha(0.2),
 // 				borderRadius: BorderRadius.circular(5),
 // 			  ),
 // 			  child: Row(

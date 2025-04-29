@@ -100,8 +100,8 @@ class _CustomSwitchState extends State<CustomSwitch> {
               isOpen = !isOpen;
             });
           },
-          activeColor: widget.activeColor,
-          trackColor: widget.inactiveTrackColor,
+          activeTrackColor: widget.activeColor,
+          inactiveTrackColor: widget.inactiveTrackColor,
           thumbColor: widget.inactiveThumbColor,
           // activeTrackColor: widget.activeTrackColor,
         ),

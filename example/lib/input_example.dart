@@ -106,7 +106,7 @@ class _InputExampleState extends State<InputExample> {
                                 spacing: 10,
                                 children: [
                                   ...'张国荣,王力宏,周杰伦,林俊杰,陈奕迅,薛之谦,周笔畅,刘德华'.split(',').map((e) =>  ActionChip(
-                                    backgroundColor: Colors.grey.setOpacity(0.1),
+                                    backgroundColor: Colors.grey.setAlpha(0.1),
                                     label: Text(e),
                                     onPressed: () {
                                     },
@@ -121,7 +121,7 @@ class _InputExampleState extends State<InputExample> {
                                 spacing: 10,
                                 children: [
                                   ...'七里香,青花,白色风车,画沙,一个人,一千个彩虹'.split(',').map((e) =>  ActionChip(
-                                    backgroundColor: Colors.grey.setOpacity(0.1),
+                                    backgroundColor: Colors.grey.setAlpha(0.1),
                                     label: Text(e),
                                     onPressed: () {
                                     },
@@ -223,7 +223,7 @@ class _InputExampleState extends State<InputExample> {
                               width: 200,
                               padding: const EdgeInsets.only(left: 10, right: 10),
                               decoration: BoxDecoration(
-                                color: Colors.grey.setOpacity(0.2),
+                                color: Colors.grey.setAlpha(0.2),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Row(

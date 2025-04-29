@@ -2,57 +2,54 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/bubble/bubble_arrow_direction.dart';
 
-
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
 /// create_date: 2022/6/16
 /// create_time: 9:19
 /// describe: 气泡组件(需要固定宽高，通常用于背景)
-/// 需要 自适应使用 Bubble2
 ///
-class Bubble extends StatelessWidget {
+class Bubble extends StatefulWidget {
   // 尖角位置
-  BubbleArrowDirection position;
+  final BubbleArrowDirection position;
 
   // 尖角高度
-  double arrHeight;
+  final double arrHeight;
 
   // 尖角角度
-  double arrAngle;
+  final double arrAngle;
 
   // 圆角半径
-  double radius;
+  final double radius;
 
   // 宽度
-  double width;
+  final double width;
 
   // 高度
-  double height;
+  final double height;
 
   // 边距
-  double length;
+  final double length;
 
   // 颜色
-  Color color;
+  final Color color;
 
   // 边框颜色
-  Color borderColor;
+  final Color borderColor;
 
   // 边框宽度
-  double strokeWidth;
+  final double strokeWidth;
 
   // 填充样式
-  PaintingStyle style;
+  final PaintingStyle style;
 
   // 子 Widget
-  Widget? child;
+  final Widget? child;
 
   // 子 Widget 与起泡间距
-  double innerPadding;
+  final double innerPadding;
 
-  Bubble({
+  const Bubble({
     required this.width,
     required this.height,
     required this.color,
@@ -70,76 +67,117 @@ class Bubble extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    if (style == PaintingStyle.stroke) {
-      borderColor = color;
+  State<Bubble> createState() => _BubbleState();
+}
+
+class _BubbleState extends State<Bubble> {
+  late double length;
+  late double radius;
+  late double arrHeight;
+  late double arrAngle;
+  late Color borderColor;
+  late double innerPadding;
+
+  @override
+  void initState() {
+    super.initState();
+    length = widget.length;
+    radius = widget.radius;
+    arrHeight = widget.arrHeight;
+    arrAngle = widget.arrAngle;
+    borderColor = widget.borderColor;
+    innerPadding = widget.innerPadding;
+
+    if (widget.style == PaintingStyle.stroke) {
+      borderColor = widget.color;
     }
-    if (arrAngle < 0.0 || arrAngle >= 180.0) {
+    if (widget.arrAngle < 0.0 || widget.arrAngle >= 180.0) {
       arrAngle = 60.0;
     }
-    if (arrHeight < 0.0) {
+    if (widget.arrHeight < 0.0) {
       arrHeight = 0.0;
     }
-    if (radius < 0.0 || radius > width * 0.5 || radius > height * 0.5) {
+    if (widget.radius < 0.0 ||
+        widget.radius > widget.width * 0.5 ||
+        widget.radius > widget.height * 0.5) {
       radius = 0.0;
     }
-    if (position == BubbleArrowDirection.top ||
-        position == BubbleArrowDirection.bottom) {
-      if (length < 0.0 || length >= width - 2 * radius) {
-        length = width * 0.5 - arrHeight * tan(_angle(arrAngle * 0.5)) - radius;
+    if (widget.position == BubbleArrowDirection.top ||
+        widget.position == BubbleArrowDirection.bottom) {
+      if (widget.length < 0.0 ||
+          widget.length >= widget.width - 2 * widget.radius) {
+        length = widget.width * 0.5 -
+            widget.arrHeight * tan(_angle(widget.arrAngle * 0.5)) -
+            widget.radius;
       }
     } else {
-      if (length < 0.0 || length >= height - 2 * radius) {
-        length =
-            height * 0.5 - arrHeight * tan(_angle(arrAngle * 0.5)) - radius;
+      if (widget.length < 0.0 ||
+          widget.length >= widget.height - 2 * widget.radius) {
+        length = widget.height * 0.5 -
+            widget.arrHeight * tan(_angle(widget.arrAngle * 0.5)) -
+            widget.radius;
       }
     }
-    if (innerPadding < 0.0 ||
-        innerPadding >= width * 0.5 ||
-        innerPadding >= height * 0.5) {
+    if (widget.innerPadding < 0.0 ||
+        widget.innerPadding >= widget.width * 0.5 ||
+        widget.innerPadding >= widget.height * 0.5) {
       innerPadding = 2.0;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Widget bubbleWidget;
-    if (style == PaintingStyle.fill) {
+    if (widget.style == PaintingStyle.fill) {
       bubbleWidget = SizedBox(
-          width: width,
-          height: height,
-          child: Stack(children: <Widget>[
-            CustomPaint(
-                painter: BubbleCanvas(context, width, height, color, position,
-                    arrHeight, arrAngle, radius, strokeWidth, style, length)),
-            _paddingWidget()
-          ]));
-    } else {
-      bubbleWidget = SizedBox(
-          width: width,
-          height: height,
+          width: widget.width,
+          height: widget.height,
           child: Stack(children: <Widget>[
             CustomPaint(
                 painter: BubbleCanvas(
                     context,
-                    width,
-                    height,
-                    color,
-                    position,
+                    widget.width,
+                    widget.height,
+                    widget.color,
+                    widget.position,
                     arrHeight,
                     arrAngle,
                     radius,
-                    strokeWidth,
+                    widget.strokeWidth,
+                    widget.style,
+                    length)),
+            _paddingWidget()
+          ]));
+    } else {
+      bubbleWidget = SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: Stack(children: <Widget>[
+            CustomPaint(
+                painter: BubbleCanvas(
+                    context,
+                    widget.width,
+                    widget.height,
+                    widget.color,
+                    widget.position,
+                    arrHeight,
+                    arrAngle,
+                    radius,
+                    widget.strokeWidth,
                     PaintingStyle.fill,
                     length)),
             CustomPaint(
                 painter: BubbleCanvas(
                     context,
-                    width,
-                    height,
+                    widget.width,
+                    widget.height,
                     borderColor,
-                    position,
+                    widget.position,
                     arrHeight,
                     arrAngle,
                     radius,
-                    strokeWidth,
-                    style,
+                    widget.strokeWidth,
+                    widget.style,
                     length)),
             _paddingWidget()
           ]));
@@ -150,19 +188,19 @@ class Bubble extends StatelessWidget {
   Widget _paddingWidget() {
     return Padding(
         padding: EdgeInsets.only(
-            top: (position == BubbleArrowDirection.top)
+            top: (widget.position == BubbleArrowDirection.top)
                 ? arrHeight + innerPadding
                 : innerPadding,
-            right: (position == BubbleArrowDirection.right)
+            right: (widget.position == BubbleArrowDirection.right)
                 ? arrHeight + innerPadding
                 : innerPadding,
-            bottom: (position == BubbleArrowDirection.bottom)
+            bottom: (widget.position == BubbleArrowDirection.bottom)
                 ? arrHeight + innerPadding
                 : innerPadding,
-            left: (position == BubbleArrowDirection.left)
+            left: (widget.position == BubbleArrowDirection.left)
                 ? arrHeight + innerPadding
                 : innerPadding),
-        child: Center(child: child));
+        child: Center(child: widget.child));
   }
 }
 

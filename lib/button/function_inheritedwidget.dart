@@ -10,6 +10,8 @@ import 'function_container.dart';
 /// create_time: 17:21
 /// describe:  组件共享数据的容器
 ///
+
+@immutable
 class FunctionInheritedWidget extends InheritedWidget {
 
   ///多选选中id

@@ -252,10 +252,9 @@ class _LinearProgressBarState extends State<LinearProgressBar>
                     progressColor: widget.progressColor,
                     linearGradient: widget.linearGradient,
                     backgroundColor: widget.backgroundColor,
-                    barRadius: widget.barRadius ??
-                        Radius.zero, // If radius is not defined, set it to zero
-                    linearGradientBackgroundColor:
-                    widget.linearGradientBackgroundColor,
+                    progressBorderColor: widget.progressBorderColor,
+                    barRadius: widget.barRadius ?? Radius.zero,
+                    linearGradientBackgroundColor: widget.linearGradientBackgroundColor,
                     maskFilter: widget.maskFilter,
                     clipLinearGradient: widget.clipLinearGradient,
                   ),
@@ -333,7 +332,7 @@ class _LinearPainter extends CustomPainter {
     required this.progressColor,
     required this.backgroundColor,
     required this.barRadius,
-    this.progressBorderColor,
+    required this.progressBorderColor,
     this.linearGradient,
     this.maskFilter,
     required this.clipLinearGradient,
@@ -342,11 +341,11 @@ class _LinearPainter extends CustomPainter {
     _paintBackground.color = backgroundColor;
 
     _paintLine.color =
-    progress == 0 ? progressColor.setOpacity(0.0) : progressColor;
+    progress == 0 ? progressColor.setAlpha(0.0) : progressColor;
 
     if (progressBorderColor != null) {
       _paintLineBorder.color = progress == 0
-          ? progressBorderColor!.setOpacity(0.0)
+          ? progressBorderColor!.setAlpha(0.0)
           : progressBorderColor!;
     }
   }

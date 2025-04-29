@@ -17,7 +17,7 @@ export 'input_extend/inputlib.dart';
 export 'edit_text/edit_text_lib.dart';
 export 'textview/textview_lib.dart';
 export 'table/tableview_lib.dart';
-export 'blur/Blur.dart';
+export 'blur/blur.dart';
 export 'textview/marquee_view.dart';
 export 'Infinite/infinite_levels_menus.dart';
 export 'Infinite/bean/infinite_menu.dart';
@@ -31,6 +31,7 @@ export 'drag/drag_box.dart';
 export 'radar/radar_lib.dart';
 export 'ext/top_view.dart';
 export 'tooltip/ztooltip.dart';
+export 'bottom_bar/bottom_bar_lib.dart';
 
 /// Utils package 工具包
 export 'utils/utils_lib.dart';

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
@@ -67,7 +68,7 @@ class _CalendarExampleState extends State<CalendarExample> {
                        endDate: DateModel(2002, 10, 31),
                        callBack: (date1,data2){
                         setState(() {
-                          selectDate = "开始时间：${date1?.year}--${date1?.month}--${date1?.day}   " + "结束时间：${data2?.year}--${data2?.month}--${data2?.day}";
+                          selectDate = "开始时间：${date1?.year}--${date1?.month}--${date1?.day}   结束时间：${data2?.year}--${data2?.month}--${data2?.day}";
                         });
                    });
                   },
@@ -93,8 +94,10 @@ class _CalendarExampleState extends State<CalendarExample> {
         aspectRatio: 1/2,   ///添加宽高比，设置的高度将失效。
         onClickOutSide: true,
         callBack: (startTime, endTime) {
-          print("---${startTime.year}--${startTime.month}--${startTime.day}->");
-          print("---${endTime.year}--${endTime.month}--${endTime.day}->");
+          if (kDebugMode) {
+            print("---${startTime.year}--${startTime.month}--${startTime.day}->");
+            print("---${endTime.year}--${endTime.month}--${endTime.day}->");
+          }
 
           selectDate2 = "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
               "结束时间：${endTime.year}--${endTime.month}--${endTime.day}";

@@ -54,7 +54,7 @@ class _RadarNDimensionsChartState extends State<RadarNDimensionsChart> {
 
     dataPaint = widget.dataPaint??(
         Paint()
-          ..color = Colors.green.setOpacity(0.5)
+          ..color = Colors.green.setAlpha(0.5)
           ..style = PaintingStyle.fill
     );
 

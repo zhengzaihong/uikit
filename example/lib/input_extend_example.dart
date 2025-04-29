@@ -115,7 +115,7 @@ class _InputExtendDemo extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(element),
-                                FontIcon(0xe642, size: 20, color: Colors.grey)
+                                const FontIcon(0xe642, size: 20, color: Colors.grey)
                               ]),
                         ));
                   },
@@ -149,7 +149,7 @@ class _InputExtendDemo extends StatelessWidget {
 
                                 return InkWell(
                                     onTap: () {
-                                      Toast.show("----${index}");
+                                      Toast.show("----$index");
 
                                       ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
                                       ///非同一数据源 即两个集合  一定要传比较器，根据属性比较
@@ -167,7 +167,7 @@ class _InputExtendDemo extends StatelessWidget {
                                               Text("item$index"),
                                               Visibility(
                                                   visible: hasValue,
-                                                  child: FontIcon(
+                                                  child: const FontIcon(
                                                     0xe64a,
                                                     size: 30,
                                                     color: Colors.lightBlue,
