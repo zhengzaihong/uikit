@@ -6,7 +6,7 @@ Language: [English](README.md) | 简体中文
 
 # pubspec.yaml 依赖
     dependencies:
-      flutter_uikit_forzzh: ^0.3.0
+      flutter_uikit_forzzh: ^0.3.1
 
 
 # flutter 常用组件ui库

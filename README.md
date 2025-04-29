@@ -6,7 +6,7 @@ This is a cross-platform UI component library. Welcome to use it and give feedba
 
 # pubspec.yaml dependent
     dependencies:
-      flutter_uikit_forzzh: ^0.3.0
+      flutter_uikit_forzzh: ^0.3.1
 
 
 # flutter Common component ui library
