@@ -19,13 +19,6 @@ class OftenWidgetExample2 extends StatefulWidget {
 
 class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTickerProviderStateMixin{
 
-  late TabController _tabController;
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 1, vsync: this);
-  }
-
   List<TabTypeBean> tabs = [
     TabTypeBean(name: "新增分类",id: 0),
     TabTypeBean(name: "修改分类",id: 1),
@@ -81,14 +74,14 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                         showScore: false,
                         zeroToPointPaint: Paint()
                           ..style = PaintingStyle.stroke
-                          ..color = Colors.cyanAccent.setOpacity(0.3)
+                          ..color = Colors.cyanAccent.setAlpha(0.3)
                           ..strokeWidth = 0.5,
                         contentPaint: Paint()
                           ..color = Colors.cyanAccent.withAlpha(100)
                           ..strokeWidth = 2
                           ..style = PaintingStyle.fill,
                         pentagonPaint: Paint()
-                          ..color = Colors.cyanAccent.setOpacity(0.1)
+                          ..color = Colors.cyanAccent.setAlpha(0.1)
                           ..strokeWidth = 1,
                         data:[
                           RadarBean(40, '认知', bgColor:Colors.blue,textStyle: const TextStyle(color: Colors.white,fontSize: 14)),
@@ -166,7 +159,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                        boxShadow: [
                          ///只底部显示发光阴影
                           BoxShadow(
-                            color: Colors.white.setOpacity(0.5),
+                            color: Colors.white.setAlpha(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
                             offset: const Offset(0, 10),
@@ -335,7 +328,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
 
 
                             DecoratedBox(decoration: BoxDecoration(
-                              color: Colors.lightBlue.setOpacity(0.4),
+                              color: Colors.lightBlue.setAlpha(0.4),
                               borderRadius: BorderRadius.circular(10),
                             ),
                               child: Row(
@@ -516,7 +509,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
 
 
                             DecoratedBox(decoration: BoxDecoration(
-                              color: Colors.lightBlue.setOpacity(0.4),
+                              color: Colors.lightBlue.setAlpha(0.4),
                               borderRadius: BorderRadius.circular(10),
                             ),
                               child: Row(

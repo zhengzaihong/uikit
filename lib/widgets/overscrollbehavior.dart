@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -8,21 +9,22 @@ import 'package:flutter/material.dart';
 /// create_time: 14:45
 /// describe: 去除列表类的波纹效果
 ///
-class OverScrollBehavior extends ScrollBehavior{
+class OverScrollBehavior extends ScrollBehavior {
 
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
-    return ScrollConfiguration(behavior: this, child: GlowingOverscrollIndicator(
-      child: child,
-      //不显示头部水波纹
-      showLeading: false,
-      //不显示尾部水波纹
-      showTrailing: false,
-      axisDirection: axisDirection,
-      color: Theme.of(context).colorScheme.secondary,
-    ));
-
-    // return child;
+  Widget buildScrollbar(BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const ClampingScrollPhysics();
+  }
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+      };
 }

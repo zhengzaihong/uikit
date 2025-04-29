@@ -402,7 +402,7 @@ class ScalingFactor{
   const ScalingFactor(this.horizontal,this.vertical);
 }
 
-class ToastTaskQueue {
+class ToastTaskQueue  with ChangeNotifier{
   String msg;
   bool status;
   Queue queue;

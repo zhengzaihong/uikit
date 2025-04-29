@@ -43,7 +43,7 @@ class Blur extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: Container(
                 decoration: BoxDecoration(
-                  color: blurColor.setOpacity(colorOpacity),
+                  color: blurColor.setAlpha(colorOpacity),
                 ),
                 alignment: alignment,
                 child: overlay,
@@ -95,7 +95,7 @@ extension FrostExtension on Widget {
         width: width,
         padding: padding,
         child: height == null || width == null ? this : const SizedBox.shrink(),
-        color: frostColor.setOpacity(frostOpacity),
+        color: frostColor.setAlpha(frostOpacity),
       ),
       alignment: alignment,
       overlay: Padding(

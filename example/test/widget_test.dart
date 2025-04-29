@@ -5,24 +5,21 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uikitlib.dart';
-
+import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 void main() {
-  //
-  // String info = "我是一个25岁的男人，我的English Name is May。我有3000万存款";
-  //
-  // List<String> list = KitMath.parseStrPlus(info);
-  // print(list);
-  // list.forEach((element) {
-  //   print("element:$element");
-  // });
-  Color color =  Color(0xFFF44336);
-  debugPrint("-------:${  colorToStr(color)}");
 
+  Color myColor = const Color(0xFF42A5F5);
+  String hex = myColor.toHexARGB(includeAlpha: false);             // #42A5F5
+  String hexWithAlpha = myColor.toHexARGB(includeAlpha: true); // #FF42A5F5
+
+  debugPrint(hex);          // 输出: #42A5F5
+  debugPrint(hexWithAlpha); // 输出: #FF42A5F5
+
+  // debugPrint(myColor.withOpacity(0.5).toHexARGB());
+  debugPrint((myColor.setAlpha(0.5).toHexARGB()));
 
 
 }

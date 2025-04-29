@@ -23,7 +23,7 @@ class _SwipeCardDemoState extends State<StackCardDemo> {
         slideType: slideType,
         orientation: orientation,
         cardSelected: (bool right,index){
-          debugPrint("StackCard = ${right}-----${index}");
+          debugPrint("StackCard = $right-----$index");
         },
         children: List.generate(10, (index) => Container(
           width: 130,

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 ///
@@ -9,6 +7,7 @@ import 'package:flutter/material.dart';
 /// create_time: 9:35
 /// describe: 颜色工具
 ///
+
 ///#FFE6E6E6(argb) 格式转 dart 颜色
 Color parseColorStr(String? colorStr) {
   if (null == colorStr || colorStr.isEmpty) {
@@ -18,23 +17,38 @@ Color parseColorStr(String? colorStr) {
 }
 
 ///Colors.red/0xFFF44336 转 #FFF44336
+@Deprecated("Removed from flutter sdk 3.29.0 ,use toHexARGB instead")
 String colorToStr(Color color) {
-  try {
-    return '#${color.value.toRadixString(16).substring(2)}';
-  } catch (e) {
-    return '#${color.toARGB32().toRadixString(16).substring(2)}';
-  }
+  return '#${color.value.toRadixString(16).substring(2)}';
 }
 
-extension ColorExtension on Color {
 
-  //如何在flutter中实现SDK直接的差异导致api 不一致的问题
+extension ColorExtension on Color {
   ///设置透明度 0.0-1.0 之间
-  Color setOpacity(double opacity){
-    try {
-      return withAlpha((255.0 * opacity).round());
-    } catch (e) {
-      return withOpacity(opacity);
+  @Deprecated("use setAlpha instead")
+  Color setOpacity(double opacity) {
+    return withOpacity(opacity);
+  }
+
+  Color setAlpha(double opacity) {
+    assert(opacity >= 0.0 && opacity <= 1.0);
+    return withAlpha((opacity * 255).round());
+  }
+
+  String toHexARGB({bool includeAlpha = true}) {
+    if (includeAlpha) {
+      // 返回 #AARRGGBB 格式
+      return '#${(a * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+              '${(r * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+              '${(g * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+              '${(b * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+          .toUpperCase();
+    } else {
+      // 返回 #RRGGBB 格式
+      return '#${(r * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+              '${(g * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+              '${(b * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+          .toUpperCase();
     }
   }
 }

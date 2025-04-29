@@ -42,9 +42,9 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
   TextStyle textViewStyle1 = const TextStyle(
       fontSize: 15, color: Colors.red, fontWeight: FontWeight.w600);
 
-  Widget checkedIconWidget = FontIcon(0xe650,size: 30,color: Colors.red,);
+  Widget checkedIconWidget = const FontIcon(0xe650,size: 30,color: Colors.red,);
 
-  Widget unCheckedWidget =  FontIcon(0xe64f,size: 30,color: Colors.white);
+  Widget unCheckedWidget =  const FontIcon(0xe64f,size: 30,color: Colors.white);
 
   List<int> defaultCheckeds = [1,2];
   List<int> defaultCheckeds2 = [1];
@@ -86,8 +86,8 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                         padding: const EdgeInsets.only(left: 10),
                         height: 30,
                         color: Colors.redAccent,
-                        child:  TextView(
-                          unCheckTextStyle:const TextStyle(color: Colors.white,fontSize: 14),
+                        child:  const TextView(
+                          unCheckTextStyle:TextStyle(color: Colors.white,fontSize: 14),
                           drawablePosition: PositionEnum.drawableLeft,
                           enableClick: false,
                           isChecked: false,
@@ -192,9 +192,9 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   title("开关按钮"),
                   CustomSwitch(
                     isOpen: checked,
-                    activeTrackColor:Color(0xFFF9820E),
+                    activeTrackColor:const Color(0xFFF9820E),
                     activeColor:Colors.white,
-                    inactiveTrackColor: Color(0xFFB3B3B3),
+                    inactiveTrackColor: const Color(0xFFB3B3B3),
                     onChange: (value) {
                       checked = value;
                       debugPrint("-----checked：$checked");
@@ -332,7 +332,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     iconLeft: true,
                     isChecked: true,
                     onChange: (checked) {
-                      debugPrint("------------>${checked}");
+                      debugPrint("------------>$checked");
                     },
                     uncheckedIcon: Container(
                         margin: const EdgeInsets.only(right: 10),

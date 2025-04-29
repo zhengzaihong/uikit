@@ -19,7 +19,7 @@ class ProgressBarExample extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
       children:  [
 
-        Row(children: const [Expanded(child: SizedBox(height: 20))]),
+        const Row(children: [Expanded(child: SizedBox(height: 20))]),
 
          CycleProgressBar(
            radius: 40.0,

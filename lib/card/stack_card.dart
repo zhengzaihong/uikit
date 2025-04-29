@@ -1,6 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+///
+/// create_user: zhengzaihong
+/// email:1096877329@qq.com
+/// create_date: 2025/1/16
+/// create_time: 15:49
+/// describe: 堆叠卡片组件
+///
+
 /// Card左右选择回调
 typedef StackCardSelected = Function(bool right, int index);
 
@@ -15,14 +24,6 @@ enum CardOrientation { left, right, bottom, top }
 
 // 0左右滑动  1上下左右滑动
 enum SlideType { horizontal, vertical }
-
-///
-/// create_user: zhengzaihong
-/// email:1096877329@qq.com
-/// create_date: 2025/1/16
-/// create_time: 15:49
-/// describe: 堆叠卡片组件
-///
 class StackCard extends StatefulWidget {
   final List<Widget> children;
   final StackCardSelected? cardSelected;

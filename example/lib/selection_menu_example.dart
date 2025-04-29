@@ -40,7 +40,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                   width: 200,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
-                    color: Colors.grey.setOpacity(0.2),
+                    color: Colors.grey.setAlpha(0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Row(
@@ -90,7 +90,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                   width: 200,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
-                    color: Colors.grey.setOpacity(0.2),
+                    color: Colors.grey.setAlpha(0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Row(
@@ -140,7 +140,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.setOpacity(0.2),
+                      color: Colors.grey.setAlpha(0.2),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(
@@ -184,7 +184,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
           ),
           Row(
             children: [
-              SizedBox(width: 20,),
+              const SizedBox(width: 20,),
               SelectionMenu(
                   popWidth: 300,
                   elevation: 2,
@@ -196,7 +196,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                       width: 200,
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey.setOpacity(0.2),
+                        color: Colors.grey.setAlpha(0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Row(
@@ -236,7 +236,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     },);
                   }
               ),
-              Spacer(),
+              const Spacer(),
               SelectionMenu(
                   popWidth: 300,
                   popHeight: 200,
@@ -247,7 +247,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                       width: 200,
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey.setOpacity(0.2),
+                        color: Colors.grey.setAlpha(0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Row(
@@ -284,7 +284,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     // },);
                   }
               ),
-              SizedBox(width: 20,),
+              const SizedBox(width: 20,),
             ],
           ),
           Center(
@@ -303,7 +303,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.setOpacity(0.2),
+                      color: Colors.grey.setAlpha(0.2),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(
@@ -358,7 +358,7 @@ class _SelectionMenuExampleState extends State<SelectionMenuExample> {
                     width: 200,
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey.setOpacity(0.2),
+                      color: Colors.grey.setAlpha(0.2),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(

@@ -5,7 +5,7 @@ class FontIcon extends StatelessWidget {
   final double? size;
   final Color? color;
 
-  FontIcon(this.codePoint, {this.size, this.color});
+  const FontIcon(this.codePoint, {this.size, this.color,Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

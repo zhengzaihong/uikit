@@ -59,13 +59,13 @@ class _TableViewExampleState extends State<TableViewExample> {
               tableDatas: list,
               minCellWidth:60,
               shrinkWrap: true,
-              fixCellHeaderWidthFlex: [1,],
+              fixCellHeaderWidthFlex: const [1,],
               buildFixHeaderTableHeaderStyle: (context,rowStyle){
                 return Container(
                   width: rowStyle.rowWidth,
                   height: 40,
                   margin: const EdgeInsets.only(top: 1),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
                   child: Row(
@@ -78,7 +78,6 @@ class _TableViewExampleState extends State<TableViewExample> {
                 );
               },
               fixHeaderRowStyle: (rowStyle){
-                TestBean bean = rowStyle.data;
                 return IntrinsicHeight(
                   child: Container(
                     width: rowStyle.rowWidth,
@@ -100,14 +99,14 @@ class _TableViewExampleState extends State<TableViewExample> {
                 );
               },
 
-              fixCellFootWidthFlex: [1,],
+              fixCellFootWidthFlex: const [1,],
               buildFixFootTableHeaderStyle: (context,rowStyle){
                 final cellsWidth = rowStyle.cellWidth!;
                 return Container(
                   width: rowStyle.rowWidth,
                   height: 40,
-                  margin: EdgeInsets.only(top: 1),
-                  decoration:  BoxDecoration(
+                  margin: const EdgeInsets.only(top: 1),
+                  decoration:  const BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
                   child: Row(
@@ -170,7 +169,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                 final rowWidth = rowStyle.rowWidth;
                 int index = rowStyle.index!;
                 double sum = flex.reduce((value, element) => value+element);
-                debugPrint("----------rowWidth--${rowWidth}---sum--$sum");
+                debugPrint("----------rowWidth--$rowWidth---sum--$sum");
                 return IntrinsicHeight(
                   child: Container(
                     width: rowWidth,
@@ -193,7 +192,7 @@ class _TableViewExampleState extends State<TableViewExample> {
             )),
 
             const SizedBox(height: 30),
-            Row(children: const [
+            const Row(children: [
               Expanded(child:  Center(child:  Text("放射科检查报告单(垂直滑动表格)",style: TextStyle(color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.w500))))
@@ -274,7 +273,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                               var cellBean =  (data as RowBean).cells[index];
                               if(cellBean.isTitle){
                                 return TabSpaceText(
-                                    contents: KitMath.parseStrPlus((cellBean.name).toString()),
+                                    contents: KitMath.parseStr((cellBean.name).toString()),
                                     padding: const EdgeInsets.only(left: 10,right: 10),
                                     style: const TextStyle(fontSize: 14,color: Colors.black));
                               }
@@ -301,7 +300,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                               var cellBean =  (data as RowBean).cells[index];
                               if(cellBean.isTitle){
                                 return TabSpaceText(
-                                    contents: KitMath.parseStrPlus((cellBean.name).toString()),
+                                    contents: KitMath.parseStr((cellBean.name).toString()),
                                     padding: const EdgeInsets.only(left: 10,right: 10),
                                     style: const TextStyle(fontSize: 14,color: Colors.black));
                               }
@@ -325,7 +324,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                           var cellBean =  (data as RowBean).cells[index];
                           if(cellBean.isTitle){
                             return TabSpaceText(
-                                contents: KitMath.parseStrPlus((cellBean.name).toString()),
+                                contents: KitMath.parseStr((cellBean.name).toString()),
                                 padding: const EdgeInsets.only(left: 10,right: 10),
                                 style: const TextStyle(fontSize: 14,color: Colors.black));
                           }

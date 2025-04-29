@@ -91,13 +91,13 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
     zeroToPointPaint = widget.zeroToPointPaint??(
         Paint()
           ..style = PaintingStyle.stroke
-          ..color = Colors.white.setOpacity(0.3)
+          ..color = Colors.white.setAlpha(0.3)
           ..strokeWidth = 0.5
     );
 
     ///5层五边形画笔
     pentagonPaint = widget.pentagonPaint??(Paint()
-      ..color = Colors.grey.setOpacity(0.1)
+      ..color = Colors.grey.setAlpha(0.1)
       ..strokeWidth = 1
       ..style = PaintingStyle.fill);
 
@@ -427,7 +427,7 @@ class RadarMapPainter extends CustomPainter {
     final scoreTextPainter = TextPainter(
       textAlign: TextAlign.center,
       text: TextSpan(
-        text: showScore?"${bean.name}\n${bean.score}":"${bean.name}",
+        text: showScore?"${bean.name}\n${bean.score}":bean.name,
         style: bean.textStyle,
       ),
       textDirection: TextDirection.ltr,

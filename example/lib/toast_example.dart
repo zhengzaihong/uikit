@@ -144,7 +144,7 @@ class _ToastExampleState extends State<ToastExample> {
                           buildStyle: (context,task){
                           return Container(
                             height: 40,
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               color: Colors.redAccent,
@@ -178,13 +178,13 @@ class _ToastExampleState extends State<ToastExample> {
                            showTime: 3000,
                            buildToastPoint: (context,style){
                              return Positioned(
-                               child:Bubble(
+                               child:const Bubble(
                                  color: Colors.white,
                                  width: 200,
                                  height: 50,
                                  length: 80,
                                  position: BubbleArrowDirection.top,
-                                 child:const Text("自定义位置Toast",style: TextStyle(color: Colors.redAccent,fontSize: 16)),
+                                 child:Text("自定义位置Toast",style: TextStyle(color: Colors.redAccent,fontSize: 16)),
                                ),
                                left: offset.dx, top: offset.dy+60,);
                            });

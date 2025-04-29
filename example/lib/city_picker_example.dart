@@ -5,18 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_uikit_forzzh/uikitlib.dart';
 
 class CityPickerExample extends StatelessWidget {
+
   const CityPickerExample({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: GestureDetector(
-        //   onTap: (){
-        //     RouteUtils.pop(context);
-        //   },
-        //   child: const Icon(Icons.arrow_back_ios,color: Colors.red,),
-        // ),
+        leading: GestureDetector(
+          onTap: (){
+            RouteUtils.pop(context);
+          },
+          child: const Icon(Icons.arrow_back_ios,color: Colors.red,),
+        ),
         title: const Text("城市选择器"),
       ),
       body: Column(children: [
@@ -26,8 +27,7 @@ class CityPickerExample extends StatelessWidget {
               List datas = json.decode(cityStr) as List;
               CityResult res =
               await PickerHelper.showPicker(context, datas: datas);
-              debugPrint("--${res.provinceCode}-----${res.cityCode}----" +
-                  "${res.areaCode}");
+              debugPrint("--${res.provinceCode}-----${res.cityCode}---${res.areaCode}");
             },
             child: Container(
               color: Colors.blueGrey,
@@ -68,7 +68,7 @@ class CityPickerExample extends StatelessWidget {
                           ]),
                       decoration: BoxDecoration(
                         border: Border(
-                            bottom: BorderSide(color: Colors.grey.setOpacity(0.1), width: 1)),
+                            bottom: BorderSide(color: Colors.grey.setAlpha(0.1), width: 1)),
                       ),
                     );
 
