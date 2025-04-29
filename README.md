@@ -2,8 +2,7 @@
 
 Language: English | [简体中文](README-ZH.md)
 
-This is a full-platform cross-platform UI component library. Welcome to use and give feedback on questions. This library will be updated continuously...
-
+This is a cross-platform UI component library. Welcome to use it and give feedback on your questions. This library will continue to be updated...
 
 # pubspec.yaml dependent
     dependencies:
