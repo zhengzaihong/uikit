@@ -2,7 +2,7 @@
 
 Language: [English](README.md) | 简体中文
 
-这是一套跨平台的UI组件库，欢迎使用和反馈问题，此库将会持续更新....
+这是一套跨平台的Flutter UI组件库，欢迎使用和反馈问题，此库将会持续更新....
 
 # pubspec.yaml 依赖
     dependencies:
