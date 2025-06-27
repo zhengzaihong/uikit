@@ -82,7 +82,7 @@ class StrUtils {
 
   /// 如果第一项为空则返回第二项, def可选返回默认值
   /// Returns the second item if the first item is empty, def optionally returns the default value
-  static String firstNullToSecond(String? first, String? second,{String def = ''}) => isEmpty(first)? second??def: first??def;
+  static String firstNullToSecond(String? first, String? second,{String def = ''}) => isEmpty(first)? second??def: first!;
 
 }
 
