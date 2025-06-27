@@ -1,6 +1,6 @@
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
+import '../../utils/str_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -36,10 +36,10 @@ class InputValidation {
       return emptyTip;
     }
     if (regExp != null) {
-      if (StringUtils.isEmpty(value) && mustFill!) {
+      if (StrUtils.isEmpty(value) && mustFill!) {
         return emptyTip;
       }
-      if(StringUtils.isNotEmpty(value) && !mustFill! && !regExp!.hasMatch(value)) {
+      if(StrUtils.isNotEmpty(value) && !mustFill! && !regExp!.hasMatch(value)) {
         return errorMsg;
       }
 
@@ -69,13 +69,14 @@ class InputValidation {
   }
 
   String _strFormat() {
-    if (StringUtils.isEmpty(format)) {
+    if (StrUtils.isEmpty(format)) {
       return "";
     }
     if (format!.contains("%s")) {
       var list = format!.split("%s");
       if (list.length - 1 != formatValues!.length) {
-        debugPrint("InputValidation 校验中占位符和填充内容长度不匹配~");
+        debugPrint("InputValidation: 校验中占位符和填充内容长度不匹配~");
+        debugPrint("InputValidation: The length of the placeholder and padding content in the check do not match~");
         return errorMsg ?? "";
       }
       StringBuffer buffer = StringBuffer();

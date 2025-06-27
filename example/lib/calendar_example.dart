@@ -62,13 +62,13 @@ class _CalendarExampleState extends State<CalendarExample> {
               GestureDetector(
                   onTap: (){
                    DatePicker.simpleDatePicker(context,
-                       width: 300,
+                       width: 350,
                        height: 470,
                        startDate: DateModel(1992, 3, 31),
                        endDate: DateModel(2002, 10, 31),
                        callBack: (date1,data2){
                         setState(() {
-                          selectDate = "开始时间：${date1?.year}--${date1?.month}--${date1?.day}   结束时间：${data2?.year}--${data2?.month}--${data2?.day}";
+                          selectDate = "开始时间：${date1?.year}/${date1?.month}/${date1?.day}   结束时间：${data2?.year}/${data2?.month}/${data2?.day}";
                         });
                    });
                   },
@@ -94,18 +94,11 @@ class _CalendarExampleState extends State<CalendarExample> {
         aspectRatio: 1/2,   ///添加宽高比，设置的高度将失效。
         onClickOutSide: true,
         callBack: (startTime, endTime) {
-          if (kDebugMode) {
-            print("---${startTime.year}--${startTime.month}--${startTime.day}->");
-            print("---${endTime.year}--${endTime.month}--${endTime.day}->");
-          }
-
-          selectDate2 = "开始时间：${startTime.year}--${startTime.month}--${startTime.day}   "
-              "结束时间：${endTime.year}--${endTime.month}--${endTime.day}";
-
-          Toast.show(selectDate2);
-
           setState(() {
+            selectDate2 = "开始时间：${startTime.year}/${startTime.month}/${startTime.day}   "
+                "结束时间：${endTime.year}/${endTime.month}/${endTime.day}";
 
+            Toast.show(selectDate2);
           });
         });
   }

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uikitlib.dart';
+
+import 'str_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -16,7 +17,7 @@ class MeasureUtils{
   /// 测量文本宽高
   static Size measureTextSize(String text, TextStyle style,
       {int maxLines = 2^31, double maxWidth = double.infinity}) {
-    if (StringUtils.isEmpty(text)) {
+    if (StrUtils.isEmpty(text)) {
       return Size.zero;
     }
     final TextPainter textPainter = TextPainter(

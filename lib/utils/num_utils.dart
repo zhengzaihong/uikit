@@ -24,10 +24,6 @@ class NumUtils {
         ? int.tryParse(valueStr)
         : double.tryParse(valueStr);
   }
-
-  static num nilToDef(num? value, num def) {
-    return value ?? def;
-  }
 }
 
 extension NumExt on Object? {
@@ -48,7 +44,8 @@ extension NumExt on Object? {
     }
   }
 
-  //还原base64 数字
+  //还原base64数字
+  //还原base64数字
   num base64toNum() {
     final bytes = base64.decode(toString());
     return String.fromCharCodes(bytes).toValue<num>();

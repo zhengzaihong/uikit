@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_uikit_forzzh/edit_text/style/inline_style.dart';
 
-import '../pop/pop_box.dart';
-import '../utils/string_utils.dart';
-import 'controller/input_controller.dart';
+import '../../pop/pop_box.dart';
+import '../../utils/str_utils.dart';
+import '../style/inline_style.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -146,23 +145,25 @@ typedef BuildInputDecorationStyle = InputDecoration Function();
 typedef BuildPop<T> = Widget Function(BuildContext context);
 
 ///焦点监听
-typedef FocusListener<T> = void Function(BuildContext context,bool focus);
+typedef FocusListener<T> = void Function(BuildContext context, bool focus);
 
 /// 构建自定样式删除  suffixIcon 实现
 typedef ClearBuilder<T> = Widget Function(BuildContext context);
-
-
 
 /// 如是需要再输入框中显示选中项后的项内容，可使用提供的 [InputExtend] 组件实现
 ///
 class InputText extends StatefulWidget {
   final Widget? title;
+
   ///设置为真 ，边框样式将取下
   final bool noBorder;
+
   /// 配合边框样式 实现圆角
   final double bgRadius;
+
   /// 是否使用表单输入框
   final bool enableForm;
+
   /// 输入框末尾的删除按钮样式 enableClear为真是生效
   final Widget? clearIcon;
 
@@ -179,8 +180,10 @@ class InputText extends StatefulWidget {
   final InputBorder? allLineBorder;
 
   final InlineStyle inline;
+
   /// 输入框的宽度，默认填充父布局
   final double? width;
+
   ///始终光标在末尾
   final bool cursorEnd;
   final EdgeInsetsGeometry? margin;
@@ -189,9 +192,11 @@ class InputText extends StatefulWidget {
 
   ///是否是有焦点即显示 pop
   final bool onFocusShowPop;
+
   ///焦点监听
   final FocusListener? focusListener;
   final BuildPop? buildPop;
+
   ///输入框弹出层相关控制
   final InputController? inputController;
 
@@ -310,150 +315,148 @@ class InputText extends StatefulWidget {
   final FormFieldSetter<String>? onSaved;
   final FormFieldValidator<String>? validator;
 
-
   // final String? initialValue;
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
   final CrossAxisAlignment crossAxisAlignment;
-  const InputText(
-      {
-        required this.controller,
-        this.inputController,
-        this.inline = InlineStyle.clearStyle,
-        this.title,
-        this.noBorder = false,
-        this.bgRadius = 10,
-        this.enableForm = false,
-        this.enableClear = true,
-        this.fixClearIcon = false,
-        this.clearIcon =  const Icon(Icons.cancel,size: 20,color: Colors.grey),
-        this.clearBuilder,
-        this.allLineBorder = const OutlineInputBorder(
-            gapPadding: 0,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(color: Colors.transparent, width: 0)),
-        this.width,
-        this.padding,
-        this.margin,
-        this.alignment = Alignment.centerLeft,
 
-        this.buildPop,
-        this.onFocusShowPop = false,
-        this.focusListener,
-        this.popBox,
-        this.marginTop = 0,
-        this.popElevation = 0.0,
-        this.popColor = Colors.transparent,
-        this.popShadowColor,
-        this.popSurfaceTintColor,
-        this.popChildTextStyle,
-        this.popBorderRadius,
-        this.popShape,
-        this.cursorEnd = false,
-        this.focusNode,
-        this.decoration,
-        this.keyboardType = TextInputType.text,
-        this.textInputAction = TextInputAction.done,
-        this.textCapitalization = TextCapitalization.none,
-        this.style = const TextStyle(fontSize: 14, color:Color(0xff222222)),
-        this.strutStyle,
-        this.textAlign = TextAlign.start,
-        this.textAlignVertical,
-        this.textDirection,
-        this.readOnly = false,
-        this.contextMenuBuilder,
-        this.showCursor,
-        this.autofocus = false,
-        this.obscuringCharacter = '•',
-        this.obscureText = false,
-        this.autocorrect = true,
-        this.enableSuggestions = true,
-        this.maxLines = 1,
-        this.minLines,
-        this.expands = false,
-        this.maxLength,
-        this.maxLengthEnforcement,
-        this.onChanged,
-        this.onEditingComplete,
-        this.onSubmitted,
-        this.onAppPrivateCommand,
-        this.inputFormatters,
-        this.enabled = true,
-        this.cursorWidth = 2.0,
-        this.cursorHeight,
-        this.cursorRadius,
-        this.cursorColor,
-        this.keyboardAppearance,
-        this.scrollPadding = const EdgeInsets.all(20.0),
-        this.selectionControls,
-        this.onTap,
-        this.mouseCursor,
-        this.buildCounter,
-        this.scrollController,
-        this.scrollPhysics,
-        this.autofillHints = const <String>[],
-        this.clipBehavior = Clip.hardEdge,
-        this.restorationId,
-        this.scribbleEnabled = true,
-        this.enableInteractiveSelection = true,
-        this.enableIMEPersonalizedLearning = true,
-        this.icon,
-        this.iconColor,
-        this.label,
-        this.labelText,
-        this.labelStyle,
-        this.floatingLabelStyle,
-        this.helperText,
-        this.helperStyle,
-        this.helperMaxLines,
-        this.hintText,
-        this.hintStyle = const TextStyle(fontSize: 14, color: Color(0xff999999)),
-        this.hintTextDirection,
-        this.hintMaxLines,
-        this.errorText,
-        this.errorStyle,
-        this.errorMaxLines,
-        this.floatingLabelBehavior,
-        this.floatingLabelAlignment,
-        this.isCollapsed = true,
-        this.isDense,
-        this.contentPadding = const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
-        this.prefixIcon,
-        this.prefixIconConstraints,
-        this.prefix,
-        this.prefixText,
-        this.prefixStyle,
-        this.prefixIconColor,
-        this.suffixIcon,
-        this.suffix,
-        this.suffixText,
-        this.suffixStyle,
-        this.suffixIconColor,
-        this.suffixIconConstraints,
-        this.counter,
-        this.counterText,
-        this.counterStyle,
-        this.filled = true,
-        this.fillColor = Colors.transparent,
-        this.focusColor,
-        this.hoverColor =  Colors.transparent,
-        this.errorBorder,
-        this.focusedBorder,
-        this.focusedErrorBorder,
-        this.disabledBorder,
-        this.enabledBorder,
-        this.border = const OutlineInputBorder(borderSide: BorderSide.none),
-        this.semanticCounterText,
-        this.alignLabelWithHint,
-        this.constraints,
-        this.onFieldSubmitted,
-        this.onSaved,
-        this.validator,
-        // this.initialValue,
-        this.mainAxisAlignment = MainAxisAlignment.start,
-        this.mainAxisSize = MainAxisSize.min,
-        this.crossAxisAlignment = CrossAxisAlignment.center,
-        Key? key})
+  const InputText(
+      {required this.controller,
+      this.inputController,
+      this.inline = InlineStyle.clearStyle,
+      this.title,
+      this.noBorder = false,
+      this.bgRadius = 10,
+      this.enableForm = false,
+      this.enableClear = true,
+      this.fixClearIcon = false,
+      this.clearIcon = const Icon(Icons.cancel, size: 20, color: Colors.grey),
+      this.clearBuilder,
+      this.allLineBorder = const OutlineInputBorder(
+          gapPadding: 0,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Colors.transparent, width: 0)),
+      this.width,
+      this.padding,
+      this.margin,
+      this.alignment = Alignment.centerLeft,
+      this.buildPop,
+      this.onFocusShowPop = false,
+      this.focusListener,
+      this.popBox,
+      this.marginTop = 0,
+      this.popElevation = 0.0,
+      this.popColor = Colors.transparent,
+      this.popShadowColor,
+      this.popSurfaceTintColor,
+      this.popChildTextStyle,
+      this.popBorderRadius,
+      this.popShape,
+      this.cursorEnd = false,
+      this.focusNode,
+      this.decoration,
+      this.keyboardType = TextInputType.text,
+      this.textInputAction = TextInputAction.done,
+      this.textCapitalization = TextCapitalization.none,
+      this.style = const TextStyle(fontSize: 14, color: Color(0xff222222)),
+      this.strutStyle,
+      this.textAlign = TextAlign.start,
+      this.textAlignVertical,
+      this.textDirection,
+      this.readOnly = false,
+      this.contextMenuBuilder,
+      this.showCursor,
+      this.autofocus = false,
+      this.obscuringCharacter = '•',
+      this.obscureText = false,
+      this.autocorrect = true,
+      this.enableSuggestions = true,
+      this.maxLines = 1,
+      this.minLines,
+      this.expands = false,
+      this.maxLength,
+      this.maxLengthEnforcement,
+      this.onChanged,
+      this.onEditingComplete,
+      this.onSubmitted,
+      this.onAppPrivateCommand,
+      this.inputFormatters,
+      this.enabled = true,
+      this.cursorWidth = 2.0,
+      this.cursorHeight,
+      this.cursorRadius,
+      this.cursorColor,
+      this.keyboardAppearance,
+      this.scrollPadding = const EdgeInsets.all(20.0),
+      this.selectionControls,
+      this.onTap,
+      this.mouseCursor,
+      this.buildCounter,
+      this.scrollController,
+      this.scrollPhysics,
+      this.autofillHints = const <String>[],
+      this.clipBehavior = Clip.hardEdge,
+      this.restorationId,
+      this.scribbleEnabled = true,
+      this.enableInteractiveSelection = true,
+      this.enableIMEPersonalizedLearning = true,
+      this.icon,
+      this.iconColor,
+      this.label,
+      this.labelText,
+      this.labelStyle,
+      this.floatingLabelStyle,
+      this.helperText,
+      this.helperStyle,
+      this.helperMaxLines,
+      this.hintText,
+      this.hintStyle = const TextStyle(fontSize: 14, color: Color(0xff999999)),
+      this.hintTextDirection,
+      this.hintMaxLines,
+      this.errorText,
+      this.errorStyle,
+      this.errorMaxLines,
+      this.floatingLabelBehavior,
+      this.floatingLabelAlignment,
+      this.isCollapsed = true,
+      this.isDense,
+      this.contentPadding = const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+      this.prefixIcon,
+      this.prefixIconConstraints,
+      this.prefix,
+      this.prefixText,
+      this.prefixStyle,
+      this.prefixIconColor,
+      this.suffixIcon,
+      this.suffix,
+      this.suffixText,
+      this.suffixStyle,
+      this.suffixIconColor,
+      this.suffixIconConstraints,
+      this.counter,
+      this.counterText,
+      this.counterStyle,
+      this.filled = true,
+      this.fillColor = Colors.transparent,
+      this.focusColor,
+      this.hoverColor = Colors.transparent,
+      this.errorBorder,
+      this.focusedBorder,
+      this.focusedErrorBorder,
+      this.disabledBorder,
+      this.enabledBorder,
+      this.border = const OutlineInputBorder(borderSide: BorderSide.none),
+      this.semanticCounterText,
+      this.alignLabelWithHint,
+      this.constraints,
+      this.onFieldSubmitted,
+      this.onSaved,
+      this.validator,
+      // this.initialValue,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.mainAxisSize = MainAxisSize.min,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
+      Key? key})
       : super(key: key);
 
   @override
@@ -461,7 +464,6 @@ class InputText extends StatefulWidget {
 }
 
 class InputTextState extends State<InputText> {
-
   // bool _hasContent = false;
 
   ///关联输入框，处理在组价在列表中跟随滚动
@@ -481,20 +483,20 @@ class InputTextState extends State<InputText> {
     _focusNode = widget.focusNode ?? FocusNode();
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
-      widget.focusListener?.call(context,hasFocus);
-      if(widget.inline == InlineStyle.clearStyle){
+      widget.focusListener?.call(context, hasFocus);
+      if (widget.inline == InlineStyle.clearStyle) {
         ///非外部自定义 走内部实现策略，否则外部调用者维护样式
-       if(mounted && widget.clearBuilder == null && !widget.fixClearIcon ){
-         setState(() {
-           if(hasFocus){
-             inlineStyle = InlineStyle.clearStyle;
-           }else{
-             inlineStyle = InlineStyle.normalStyle;
-           }
-         });
-       }
+        if (mounted && widget.clearBuilder == null && !widget.fixClearIcon) {
+          setState(() {
+            if (hasFocus) {
+              inlineStyle = InlineStyle.clearStyle;
+            } else {
+              inlineStyle = InlineStyle.normalStyle;
+            }
+          });
+        }
       }
-      if(hasFocus && widget.buildPop!=null){
+      if (hasFocus && widget.buildPop != null) {
         addPop();
         return;
       }
@@ -515,8 +517,9 @@ class InputTextState extends State<InputText> {
   @override
   void didUpdateWidget(covariant InputText oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(widget.cursorEnd){
-      widget.controller?.selection = TextSelection.collapsed(offset: widget.controller?.text.length??0);
+    if (widget.cursorEnd) {
+      widget.controller?.selection =
+          TextSelection.collapsed(offset: widget.controller?.text.length ?? 0);
     }
     if (widget.inputController != null &&
         oldWidget.inputController != widget.inputController) {
@@ -530,28 +533,31 @@ class InputTextState extends State<InputText> {
       link: _layerLink,
       child: Column(
         crossAxisAlignment: widget.crossAxisAlignment,
-        mainAxisAlignment:widget.mainAxisAlignment,
+        mainAxisAlignment: widget.mainAxisAlignment,
         mainAxisSize: widget.mainAxisSize,
         children: [
           widget.title ?? const SizedBox.shrink(),
           widget.noBorder
               ? Theme(
-              data: ThemeData(
-                primaryColor: Colors.transparent,
-                inputDecorationTheme: InputDecorationTheme(
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(widget.bgRadius)),
-                        borderSide: const BorderSide(color: Colors.transparent)),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(widget.bgRadius)),
-                        borderSide: const BorderSide(color: Colors.transparent))),
-              ),
-              child: widget.enableForm ? _createInputForm() : _createInput())
+                  data: ThemeData(
+                    primaryColor: Colors.transparent,
+                    inputDecorationTheme: InputDecorationTheme(
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(widget.bgRadius)),
+                            borderSide:
+                                const BorderSide(color: Colors.transparent)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(widget.bgRadius)),
+                            borderSide:
+                                const BorderSide(color: Colors.transparent))),
+                  ),
+                  child:
+                      widget.enableForm ? _createInputForm() : _createInput())
               : widget.enableForm
-              ? _createInputForm()
-              : _createInput(),
+                  ? _createInputForm()
+                  : _createInput(),
         ],
       ),
     );
@@ -608,8 +614,7 @@ class InputTextState extends State<InputText> {
         restorationId: widget.restorationId,
         scribbleEnabled: widget.scribbleEnabled,
         enableInteractiveSelection: widget.enableInteractiveSelection,
-        enableIMEPersonalizedLearning:
-        widget.enableIMEPersonalizedLearning,
+        enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
         onSubmitted: widget.onSubmitted,
         onChanged: (text) {
           _refresh(text);
@@ -617,19 +622,22 @@ class InputTextState extends State<InputText> {
         decoration: buildDefaultInputDecoration(),
       ),
     );
-    return widget.width != null ? input : Row(children: [Expanded(child: input)],);
+    return widget.width != null
+        ? input
+        : Row(
+            children: [Expanded(child: input)],
+          );
   }
 
-
   Widget _createInputForm() {
-    final inputForm =  Container(
+    final inputForm = Container(
       alignment: widget.alignment,
       padding: widget.padding,
       margin: widget.margin,
       width: widget.width,
       child: TextFormField(
         controller: widget.controller,
-        focusNode:_focusNode,
+        focusNode: _focusNode,
         style: widget.style,
         scrollController: widget.scrollController,
         keyboardType: widget.keyboardType,
@@ -668,9 +676,8 @@ class InputTextState extends State<InputText> {
         scrollPhysics: widget.scrollPhysics,
         autofillHints: widget.autofillHints,
         restorationId: widget.restorationId,
-        enableInteractiveSelection:widget.enableInteractiveSelection ,
-        enableIMEPersonalizedLearning:
-        widget.enableIMEPersonalizedLearning,
+        enableInteractiveSelection: widget.enableInteractiveSelection,
+        enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
         // initialValue: widget.initialValue,
         validator: (value) {
           return widget.validator?.call(value);
@@ -687,47 +694,53 @@ class InputTextState extends State<InputText> {
         decoration: buildDefaultInputDecoration(),
       ),
     );
-    return widget.width != null ? inputForm:Row(children: [Expanded(child: inputForm)],);
+    return widget.width != null
+        ? inputForm
+        : Row(
+            children: [Expanded(child: inputForm)],
+          );
   }
 
-  InputBorder? _buildBorder(InputBorder? inputBorderType){
-    if(widget.noBorder){
+  InputBorder? _buildBorder(InputBorder? inputBorderType) {
+    if (widget.noBorder) {
       return null;
     }
-    if(inputBorderType!=null){
+    if (inputBorderType != null) {
       return inputBorderType;
     }
     return widget.allLineBorder;
   }
+
   InputDecoration? buildDefaultInputDecoration() {
     if (widget.decoration == null) {
       Widget? suffixIcon;
-      if(inlineStyle == InlineStyle.clearStyle){
-          if(widget.clearBuilder!=null){
-            suffixIcon = widget.clearBuilder!(context);
-          }else{
-            suffixIcon = (widget.enableClear && getIsEnable() && getHasContent())
-                ? GestureDetector(
-              onTap:() {
-                clearContent();
-              },
-              child: widget.clearIcon,
-            ) : const Text("");
-          }
+      if (inlineStyle == InlineStyle.clearStyle) {
+        if (widget.clearBuilder != null) {
+          suffixIcon = widget.clearBuilder!(context);
+        } else {
+          suffixIcon = (widget.enableClear && getIsEnable() && getHasContent())
+              ? GestureDetector(
+                  onTap: () {
+                    clearContent();
+                  },
+                  child: widget.clearIcon,
+                )
+              : const Text("");
+        }
       }
-      if(inlineStyle == InlineStyle.normalStyle){
+      if (inlineStyle == InlineStyle.normalStyle) {
         suffixIcon = widget.suffixIcon;
       }
       return InputDecoration(
-        suffixIcon:suffixIcon,
+        suffixIcon: suffixIcon,
         fillColor: widget.fillColor,
         filled: widget.filled,
         border: widget.border,
         focusedBorder: _buildBorder(widget.focusedBorder),
-        enabledBorder:_buildBorder(widget.enabledBorder),
+        enabledBorder: _buildBorder(widget.enabledBorder),
         disabledBorder: _buildBorder(widget.disabledBorder),
-        focusedErrorBorder:_buildBorder(widget.focusedErrorBorder),
-        errorBorder:_buildBorder(widget.errorBorder),
+        focusedErrorBorder: _buildBorder(widget.focusedErrorBorder),
+        errorBorder: _buildBorder(widget.errorBorder),
         isCollapsed: widget.isCollapsed,
         contentPadding: widget.contentPadding,
         icon: widget.icon,
@@ -772,8 +785,6 @@ class InputTextState extends State<InputText> {
     return widget.decoration;
   }
 
-
-
   // ignore: unused_element
   List<double?> _setPopSize() {
     List<double?> sizeInfo = [];
@@ -802,60 +813,62 @@ class InputTextState extends State<InputText> {
     var popBox = widget.popBox;
     return OverlayEntry(
         builder: (context) => Stack(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: (){
-                if(_focusNode.hasFocus){
-                  _focusNode.unfocus();
-                  return;
-                }
-                if(!_focusNode.hasFocus){
-                  removePop();
-                }
-              },
-              child: const SizedBox(
-                height: double.infinity,
-                width: double.infinity,
-              ),
-            ),
-            Positioned(
-              width: popBox == null
-                  ? size.width
-                  : popBox.limitSize
-                  ? null
-                  : popBox.width,
-              height: popBox?.height,
-              child: CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: false,
-                offset: Offset(0.0, size.height + widget.marginTop),
-                child: Material(
-                  elevation: widget.popElevation!,
-                  shadowColor: widget.popShadowColor,
-                  color: widget.popColor,
-                  shape: widget.popShape,
-                  borderRadius: widget.popBorderRadius,
-                  surfaceTintColor: widget.popSurfaceTintColor,
-                  textStyle: widget.popChildTextStyle,
-                  child:  widget.buildPop?.call(context),
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    if (_focusNode.hasFocus) {
+                      _focusNode.unfocus();
+                      return;
+                    }
+                    if (!_focusNode.hasFocus) {
+                      removePop();
+                    }
+                  },
+                  child: const SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+                Positioned(
+                  width: popBox == null
+                      ? size.width
+                      : popBox.limitSize
+                          ? null
+                          : popBox.width,
+                  height: popBox?.height,
+                  child: CompositedTransformFollower(
+                    link: _layerLink,
+                    showWhenUnlinked: false,
+                    offset: Offset(0.0, size.height + widget.marginTop),
+                    child: Material(
+                      elevation: widget.popElevation!,
+                      shadowColor: widget.popShadowColor,
+                      color: widget.popColor,
+                      shape: widget.popShape,
+                      borderRadius: widget.popBorderRadius,
+                      surfaceTintColor: widget.popSurfaceTintColor,
+                      textStyle: widget.popChildTextStyle,
+                      child: widget.buildPop?.call(context),
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 
-  void addPop(){
-    if(null==_overlayEntry){
+  void addPop() {
+    if (null == _overlayEntry) {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context).insert(_overlayEntry!);
     }
   }
-  void removePop(){
+
+  void removePop() {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
+
   void notyOverlayDataChange() {
     _overlayEntry?.markNeedsBuild();
   }
@@ -866,10 +879,10 @@ class InputTextState extends State<InputText> {
     }
   }
 
-  void _refresh(String text){
-    if(mounted){
+  void _refresh(String text) {
+    if (mounted) {
       setState(() {
-         widget.onChanged?.call(text);
+        widget.onChanged?.call(text);
       });
     }
   }
@@ -884,8 +897,9 @@ class InputTextState extends State<InputText> {
   bool getIsEnable() {
     return widget.enabled ?? true;
   }
+
   bool getHasContent() {
-    return StringUtils.isNotEmpty(widget.controller?.text);
+    return StrUtils.isNotEmpty(widget.controller?.text);
   }
 
   bool isFocus() {
@@ -900,5 +914,64 @@ class InputTextState extends State<InputText> {
 
   TextEditingController? getTextEditingController() {
     return widget.controller;
+  }
+}
+
+///
+/// create_user: zhengzaihong
+/// email:1096877329@qq.com
+/// create_date: 2024/11/26
+/// create_time: 11:15
+/// describe: 优化输入框 InputText 的控制器
+///
+class InputController {
+  InputController();
+
+  InputTextState? _state;
+
+  void bind(InputTextState state) {
+    _state = state;
+  }
+
+  void addPop() {
+    _state?.addPop();
+  }
+
+  void removePop() {
+    _state?.removePop();
+  }
+
+  void notyListUiChange() {
+    _state?.notyListUiChange();
+  }
+
+  void clearContent() {
+    _state?.clearContent();
+  }
+
+  bool isFocus() => _state?.isFocus() ?? false;
+
+  bool hasContent() => _state?.getHasContent() ?? false;
+
+  void setText(String text) {
+    _state?.setText(text);
+  }
+
+  InputTextState? getState() => _state;
+
+  TextEditingController? getTextEditingController() {
+    return _state?.getTextEditingController();
+  }
+
+  RenderBox? getRenderBox() {
+    final obj = _state?.context.findRenderObject();
+    if (obj != null) {
+      return obj as RenderBox;
+    }
+    return null;
+  }
+
+  void dispose() {
+    _state = null;
   }
 }

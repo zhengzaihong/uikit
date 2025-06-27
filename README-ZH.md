@@ -17,7 +17,7 @@ Language: [English](README.md) | 简体中文
 *  城市选择器 CityPickerView
 *  时间选择器 DatePicker
 *  复选框，单选，气泡,抽屉组件等
-*  倒计时控件 TimeView
+*  支持任意组件下倒计时 TimeView
 *  增加类似android TextView 上下左右可添加元素组件
 *  添加可自定大小的switch组件
 *  新增表格布局 TableView ，新增横向和纵向都可滚动功能。
@@ -40,6 +40,7 @@ Language: [English](README.md) | 简体中文
 *  新增 双向滚动表格组件 TableViewExtend
 *  新增 CustomAnimatedBottomBar 底部动画菜单
 *  新增 堆叠卡片组件 StackCard
+*  新增 无限层级折叠菜单 MultiSelector
 
   ...持续更新中....
 
@@ -88,7 +89,7 @@ Language: [English](README.md) | 简体中文
 
 ## 可定制的Toast：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.png)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
 
 ## 微光加载效果：
@@ -115,6 +116,8 @@ Language: [English](README.md) | 简体中文
 
 ## 无限层级菜单
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
+## 无限层级多选菜单!
+![](https://github.com/zhengzaihong/uikit/blob/master/images/selector.png)
 
 ## 表格组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/table_scroller.gif)

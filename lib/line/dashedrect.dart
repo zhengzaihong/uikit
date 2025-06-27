@@ -12,11 +12,12 @@ class DashedRect extends StatelessWidget {
 
   ///虚线颜色
   final Color color;
+
   ///虚线高度
   final double strokeWidth;
+
   ///点之间的间隔
   final double gap;
-
 
    const DashedRect({
         this.color = Colors.black,

@@ -40,6 +40,7 @@ This is a cross-platform Flutter UI component library. Welcome to use it and giv
 *  New two-way scrolling table component TableViewExtend
 *  Add an animated menu at the bottom of the CustomAnimated BottomBar
 *  Add StackCard, a stacking card component
+*  Add unlimited level folding menu MultiSelector
 
   ...continuously updated....
 
@@ -88,7 +89,7 @@ There are many optimization changes, so it is recommended to use version 0.2.0 o
 
 ## Customizable Toast：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.png)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
 
 ## Low-light loading effect：
@@ -115,6 +116,9 @@ There are many optimization changes, so it is recommended to use version 0.2.0 o
 
 ## Unlimited level menu
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
+
+## Unlimited level multi-selection menu!
+![](https://github.com/zhengzaihong/uikit/blob/master/images/selector.png)
 
 ## table component
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/table_scroller.gif)

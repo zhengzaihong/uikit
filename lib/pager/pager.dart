@@ -1,10 +1,9 @@
-
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_uikit_forzzh/edit_text/input_text.dart';
-import 'package:flutter_uikit_forzzh/edit_text/style/outline_input_text_border.dart';
+
+import '../input/style/outline_input_text_border.dart';
+import '../input/view/input_text.dart';
 
 ///
 /// create_user: zhengzaihong

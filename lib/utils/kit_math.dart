@@ -1,4 +1,4 @@
-import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
+import 'package:flutter_uikit_forzzh/utils/str_utils.dart';
 
 ///
 /// create_user: zhengzaihong
@@ -8,10 +8,11 @@ import 'package:flutter_uikit_forzzh/utils/string_utils.dart';
 /// describe: 本库的一些计算工具类
 ///
 class KitMath {
+
   KitMath._();
 
   static List<String> parseStr(String? string,{RegExp? reg}) {
-    if (StringUtils.isEmpty(string)) {
+    if (StrUtils.isEmpty(string)) {
       return [];
     }
     RegExp regExp = reg?? RegExp(
