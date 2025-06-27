@@ -69,6 +69,8 @@ Language: [English](README.md) | 简体中文
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text_pop.gif)
 
 
+## 底部导航菜单：
+![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif) )
 
 ## 输入框拓展搜索组件：
 
@@ -92,6 +94,7 @@ Language: [English](README.md) | 简体中文
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.png)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
 
+
 ## 微光加载效果：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
 
@@ -105,7 +108,6 @@ Language: [English](README.md) | 简体中文
 
 
 ## 可高度自定义的选择下拉框组件
-![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu2.jpg)
 
 ## WEB 中鼠标右键弹窗组件

@@ -68,7 +68,8 @@ There are many optimization changes, so it is recommended to use version 0.2.0 o
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text_pop.gif)
 
-
+## Bottom Navigation Menu：
+![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif) )
 
 ## Input box expands search component：
 
@@ -95,7 +96,6 @@ There are many optimization changes, so it is recommended to use version 0.2.0 o
 ## Low-light loading effect：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
 
-
 ## Highly customizable switch button components：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/image_switch.gif)
 
@@ -105,7 +105,6 @@ There are many optimization changes, so it is recommended to use version 0.2.0 o
 
 
 ## Highly customizable selection drop-down box component
-![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu2.jpg)
 
 ## Right-mouse button pop-up component in WEB
