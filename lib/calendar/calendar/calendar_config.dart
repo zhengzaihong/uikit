@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uikitlib.dart';
+import 'package:flutter_uikit_forzzh/uikit_lib.dart';
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com

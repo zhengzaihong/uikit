@@ -41,12 +41,13 @@ Language: [English](README.md) | 简体中文
 *  新增 CustomAnimatedBottomBar 底部动画菜单
 *  新增 堆叠卡片组件 StackCard
 *  新增 无限层级折叠菜单 MultiSelector
+*  新增 在抽屉中实现多级子抽屉或同级内容路由跳转的组件 DrawerRouterStack，需配合DrawerRouter使用
 
   ...持续更新中....
 
 本次版本：SelectionMenu，InputText，ZTooltip，InputExtend 新增控制器
 浮窗PopupWindow组件已删除，定点悬浮提示使用 SelectionMenu/InputText/ZTooltip组件效果替换，
-优化变动较多，建议使用 0.2.0 以上版本进行更新
+优化变动较多，建议使用 0.3.0 以上版本进行更新
 
 
 
