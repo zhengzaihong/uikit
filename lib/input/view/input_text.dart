@@ -873,7 +873,7 @@ class InputTextState extends State<InputText> {
     _overlayEntry?.markNeedsBuild();
   }
 
-  void notyListUiChange() {
+  void notyUiChange() {
     if (mounted) {
       setState(() {});
     }
@@ -936,8 +936,8 @@ class InputController {
     _state?.removePop();
   }
 
-  void notyListUiChange() {
-    _state?.notyListUiChange();
+  void notyUiChange() {
+    _state?.notyUiChange();
   }
 
   void clearContent() {
