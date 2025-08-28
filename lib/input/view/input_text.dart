@@ -917,14 +917,9 @@ class InputTextState extends State<InputText> {
   }
 }
 
-///
-/// create_user: zhengzaihong
-/// email:1096877329@qq.com
-/// create_date: 2024/11/26
-/// create_time: 11:15
-/// describe: 优化输入框 InputText 的控制器
-///
+///优化输入框 InputText 的控制器
 class InputController {
+
   InputController();
 
   InputTextState? _state;

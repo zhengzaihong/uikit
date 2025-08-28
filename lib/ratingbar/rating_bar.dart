@@ -154,7 +154,7 @@ class _RatingBarState extends State<RatingBar> {
     return children;
   }
 
-  List<Widget> buildNomalRow() {
+  List<Widget> buildNormalRow() {
     List<Widget> children = [];
     for (int i = 0; i < widget.count; i++) {
       children.add(
@@ -173,7 +173,7 @@ class _RatingBarState extends State<RatingBar> {
     return Stack(
       children: <Widget>[
         Row(
-          children: buildNomalRow(),
+          children: buildNormalRow(),
         ),
         Row(
           children: buildRow(),

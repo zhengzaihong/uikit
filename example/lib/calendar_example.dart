@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikit_lib.dart';
+import 'package:intl/intl.dart';
 
 class CalendarExample extends StatefulWidget {
   const CalendarExample({Key? key}) : super(key: key);
@@ -10,42 +12,14 @@ class CalendarExample extends StatefulWidget {
 
 class _CalendarExampleState extends State<CalendarExample> {
 
-
-  Widget createDateWidget(DateTime? dateTime) {
-    var checkedText = const TextStyle(
-      color: Colors.black54,
-      fontSize: 16,
-    );
-    return Text(
-      dateTime == null
-          ? "--/--"
-          : "${dateTime.year}年${dateTime.month}月${dateTime.day}日",
-      style: checkedText,
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-
-    var config = CalendarHelper.getConfig();
-    config.calendarWidth = 480;
-
-    config.callBackStartTime = (dateTime) {
-      return createDateWidget(dateTime);
-    };
-
-    config.callBackEndTime = (dateTime) {
-      return createDateWidget(dateTime);
-    };
-    config.dayTextSize = 14;
-    config.sureButtonWidth=200;
   }
 
   String selectDate = "日期选择器 style1";
-  String selectDate2 = "日期选择器 style2";
 
-  
+
   @override
   Widget build(BuildContext context) {
 
@@ -60,46 +34,53 @@ class _CalendarExampleState extends State<CalendarExample> {
               const SizedBox(height: 40,),
               GestureDetector(
                   onTap: (){
-                   DatePicker.simpleDatePicker(context,
-                       width: 350,
-                       height: 470,
-                       startDate: DateModel(1992, 3, 31),
-                       endDate: DateModel(2002, 10, 31),
-                       callBack: (date1,data2){
+                   DatePicker.simpleDateRangePicker(context,
+                       width: 700,
+                       height: 600,
+                       backwardYear: 100,//当前时间的前100年
+                       needYear: 120, ////当前时间的后20年
+                       // initStartDate: DateTime(1992, 3, 31,10,22,44),//默认选中的开始时间
+                       // initEndDate: DateTime(2002, 10, 31), //默认选中的结束时间
+                       initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
+                       initEndDate:DateTime.tryParse("2023-04-27 14:47:30"), //默认选中的结束时间
+                       showColumn: [DateType.YEAR, DateType.MONTH, DateType.DAY,DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                       maskColor:  const Color.fromRGBO(242, 242, 244, 0.7),//横向遮罩颜色
+                       //设置选中的条目的遮罩色
+                       selectionOverlay:  CupertinoPickerDefaultSelectionOverlay(
+                         background: CupertinoColors.activeBlue.withAlpha(10),
+                         capStartEdge: true,
+                         capEndEdge: true,
+                       ),
+                       pickerVisibilityHeight: 200,
+                       diameterRatio: 0.8,//设置曲率，越小越弯曲
+                       itemExtent: 40,//每个item的高度
+                       maskHeight: 40,//遮罩的高度
+                       maskRadius: 0,//遮罩的圆角
+                       //itemWidth: 100,//每个item的宽度
+                       //vGap: 16,//垂直间距
+                       //useMagnifier: true,//是否启用放大镜效果
+                       //magnification: 1.5, //设置放大倍数
+                       callBack: (date1,date2){
                         setState(() {
-                          selectDate = "开始时间：${date1?.year}/${date1?.month}/${date1?.day}   结束时间：${data2?.year}/${data2?.month}/${data2?.day}";
+                          selectDate = "开始时间：${ DateFormat("yyyy-MM-dd HH:mm:ss").format(date1!)} "
+                              " 结束时间：${ DateFormat("yyyy-MM-dd HH:mm:ss").format(date2!)} ";
                         });
                    });
                   },
-                child:  Center(child: Text(selectDate,style: const TextStyle(fontSize: 20,color: Colors.red))),
+                child:Center(child: Text(selectDate,style: const TextStyle(fontSize: 20,color: Colors.red))),
               ),
 
 
              const SizedBox(height: 40,),
              GestureDetector(
                onTap: (){
-                 _openCalendar();
                },
-               child:  Center(child: Text(selectDate2,style: const TextStyle(fontSize: 20,color: Colors.red))),
+               child:  Center(child: Text(selectDate,style: const TextStyle(fontSize: 20,color: Colors.red))),
              )
             ],
           );
       }),
     );
-  }
-
-  void _openCalendar(){
-    CalendarHelper.showDateDialog(context,
-        aspectRatio: 1/2,   ///添加宽高比，设置的高度将失效。
-        onClickOutSide: true,
-        callBack: (startTime, endTime) {
-          setState(() {
-            selectDate2 = "开始时间：${startTime.year}/${startTime.month}/${startTime.day}   "
-                "结束时间：${endTime.year}/${endTime.month}/${endTime.day}";
-
-            Toast.show(selectDate2);
-          });
-        });
   }
 }
 
