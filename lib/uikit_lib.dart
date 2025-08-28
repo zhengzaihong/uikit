@@ -24,7 +24,7 @@ export 'loading/shimmer_loading.dart';
 export 'drag/drag_box.dart';
 export 'ext/top_view.dart';
 export 'tooltip/ztooltip.dart';
-export 'navigation//bottom_bar_lib.dart';
+export 'nav/bottom_bar_lib.dart';
 export 'checkbox/custom_checkbox.dart';
 export 'card/stack_card.dart';
 export 'textview/marquee_view.dart';

@@ -8,8 +8,10 @@ import '../../ext/top_view.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024/12/4
 /// create_time: 11:09
-/// describe: 日期选择器，一次可选择开始和结束日期
-///
+/// describe: 1.支持范围日期选择，
+/// 2，支持具体某天选择，
+/// 3，支持可配置列时间选择.
+/// 4.支持多语种(提供中文-英文，其他语种请实现 DatePickerStrings配置)
 
 typedef ItemBuilder = Widget Function(DateType type, int value);
 
@@ -54,7 +56,7 @@ class DatePicker extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
 
   //开始日期和结束日期的widget
-  final Widget startWidget;
+  final Widget? startWidget;
   final Widget? endWidget;
 
   //picker的可见高度
@@ -100,10 +102,10 @@ class DatePicker extends StatefulWidget {
   final DateTime? initStartDate;
   final DateTime? initEndDate;
   //倒推的年份个数
-  final int backwardYear;
+  final int forwardYears;
 
-  //年份的个数  [重要：必须大于backwardYear，时间范围：[(当前时间-backwardYear) ---- (当前时间+(needYear-backwardYear))]]
-  final int needYear;
+  //年份的个数  [重要：必须大于forwardYears，时间范围：[(当前时间-forwardYears) ---- (当前时间+(totalYears-forwardYears))]]
+  final int totalYears;
 
   //动画时间
   final Duration duration;
@@ -120,7 +122,7 @@ class DatePicker extends StatefulWidget {
   DatePicker({
     required this.controller,
     required this.itemBuilder,
-    required this.startWidget,
+    this.startWidget,
     this.showColumn = const [
       DateType.YEAR,
       DateType.MONTH,
@@ -150,28 +152,32 @@ class DatePicker extends StatefulWidget {
     this.itemExtent = 40,
     this.squeeze,
     this.selectionOverlay,
-    this.backwardYear = 50,
-    this.needYear = 110,
+    this.forwardYears = 50,
+    this.totalYears = 110,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.easeInOutCubic,
     this.action,
     Key? key,
   }) : super(key: key) {
-    assert(needYear > backwardYear, "needYear必须大于backwardYear");
+    assert(totalYears > forwardYears, "totalYears必须大于forwardYears");
   }
 
   @override
   State<DatePicker> createState() => _DatePickerState();
 
-  ///展示选择器基础示例，不满足样式外部可自定义。
-  ///开始时间--结束时间
-  static Future<dynamic> simpleDateRangePicker(
-    BuildContext context, {
+  ///展示选择器基础示例，不满足样式外部更加DatePicker可自定义你的窗口
+
+
+  ///开始时间--结束时间 -dialog
+  static Future<dynamic> showDateRangePicker(
+   {
+    required BuildContext context,
+    required DateController controller,
     bool barrierDismissible = true,
     double height = 500,
     double width = 400,
-    int needYear = 110,
-    int backwardYear = 50,
+    int totalYears = 110,
+    int forwardYears = 50,
     double vGap = 16,
     BoxDecoration? pickerDecoration,
     DateTime? initStartDate,
@@ -199,22 +205,23 @@ class DatePicker extends StatefulWidget {
       DateType.MINUTE,
       DateType.SECOND
     ],
+    DatePickerStrings? datePickerStrings, 
     Function(DateTime? startDate, DateTime? endDate)? callBack,
   }) {
-    final controller = DateController();
+    final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
     return showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (context) {
-        return DatePicker(
+        return Center(child: DatePicker(
           controller: controller,
           pickerDecoration: pickerDecoration,
           width: width,
           height: height,
-          needYear: needYear,
+          totalYears: totalYears,
           initStartDate: initStartDate,
           initEndDate: initEndDate,
-          backwardYear: backwardYear,
+          forwardYears: forwardYears,
           vGap: vGap,
           pickerVisibilityHeight: pickerVisibilityHeight,
           itemExtent: itemExtent,
@@ -232,42 +239,42 @@ class DatePicker extends StatefulWidget {
           duration: duration,
           curve: curve,
           showColumn: showColumn,
-          startWidget: const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text('开始日期：',
-                style: TextStyle(
+          startWidget: Padding( // Using strings.startDate
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(strings.startDate,
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 14,
                     fontWeight: FontWeight.bold)),
           ),
-          endWidget: const Padding(
-            padding: EdgeInsets.only(left: 20),
-            child: Text('结束日期：',
-                style: TextStyle(
+          endWidget: Padding( // Using strings.endDate
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(strings.endDate,
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 14,
                     fontWeight: FontWeight.bold)),
           ),
           itemBuilder: (type, value) {
             String label = '';
-            switch (type) {
+            switch (type) { // Using strings for year, month, day, etc.
               case DateType.YEAR:
-                label = '年';
+                label = strings.year;
                 break;
               case DateType.MONTH:
-                label = '月';
+                label = strings.month;
                 break;
               case DateType.DAY:
-                label = '日';
+                label = strings.day;
                 break;
               case DateType.HOUR:
-                label = '时';
+                label = strings.hour;
                 break;
               case DateType.MINUTE:
-                label = '分';
+                label = strings.minute;
                 break;
               case DateType.SECOND:
-                label = '秒';
+                label = strings.second;
                 break;
             }
             return Center(
@@ -291,13 +298,353 @@ class DatePicker extends StatefulWidget {
               child: Container(
                 margin: const EdgeInsets.only(top: 30),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.lightBlueAccent,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text("确定",
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                child: Text(strings.confirm, // Using strings.confirm
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
+              ),
+            ),
+          ),
+        ));
+      },
+    );
+  }
+  ///开始时间--结束时间 -BottomSheet
+  static Future<dynamic> showDateRangeModalBottomSheet({
+        required BuildContext context,
+        required DateController controller,
+        bool barrierDismissible = true,
+        double height = 500,
+        double width = 400,
+        int totalYears = 110,
+        int forwardYears = 50,
+        double vGap = 16,
+        BoxDecoration? pickerDecoration,
+        DateTime? initStartDate,
+        DateTime? initEndDate,
+        double pickerVisibilityHeight = 140,
+        double itemExtent = 40,
+        double maskHeight = 40,
+        double itemWidth = 100,
+        double maskRadius = 0,
+        double? diameterRatio,
+        Color? backgroundColor,
+        double? offAxisFraction,
+        bool? useMagnifier,
+        double? magnification,
+        double? squeeze,
+        Widget? selectionOverlay,
+        Color? maskColor = const Color.fromRGBO(242, 242, 244, 0.7),
+        Duration duration = const Duration(milliseconds: 200),
+        Curve curve = Curves.easeInOutCubic,
+        List<DateType> showColumn = const [
+          DateType.YEAR,
+          DateType.MONTH,
+          DateType.DAY,
+          DateType.HOUR,
+          DateType.MINUTE,
+          DateType.SECOND
+        ],
+        DatePickerStrings? datePickerStrings,
+        Color? bottomSheetBackgroundColor,
+        String? barrierLabel,
+        double? elevation,
+        ShapeBorder? shape,
+        Clip? clipBehavior,
+        BoxConstraints? constraints,
+        Color? barrierColor,
+        bool isScrollControlled = false,
+        double scrollControlDisabledMaxHeightRatio =  9.0 / 16.0,
+        bool useRootNavigator = false,
+        bool isDismissible = true,
+        bool enableDrag = true,
+        bool? showDragHandle,
+        bool useSafeArea = false,
+        RouteSettings? routeSettings,
+        AnimationController? transitionAnimationController,
+        Offset? anchorPoint,
+        AnimationStyle? sheetAnimationStyle,
+        Function(DateTime? startDate, DateTime? endDate)? callBack,
+      }) {
+    final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: bottomSheetBackgroundColor,
+      barrierLabel: barrierLabel,
+      elevation: elevation,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      constraints: constraints,
+      barrierColor: barrierColor,
+      isScrollControlled: isScrollControlled,
+      scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
+      useRootNavigator: useRootNavigator,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      showDragHandle: showDragHandle,
+      useSafeArea: useSafeArea,
+      routeSettings: routeSettings,
+      transitionAnimationController: transitionAnimationController,
+      anchorPoint: anchorPoint,
+      sheetAnimationStyle: sheetAnimationStyle,
+      builder: (context) {
+        return DatePicker(
+          controller: controller,
+          pickerDecoration: pickerDecoration,
+          width: width,
+          height: height,
+          totalYears: totalYears,
+          initStartDate: initStartDate,
+          initEndDate: initEndDate,
+          forwardYears: forwardYears,
+          vGap: vGap,
+          pickerVisibilityHeight: pickerVisibilityHeight,
+          itemExtent: itemExtent,
+          itemWidth: itemWidth,
+          maskHeight: maskHeight,
+          maskRadius: maskRadius,
+          maskColor: maskColor,
+          diameterRatio: diameterRatio,
+          backgroundColor: backgroundColor,
+          offAxisFraction: offAxisFraction,
+          useMagnifier: useMagnifier,
+          magnification: magnification,
+          squeeze: squeeze,
+          selectionOverlay: selectionOverlay,
+          duration: duration,
+          curve: curve,
+          showColumn: showColumn,
+          startWidget: Padding( // Using strings.startDate
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(strings.startDate,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold)),
+          ),
+          endWidget: Padding( // Using strings.endDate
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(strings.endDate,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold)),
+          ),
+          itemBuilder: (type, value) {
+            String label = '';
+            switch (type) { // Using strings for year, month, day, etc.
+              case DateType.YEAR:
+                label = strings.year;
+                break;
+              case DateType.MONTH:
+                label = strings.month;
+                break;
+              case DateType.DAY:
+                label = strings.day;
+                break;
+              case DateType.HOUR:
+                label = strings.hour;
+                break;
+              case DateType.MINUTE:
+                label = strings.minute;
+                break;
+              case DateType.SECOND:
+                label = strings.second;
+                break;
+            }
+            return Center(
+              child: Text(
+                "$value$label",
+                style: const TextStyle(
+                    color: Color.fromRGBO(21, 21, 21, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            );
+          },
+          action: GestureDetector(
+            onTap: () {
+              final startDate = controller.getStartDate();
+              callBack?.call(startDate,null);
+              Navigator.pop(context, [startDate]);
+            },
+            child: Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 30),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(strings.confirm, // Using strings.confirm
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  ///选择某个日期-时间
+  static Future<dynamic> showDateModalBottomSheet({
+    required BuildContext context,
+    required DateController controller,
+    bool barrierDismissible = true,
+    double height = 500,
+    double width = 400,
+    int totalYears = 110,
+    int forwardYears = 50,
+    double vGap = 16,
+    BoxDecoration? pickerDecoration,
+    DateTime? initStartDate,
+    DateTime? initEndDate,
+    double pickerVisibilityHeight = 140,
+    double itemExtent = 40,
+    double maskHeight = 40,
+    double itemWidth = 100,
+    double maskRadius = 0,
+    double? diameterRatio,
+    Color? backgroundColor,
+    double? offAxisFraction,
+    bool? useMagnifier,
+    double? magnification,
+    double? squeeze,
+    Widget? selectionOverlay,
+    Widget? title,
+    Color? maskColor = const Color.fromRGBO(242, 242, 244, 0.7),
+    Duration duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.easeInOutCubic,
+    List<DateType> showColumn = const [
+      DateType.YEAR,
+      DateType.MONTH,
+      DateType.DAY,
+      DateType.HOUR,
+      DateType.MINUTE,
+      DateType.SECOND
+    ],
+    DatePickerStrings? datePickerStrings,
+    Color? bottomSheetBackgroundColor,
+    String? barrierLabel,
+    double? elevation,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    BoxConstraints? constraints,
+    Color? barrierColor,
+    bool isScrollControlled = false,
+    double scrollControlDisabledMaxHeightRatio =  9.0 / 16.0,
+    bool useRootNavigator = false,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    bool? showDragHandle,
+    bool useSafeArea = false,
+    RouteSettings? routeSettings,
+    AnimationController? transitionAnimationController,
+    Offset? anchorPoint,
+    AnimationStyle? sheetAnimationStyle,
+    Function(DateTime? startDate, DateTime? endDate)? callBack,
+  }) {
+    final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: bottomSheetBackgroundColor,
+      barrierLabel: barrierLabel,
+      elevation: elevation,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      constraints: constraints,
+      barrierColor: barrierColor,
+      isScrollControlled: isScrollControlled,
+      scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
+      useRootNavigator: useRootNavigator,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      showDragHandle: showDragHandle,
+      useSafeArea: useSafeArea,
+      routeSettings: routeSettings,
+      transitionAnimationController: transitionAnimationController,
+      anchorPoint: anchorPoint,
+      sheetAnimationStyle: sheetAnimationStyle,
+      builder: (context) {
+        return DatePicker(
+          controller: controller,
+          pickerDecoration: pickerDecoration,
+          startWidget: title,
+          width: width,
+          height: height,
+          totalYears: totalYears,
+          initStartDate: initStartDate,
+          initEndDate: initEndDate,
+          forwardYears: forwardYears,
+          vGap: vGap,
+          pickerVisibilityHeight: pickerVisibilityHeight,
+          itemExtent: itemExtent,
+          itemWidth: itemWidth,
+          maskHeight: maskHeight,
+          maskRadius: maskRadius,
+          maskColor: maskColor,
+          diameterRatio: diameterRatio,
+          backgroundColor: backgroundColor,
+          offAxisFraction: offAxisFraction,
+          useMagnifier: useMagnifier,
+          magnification: magnification,
+          squeeze: squeeze,
+          selectionOverlay: selectionOverlay,
+          duration: duration,
+          curve: curve,
+          showColumn: showColumn,
+          itemBuilder: (type, value) {
+            String label = '';
+            switch (type) { // Using strings for year, month, day, etc.
+              case DateType.YEAR:
+                label = strings.year;
+                break;
+              case DateType.MONTH:
+                label = strings.month;
+                break;
+              case DateType.DAY:
+                label = strings.day;
+                break;
+              case DateType.HOUR:
+                label = strings.hour;
+                break;
+              case DateType.MINUTE:
+                label = strings.minute;
+                break;
+              case DateType.SECOND:
+                label = strings.second;
+                break;
+            }
+            return Center(
+              child: Text(
+                "$value$label",
+                style: const TextStyle(
+                    color: Color.fromRGBO(21, 21, 21, 1),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            );
+          },
+          action: GestureDetector(
+            onTap: () {
+              final startDate = controller.getStartDate();
+              final endDate = controller.getEndDate();
+              callBack?.call(startDate, endDate);
+              Navigator.pop(context, [startDate, endDate]);
+            },
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(strings.confirm, // Using strings.confirm
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
               ),
             ),
           ),
@@ -333,12 +680,12 @@ class _DatePickerState extends State<DatePicker> {
 
   DateTime startDate() {
     return DateTime(_startDateModel.year, _startDateModel.month,
-        _startDateModel.day, _startDateModel.hour, _startDateModel.minute);
+        _startDateModel.day, _startDateModel.hour, _startDateModel.minute, _startDateModel.second);
   }
 
   DateTime endDate() {
     return DateTime(_endDateModel.year, _endDateModel.month, _endDateModel.day,
-        _endDateModel.hour, _endDateModel.minute);
+        _endDateModel.hour, _endDateModel.minute, _endDateModel.second);
   }
 
   @override
@@ -350,7 +697,7 @@ class _DatePickerState extends State<DatePicker> {
     _startDate = widget.initStartDate ??
         DateTime(
             now.year, now.month, now.day, now.hour, now.minute, now.second);
-    _startYear = now.year - widget.backwardYear;
+    _startYear = now.year - widget.forwardYears;
     _endDate = widget.initEndDate ??
         DateTime(
             now.year, now.month, now.day, now.hour, now.minute, now.second);
@@ -366,25 +713,25 @@ class _DatePickerState extends State<DatePicker> {
   }
 
   void _animateTo() {
-    _animateScroll(startYearScrollController, _startDate.year - _startYear);
-    _animateScroll(startMonthScrollController, _startDate.month - 1);
-    _animateScroll(startDayScrollController, _startDate.day - 1);
-    _animateScroll(startHourScrollController, _startDate.hour);
-    _animateScroll(startMinuteScrollController, _startDate.minute);
-    _animateScroll(startSecondScrollController, _startDate.second);
+    if(widget.showColumn.contains(DateType.YEAR)) _animateScroll(startYearScrollController, _startDate.year - _startYear);
+    if(widget.showColumn.contains(DateType.MONTH)) _animateScroll(startMonthScrollController, _startDate.month - 1);
+    if(widget.showColumn.contains(DateType.DAY)) _animateScroll(startDayScrollController, _startDate.day - 1);
+    if(widget.showColumn.contains(DateType.HOUR)) _animateScroll(startHourScrollController, _startDate.hour);
+    if(widget.showColumn.contains(DateType.MINUTE)) _animateScroll(startMinuteScrollController, _startDate.minute);
+    if(widget.showColumn.contains(DateType.SECOND)) _animateScroll(startSecondScrollController, _startDate.second);
 
     if (widget.endWidget != null) {
-      _animateScroll(endYearScrollController, _endDate.year - _startYear);
-      _animateScroll(endMonthScrollController, _endDate.month - 1);
-      _animateScroll(endDayScrollController, _endDate.day - 1);
-      _animateScroll(endHourScrollController, _endDate.hour);
-      _animateScroll(endMinuteScrollController, _endDate.minute);
-      _animateScroll(endSecondScrollController, _endDate.second);
+      if(widget.showColumn.contains(DateType.YEAR)) _animateScroll(endYearScrollController, _endDate.year - _startYear);
+      if(widget.showColumn.contains(DateType.MONTH)) _animateScroll(endMonthScrollController, _endDate.month - 1);
+      if(widget.showColumn.contains(DateType.DAY)) _animateScroll(endDayScrollController, _endDate.day - 1);
+      if(widget.showColumn.contains(DateType.HOUR)) _animateScroll(endHourScrollController, _endDate.hour);
+      if(widget.showColumn.contains(DateType.MINUTE)) _animateScroll(endMinuteScrollController, _endDate.minute);
+      if(widget.showColumn.contains(DateType.SECOND)) _animateScroll(endSecondScrollController, _endDate.second);
     }
   }
 
   void _animateScroll(FixedExtentScrollController controller, int item) {
-    if (controller.hasClients) {
+    if (controller.hasClients && item >=0 && controller.position.maxScrollExtent >= item * widget.itemExtent) { // Ensure item is valid
       controller.animateToItem(item,
           duration: widget.duration, curve: widget.curve);
     }
@@ -416,39 +763,41 @@ class _DatePickerState extends State<DatePicker> {
     if (oldWidget.controller != widget.controller) {
       widget.controller.bind(this);
     }
+    if (widget.initStartDate != oldWidget.initStartDate || widget.initEndDate != oldWidget.initEndDate) {
+        _startDate = widget.initStartDate ?? DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second);
+        _endDate = widget.initEndDate ?? DateTime(now.year, now.month, now.day, now.hour, now.minute, now.second);
+        _startDateModel = DateModel(_startDate.year, _startDate.month, _startDate.day, _startDate.hour, _startDate.minute, _startDate.second);
+        _endDateModel = DateModel(_endDate.year, _endDate.month, _endDate.day, _endDate.hour, _endDate.minute, _endDate.second);
+        WidgetsBinding.instance.addPostFrameCallback((_) => _animateTo());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: Center(
-        child: Container(
-          width: widget.width,
-          height: widget.height,
-          padding: widget.padding,
-          decoration: widget.pickerDecoration ??
-              BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              vGap(widget.vGap),
-              widget.startWidget,
-              vGap(widget.vGap),
-              _buildDatePicker(_startDateModel, true),
-              if (widget.endWidget != null) ...[
-                vGap(widget.vGap),
-                widget.endWidget!,
-                vGap(widget.vGap),
-                _buildDatePicker(_endDateModel, false),
-              ],
-              const Spacer(),
-              if (widget.action != null) widget.action!,
-              vGap(widget.vGap),
-            ],
-          ),
-        ),
+    return Container(
+      width: widget.width,
+      height: widget.height,
+      padding: widget.padding,
+      decoration: widget.pickerDecoration ?? BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          vGap(widget.vGap),
+          if (widget.startWidget != null) ...[
+           widget.startWidget!,
+            vGap(widget.vGap),
+          ],
+          _buildDatePicker(_startDateModel, true),
+          if (widget.endWidget != null) ...[
+            vGap(widget.vGap),
+            widget.endWidget!,
+            vGap(widget.vGap),
+            _buildDatePicker(_endDateModel, false),
+          ],
+          const Spacer(),
+          if (widget.action != null) widget.action!,
+          vGap(widget.vGap),
+        ],
       ),
     );
   }
@@ -487,7 +836,7 @@ class _DatePickerState extends State<DatePicker> {
         return _buildPickerColumn(
           controller:
               isStart ? startYearScrollController : endYearScrollController,
-          itemCount: widget.needYear,
+          itemCount: widget.totalYears,
           itemBuilder: (index) => _startYear + index,
           onSelectedItemChanged: (index) {
             setState(() {
@@ -551,7 +900,8 @@ class _DatePickerState extends State<DatePicker> {
           itemCount: 60,
           itemBuilder: (index) => index,
           onSelectedItemChanged: (index) {
-            dateModel.minute = index;
+            // Bug fix: was setting dateModel.minute, should be dateModel.second
+            dateModel.second = index;
           },
           type: type,
         );
@@ -594,32 +944,22 @@ class _DatePickerState extends State<DatePicker> {
       final controller =
           isStart ? startDayScrollController : endDayScrollController;
       if (controller.hasClients) {
-        controller.jumpToItem(maxDay - 1);
+         // Animate to the new valid day instead of jumping
+        controller.animateToItem(maxDay - 1, duration: widget.duration, curve: widget.curve);
       }
     }
   }
 
   int _getMonthDay(int year, int month) {
+    if (month < 1 || month > 12) return 31; // Should not happen with current setup
     if (month == 2) {
       if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
         return 29;
       }
       return 28;
     }
-    const daysInMonth = <int>[
-      0,
-      31,
-      28,
-      31,
-      30,
-      31,
-      30,
-      31,
-      31,
-      30,
-      31,
-      30,
-      31
+    const daysInMonth = <int>[ // Index 0 is unused, 1 for Jan, etc.
+      0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     ];
     return daysInMonth[month];
   }
@@ -631,10 +971,10 @@ class DateModel {
   int day;
   int hour;
   int minute;
-  int second;
+  int second; // Added second
 
   DateModel(
-      this.year, this.month, this.day, this.hour, this.minute, this.second);
+      this.year, this.month, this.day, this.hour, this.minute, this.second); // Added second
 
   Map<String, dynamic> toJson() {
     return {
@@ -643,12 +983,14 @@ class DateModel {
       "day": day,
       "hour": hour,
       "minute": minute,
-      "second": second,
+      "second": second, // Added second
     };
   }
 }
 
 class DateController {
+
+   DateController();
   _DatePickerState? _state;
 
   DateTime? getStartDate() {
@@ -666,4 +1008,71 @@ class DateController {
   void dispose() {
     _state = null;
   }
+}
+
+class DatePickerStrings {
+  final String year;
+  final String month;
+  final String day;
+  final String hour;
+  final String minute;
+  final String second;
+  final String startDate;
+  final String endDate;
+  final String confirm;
+
+  const DatePickerStrings({
+    required this.year,
+    required this.month,
+    required this.day,
+    required this.hour,
+    required this.minute,
+    required this.second,
+    required this.startDate,
+    required this.endDate,
+    required this.confirm,
+  });
+
+  factory DatePickerStrings.fromLocale(Locale locale) {
+    switch (locale.languageCode) {
+      case 'zh':
+        return const DatePickerStrings.zh();
+      case 'en':
+      default:
+        return const DatePickerStrings.en();
+    }
+  }
+
+  // 中文
+  const factory DatePickerStrings.zh() = _DatePickerStringsZh;
+  // 英文
+  const factory DatePickerStrings.en() = _DatePickerStringsEn;
+}
+
+// Chinese strings.
+class _DatePickerStringsZh implements DatePickerStrings {
+  const _DatePickerStringsZh();
+  @override String get year => '年';
+  @override String get month => '月';
+  @override String get day => '日';
+  @override String get hour => '时';
+  @override String get minute => '分';
+  @override String get second => '秒';
+  @override String get startDate => '开始日期：';
+  @override String get endDate => '结束日期：';
+  @override String get confirm => '确定';
+}
+
+//  English strings.
+class _DatePickerStringsEn implements DatePickerStrings {
+  const _DatePickerStringsEn();
+  @override String get year => 'Year';
+  @override String get month => 'Month';
+  @override String get day => 'Day';
+  @override String get hour => 'Hour';
+  @override String get minute => 'Minute';
+  @override String get second => 'Second';
+  @override String get startDate => 'Start Date:';
+  @override String get endDate => 'End Date:';
+  @override String get confirm => 'Confirm';
 }
