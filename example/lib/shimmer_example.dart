@@ -35,7 +35,6 @@ class _ShimmerLoadingExampleState extends State<ShimmerLoadingExample> {
           SelectionMenu(
               popWidth: 200,
               popHeight: 160,
-              barrierColor: Colors.black.withOpacity(0.5),
               buttonBuilder: (show) {
                 return Container(
                   width: 200,
@@ -50,38 +49,54 @@ class _ShimmerLoadingExampleState extends State<ShimmerLoadingExample> {
                 );
               },
               selectorBuilder: (context) {
-                return Container(
+                return Bubble(
+                  radius: 12,
+                  arrowWidth: 20,
+                  arrowHeight: 12,
+                  direction: BubbleArrowDirection.top,
+                  arrowShape: BubbleArrowShape.triangle,
+                  arrowPositionPercent: 0.3,
+                  arrowAdaptive: true,
+                  clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
+                    gradient: const LinearGradient(colors: [Colors.blue, Colors.purple]),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.black12, width: 1),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(2, 2)),
+                    ],
                   ),
-                  child: ListView.separated(
-                    itemCount: dataList.length,
-                    itemBuilder: (context, index) {
-                      final item = dataList[index];
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            currentType = item["type"];
-                            Navigator.pop(context);
-                          });
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListView.separated(
+                        itemCount: dataList.length,
+                        itemBuilder: (context, index) {
+                          final item = dataList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                currentType = item["type"];
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              height: 35,
+                              width: 300,
+                              alignment: Alignment.center,
+                              child: Text(
+                                item["title"],
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                              ),
+                            ),
+                          );
                         },
-                        child: Container(
-                          height: 35,
-                          alignment: Alignment.center,
-                          child: Text(
-                            item["title"],
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.black),
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Divider();
-                    },
-                  ),
-                );
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider();
+                        },
+                      ),
+                    ),
+                  );
               }),
           CustomSwitch(
               isOpen: isLoading,

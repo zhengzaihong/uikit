@@ -1,357 +1,354 @@
-import 'dart:math';
+import 'dart:math' show max, min;
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/bubble/bubble_arrow_direction.dart';
 
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
 /// create_date: 2022/6/16
 /// create_time: 9:19
-/// describe: 气泡组件(需要固定宽高，通常用于背景)
-///
-class Bubble extends StatefulWidget {
-  // 尖角位置
-  final BubbleArrowDirection position;
+/// describe: 气泡组件
+/// 箭头支持渐变、边框、阴影 → 箭头和气泡保持一致的视觉效果。
+/// 可配置 arrowShape → 支持三角形 / 圆角三角形 / 弧形等扩展。
+/// 箭头大小自适应 → 可选开关 arrowAdaptive，自动缩放避免超过边界或圆角。
+/// 支持 clipBehavior → 控制是否裁剪气泡内容。
+/// 支持 BoxDecoration（颜色、渐变、圆角、阴影、边框）。
 
-  // 尖角高度
-  final double arrHeight;
+/// 箭头方向
+enum BubbleArrowDirection { left, top, right, bottom }
 
-  // 尖角角度
-  final double arrAngle;
-
-  // 圆角半径
-  final double radius;
-
-  // 宽度
-  final double width;
-
-  // 高度
-  final double height;
-
-  // 边距
-  final double length;
-
-  // 颜色
-  final Color color;
-
-  // 边框颜色
-  final Color borderColor;
-
-  // 边框宽度
-  final double strokeWidth;
-
-  // 填充样式
-  final PaintingStyle style;
-
-  // 子 Widget
-  final Widget? child;
-
-  // 子 Widget 与起泡间距
-  final double innerPadding;
-
-  const Bubble({
-    required this.width,
-    required this.height,
-    required this.color,
-    required this.position,
-    this.length = 1,
-    this.arrHeight = 12.0,
-    this.arrAngle = 60.0,
-    this.radius = 10.0,
-    this.strokeWidth = 4.0,
-    this.style = PaintingStyle.fill,
-    this.borderColor = Colors.transparent,
-    this.child,
-    this.innerPadding = 6.0,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<Bubble> createState() => _BubbleState();
+/// 箭头形状
+enum BubbleArrowShape {
+  triangle,      // 普通三角形
+  rounded,       // 圆角三角
+  curved,        // 弧形
 }
 
-class _BubbleState extends State<Bubble> {
-  late double length;
-  late double radius;
-  late double arrHeight;
-  late double arrAngle;
-  late Color borderColor;
-  late double innerPadding;
+/// 气泡组件
+class Bubble extends StatelessWidget {
+  final Widget child;
+  final double radius;
+  final double arrowWidth;
+  final double arrowHeight;
+  final double arrowPositionPercent;
+  final BubbleArrowDirection direction;
+  final BubbleArrowShape arrowShape;
+  final bool arrowAdaptive; // 箭头大小是否自适应
+  final BoxDecoration? decoration;
+  final Clip clipBehavior;
 
-  @override
-  void initState() {
-    super.initState();
-    length = widget.length;
-    radius = widget.radius;
-    arrHeight = widget.arrHeight;
-    arrAngle = widget.arrAngle;
-    borderColor = widget.borderColor;
-    innerPadding = widget.innerPadding;
-
-    if (widget.style == PaintingStyle.stroke) {
-      borderColor = widget.color;
-    }
-    if (widget.arrAngle < 0.0 || widget.arrAngle >= 180.0) {
-      arrAngle = 60.0;
-    }
-    if (widget.arrHeight < 0.0) {
-      arrHeight = 0.0;
-    }
-    if (widget.radius < 0.0 ||
-        widget.radius > widget.width * 0.5 ||
-        widget.radius > widget.height * 0.5) {
-      radius = 0.0;
-    }
-    if (widget.position == BubbleArrowDirection.top ||
-        widget.position == BubbleArrowDirection.bottom) {
-      if (widget.length < 0.0 ||
-          widget.length >= widget.width - 2 * widget.radius) {
-        length = widget.width * 0.5 -
-            widget.arrHeight * tan(_angle(widget.arrAngle * 0.5)) -
-            widget.radius;
-      }
-    } else {
-      if (widget.length < 0.0 ||
-          widget.length >= widget.height - 2 * widget.radius) {
-        length = widget.height * 0.5 -
-            widget.arrHeight * tan(_angle(widget.arrAngle * 0.5)) -
-            widget.radius;
-      }
-    }
-    if (widget.innerPadding < 0.0 ||
-        widget.innerPadding >= widget.width * 0.5 ||
-        widget.innerPadding >= widget.height * 0.5) {
-      innerPadding = 2.0;
-    }
-  }
+  const Bubble({
+    super.key,
+    required this.child,
+    this.radius = 8,
+    this.arrowWidth = 12,
+    this.arrowHeight = 8,
+    this.arrowPositionPercent = 0.5,
+    this.direction = BubbleArrowDirection.top,
+    this.arrowShape = BubbleArrowShape.triangle,
+    this.arrowAdaptive = true,
+    this.decoration,
+    this.clipBehavior = Clip.none,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Widget bubbleWidget;
-    if (widget.style == PaintingStyle.fill) {
-      bubbleWidget = SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: Stack(children: <Widget>[
-            CustomPaint(
-                painter: BubbleCanvas(
-                    context,
-                    widget.width,
-                    widget.height,
-                    widget.color,
-                    widget.position,
-                    arrHeight,
-                    arrAngle,
-                    radius,
-                    widget.strokeWidth,
-                    widget.style,
-                    length)),
-            _paddingWidget()
-          ]));
-    } else {
-      bubbleWidget = SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: Stack(children: <Widget>[
-            CustomPaint(
-                painter: BubbleCanvas(
-                    context,
-                    widget.width,
-                    widget.height,
-                    widget.color,
-                    widget.position,
-                    arrHeight,
-                    arrAngle,
-                    radius,
-                    widget.strokeWidth,
-                    PaintingStyle.fill,
-                    length)),
-            CustomPaint(
-                painter: BubbleCanvas(
-                    context,
-                    widget.width,
-                    widget.height,
-                    borderColor,
-                    widget.position,
-                    arrHeight,
-                    arrAngle,
-                    radius,
-                    widget.strokeWidth,
-                    widget.style,
-                    length)),
-            _paddingWidget()
-          ]));
-    }
-    return bubbleWidget;
-  }
-
-  Widget _paddingWidget() {
-    return Padding(
-        padding: EdgeInsets.only(
-            top: (widget.position == BubbleArrowDirection.top)
-                ? arrHeight + innerPadding
-                : innerPadding,
-            right: (widget.position == BubbleArrowDirection.right)
-                ? arrHeight + innerPadding
-                : innerPadding,
-            bottom: (widget.position == BubbleArrowDirection.bottom)
-                ? arrHeight + innerPadding
-                : innerPadding,
-            left: (widget.position == BubbleArrowDirection.left)
-                ? arrHeight + innerPadding
-                : innerPadding),
-        child: Center(child: widget.child));
+    return CustomPaint(
+      painter: _BubblePainter(
+        radius: radius,
+        arrowWidth: arrowWidth,
+        arrowHeight: arrowHeight,
+        arrowPositionPercent: arrowPositionPercent,
+        direction: direction,
+        arrowShape: arrowShape,
+        arrowAdaptive: arrowAdaptive,
+        decoration: decoration,
+      ),
+      child: ClipPath(
+        clipper: clipBehavior == Clip.none
+            ? null
+            : _BubbleClipper(
+          radius: radius,
+          arrowWidth: arrowWidth,
+          arrowHeight: arrowHeight,
+          arrowPositionPercent: arrowPositionPercent,
+          direction: direction,
+          arrowShape: arrowShape,
+          arrowAdaptive: arrowAdaptive,
+        ),
+        clipBehavior: clipBehavior,
+        child: Padding(
+          padding: EdgeInsets.all(arrowHeight),
+          child: child,
+        ),
+      ),
+    );
   }
 }
 
-class BubbleCanvas extends CustomPainter {
-  BuildContext context;
-  BubbleArrowDirection position;
-  double arrHeight;
-  double arrAngle;
-  double radius;
-  double width;
-  double height;
-  double length;
-  Color color;
-  double strokeWidth;
-  PaintingStyle style;
+/// 绘制气泡
+class _BubblePainter extends CustomPainter {
+  final double radius;
+  final double arrowWidth;
+  final double arrowHeight;
+  final double arrowPositionPercent;
+  final BubbleArrowDirection direction;
+  final BubbleArrowShape arrowShape;
+  final bool arrowAdaptive;
+  final BoxDecoration? decoration;
 
-  BubbleCanvas(
-      this.context,
-      this.width,
-      this.height,
-      this.color,
-      this.position,
-      this.arrHeight,
-      this.arrAngle,
-      this.radius,
-      this.strokeWidth,
-      this.style,
-      this.length);
+  _BubblePainter({
+    required this.radius,
+    required this.arrowWidth,
+    required this.arrowHeight,
+    required this.arrowPositionPercent,
+    required this.direction,
+    required this.arrowShape,
+    required this.arrowAdaptive,
+    required this.decoration,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    Path path = Path();
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.left)
-                    ? radius + arrHeight
-                    : radius,
-                (position == BubbleArrowDirection.top)
-                    ? radius + arrHeight
-                    : radius),
-            radius: radius),
-        pi,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.top) {
-      path.lineTo(length + radius, arrHeight);
-      path.lineTo(
-          length + radius + arrHeight * tan(_angle(arrAngle * 0.5)), 0.0);
-      path.lineTo(length + radius + arrHeight * tan(_angle(arrAngle * 0.5)) * 2,
-          arrHeight);
+    if (decoration == null) return;
+
+    final path = _buildBubblePath(size);
+
+    // === 阴影 ===
+    if (decoration!.boxShadow != null) {
+      for (final shadow in decoration!.boxShadow!) {
+        final shadowPaint = Paint()
+          ..color = shadow.color
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, shadow.blurRadius);
+        canvas.save();
+        canvas.translate(shadow.offset.dx, shadow.offset.dy);
+        canvas.drawPath(path, shadowPaint);
+        canvas.restore();
+      }
     }
-    path.lineTo(
-        (position == BubbleArrowDirection.right)
-            ? width - radius - arrHeight
-            : width - radius,
-        (position == BubbleArrowDirection.top) ? arrHeight : 0.0);
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.right)
-                    ? width - radius - arrHeight
-                    : width - radius,
-                (position == BubbleArrowDirection.top)
-                    ? radius + arrHeight
-                    : radius),
-            radius: radius),
-        -pi * 0.5,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.right) {
-      path.lineTo(width - arrHeight, length + radius);
-      path.lineTo(
-          width, length + radius + arrHeight * tan(_angle(arrAngle * 0.5)));
-      path.lineTo(width - arrHeight,
-          length + radius + arrHeight * tan(_angle(arrAngle * 0.5)) * 2);
+
+    // === 填充 ===
+    if (decoration!.gradient != null) {
+      final rect = Offset.zero & size;
+      final paint = Paint()
+        ..shader = decoration!.gradient!.createShader(rect);
+      canvas.drawPath(path, paint);
+    } else if (decoration!.color != null) {
+      final paint = Paint()..color = decoration!.color!;
+      canvas.drawPath(path, paint);
     }
-    path.lineTo(
-        (position == BubbleArrowDirection.right) ? width - arrHeight : width,
-        (position == BubbleArrowDirection.bottom)
-            ? height - radius - arrHeight
-            : height - radius);
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.right)
-                    ? width - radius - arrHeight
-                    : width - radius,
-                (position == BubbleArrowDirection.bottom)
-                    ? height - radius - arrHeight
-                    : height - radius),
-            radius: radius),
-        pi * 0,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.bottom) {
-      path.lineTo(width - radius - length, height - arrHeight);
-      path.lineTo(
-          width - radius - length - arrHeight * tan(_angle(arrAngle * 0.5)),
-          height);
-      path.lineTo(
-          width - radius - length - arrHeight * tan(_angle(arrAngle * 0.5)) * 2,
-          height - arrHeight);
+
+    // === 边框 ===
+    if (decoration!.border != null) {
+      final border = decoration!.border as Border?;
+      if (border != null) {
+        final paint = Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = border.top.width
+          ..color = border.top.color;
+        canvas.drawPath(path, paint);
+      }
     }
-    path.lineTo(
-        (position == BubbleArrowDirection.left) ? radius + arrHeight : radius,
-        (position == BubbleArrowDirection.bottom)
-            ? height - arrHeight
-            : height);
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.left)
-                    ? radius + arrHeight
-                    : radius,
-                (position == BubbleArrowDirection.bottom)
-                    ? height - radius - arrHeight
-                    : height - radius),
-            radius: radius),
-        pi * 0.5,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.left) {
-      path.lineTo(arrHeight, height - radius - length);
-      path.lineTo(0.0,
-          height - radius - length - arrHeight * tan(_angle(arrAngle * 0.5)));
-      path.lineTo(
-          arrHeight,
-          height -
-              radius -
-              length -
-              arrHeight * tan(_angle(arrAngle * 0.5)) * 2);
+  }
+
+  Path _buildBubblePath(Size size) {
+    final path = Path();
+
+    final width = size.width;
+    final height = size.height;
+
+    final left = direction == BubbleArrowDirection.left ? arrowHeight : 0.0;
+    final top = direction == BubbleArrowDirection.top ? arrowHeight : 0.0;
+    final right =
+        width - (direction == BubbleArrowDirection.right ? arrowHeight : 0);
+    final bottom =
+        height - (direction == BubbleArrowDirection.bottom ? arrowHeight : 0);
+
+    final innerWidth = right - left;
+    final innerHeight = bottom - top;
+
+    // final r = radius.clamp(0.0, min(innerWidth / 2.0, innerHeight / 2.0));
+    //安全计算圆角上界，避免 clamp 上界 < 0 导致异常
+    final double maxAllowedRadius = max(0.0, min(innerWidth / 2.0, innerHeight / 2.0));
+    final double r = radius.clamp(0.0, maxAllowedRadius);
+
+    // 箭头位置
+    double arrowPos;
+    if (direction == BubbleArrowDirection.top ||
+        direction == BubbleArrowDirection.bottom) {
+      arrowPos = left + arrowPositionPercent.clamp(0.0, 1.0) * innerWidth;
+    } else {
+      arrowPos = top + arrowPositionPercent.clamp(0.0, 1.0) * innerHeight;
     }
-    path.lineTo((position == BubbleArrowDirection.left) ? arrHeight : 0.0,
-        (position == BubbleArrowDirection.top) ? radius + arrHeight : radius);
+
+    if (arrowAdaptive) {
+      if (direction == BubbleArrowDirection.top ||
+          direction == BubbleArrowDirection.bottom) {
+        arrowPos = arrowPos.clamp(left + r + arrowWidth / 2,
+            right - r - arrowWidth / 2);
+      } else {
+        arrowPos = arrowPos.clamp(top + r + arrowWidth / 2,
+            bottom - r - arrowWidth / 2);
+      }
+    }
+
+    // --- 开始绘制 ---
+    path.moveTo(left + r, top);
+
+    // 顶部
+    if (direction == BubbleArrowDirection.top) {
+      _drawArrow(path, arrowPos, top, direction);
+    }
+    path.lineTo(right - r, top);
+    path.quadraticBezierTo(right, top, right, top + r);
+
+    // 右侧
+    if (direction == BubbleArrowDirection.right) {
+      _drawArrow(path, arrowPos, right, direction);
+    }
+    path.lineTo(right, bottom - r);
+    path.quadraticBezierTo(right, bottom, right - r, bottom);
+
+    // 底部
+    if (direction == BubbleArrowDirection.bottom) {
+      _drawArrow(path, arrowPos, bottom, direction);
+    }
+    path.lineTo(left + r, bottom);
+    path.quadraticBezierTo(left, bottom, left, bottom - r);
+
+    // 左侧
+    if (direction == BubbleArrowDirection.left) {
+      _drawArrow(path, arrowPos, left, direction);
+    }
+    path.lineTo(left, top + r);
+    path.quadraticBezierTo(left, top, left + r, top);
     path.close();
-    canvas.drawPath(
-        path,
-        Paint()
-          ..color = color
-          ..style = style
-          ..strokeCap = StrokeCap.round
-          ..strokeWidth = strokeWidth);
+
+    return path;
+  }
+
+  void _drawArrow(Path path, double arrowPos, double edge, BubbleArrowDirection dir) {
+    switch (dir) {
+      case BubbleArrowDirection.top:
+        if (arrowShape == BubbleArrowShape.triangle) {
+          path.lineTo(arrowPos - arrowWidth / 2, edge);
+          path.lineTo(arrowPos, 0);
+          path.lineTo(arrowPos + arrowWidth / 2, edge);
+        } else if (arrowShape == BubbleArrowShape.rounded) {
+          path.quadraticBezierTo(
+              arrowPos - arrowWidth / 2, edge, arrowPos, 0);
+          path.quadraticBezierTo(
+              arrowPos + arrowWidth / 2, edge, arrowPos + arrowWidth / 2, edge);
+        } else if (arrowShape == BubbleArrowShape.curved) {
+          path.arcToPoint(
+            Offset(arrowPos + arrowWidth / 2, edge),
+            radius: Radius.circular(arrowHeight),
+            clockwise: false,
+          );
+        }
+        break;
+      case BubbleArrowDirection.bottom:
+        if (arrowShape == BubbleArrowShape.triangle) {
+          path.lineTo(arrowPos + arrowWidth / 2, edge);
+          path.lineTo(arrowPos, edge + arrowHeight);
+          path.lineTo(arrowPos - arrowWidth / 2, edge);
+        } else if (arrowShape == BubbleArrowShape.rounded) {
+          path.quadraticBezierTo(
+              arrowPos + arrowWidth / 2, edge, arrowPos, edge + arrowHeight);
+          path.quadraticBezierTo(
+              arrowPos - arrowWidth / 2, edge, arrowPos - arrowWidth / 2, edge);
+        } else if (arrowShape == BubbleArrowShape.curved) {
+          path.arcToPoint(
+            Offset(arrowPos - arrowWidth / 2, edge),
+            radius: Radius.circular(arrowHeight),
+            clockwise: false,
+          );
+        }
+        break;
+      case BubbleArrowDirection.left:
+        if (arrowShape == BubbleArrowShape.triangle) {
+          path.lineTo(edge, arrowPos + arrowWidth / 2);
+          path.lineTo(0, arrowPos);
+          path.lineTo(edge, arrowPos - arrowWidth / 2);
+        } else if (arrowShape == BubbleArrowShape.rounded) {
+          path.quadraticBezierTo(
+              edge, arrowPos + arrowWidth / 2, 0, arrowPos);
+          path.quadraticBezierTo(
+              edge, arrowPos - arrowWidth / 2, edge, arrowPos - arrowWidth / 2);
+        } else if (arrowShape == BubbleArrowShape.curved) {
+          path.arcToPoint(
+            Offset(edge, arrowPos - arrowWidth / 2),
+            radius: Radius.circular(arrowHeight),
+            clockwise: false,
+          );
+        }
+        break;
+      case BubbleArrowDirection.right:
+        if (arrowShape == BubbleArrowShape.triangle) {
+          path.lineTo(edge, arrowPos - arrowWidth / 2);
+          path.lineTo(edge + arrowHeight, arrowPos);
+          path.lineTo(edge, arrowPos + arrowWidth / 2);
+        } else if (arrowShape == BubbleArrowShape.rounded) {
+          path.quadraticBezierTo(
+              edge, arrowPos - arrowWidth / 2, edge + arrowHeight, arrowPos);
+          path.quadraticBezierTo(
+              edge, arrowPos + arrowWidth / 2, edge, arrowPos + arrowWidth / 2);
+        } else if (arrowShape == BubbleArrowShape.curved) {
+          path.arcToPoint(
+            Offset(edge, arrowPos + arrowWidth / 2),
+            radius: Radius.circular(arrowHeight),
+            clockwise: false,
+          );
+        }
+        break;
+    }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(covariant _BubblePainter oldDelegate) =>
+      oldDelegate.radius != radius ||
+          oldDelegate.arrowWidth != arrowWidth ||
+          oldDelegate.arrowHeight != arrowHeight ||
+          oldDelegate.arrowPositionPercent != arrowPositionPercent ||
+          oldDelegate.direction != direction ||
+          oldDelegate.arrowShape != arrowShape ||
+          oldDelegate.arrowAdaptive != arrowAdaptive ||
+          oldDelegate.decoration != decoration;
 }
 
-double _angle(angle) {
-  return angle * pi / 180;
+/// ClipPath 用于裁剪气泡内部
+class _BubbleClipper extends CustomClipper<Path> {
+  final double radius;
+  final double arrowWidth;
+  final double arrowHeight;
+  final double arrowPositionPercent;
+  final BubbleArrowDirection direction;
+  final BubbleArrowShape arrowShape;
+  final bool arrowAdaptive;
+
+  _BubbleClipper({
+    required this.radius,
+    required this.arrowWidth,
+    required this.arrowHeight,
+    required this.arrowPositionPercent,
+    required this.direction,
+    required this.arrowShape,
+    required this.arrowAdaptive,
+  });
+
+  @override
+  Path getClip(Size size) {
+    return _BubblePainter(
+      radius: radius,
+      arrowWidth: arrowWidth,
+      arrowHeight: arrowHeight,
+      arrowPositionPercent: arrowPositionPercent,
+      direction: direction,
+      arrowShape: arrowShape,
+      arrowAdaptive: arrowAdaptive,
+      decoration: const BoxDecoration(color: Colors.transparent),
+    )._buildBubblePath(size);
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }

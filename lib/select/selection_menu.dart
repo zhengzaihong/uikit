@@ -337,24 +337,6 @@ class SelectionMenuState extends State<SelectionMenu>{
       ),
     ):widget.layoutSelectPop!.call(button,overlay);
 
-    // RelativeRect position = widget.layoutSelectPop==null? RelativeRect.fromRect(
-    //   Rect.fromPoints(
-    //     button.localToGlobal(offset, ancestor: overlay),
-    //     button.localToGlobal( offset, ancestor: overlay),
-    //     // button.localToGlobal(button.size.bottomLeft(Offset.zero) + offset, ancestor: overlay),
-    //   ),
-    //   widget.alignType == AlignType.right?Rect.fromPoints(
-    //     Offset(-(button.size.width-widget.popWidth), 0),
-    //     Offset(widget.popWidth, 0),
-    //   ): widget.alignType == AlignType.center?Rect.fromPoints(
-    //     Offset(centerX, 0),
-    //     Offset(widget.popWidth, 0),
-    //   ): Rect.fromPoints(
-    //     const Offset(0, 0),
-    //     Offset(widget.popWidth, 0),
-    //   ),
-    // ):widget.layoutSelectPop!.call(button,overlay);
-
     Navigator.of(context).push(_CustomPopupRoute(
         position: position,
         menuState: this,

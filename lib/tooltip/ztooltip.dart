@@ -244,18 +244,18 @@ class ZTooltipState extends State<ZTooltip> {
       builder: (context) {
         final child = widget.enableBubble
             ? Bubble(
-                width: widget.width ?? 100,
-                height: widget.height ?? 50,
-                length: widget.length,
-                radius: widget.arrowRadius,
-                color: widget.color ?? Colors.white,
-                position: widget.position ?? BubbleArrowDirection.top,
-                arrAngle: widget.arrAngle,
-                arrHeight: widget.arrHeight,
-                borderColor: widget.borderColor,
-                strokeWidth: widget.strokeWidth,
-                style: widget.style,
-                innerPadding: widget.innerPadding,
+                // width: widget.width ?? 100,
+                // height: widget.height ?? 50,
+                // length: widget.length,
+                // radius: widget.arrowRadius,
+                // color: widget.color ?? Colors.white,
+                // position: widget.position ?? BubbleArrowDirection.top,
+                // arrAngle: widget.arrAngle,
+                // arrHeight: widget.arrHeight,
+                // // borderColor: widget.borderColor,
+                // strokeWidth: widget.strokeWidth,
+                // style: widget.style,
+                // innerPadding: widget.innerPadding,
                 child: widget.buildTip?.call() ?? const SizedBox())
             : widget.buildTip?.call() ?? const SizedBox();
 

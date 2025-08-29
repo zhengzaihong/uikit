@@ -178,13 +178,17 @@ class _ToastExampleState extends State<ToastExample> {
                            showTime: 3000,
                            buildToastPoint: (context,style){
                              return Positioned(
-                               child:const Bubble(
-                                 color: Colors.white,
-                                 width: 200,
-                                 height: 50,
-                                 length: 80,
-                                 position: BubbleArrowDirection.top,
-                                 child:Text("自定义位置Toast",style: TextStyle(color: Colors.redAccent,fontSize: 16)),
+                               child:Bubble(
+                                 arrowPositionPercent: 0.5,
+                                 decoration: BoxDecoration(
+                                   color: Colors.white,
+                                   borderRadius: BorderRadius.circular(12),
+                                   border: Border.all(color: Colors.black12, width: 1),
+                                   boxShadow: const [
+                                     BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(2, 2)),
+                                   ],
+                                 ),
+                                 child:const Text("自定义位置Toast",style: TextStyle(color: Colors.redAccent,fontSize: 16)),
                                ),
                                left: offset.dx, top: offset.dy+60,);
                            });
