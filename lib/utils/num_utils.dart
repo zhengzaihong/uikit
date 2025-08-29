@@ -45,7 +45,6 @@ extension NumExt on Object? {
   }
 
   //还原base64数字
-  //还原base64数字
   num base64toNum() {
     final bytes = base64.decode(toString());
     return String.fromCharCodes(bytes).toValue<num>();

@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikit_lib.dart';
 
 class ShimmerLoadingExample extends StatefulWidget {
-
   const ShimmerLoadingExample({Key? key}) : super(key: key);
 
   @override
@@ -11,193 +9,238 @@ class ShimmerLoadingExample extends StatefulWidget {
 }
 
 class _ShimmerLoadingExampleState extends State<ShimmerLoadingExample> {
-  final _shimmerGradient = const LinearGradient(
-    colors: [
-      Color(0xFFEBEBF4),
-      Color(0xFFF4F4F4),
-      Color(0xFFEBEBF4),
-    ],
-    stops: [
-      0.1,
-      0.3,
-      0.4,
-    ],
-    begin: Alignment(-1.0, -0.3),
-    end: Alignment(1.0, 0.3),
-    tileMode: TileMode.clamp,
-  );
-
-  bool _isLoading = true;
-
-  void _toggleLoading() {
-    setState(() {
-      _isLoading = !_isLoading;
-    });
-  }
+  bool isLoading = true;
+  var currentType = "1";
+  List<Map<String, dynamic>> dataList = [
+    {
+      "title": "垂直列表",
+      "type": "1",
+    },
+    {
+      "title": "网格布局",
+      "type": "2",
+    },
+    {
+      "title": "自定义占位",
+      "type": "3",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Shimmer(
-        linearGradient: _shimmerGradient,
-        child: ListView(
-          physics: _isLoading ? const NeverScrollableScrollPhysics() : null,
-          children: [
-            const SizedBox(height: 16),
-            _buildTopRowList(),
-            const SizedBox(height: 16),
-            _buildListItem(),
-            _buildListItem(),
-            _buildListItem(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _toggleLoading,
-        child: Icon(
-          _isLoading ? Icons.hourglass_full : Icons.hourglass_bottom,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTopRowList() {
-    return SizedBox(
-      height: 72,
-      child: ListView(
-        physics: _isLoading ? const NeverScrollableScrollPhysics() : null,
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        children: [
-          const SizedBox(width: 16),
-          _buildTopRowItem(),
-          _buildTopRowItem(),
-          _buildTopRowItem(),
-          _buildTopRowItem(),
-          _buildTopRowItem(),
-          _buildTopRowItem(),
+      appBar: AppBar(
+        title: const Text("Shimmer Demo"),
+        actions: [
+          SelectionMenu(
+              popWidth: 200,
+              popHeight: 160,
+              barrierColor: Colors.black.withOpacity(0.5),
+              buttonBuilder: (show) {
+                return Container(
+                  width: 200,
+                  height: 35,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.setAlpha(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text("示例加载"),
+                );
+              },
+              selectorBuilder: (context) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: ListView.separated(
+                    itemCount: dataList.length,
+                    itemBuilder: (context, index) {
+                      final item = dataList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            currentType = item["type"];
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Container(
+                          height: 35,
+                          alignment: Alignment.center,
+                          child: Text(
+                            item["title"],
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black),
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider();
+                    },
+                  ),
+                );
+              }),
+          CustomSwitch(
+              isOpen: isLoading,
+              isInnerStyle: true,
+              activeColor: Colors.red,
+              onChange: (v) {
+                setState(() {
+                  isLoading = v;
+                });
+              }),
+          hGap(16),
         ],
       ),
+      body: currentType == "1"
+          ? _buildShimmerList()
+          : currentType == "2"
+              ? _buildShimmerGrid()
+              : currentType == "3"
+                  ? _buildShimmerCustomPlaceHolder()
+                  : Container(),
     );
   }
 
-  Widget _buildTopRowItem() {
-    return ShimmerLoading(
-      isLoading: _isLoading,
-      child: const CircleListItem(),
-    );
-  }
-
-  Widget _buildListItem() {
-    return ShimmerLoading(
-      isLoading: _isLoading,
-      child: CardListItem(
-        isLoading: _isLoading,
-      ),
-    );
-  }
-}
-class CardListItem extends StatelessWidget {
-  const CardListItem({
-    required this.isLoading,
-    Key? key
-  }):super(key: key);
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildImage(),
-          const SizedBox(height: 16),
-          _buildText(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImage() {
-    return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.network(
-            'https://docs.flutter.dev/cookbook'
-                '/img-files/effects/split-check/Food1.jpg',
-            fit: BoxFit.cover,
+  Widget _buildShimmerList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("📄 文本段落示例", style: TextStyle(fontSize: 20)),
+        vGap(8),
+        AutoShimmerList(
+          isLoading: isLoading,
+          direction: ShimmerListDirection.vertical,
+          children: List.generate(
+            20,
+            (i) => Text("这是一段示例文本 $i", style: const TextStyle(fontSize: 16)),
           ),
         ),
-      ),
+      ],
     );
   }
 
-  Widget _buildText() {
-    if (isLoading) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            height: 24,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(16),
+  Widget _buildShimmerGrid() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("🖼️ 网格布局示例", style: TextStyle(fontSize: 20)),
+        vGap(8),
+        AutoShimmerList(
+          isLoading: isLoading,
+          direction: ShimmerListDirection.grid,
+          crossAxisCount: 10,
+          spacing: 20,
+          children: List.generate(
+            20,
+            (i) => Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: Text("网格 $i"),
             ),
           ),
-          const SizedBox(height: 16),
-          Container(
-            width: 250,
-            height: 24,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildShimmerCustomPlaceHolder() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("⚙️ 自定义占位示例", style: TextStyle(fontSize: 20)),
+        vGap(8),
+        Shimmer(
+          isLoading: isLoading,
+          builder: (context) => Container(
+            height: 80,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Container(
+                      width: 54,
+                      height: 54,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: ClipOval(
+                        child: Image.network(
+                          'https://docs.flutter.dev/cookbook'
+                          '/img-files/effects/split-check/Avatar1.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("这是一段标题内容",
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Text("很长很长的描述内容很长很长的描述内容很长很长的描述内容很长很长的描述内容很长很长的描述内容",
+                        style: TextStyle(fontSize: 12, color: Colors.black)),
+                  ],
+                )
+              ],
             ),
           ),
-        ],
-      );
-    } else {
-      return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
-              'eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        ),
-      );
-    }
-  }
-}
-
-class CircleListItem extends StatelessWidget {
-  const CircleListItem({Key? key}):super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Container(
-        width: 54,
-        height: 54,
-        decoration: const BoxDecoration(
-          color: Colors.black,
-          shape: BoxShape.circle,
-        ),
-        child: ClipOval(
-          child: Image.network(
-            'https://docs.flutter.dev/cookbook'
-                '/img-files/effects/split-check/Avatar1.jpg',
-            fit: BoxFit.cover,
+          placeholderBuilder: (context) => Container(
+            height: 80,
+            alignment: Alignment.center,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: Container(
+                      width: 54,
+                      height: 54,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        shape: BoxShape.circle,
+                      ),
+                    )),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 240,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Container(
+                      width: 350,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

@@ -43,8 +43,6 @@ class DatePicker extends StatefulWidget {
   //picker的高度
   final double height;
 
-  //picker的宽度
-  final double width;
 
   //是否可循环滚动
   final bool scrollLoop;
@@ -135,7 +133,6 @@ class DatePicker extends StatefulWidget {
     this.initEndDate,
     this.pickerDecoration,
     this.height = 500,
-    this.width = 400,
     this.scrollLoop = true,
     this.padding,
     this.vGap = 16,
@@ -205,7 +202,11 @@ class DatePicker extends StatefulWidget {
       DateType.MINUTE,
       DateType.SECOND
     ],
-    DatePickerStrings? datePickerStrings, 
+    DatePickerStrings? datePickerStrings,
+    Widget? startTitle,
+    Widget? endTitle,
+    TextStyle? itemTextStyle,
+    Widget? actions,
     Function(DateTime? startDate, DateTime? endDate)? callBack,
   }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
@@ -213,102 +214,106 @@ class DatePicker extends StatefulWidget {
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (context) {
-        return Center(child: DatePicker(
-          controller: controller,
-          pickerDecoration: pickerDecoration,
+        return Center(child:
+        SizedBox(
           width: width,
-          height: height,
-          totalYears: totalYears,
-          initStartDate: initStartDate,
-          initEndDate: initEndDate,
-          forwardYears: forwardYears,
-          vGap: vGap,
-          pickerVisibilityHeight: pickerVisibilityHeight,
-          itemExtent: itemExtent,
-          itemWidth: itemWidth,
-          maskHeight: maskHeight,
-          maskRadius: maskRadius,
-          maskColor: maskColor,
-          diameterRatio: diameterRatio,
-          backgroundColor: backgroundColor,
-          offAxisFraction: offAxisFraction,
-          useMagnifier: useMagnifier,
-          magnification: magnification,
-          squeeze: squeeze,
-          selectionOverlay: selectionOverlay,
-          duration: duration,
-          curve: curve,
-          showColumn: showColumn,
-          startWidget: Padding( // Using strings.startDate
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(strings.startDate,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold)),
-          ),
-          endWidget: Padding( // Using strings.endDate
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(strings.endDate,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold)),
-          ),
-          itemBuilder: (type, value) {
-            String label = '';
-            switch (type) { // Using strings for year, month, day, etc.
-              case DateType.YEAR:
-                label = strings.year;
-                break;
-              case DateType.MONTH:
-                label = strings.month;
-                break;
-              case DateType.DAY:
-                label = strings.day;
-                break;
-              case DateType.HOUR:
-                label = strings.hour;
-                break;
-              case DateType.MINUTE:
-                label = strings.minute;
-                break;
-              case DateType.SECOND:
-                label = strings.second;
-                break;
-            }
-            return Center(
-              child: Text(
-                "$value$label",
-                style: const TextStyle(
-                    color: Color.fromRGBO(21, 21, 21, 1),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-            );
-          },
-          action: GestureDetector(
-            onTap: () {
-              final startDate = controller.getStartDate();
-              final endDate = controller.getEndDate();
-              callBack?.call(startDate, endDate);
-              Navigator.pop(context, [startDate, endDate]);
-            },
-            child: Center(
-              child: Container(
-                margin: const EdgeInsets.only(top: 30),
-                padding:
-                const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.lightBlueAccent,
-                  borderRadius: BorderRadius.circular(20),
+          child: DatePicker(
+            controller: controller,
+            pickerDecoration: pickerDecoration,
+            height: height,
+            totalYears: totalYears,
+            initStartDate: initStartDate,
+            initEndDate: initEndDate,
+            forwardYears: forwardYears,
+            vGap: vGap,
+            pickerVisibilityHeight: pickerVisibilityHeight,
+            itemExtent: itemExtent,
+            itemWidth: itemWidth,
+            maskHeight: maskHeight,
+            maskRadius: maskRadius,
+            maskColor: maskColor,
+            diameterRatio: diameterRatio,
+            backgroundColor: backgroundColor,
+            offAxisFraction: offAxisFraction,
+            useMagnifier: useMagnifier,
+            magnification: magnification,
+            squeeze: squeeze,
+            selectionOverlay: selectionOverlay,
+            duration: duration,
+            curve: curve,
+            showColumn: showColumn,
+            startWidget:startTitle?? Padding( // Using strings.startDate
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(strings.startDate,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
+            ),
+            endWidget: endTitle?? Padding( // Using strings.endDate
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(strings.endDate,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
+            ),
+            itemBuilder: (type, value) {
+              String label = '';
+              switch (type) { // Using strings for year, month, day, etc.
+                case DateType.YEAR:
+                  label = strings.year;
+                  break;
+                case DateType.MONTH:
+                  label = strings.month;
+                  break;
+                case DateType.DAY:
+                  label = strings.day;
+                  break;
+                case DateType.HOUR:
+                  label = strings.hour;
+                  break;
+                case DateType.MINUTE:
+                  label = strings.minute;
+                  break;
+                case DateType.SECOND:
+                  label = strings.second;
+                  break;
+              }
+              return Center(
+                child: Text(
+                  "$value$label",
+                  style:itemTextStyle?? const TextStyle(
+                      color: Color.fromRGBO(21, 21, 21, 1),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
-                child: Text(strings.confirm, // Using strings.confirm
-                    style: const TextStyle(color: Colors.white, fontSize: 16)),
+              );
+            },
+            action: actions??GestureDetector(
+              onTap: () {
+                final startDate = controller.getStartDate();
+                final endDate = controller.getEndDate();
+                callBack?.call(startDate, endDate);
+                Navigator.pop(context, [startDate, endDate]);
+              },
+              child: Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlueAccent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(strings.confirm, // Using strings.confirm
+                      style: const TextStyle(color: Colors.white, fontSize: 16)),
+                ),
               ),
             ),
           ),
-        ));
+        )
+        );
       },
     );
   }
@@ -318,7 +323,6 @@ class DatePicker extends StatefulWidget {
         required DateController controller,
         bool barrierDismissible = true,
         double height = 500,
-        double width = 400,
         int totalYears = 110,
         int forwardYears = 50,
         double vGap = 16,
@@ -367,7 +371,11 @@ class DatePicker extends StatefulWidget {
         AnimationController? transitionAnimationController,
         Offset? anchorPoint,
         AnimationStyle? sheetAnimationStyle,
-        Function(DateTime? startDate, DateTime? endDate)? callBack,
+        Widget? startTitle,
+        Widget? endTitle,
+        TextStyle? itemTextStyle,
+        Widget? actions,
+    Function(DateTime? startDate, DateTime? endDate)? callBack,
       }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
     return showModalBottomSheet(
@@ -377,9 +385,9 @@ class DatePicker extends StatefulWidget {
       elevation: elevation,
       shape: shape,
       clipBehavior: clipBehavior,
-      constraints: constraints,
+      constraints: constraints ?? BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       barrierColor: barrierColor,
-      isScrollControlled: isScrollControlled,
+      isScrollControlled: true,
       scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
       useRootNavigator: useRootNavigator,
       isDismissible: isDismissible,
@@ -394,7 +402,6 @@ class DatePicker extends StatefulWidget {
         return DatePicker(
           controller: controller,
           pickerDecoration: pickerDecoration,
-          width: width,
           height: height,
           totalYears: totalYears,
           initStartDate: initStartDate,
@@ -417,7 +424,7 @@ class DatePicker extends StatefulWidget {
           duration: duration,
           curve: curve,
           showColumn: showColumn,
-          startWidget: Padding( // Using strings.startDate
+          startWidget: startTitle?? Padding( // Using strings.startDate
             padding: const EdgeInsets.only(left: 20),
             child: Text(strings.startDate,
                 style: const TextStyle(
@@ -425,7 +432,7 @@ class DatePicker extends StatefulWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.bold)),
           ),
-          endWidget: Padding( // Using strings.endDate
+          endWidget: endTitle??Padding( // Using strings.endDate
             padding: const EdgeInsets.only(left: 20),
             child: Text(strings.endDate,
                 style: const TextStyle(
@@ -458,14 +465,14 @@ class DatePicker extends StatefulWidget {
             return Center(
               child: Text(
                 "$value$label",
-                style: const TextStyle(
+                style: itemTextStyle??const TextStyle(
                     color: Color.fromRGBO(21, 21, 21, 1),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
             );
           },
-          action: GestureDetector(
+          action: actions??GestureDetector(
             onTap: () {
               final startDate = controller.getStartDate();
               callBack?.call(startDate,null);
@@ -490,13 +497,154 @@ class DatePicker extends StatefulWidget {
     );
   }
 
+
+  static Future<dynamic> showDatePicker(
+      {
+        required BuildContext context,
+        required DateController controller,
+        bool barrierDismissible = true,
+        double height = 500,
+        double width = 400,
+        int totalYears = 110,
+        int forwardYears = 50,
+        double vGap = 16,
+        BoxDecoration? pickerDecoration,
+        DateTime? initStartDate,
+        DateTime? initEndDate,
+        double pickerVisibilityHeight = 140,
+        double itemExtent = 40,
+        double maskHeight = 40,
+        double itemWidth = 100,
+        double maskRadius = 0,
+        double? diameterRatio,
+        Color? backgroundColor,
+        double? offAxisFraction,
+        bool? useMagnifier,
+        double? magnification,
+        double? squeeze,
+        Widget? selectionOverlay,
+        Color? maskColor = const Color.fromRGBO(242, 242, 244, 0.7),
+        Duration duration = const Duration(milliseconds: 200),
+        Curve curve = Curves.easeInOutCubic,
+        List<DateType> showColumn = const [
+          DateType.YEAR,
+          DateType.MONTH,
+          DateType.DAY,
+          DateType.HOUR,
+          DateType.MINUTE,
+          DateType.SECOND
+        ],
+        DatePickerStrings? datePickerStrings,
+        Widget? title,
+        TextStyle? itemTextStyle,
+        Widget? actions,
+        Function(DateTime? startDate, DateTime? endDate)? callBack,
+      }) {
+    final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
+    return showDialog(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (context) {
+        return Center(child:
+        SizedBox(
+          width: width,
+          child: DatePicker(
+            controller: controller,
+            pickerDecoration: pickerDecoration,
+            height: height,
+            totalYears: totalYears,
+            initStartDate: initStartDate,
+            initEndDate: initEndDate,
+            forwardYears: forwardYears,
+            vGap: vGap,
+            pickerVisibilityHeight: pickerVisibilityHeight,
+            itemExtent: itemExtent,
+            itemWidth: itemWidth,
+            maskHeight: maskHeight,
+            maskRadius: maskRadius,
+            maskColor: maskColor,
+            diameterRatio: diameterRatio,
+            backgroundColor: backgroundColor,
+            offAxisFraction: offAxisFraction,
+            useMagnifier: useMagnifier,
+            magnification: magnification,
+            squeeze: squeeze,
+            selectionOverlay: selectionOverlay,
+            duration: duration,
+            curve: curve,
+            showColumn: showColumn,
+            startWidget:title?? Padding( // Using strings.startDate
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(strings.pleaseSelect,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
+            ),
+            itemBuilder: (type, value) {
+              String label = '';
+              switch (type) { // Using strings for year, month, day, etc.
+                case DateType.YEAR:
+                  label = strings.year;
+                  break;
+                case DateType.MONTH:
+                  label = strings.month;
+                  break;
+                case DateType.DAY:
+                  label = strings.day;
+                  break;
+                case DateType.HOUR:
+                  label = strings.hour;
+                  break;
+                case DateType.MINUTE:
+                  label = strings.minute;
+                  break;
+                case DateType.SECOND:
+                  label = strings.second;
+                  break;
+              }
+              return Center(
+                child: Text(
+                  "$value$label",
+                  style:itemTextStyle?? const TextStyle(
+                      color: Color.fromRGBO(21, 21, 21, 1),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              );
+            },
+            action: actions??GestureDetector(
+              onTap: () {
+                final startDate = controller.getStartDate();
+                final endDate = controller.getEndDate();
+                callBack?.call(startDate, endDate);
+                Navigator.pop(context, [startDate, endDate]);
+              },
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlueAccent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(strings.confirm, // Using strings.confirm
+                      style: const TextStyle(color: Colors.white, fontSize: 16)),
+                ),
+              ),
+            ),
+          ),
+        )
+        );
+      },
+    );
+  }
+
   ///选择某个日期-时间
   static Future<dynamic> showDateModalBottomSheet({
     required BuildContext context,
     required DateController controller,
     bool barrierDismissible = true,
     double height = 500,
-    double width = 400,
     int totalYears = 110,
     int forwardYears = 50,
     double vGap = 16,
@@ -546,6 +694,8 @@ class DatePicker extends StatefulWidget {
     AnimationController? transitionAnimationController,
     Offset? anchorPoint,
     AnimationStyle? sheetAnimationStyle,
+    TextStyle? itemTextStyle,
+    Widget? actions,
     Function(DateTime? startDate, DateTime? endDate)? callBack,
   }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
@@ -556,9 +706,9 @@ class DatePicker extends StatefulWidget {
       elevation: elevation,
       shape: shape,
       clipBehavior: clipBehavior,
-      constraints: constraints,
+      constraints: constraints ?? BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       barrierColor: barrierColor,
-      isScrollControlled: isScrollControlled,
+      isScrollControlled: true,
       scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
       useRootNavigator: useRootNavigator,
       isDismissible: isDismissible,
@@ -573,8 +723,6 @@ class DatePicker extends StatefulWidget {
         return DatePicker(
           controller: controller,
           pickerDecoration: pickerDecoration,
-          startWidget: title,
-          width: width,
           height: height,
           totalYears: totalYears,
           initStartDate: initStartDate,
@@ -597,9 +745,17 @@ class DatePicker extends StatefulWidget {
           duration: duration,
           curve: curve,
           showColumn: showColumn,
+          startWidget:title?? Padding( // Using strings.startDate
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(strings.pleaseSelect,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold)),
+          ),
           itemBuilder: (type, value) {
             String label = '';
-            switch (type) { // Using strings for year, month, day, etc.
+            switch (type) {
               case DateType.YEAR:
                 label = strings.year;
                 break;
@@ -622,14 +778,14 @@ class DatePicker extends StatefulWidget {
             return Center(
               child: Text(
                 "$value$label",
-                style: const TextStyle(
+                style: itemTextStyle??const TextStyle(
                     color: Color.fromRGBO(21, 21, 21, 1),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
             );
           },
-          action: GestureDetector(
+          action: actions??GestureDetector(
             onTap: () {
               final startDate = controller.getStartDate();
               final endDate = controller.getEndDate();
@@ -775,7 +931,6 @@ class _DatePickerState extends State<DatePicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width,
       height: widget.height,
       padding: widget.padding,
       decoration: widget.pickerDecoration ?? BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
@@ -804,7 +959,7 @@ class _DatePickerState extends State<DatePicker> {
 
   Widget _buildDatePicker(DateModel dateModel, bool isStart) {
     return SizedBox(
-      width: widget.width,
+      width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -826,7 +981,7 @@ class _DatePickerState extends State<DatePicker> {
         .toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: columns,
+      children: columns.map((e) => Expanded(child: e)).toList(),
     );
   }
 
@@ -1020,6 +1175,9 @@ class DatePickerStrings {
   final String startDate;
   final String endDate;
   final String confirm;
+  final String selectTime;
+  final String selectDate;
+  final String pleaseSelect;
 
   const DatePickerStrings({
     required this.year,
@@ -1031,6 +1189,9 @@ class DatePickerStrings {
     required this.startDate,
     required this.endDate,
     required this.confirm,
+    required this.selectTime,
+    required this.selectDate,
+    required this.pleaseSelect,
   });
 
   factory DatePickerStrings.fromLocale(Locale locale) {
@@ -1061,6 +1222,9 @@ class _DatePickerStringsZh implements DatePickerStrings {
   @override String get startDate => '开始日期：';
   @override String get endDate => '结束日期：';
   @override String get confirm => '确定';
+  @override String get selectTime => '选择时间';
+  @override String get selectDate => '选择日期';
+  @override String get pleaseSelect => '请选择';
 }
 
 //  English strings.
@@ -1075,4 +1239,7 @@ class _DatePickerStringsEn implements DatePickerStrings {
   @override String get startDate => 'Start Date:';
   @override String get endDate => 'End Date:';
   @override String get confirm => 'Confirm';
+  @override String get selectTime => 'Select Time';
+  @override String get selectDate => 'Select Date';
+  @override String get pleaseSelect => 'Please Select';
 }

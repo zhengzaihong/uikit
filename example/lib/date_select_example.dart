@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikit_lib.dart';
 import 'package:intl/intl.dart';
 
-class CalendarExample extends StatefulWidget {
-  const CalendarExample({Key? key}) : super(key: key);
+class DateSelectExample extends StatefulWidget {
+  const DateSelectExample({Key? key}) : super(key: key);
 
   @override
-  _CalendarExampleState createState() => _CalendarExampleState();
+  _DateSelectExampleState createState() => _DateSelectExampleState();
 }
 
-class _CalendarExampleState extends State<CalendarExample> {
+class _DateSelectExampleState extends State<DateSelectExample> {
 
   @override
   void initState() {
@@ -76,7 +76,6 @@ class _CalendarExampleState extends State<CalendarExample> {
                 DatePicker.showDateRangeModalBottomSheet(
                     context: context,
                     controller: DateController(),
-                    width: double.infinity,
                     height: 600,
                     pickerDecoration: const BoxDecoration(
                       color: Colors.white,
@@ -116,10 +115,48 @@ class _CalendarExampleState extends State<CalendarExample> {
 
               vGap(20),
               FilledButton(onPressed:(){
+                DatePicker.showDatePicker(
+                    context: context,
+                    controller: DateController(),
+                    width: 400,
+                    height: 330,
+                    datePickerStrings: const DatePickerStrings.zh(), //显示的语种
+                    forwardYears: 100,//当前时间的前100年
+                    totalYears: 120, //总共120年 [可选时间范围，前100年-后20年]
+                    initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
+                    showColumn: [DateType.YEAR, DateType.MONTH, DateType.DAY,DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    diameterRatio: 0.9,
+                    pickerVisibilityHeight: 200,
+                    callBack: (date1,date2){
+                      setState(() {
+                        selectDate = "选择了：${ DateFormat("yyyy-MM-dd HH:mm:ss").format(date1!)} ";
+                      });
+                    });
+              }, child: const Text("Dialog日期选择")),
+
+              vGap(20),
+              FilledButton(onPressed:(){
+                DatePicker.showDatePicker(
+                    context: context,
+                    controller: DateController(),
+                    width: 300,
+                    height: 280,
+                    datePickerStrings: const DatePickerStrings.zh(), //显示的语种
+                    initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
+                    showColumn: [DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    diameterRatio: 0.9,
+                    callBack: (date1,date2){
+                      setState(() {
+                        selectDate = "选择了：${ DateFormat("HH:mm:ss").format(date1!)} ";
+                      });
+                    });
+              }, child: const Text("Dialog时间选择")),
+
+              vGap(20),
+              FilledButton(onPressed:(){
                 DatePicker.showDateModalBottomSheet(
                     context: context,
                     controller: DateController(),
-                    width: double.infinity,
                     height: 330,
                     pickerDecoration: const BoxDecoration(
                         color: Colors.white,

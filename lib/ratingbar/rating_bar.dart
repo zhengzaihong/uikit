@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
-/// create_date: 2021/11/24
-/// create_time: 14:36
-/// describe: 满意度RatingBar
+/// describe: 满意度 RatingBar（支持 step、allowZero、readOnly）
 ///
 class RatingBar extends StatefulWidget {
-
   /// 星星数量
   final int count;
 
@@ -36,22 +33,30 @@ class RatingBar extends StatefulWidget {
   /// 点击回调
   final ValueChanged<double>? onRatingUpdate;
 
-  /// 是否支持半选模式 true 0-max之间任何值，false 0.5-取整
-  final bool half;
+  /// 步长（例如 1.0 表示整星，0.5 半星，0.1 精确到 0.1）
+  final double step;
 
-  const RatingBar(
-      {this.maxRating = 10.0,
-      this.count = 5,
-      this.value = 0,
-      this.size = 20,
-      required this.normalImage,
-      required this.selectImage,
-      this.padding = 3,
-      this.selectAble = false,
-      this.half = false,
-      required this.onRatingUpdate,
-      Key? key})
-      : super(key: key);
+  /// 是否允许为 0 分（false 时至少为 step）
+  final bool allowZero;
+
+  /// 是否只读（只展示，不能交互）
+  final bool readOnly;
+
+  const RatingBar({
+    this.maxRating = 10.0,
+    this.count = 5,
+    this.value = 0,
+    this.size = 20,
+    required this.normalImage,
+    required this.selectImage,
+    this.padding = 3,
+    this.selectAble = false,
+    this.step = 1.0,
+    this.allowZero = true,
+    this.readOnly = false,
+    this.onRatingUpdate,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _RatingBarState createState() => _RatingBarState();
@@ -61,61 +66,62 @@ class _RatingBarState extends State<RatingBar> {
   double value = 0;
 
   @override
+  void initState() {
+    super.initState();
+    value = widget.value;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (widget.readOnly) {
+      // 只读模式：仅展示
+      return buildRowRating();
+    }
+
     return Listener(
       child: buildRowRating(),
       onPointerDown: (PointerDownEvent event) {
-        double x = event.localPosition.dx;
-        if (x < 0) x = 0;
-        pointValue(x);
+        if (widget.selectAble) pointValue(event.localPosition.dx);
       },
       onPointerMove: (PointerMoveEvent event) {
-        double x = event.localPosition.dx;
-        if (x < 0) x = 0;
-        pointValue(x);
+        if (widget.selectAble) pointValue(event.localPosition.dx);
       },
       onPointerUp: (_) {},
       behavior: HitTestBehavior.deferToChild,
     );
   }
 
-  pointValue(double dx) {
-    if (!widget.selectAble) {
-      return;
-    }
-    if (dx >=
-        widget.size * widget.count + widget.padding * (widget.count - 1)) {
-      value = widget.maxRating;
+  void pointValue(double dx) {
+    if (dx < 0) dx = 0;
+    double newValue;
+    if (dx >= widget.size * widget.count + widget.padding * (widget.count - 1)) {
+      newValue = widget.maxRating;
     } else {
-      for (double i = 1; i < widget.count + 1; i++) {
-        if (dx > widget.size * i + widget.padding * (i - 1) &&
-            dx < widget.size * i + widget.padding * i) {
-          value = i * (widget.maxRating / widget.count);
-          break;
-        } else if (dx > widget.size * (i - 1) + widget.padding * (i - 1) &&
-            dx < widget.size * i + widget.padding * i) {
-          value = (dx - widget.padding * (i - 1)) /
-              (widget.size * widget.count) *
-              widget.maxRating;
-          break;
-        }
-      }
+      newValue = dx /
+          (widget.size * widget.count + widget.padding * (widget.count - 1)) *
+          widget.maxRating;
     }
+
+    // ====== 对齐到 step ======
+    if (widget.step > 0) {
+      newValue = (newValue / widget.step).roundToDouble() * widget.step;
+    }
+
+    // 限制范围
+    if (newValue > widget.maxRating) {
+      newValue = widget.maxRating;
+    } else if (newValue < 0) {
+      newValue = 0;
+    }
+
+    // ====== 判断 allowZero ======
+    if (!widget.allowZero && newValue == 0) {
+      newValue = widget.step; // 至少为 step
+    }
+
     setState(() {
-      if(widget.half){
-        double tempValue = value.floorToDouble();
-        if(value<(tempValue+0.5)){
-          value = tempValue+0.5;
-        }else{
-          value = value.roundToDouble();
-        }
-        if(value>widget.maxRating){
-          value = widget.maxRating;
-        }
-      }
-      if (widget.onRatingUpdate != null) {
-        widget.onRatingUpdate!(value);
-      }
+      value = newValue;
+      widget.onRatingUpdate?.call(value);
     });
   }
 
@@ -124,9 +130,6 @@ class _RatingBarState extends State<RatingBar> {
   }
 
   double star() {
-    if (widget.count / fullStars() == widget.maxRating / value) {
-      return 0;
-    }
     return (value % (widget.maxRating / widget.count)) /
         (widget.maxRating / widget.count);
   }
@@ -135,20 +138,19 @@ class _RatingBarState extends State<RatingBar> {
     int full = fullStars();
     List<Widget> children = [];
     for (int i = 0; i < full; i++) {
-      children.add(
-        widget.selectImage);
+      children.add(widget.selectImage);
       if (i < widget.count - 1) {
-        children.add(
-          SizedBox(
-            width: widget.padding,
-          ),
-        );
+        children.add(SizedBox(width: widget.padding));
       }
     }
+
     if (full < widget.count) {
-      children.add(ClipRect(
-        clipper: SMClipper(rating: star() * widget.size),
-        child: widget.selectImage));
+      children.add(
+        ClipRect(
+          clipper: SMClipper(rating: star() * widget.size),
+          child: widget.selectImage,
+        ),
+      );
     }
 
     return children;
@@ -157,13 +159,9 @@ class _RatingBarState extends State<RatingBar> {
   List<Widget> buildNormalRow() {
     List<Widget> children = [];
     for (int i = 0; i < widget.count; i++) {
-      children.add(
-        widget.normalImage,
-      );
+      children.add(widget.normalImage);
       if (i < widget.count - 1) {
-        children.add(SizedBox(
-          width: widget.padding,
-        ));
+        children.add(SizedBox(width: widget.padding));
       }
     }
     return children;
@@ -172,25 +170,14 @@ class _RatingBarState extends State<RatingBar> {
   Widget buildRowRating() {
     return Stack(
       children: <Widget>[
-        Row(
-          children: buildNormalRow(),
-        ),
-        Row(
-          children: buildRow(),
-        )
+        Row(children: buildNormalRow()),
+        Row(children: buildRow()),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.value;
   }
 }
 
 class SMClipper extends CustomClipper<Rect> {
-
   final double rating;
 
   SMClipper({required this.rating});

@@ -81,29 +81,25 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   title("跑马灯"),
                   Row(
                     children: [
-
                       Container(
                         padding: const EdgeInsets.only(left: 10),
                         height: 30,
                         color: Colors.redAccent,
-                        child:  const TextView(
-                          unCheckTextStyle:TextStyle(color: Colors.white,fontSize: 14),
-                          drawablePosition: PositionEnum.drawableLeft,
-                          enableClick: false,
-                          isChecked: false,
-                          drawableWidget: FontIcon(0xe6be,size: 14,color: Colors.white),
-                          title:  "通知：",
-                        ),
-                      ),
+                        child: const Row(
+                          children: [
+                            FontIcon(0xe6be,size: 14,color: Colors.white),
+                            Text("通知：",style: TextStyle(color: Colors.white,fontSize: 16),),
+                          ],
+                        )),
 
                       Expanded(child:  Container(
-                        height: 30,
                         alignment: Alignment.centerLeft,
                         color: Colors.redAccent,
                         child: MarqueeView(
                             direction: MarqueeDirection.vertical,
                             itemExtent: 30,
-                            interval: 5,
+                            interval: const Duration(seconds: 2),
+                            animateDuration: const Duration(milliseconds: 500),
                             marqueeItems: const [
                               "这是flutter 基础 widget 案例展示，更多内容请查看源码!1",
                               "测试代码2",
@@ -118,7 +114,29 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                             buildItem: (context, data) {
                               return Text(data);
                          }),
-                      ))
+                      )),
+
+                    ],
+                  ),
+
+                  Row(
+                    children: [
+                      Container(
+                        width: 400,
+                        alignment: Alignment.centerLeft,
+                        color: Colors.redAccent,
+                        child: MarqueeView(
+                            direction: MarqueeDirection.horizontal,
+                            itemExtent: 30,
+                            interval: const Duration(seconds: 2),
+                            animateDuration: const Duration(milliseconds: 800),
+                            marqueeItems: const [
+                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!1,这是flutter 基础 widget 案例展示，更多内容请查看源码!1这是flutter 基础 widget 案例展示，更多内容请查看源码!1这是flutter 基础 widget 案例展示，更多内容请查看源码!1",
+                            ],
+                            buildItem: (context, data) {
+                              return Text(data);
+                            }),
+                      )
                     ],
                   ),
 
@@ -131,9 +149,10 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     normalImage: Image.asset("images/wjx.png",width: 20,height: 20,),
                     selectImage: Image.asset("images/wjx1.png",width: 20,height: 20,),
                     selectAble: true,
-                    half: true,
-                    maxRating: 5,
-                    count: 5,
+                    readOnly: false,
+                    step: 0.5,
+                    maxRating: 10,
+                    count: 10,
                     onRatingUpdate: (double value) {
                       setState(() {
                         ratingBarCount = value;
@@ -142,51 +161,6 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     },
                   ),
 
-
-                  title("仿Android TextView"),
-                  Row(children: [
-
-                    TextView(
-                      title: "TextView",
-                      drawablePosition: PositionEnum.drawableLeft,
-                      checkedTextStyle: textViewStyle1,
-                      unCheckTextStyle: textViewStyle,
-                      drawablePressWidget: const Icon(Icons.alarm_rounded,color: Colors.red),
-                      drawableWidget: const Icon(Icons.alarm_rounded,color: Colors.grey),
-                    ),
-
-
-                    const SizedBox(width: 10),
-                    TextView(
-                      title: "TextView",
-                      drawablePosition: PositionEnum.drawableRight,
-                      checkedTextStyle: textViewStyle1,
-                      unCheckTextStyle: textViewStyle,
-                      drawablePressWidget: const Icon(Icons.home,color: Colors.red),
-                      drawableWidget: const Icon(Icons.home,color: Colors.grey),
-                    ),
-
-                    const SizedBox(width: 30),
-                    TextView(
-                      title: "TextView",
-                      drawablePosition: PositionEnum.drawableTop,
-                      checkedTextStyle: textViewStyle1,
-                      unCheckTextStyle: textViewStyle,
-                      drawablePressWidget: const Icon(Icons.home,color: Colors.red),
-                      drawableWidget: const Icon(Icons.home,color: Colors.grey),
-                    ),
-
-                    const SizedBox(width: 30),
-                    TextView(
-                      title: "TextView",
-                      drawablePosition: PositionEnum.drawableBottom,
-                      checkedTextStyle: textViewStyle1,
-                      unCheckTextStyle: textViewStyle,
-                      drawablePressWidget: const Icon(Icons.home,color: Colors.red),
-                      drawableWidget: const Icon(Icons.home,color: Colors.grey),
-                    ),
-
-                  ]),
 
 
                   title("开关按钮"),
@@ -361,150 +335,6 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
                   ),
 
-
-                  title("多选的复选框"),
-                  SizedBox(height: 60,child:  FunctionContainer(
-                    defaultChecks: defaultCheckboxIds,
-                    allowMultipleChoice: true,
-                    multipleCheckedChange: (list){
-                      defaultCheckboxIds = list as List<int>;
-                      setState(() {
-
-                      });
-                      Toast.show("选中的CheckBox: ${list.toString()}");
-                    },
-                    child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-
-                      FunButtonBox(
-                        index: 0,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('item1',style: isCheck?checkedTextStyle:unCheckTextStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/sel_icon_13@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              uncheckedIcon:Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/nor_icon_16@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      ),
-
-
-                      const SizedBox(width: 10),
-                      FunButtonBox(
-                        index: 1,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('item2',style: isCheck?checkedTextStyle:unCheckTextStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/sel_icon_13@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              uncheckedIcon:Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/nor_icon_16@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      ),
-
-                      const SizedBox(width: 10),
-                      FunButtonBox(
-                        index: 2,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('item3',style: isCheck?checkedTextStyle:unCheckTextStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/sel_icon_13@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              uncheckedIcon:Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/nor_icon_16@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      )
-                      ,
-                      const SizedBox(width: 10),
-                      FunButtonBox(
-                        index: 3,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('item4',style: isCheck?checkedTextStyle:unCheckTextStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/sel_icon_13@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              uncheckedIcon:Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  child: Image.asset(
-                                    "images/nor_icon_16@2x.png",
-                                    width: 25,
-                                    height: 25,
-                                  )),
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      )
-                      ,
-                    ]),
-                  )),
 
 
                   title("倒计时控件"),

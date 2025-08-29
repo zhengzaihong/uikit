@@ -20,7 +20,7 @@ export 'picker/picker_lib.dart';
 
 export 'ratingbar/rating_bar.dart';
 export 'pager/pager.dart';
-export 'loading/shimmer_loading.dart';
+export 'loading/shimmer.dart';
 export 'drag/drag_box.dart';
 export 'ext/top_view.dart';
 export 'tooltip/ztooltip.dart';
