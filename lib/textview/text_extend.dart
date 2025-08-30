@@ -51,7 +51,7 @@ import 'package:flutter/material.dart';
 //       )
 
 ///自定义内部子组件 子组件需要单独实现样式配置
-typedef BuilderChild = Widget? Function(BuildContext context, Widget child, bool isHover);
+typedef _BuildChild = Widget? Function(BuildContext context, Widget child, bool isHover);
 
 ///子组件内部对齐方式不满足时可重新改方法
 typedef CustomChildLayout = Widget Function(BuildContext context, Widget prefix, Widget child, Widget suffix);
@@ -80,7 +80,7 @@ class TextExtend extends StatefulWidget {
   final double? width;
   final double? height;
   // 自定义子组件
-  final BuilderChild? builder;
+  final _BuildChild? build;
   // 自定义内部子组件对齐方式
   final CustomChildLayout? customChildLayout;
 
@@ -174,7 +174,7 @@ class TextExtend extends StatefulWidget {
     this.maxLength,
     this.width,
     this.height,
-    this.builder,
+    this.build,
     this.customChildLayout,
     this.animation = false,
     this.animationTime = const Duration(milliseconds: 150),
@@ -343,7 +343,7 @@ class _TextExtendState extends State<TextExtend>  with SingleTickerProviderState
       transformAlignment: _onHover
           ? widget.onHoverTransformAlignment ?? widget.transformAlignment
           : widget.transformAlignment,
-      child: widget.builder?.call(context, child,_onHover) ??
+      child: widget.build?.call(context, child,_onHover) ??
           (widget.customChildLayout == null ? Row(
             mainAxisAlignment: widget.mainAxisAlignment,
             mainAxisSize: widget.mainAxisSize,

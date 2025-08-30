@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 /// describe: 复选框
 ///eg:
 //
-//    CustomCheckBox(
+//    KitCheckBox(
 //       activeColor: Colors.purple,
 //       checkColor: Colors.red,
 //       isChecked: true,
@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 //    }),
 
 
-class CustomCheckBox extends StatefulWidget {
+class KitCheckBox extends StatefulWidget {
 
   final Widget? text;
   final Widget? checkedText;
@@ -48,7 +48,7 @@ class CustomCheckBox extends StatefulWidget {
   final BorderSide? side;
   final double? splashRadius;
 
-  const CustomCheckBox({
+  const KitCheckBox({
     this.text,
     this.checkedText,
     this.uncheckedIcon,
@@ -70,11 +70,11 @@ class CustomCheckBox extends StatefulWidget {
     Key? key}) : super(key: key);
 
   @override
-  State<CustomCheckBox> createState() => _CustomCheckBoxState();
+  State<KitCheckBox> createState() => _KitCheckBoxState();
 
 }
 
-class _CustomCheckBoxState extends State<CustomCheckBox> {
+class _KitCheckBoxState extends State<KitCheckBox> {
 
   late bool isChecked;
 

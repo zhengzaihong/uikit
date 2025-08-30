@@ -8,14 +8,16 @@ import 'package:flutter_uikit_forzzh/uikit_lib.dart';
 /// create_time: 9:36
 /// describe: 纵向无限层级菜单
 ///
-
-typedef BuildMenuItem = Widget Function(InfiniteLevelsMenusState state,
+typedef BuildMenuItem = Widget Function(
     bool isCurrent, InfiniteMenu data, int currentLevel);
 
 typedef BuildSeparator<Dynamic> = Widget Function(
     BuildContext context, dynamic data, int currentLevel);
 
 class InfiniteLevelsMenus extends StatefulWidget {
+  ///菜单控制器
+  final InfiniteLevelsMenusController? controller;
+
   /// 菜单数据
   final List<InfiniteMenu>? datas;
 
@@ -32,8 +34,7 @@ class InfiniteLevelsMenus extends StatefulWidget {
   final double titleChildSpace;
 
   /// 构建完成
-  final Function(InfiniteLevelsMenusState state, InfiniteMenu? item)?
-      buildComplete;
+  final Function(InfiniteMenu? item)? buildComplete;
 
   /// 是否展开所有
   final bool? allExpand;
@@ -43,6 +44,7 @@ class InfiniteLevelsMenus extends StatefulWidget {
 
   const InfiniteLevelsMenus(
       {required this.buildMenuItem,
+      this.controller,
       this.buildSeparator,
       this.datas,
       this.noDataView,
@@ -65,12 +67,13 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
   void initState() {
     super.initState();
 
+    widget.controller?.bind(this);
     _lastClickItem = widget.defaultExpand;
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (isFirstBuild) {
         isFirstBuild = false;
-        widget.buildComplete?.call(this, _lastClickItem);
+        widget.buildComplete?.call(_lastClickItem);
       }
       if (widget.allExpand == true) {
         openAll();
@@ -100,6 +103,15 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
         });
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(InfiniteLevelsMenus oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.controller != null &&
+        oldWidget.controller != widget.controller) {
+      widget.controller?.bind(this);
+    }
   }
 
   @override
@@ -135,7 +147,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
                 children: [
                   parentMenu.isChecked
                       ? widget.buildMenuItem
-                          .call(this, bean == _lastClickItem, bean, level)
+                          .call(bean == _lastClickItem, bean, level)
                       : const SizedBox(),
                   parentMenu.isChecked
                       ? Row(
@@ -170,8 +182,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ///标题
-          widget.buildMenuItem
-              .call(this, element == _lastClickItem, element, level),
+          widget.buildMenuItem.call(element == _lastClickItem, element, level),
 
           ///子标题
           Row(
@@ -245,4 +256,68 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
       _openAllChild(element);
     });
   }
+}
+
+class InfiniteLevelsMenusController {
+  InfiniteLevelsMenusController();
+
+  InfiniteLevelsMenusState? _state;
+
+  void bind(InfiniteLevelsMenusState state) {
+    _state = state;
+  }
+
+  InfiniteLevelsMenusState? getState() {
+    return _state;
+  }
+
+  RenderBox? getRenderBox() {
+    final obj = _state?.context.findRenderObject();
+    if (obj != null) {
+      return obj as RenderBox;
+    }
+    return null;
+  }
+
+  void dispose() {
+    _state = null;
+  }
+
+  void setItem(InfiniteMenu data) {
+    _state?.setItem(data);
+  }
+
+  void openAll() {
+    _state?.openAll();
+  }
+
+  void closeAll() {
+    _state?.closeAll();
+  }
+}
+
+abstract class InfiniteMenu {
+  /// 附加数据，可以是任意类型
+  dynamic obj;
+
+  /// 当前菜单标题
+  String? title;
+
+  bool isChecked;
+
+  /// 子菜单
+  List<InfiniteMenu>? children;
+
+  InfiniteMenu({
+    this.obj,
+    this.title,
+    this.children,
+    this.isChecked = false,
+  });
+
+  /// 通过实现该方法来进行数据转换
+  Map<String, dynamic> toMap();
+
+  /// 通过实现该方法来进行数据解析
+  void fromMap(Map<String, dynamic> map);
 }

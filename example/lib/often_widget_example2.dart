@@ -368,7 +368,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                         ),
                                         alignment: Alignment.center,
                                         mainAxisAlignment: MainAxisAlignment.center,
-                                        builder: (context,child, hover){
+                                        build: (context,child, hover){
                                           return e.fontIcon==null?null:SelectionMenu(
                                               popWidth: 200,
                                               barrierColor: Colors.transparent,
@@ -555,7 +555,7 @@ class _OftenWidgetExampleState2 extends State<OftenWidgetExample2> with SingleTi
                                             ],
                                           ));
                                         },
-                                        builder: (context,child,isHover){
+                                        build: (context,child,isHover){
                                           return  e=="4"? Container(
                                             height: 40,
                                             width: 220,

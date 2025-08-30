@@ -98,7 +98,7 @@ class _ShimmerLoadingExampleState extends State<ShimmerLoadingExample> {
                     ),
                   );
               }),
-          CustomSwitch(
+          KitSwitch(
               isOpen: isLoading,
               isInnerStyle: true,
               activeColor: Colors.red,

@@ -21,29 +21,29 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
  static List<InfiniteMenu> menus = [
 
-    InfiniteMenu(
+    CustomMenu(
       title: "一级标题A",
       children: [
-        InfiniteMenu(
+        CustomMenu(
             title: "二级标题1",
             children: [
 
-              InfiniteMenu(
+              CustomMenu(
                   title: "三级标题1",
                   children: [
-                    InfiniteMenu(
+                    CustomMenu(
                         title: "四级标题1",
                         children: [
-                          InfiniteMenu(
+                          CustomMenu(
                               title: "五级标题1",
                               children: [
-                                InfiniteMenu(
+                                CustomMenu(
                                     title: "六级标题1",
                                     children: [
 
                                     ]
                                 ),
-                                InfiniteMenu(
+                                CustomMenu(
                                     title: "六级标题2",
                                     children: [
 
@@ -55,7 +55,7 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                     ),
                   ]
               ),
-              InfiniteMenu(
+              CustomMenu(
                   title: "三级标题2",
                   children: [
 
@@ -66,20 +66,20 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
       ]
     ),
 
-    InfiniteMenu(
+    CustomMenu(
         title: "一级标题B",
         children: [
-          InfiniteMenu(
+          CustomMenu(
               title: "二级标题1",
               children: [
 
-                InfiniteMenu(
+                CustomMenu(
                     title: "三级标题1",
                     children: [
 
                     ]
                 ),
-                InfiniteMenu(
+                CustomMenu(
                     title: "三级标题2",
                 ),
               ]
@@ -90,6 +90,8 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
   bool? isAllExpand;
   InfiniteMenu? _lastClickItem = menus.last.children?.first.children?.first;
+  final infiniteLevelsMenusController = InfiniteLevelsMenusController();
+
   @override
   Widget build(BuildContext context) {
 
@@ -117,18 +119,19 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
                   margin: const EdgeInsets.only(left: 10,top: 10),
                   child:  InfiniteLevelsMenus(
                     key: ValueKey(isAllExpand),
+                    controller: infiniteLevelsMenusController,
                     datas: menus,
                     allExpand: isAllExpand,
                     defaultExpand: _lastClickItem,
-                    buildComplete: (state,item){
+                    buildComplete: (item){
                       debugPrint("---------------------buildComplete-----${item?.title}");
                     },
-                    buildMenuItem:(state,isCurrent,data,lv){
+                    buildMenuItem:(isCurrent,data,lv){
                       return  GestureDetector(
                           onTap: (){
                             debugPrint("---点击:${data.title}--层级：$lv");
                             _lastClickItem = data;
-                            state.setItem(data);
+                            infiniteLevelsMenusController.setItem(data);
                           },
                           child: Container(
                             padding: const EdgeInsets.only(left: 4,right: 4,top: 5,bottom: 5),
@@ -155,4 +158,37 @@ class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
     ));
   }
 
+}
+class CustomMenu extends InfiniteMenu {
+  CustomMenu({
+    dynamic obj,
+    String? title,
+    List<InfiniteMenu>? children,
+    bool isChecked = false,
+  }) : super(
+    obj: obj,
+    title: title,
+    children: children,
+    isChecked: isChecked,
+  );
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      "obj": obj,
+      "title": title,
+      "children": children?.map((e) => e.toMap()).toList(),
+      'isChecked': isChecked
+    };
+  }
+
+  @override
+  void fromMap(Map<String, dynamic> map) {
+    obj = map['obj'];
+    title = map['title'];
+    children = (map['children'] as List?)
+        ?.map((e) => CustomMenu()..fromMap(e))
+        .toList();
+    isChecked = map['isChecked'];
+  }
 }

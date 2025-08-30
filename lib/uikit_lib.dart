@@ -25,11 +25,10 @@ export 'drag/drag_box.dart';
 export 'ext/top_view.dart';
 export 'tooltip/ztooltip.dart';
 export 'nav/bottom_bar_lib.dart';
-export 'checkbox/custom_checkbox.dart';
+export 'checkbox/kit_checkbox.dart';
 export 'card/stack_card.dart';
 export 'textview/marquee_view.dart';
 export 'infinite/infinite_levels_menus.dart';
-export 'infinite/bean/infinite_menu.dart';
 
 
 /// 工具包

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/button/function_inheritedwidget.dart';
 import 'package:flutter_uikit_forzzh/uikit_lib.dart';
 import 'package:uikit_example/utils/font_utils.dart';
 
@@ -165,7 +164,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
 
 
                   title("开关按钮"),
-                  CustomSwitch(
+                  KitSwitch(
                     isOpen: checked,
                     activeTrackColor:const Color(0xFFF9820E),
                     activeColor:Colors.white,
@@ -179,131 +178,13 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     },
                   ),
 
-                  title("多选button 案例"),
-                  SizedBox(height: 60,child: FunctionContainer(
-                    defaultChecks: defaultCheckeds2,
-                    allowMultipleChoice: true, //多选
-                    mutualExclusionIndex: 1,
-                    multipleCheckedChange: (list){
-                      StringBuffer buffer  = StringBuffer();
-                      for (var element in list) {
-                        buffer.write(element);
-                        buffer.write(",");
-                      }
-                      defaultCheckeds2 = list as List<int>;
-                      debugPrint("------$defaultCheckeds2");
-                      setState(() {
-                      });
-                      Toast.show("选中的按钮Id: ${buffer.toString()}");
-                    },
-                    child: LayoutBuilder(
-                      builder: (context,boxConstraints){
-                        int index = 0;
-                        return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                          ...["全选","CT","抽血","检查",'手术'].map((e){
-                            index++;
-                            return FunButtonBox(
-                              index: index,
-                              builderBox: (context,state, isCheck) {
-                                return CustomCheckBox(
-                                    key: ValueKey(isCheck),
-                                    text: Text(e,style: isCheck?checkedTextStyle:unCheckTextStyle),
-                                    activeColor: Colors.purple,
-                                    checkColor: Colors.red,
-                                    isChecked: isCheck,
-                                    useDefaultStyle: false,
-                                    iconLeft: true,
-                                    checkIcon: const Icon(
-                                        Icons.check_box, color: Colors.red),
-                                    uncheckedIcon: const Icon(
-                                      Icons.check_box_outline_blank,
-                                      color: Colors.grey,),
-                                    onChange: (v) {
-                                      state.updateChange();
-                                    });
-                              },
-                            );
-                          }).toList(),
-                        ]);
-                      },
-                    ),
-                  )),
 
 
 
-                  title("单选Radio"),
-                  SizedBox(height: 60,child:  FunctionContainer(
-                    defaultCheck: 1,
-                    singleCheckedChange: (id){
-                      Toast.show("选中的radio: ${id.toString()}");
-                    },
-                    child:
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start, children: [
-                      FunButtonBox(
-                        index: 0,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('化学品',style: textBlodStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: checkedIconWidget,
-                              uncheckedIcon:unCheckedWidget,
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      FunButtonBox(
-                        index: 1,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('毒物',style: textBlodStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: checkedIconWidget,
-                              uncheckedIcon:unCheckedWidget,
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      FunButtonBox(
-                        index: 2,
-                        builderBox: (context,state, isCheck) {
-                          return CustomCheckBox(
-                              key: ValueKey(isCheck),
-                              text: Text('射线',style: textBlodStyle),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.red,
-                              isChecked: isCheck,
-                              useDefaultStyle: false,
-                              iconLeft: true,
-                              checkIcon: checkedIconWidget,
-                              uncheckedIcon:unCheckedWidget,
-                              onChange: (v) {
-                                state.updateChange();
-                              });
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                    ]),
-                  )),
 
 
                   title("复选框"),
-                  CustomCheckBox(
+                  KitCheckBox(
                     iconLeft: true,
                     isChecked: true,
                     onChange: (checked) {
@@ -345,7 +226,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                     duration: const Duration(
                         seconds: 1
                     ),
-                    builder: (context, time) {
+                    build: (context, time) {
                       if (!controller.isStart()) {
                         return InkWell(
                             onTap: () {

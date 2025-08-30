@@ -10,7 +10,7 @@ import 'switch_lib.dart';
 /// describe: 开关按钮组件, 支持ios风格和android风格
 /// 需自定义各种样式和效果请使用提供的 [ImageSwitch] 组件
 /// eg:
-//   CustomSwitch(
+//   KitSwitch(
 //     isOpen: false,
 //     labelRight: true,
 //     isInnerStyle: true,
@@ -25,7 +25,7 @@ import 'switch_lib.dart';
 //     }),
 
 
-class CustomSwitch extends StatefulWidget {
+class KitSwitch extends StatefulWidget {
 
   final bool isOpen;
   final ValueChanged<bool>? onChange;
@@ -40,7 +40,7 @@ class CustomSwitch extends StatefulWidget {
   ///开关的样式 true内含样式ios 风格， false滑动模块外突android风格
   final bool? isInnerStyle;
   final bool? enableFirstCallBack;
-  const CustomSwitch({
+  const KitSwitch({
     this.isOpen=true,
     this.onChange,
     this.labelRight=false,
@@ -56,10 +56,10 @@ class CustomSwitch extends StatefulWidget {
     Key? key}) : super(key: key);
 
   @override
-  State<CustomSwitch> createState() => _CustomSwitchState();
+  State<KitSwitch> createState() => _KitSwitchState();
 }
 
-class _CustomSwitchState extends State<CustomSwitch> {
+class _KitSwitchState extends State<KitSwitch> {
 
   late bool isOpen;
   @override
