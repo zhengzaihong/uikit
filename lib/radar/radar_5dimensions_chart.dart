@@ -3,8 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/radar/radar_bean.dart';
-import 'package:flutter_uikit_forzzh/radar/radar_ndimensions_chart.dart';
 import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 
 ///
@@ -12,7 +10,7 @@ import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024/5/29
 /// create_time: 14:42
-/// describe: 5维度雷达图  N维 使用[RadarNDimensionsChart]
+/// describe: 5维度雷达图  N维 使用[RadarChart]
 ///
 
 enum RadarType {
@@ -21,6 +19,8 @@ enum RadarType {
   none,
 }
 typedef CustomPosition = Offset Function(Offset,RadarBean);
+
+@Deprecated("Please use a more powerful RadarChart component instead")
 class Radar5DimensionsChart extends StatefulWidget {
 
   ///半径
@@ -473,3 +473,22 @@ class RadarMapPainter extends CustomPainter {
 double angleToRadian(double angle) {
   return angle / 180.0 * pi;
 }
+
+class RadarBean {
+  num score;
+  String name;
+  Color bgColor;
+  TextStyle textStyle;
+  TextStyle scoreTextStyle;
+  num emptyScoreGrid = 0;
+
+  RadarBean(
+      this.score,
+      this.name, {
+        this.bgColor = Colors.white,
+        this.textStyle = const TextStyle(color: Colors.black, fontSize: 12),
+        this.scoreTextStyle = const TextStyle(color: Colors.white, fontSize: 12),
+        this.emptyScoreGrid = 10,
+      });
+}
+

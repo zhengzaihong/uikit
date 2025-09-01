@@ -475,8 +475,9 @@ class DatePicker extends StatefulWidget {
           action: actions??GestureDetector(
             onTap: () {
               final startDate = controller.getStartDate();
-              callBack?.call(startDate,null);
-              Navigator.pop(context, [startDate]);
+              final endDate = controller.getEndDate();
+              callBack?.call(startDate, endDate);
+              Navigator.pop(context, [startDate, endDate]);
             },
             child: Center(
               child: Container(

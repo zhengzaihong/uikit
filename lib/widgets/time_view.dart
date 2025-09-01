@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 /// create_date: 2021/12/13
 /// create_time: 9:43
 /// describe: 用于倒计时类的控件，
-/// 使用规范: 外部请不要将 TimeViewState 持久化。
 ///
 
 typedef _BuildChild = Widget Function(BuildContext context, int time);

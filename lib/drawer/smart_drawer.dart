@@ -52,19 +52,7 @@ class _SmartDrawerState extends State<SmartDrawer> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
-    String? label = widget.semanticLabel;
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.iOS:
-        label = widget.semanticLabel;
-        break;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        label = widget.semanticLabel ??
-            MaterialLocalizations.of(context).drawerLabel;
-    }
+    String? label = widget.semanticLabel ?? MaterialLocalizations.of(context).drawerLabel;
     double _width;
     if (widget.width != null) {
       _width = widget.width!;

@@ -116,6 +116,8 @@ class Toast {
           child: Text(msg, style: _globalToastTextStyle)),
     );
   }
+
+
   ///显示一个吐司
   static Future<OverlayEntryManger?> show(
     String msg, {

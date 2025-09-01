@@ -7,7 +7,7 @@ import 'package:flutter_uikit_forzzh/behavior/overscrollbehavior.dart';
 /// email:1096877329@qq.com
 /// create_date: 2022/6/20
 /// create_time: 9:51
-/// describe: 绘制表格的组件，使用此组件一定要注意每行的权重比
+/// describe: 支持横向和纵向滚动的表格的组件，使用此组件一定要注意每行的权重比
 /// 此组件用于通用性表格，
 /// 表格存在各种合并的单元格 需根据行号单独处理
 ///  2023-02-25 已支持非固定行高，一行中自动适配最高行。
@@ -16,7 +16,20 @@ import 'package:flutter_uikit_forzzh/behavior/overscrollbehavior.dart';
 
 typedef HandlerControllerCallBack = void Function(HandlerController handler);
 
-class TableViewExtend<T> extends StatefulWidget {
+///构建标题行
+typedef BuildTableHeaderStyle<T> = Widget Function(
+    BuildContext context, RowStyleParam rowStyle);
+
+///构建每一行的样式
+typedef BuildRowStyle<T> = Widget Function(RowStyleParam rowStyle);
+
+///预处理数据
+typedef PreDealData<T> = List<T> Function();
+
+///构建每一行的样式
+typedef BuildFixHeaderRowStyle<T> = Widget Function(RowStyleParam rowStyle);
+
+class TableExtend<T> extends StatefulWidget {
 
   ///数据 表示表格有多少行
   final List<T>? tableDatas;
@@ -73,7 +86,7 @@ class TableViewExtend<T> extends StatefulWidget {
   final List<double>? fixCellFootWidthFlex;
   final ScrollBehavior? behavior;
 
-  const TableViewExtend(
+  const TableExtend(
       { this.tableDatas = const [],
         this.bodyDecoration,
         this.headerDecoration,
@@ -114,24 +127,24 @@ class TableViewExtend<T> extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<TableViewExtend> createState() => _TableViewExtendState<T>();
+  State<TableExtend> createState() => _TableExtendState<T>();
 }
 
-class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
+class _TableExtendState<T> extends State<TableExtend<T>> {
 
   List<T> datas = [];
 
   int _itemCount = 0;
 
-   ScrollController? _titleController;
-   ScrollController? _contentHorizontalController;
-   ScrollController? _contentVerticalController;
+  ScrollController? _titleController;
+  ScrollController? _contentHorizontalController;
+  ScrollController? _contentVerticalController;
 
-   ScrollController? _fixHeaderTitleController;
-   ScrollController? _fixHeaderContentController;
+  ScrollController? _fixHeaderTitleController;
+  ScrollController? _fixHeaderContentController;
 
-   ScrollController? _fixFootTitleController;
-   ScrollController? _fixFootContentController;
+  ScrollController? _fixFootTitleController;
+  ScrollController? _fixFootContentController;
 
   List<double>? cellWidthFlex;
   List<double>? fixCellHeaderWidthFlex;
@@ -325,93 +338,93 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
       }
       return Column(
         children: [
-      Row(
-        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: DecoratedBox(
+                    decoration: widget.headerDecoration??BoxDecoration(
+                      border:widget.enableDivider && widget.gridDivider? Border(
+                          top: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                          bottom: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                          right: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                          left: BorderSide(color:widget.dividerColor,width:widget.dividerSize)):null,
+                    ),
+                    child: ScrollConfiguration(
+                      behavior: OverScrollBehavior(),
+                      child: SingleChildScrollView(
+                        controller: _titleController,
+                        scrollDirection: Axis.horizontal,
+                        child: widget.buildTableHeaderStyle?.call(
+                            context,
+                            RowStyleParam(
+                                enableDivider: widget.enableDivider,
+                                rowWidth: _horizontalTotalWidth,
+                                cellWidth: cellWidthFlex!
+                                    .map((e) => e * widget.minCellWidth)
+                                    .toList())
+                        ),
+                      ),
+                    ),
+                  )),
+            ],
+          ),
           Expanded(
               child: DecoratedBox(
-                decoration: widget.headerDecoration??BoxDecoration(
-                  border:widget.enableDivider && widget.gridDivider? Border(
+                decoration: widget.bodyDecoration??BoxDecoration(
+                  border:widget.enableDivider  && widget.gridDivider? Border(
                       top: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                       bottom: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                       right: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
                       left: BorderSide(color:widget.dividerColor,width:widget.dividerSize)):null,
                 ),
-                child: ScrollConfiguration(
-                  behavior: OverScrollBehavior(),
-                  child: SingleChildScrollView(
-                    controller: _titleController,
-                    scrollDirection: Axis.horizontal,
-                    child: widget.buildTableHeaderStyle?.call(
-                        context,
-                        RowStyleParam(
-                            enableDivider: widget.enableDivider,
-                            rowWidth: _horizontalTotalWidth,
-                            cellWidth: cellWidthFlex!
-                                .map((e) => e * widget.minCellWidth)
-                                .toList())
+                child:GestureDetector(
+                  // onHorizontalDragUpdate: (details) {
+                  //   final newScrollOffset = _contentHorizontalController!.offset - details.delta.dx;
+                  //   _contentHorizontalController!.jumpTo(newScrollOffset);
+                  // },
+                  child: ScrollConfiguration(
+                    behavior: OverScrollBehavior(),
+                    child:  SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      controller: _contentHorizontalController,
+                      physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        width: _horizontalTotalWidth,
+                        height: box.maxHeight,
+                        child:ScrollConfiguration(
+                          behavior:OverScrollBehavior() ,
+                          child:  ListView.separated(
+                              itemCount: _itemCount,
+                              controller: _contentVerticalController,
+                              // physics: ClampingScrollPhysics(),
+                              // physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final rowStyleParam = RowStyleParam(
+                                    enableDivider: widget.enableDivider,
+                                    rowWidth: _horizontalTotalWidth,
+                                    data: datas[index],
+                                    index: index,
+                                    cellWidth: cellWidthFlex!
+                                        .map((e) =>
+                                    e * widget.minCellWidth)
+                                        .toList());
+                                return widget.buildRowStyle(rowStyleParam);
+                              },
+                              separatorBuilder: (context, index) {
+                                final divider = Container(
+                                  height: widget.dividerSize,
+                                  color: widget.dividerColor,
+                                );
+                                return widget.enableDivider
+                                    ? divider
+                                    : const SizedBox();
+                              }),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              )),
-        ],
-      ),
-      Expanded(
-          child: DecoratedBox(
-            decoration: widget.bodyDecoration??BoxDecoration(
-              border:widget.enableDivider  && widget.gridDivider? Border(
-                  top: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
-                  bottom: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
-                  right: BorderSide(color:widget.dividerColor,width:widget.dividerSize),
-                  left: BorderSide(color:widget.dividerColor,width:widget.dividerSize)):null,
-            ),
-            child:GestureDetector(
-              // onHorizontalDragUpdate: (details) {
-              //   final newScrollOffset = _contentHorizontalController!.offset - details.delta.dx;
-              //   _contentHorizontalController!.jumpTo(newScrollOffset);
-              // },
-              child: ScrollConfiguration(
-                behavior: OverScrollBehavior(),
-                child:  SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  controller: _contentHorizontalController,
-                  physics:widget.physics ?? const AlwaysScrollableScrollPhysics(),
-                  child: SizedBox(
-                    width: _horizontalTotalWidth,
-                    height: box.maxHeight,
-                    child:ScrollConfiguration(
-                      behavior:OverScrollBehavior() ,
-                      child:  ListView.separated(
-                          itemCount: _itemCount,
-                          controller: _contentVerticalController,
-                          // physics: ClampingScrollPhysics(),
-                          // physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final rowStyleParam = RowStyleParam(
-                                enableDivider: widget.enableDivider,
-                                rowWidth: _horizontalTotalWidth,
-                                data: datas[index],
-                                index: index,
-                                cellWidth: cellWidthFlex!
-                                    .map((e) =>
-                                e * widget.minCellWidth)
-                                    .toList());
-                            return widget.buildRowStyle(rowStyleParam);
-                          },
-                          separatorBuilder: (context, index) {
-                            final divider = Container(
-                              height: widget.dividerSize,
-                              color: widget.dividerColor,
-                            );
-                            return widget.enableDivider
-                                ? divider
-                                : const SizedBox();
-                          }),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ))
+              ))
         ],
       );
     });
@@ -425,7 +438,7 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
     required ScrollController? contentController,
     required BuildTableHeaderStyle buildTableHeaderStyle,
     required BuildRowStyle rowStyle,
-}) {
+  }) {
     return SizedBox(
       width: width,
       child:  Column(
@@ -447,7 +460,7 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                       child: SingleChildScrollView(
                         controller: titleController,
                         scrollDirection: Axis.horizontal,
-                        child: buildTableHeaderStyle.call(
+                        child:buildTableHeaderStyle.call(
                             context,
                             RowStyleParam(
                                 enableDivider: widget.enableDivider,
@@ -477,11 +490,11 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
                   child:DecoratedBox(
                     decoration: widget.bodyDecoration??BoxDecoration(
                       border:widget.enableDivider  && widget.gridDivider? Border(
-                          top:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
-                          bottom:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
-                          left: getBorderSide(header,isLeft: true),
-                          right:getBorderSide(header,isLeft: false),
-                          ):null,
+                        top:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                        bottom:BorderSide(color:widget.dividerColor,width:widget.dividerSize),
+                        left: getBorderSide(header,isLeft: true),
+                        right:getBorderSide(header,isLeft: false),
+                      ):null,
                     ),
                     child:ScrollConfiguration(
                       behavior:OverScrollBehavior() ,
@@ -521,12 +534,10 @@ class _TableViewExtendState<T> extends State<TableViewExtend<T>> {
 
   BorderSide getBorderSide(bool header,{bool isLeft = true}) {
     if(header){
-     return isLeft?BorderSide(color:widget.dividerColor,width:widget.dividerSize): BorderSide.none;
+      return isLeft?BorderSide(color:widget.dividerColor,width:widget.dividerSize): BorderSide.none;
     }
     return isLeft? BorderSide.none:BorderSide(color:widget.dividerColor,width:widget.dividerSize);
   }
-
-
 }
 
 class HandlerController {
@@ -605,4 +616,228 @@ class HandlerController {
     _fixFooterContentController?.dispose();
 
   }
+}
+
+// 每一行
+class TabRow extends StatelessWidget {
+  final bool enableDivider;
+  final List<int> cellWidget;
+  final double? rowDividerHeight;
+  final double rowDividerWidth;
+  final Color? dividerColor;
+  final CellItem cellItem;
+  final double? rowHeight;
+
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
+  final CrossAxisAlignment crossAxisAlignment;
+  final TextDirection? textDirection;
+  final VerticalDirection verticalDirection;
+  final bool fixRowHeight;
+
+  const TabRow(
+      {this.enableDivider = true,
+        this.rowDividerHeight,
+        this.rowDividerWidth = 0.5,
+        required this.cellWidget,
+        required this.cellItem,
+        this.rowHeight,
+        this.mainAxisAlignment = MainAxisAlignment.start,
+        this.mainAxisSize = MainAxisSize.max,
+        this.crossAxisAlignment = CrossAxisAlignment.center,
+        this.verticalDirection = VerticalDirection.down,
+        this.textDirection,
+        this.dividerColor = Colors.red,
+        this.fixRowHeight = false,
+        Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildRow();
+  }
+
+  Widget _buildRow() {
+    return IntrinsicHeight(
+      child: Row(
+          mainAxisSize: mainAxisSize,
+          mainAxisAlignment: mainAxisAlignment,
+          crossAxisAlignment: crossAxisAlignment,
+          verticalDirection: verticalDirection,
+          textDirection: textDirection,
+          children: _buildCells(cellWidget)),
+    );
+  }
+
+  Widget _createRowLine() {
+    if (!fixRowHeight && rowHeight != null) {
+      return SizedBox(
+        width: rowDividerWidth,
+        height: rowHeight,
+        child: Row(
+          children: [
+            Expanded(
+                child: Container(
+                  width: rowDividerWidth,
+                  color: dividerColor,
+                ))
+          ],
+        ),
+      );
+    }
+    return Container(
+      width: rowDividerWidth,
+      height: rowDividerHeight,
+      color: dividerColor,
+    );
+  }
+
+  List<Widget> _buildCells(List<int> cellWidget) {
+    List<Widget> cells = [];
+
+    for (var i = 0; i < cellWidget.length; i++) {
+      var widget = cellItem.buildCell(cellItem, i, null);
+      cells.add(Expanded(
+          flex: cellWidget[i],
+          child: Row(children: [
+            if (enableDivider) _createRowLine(),
+            Expanded(
+                child: Container(
+                  color: cellItem.background,
+                  padding: cellItem.padding,
+                  alignment: cellItem.alignment,
+                  child: widget,
+                ))
+          ])));
+    }
+    if (enableDivider) {
+      cells.add(_createRowLine());
+    }
+    return cells;
+  }
+}
+
+// 如果想让标题类的 左右对齐可使用该文本组件，外部可直接使用该组件，
+/// eg:  return TabSpaceText(
+///  contents: KitMath.parseStr((cellBean.name).toString()),
+///  padding: const EdgeInsets.only(left: 10,right: 10),
+///  style: const TextStyle(fontSize: 14,color: Colors.black));
+///
+class TabSpaceText extends StatelessWidget {
+
+  final List<String> contents;
+  final TextStyle style;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
+  final Color? backgroundColor;
+  final double? width;
+  final double? height;
+  final AlignmentGeometry? alignment;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisSize mainAxisSize;
+
+  const TabSpaceText(
+      {Key? key,
+        required this.contents,
+        this.margin,
+        this.padding,
+        this.backgroundColor,
+        this.width,
+        this.height,
+        this.alignment,
+        this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+        this.crossAxisAlignment = CrossAxisAlignment.center,
+        this.mainAxisSize = MainAxisSize.max,
+        this.style = const TextStyle(color: Colors.red, fontSize: 12)})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      padding: padding,
+      width: width,
+      height: height,
+      alignment: alignment,
+      color: backgroundColor,
+      child: Row(
+        mainAxisAlignment: mainAxisAlignment,
+        crossAxisAlignment: crossAxisAlignment,
+        mainAxisSize: mainAxisSize,
+        children: [...contents.map((e) => Text(e, style: style)).toList()],
+      ),
+    );
+  }
+}
+
+
+/// 构建每一行的参数
+class RowStyleParam<T>{
+
+  RowStyleParam({this.data,this.rowWidth,this.cellWidth,this.index,this.enableDivider = false});
+
+  bool enableDivider;
+
+  int? index;
+
+  T? data;
+
+  /// 行高
+  double? rowWidth;
+  /// 单元格宽度
+  List<double>? cellWidth;
+
+}
+
+///通用性单元格实体，只针对非列表数据结构的处理成表格
+///列表结构不要使用该类
+class RowBean {
+
+  ///单元格宽度 权重
+  final List<int> flex;
+  ///单元格内容
+  final List<CellBean> cells;
+
+  RowBean({required this.cells, this.flex = const []});
+}
+
+
+
+/// CellItem 每个元素的信息
+///外部构建每个表格的样式信息
+typedef BuildCell = Widget Function(CellItem cellItem, int index, double? weight);
+
+class CellItem {
+  AlignmentGeometry alignment;
+  EdgeInsetsGeometry padding;
+  Color background;
+
+  final BuildCell buildCell;
+
+  CellItem(
+      {this.alignment = Alignment.center,
+        this.background = Colors.transparent,
+        this.padding = const EdgeInsets.all(0),
+        required this.buildCell});
+}
+
+
+///通用性单元格实体，只针对非列表数据结构的处理成表格
+///列表结构不要使用该类
+class CellBean {
+  String? name;
+  int? rowIndex;
+  int? cellIndex;
+  final bool isTitle;
+
+  ///附加信息
+  dynamic obj;
+
+  CellBean(
+      {this.rowIndex,
+        required this.name,
+        this.cellIndex,
+        this.obj,
+        this.isTitle = false});
 }

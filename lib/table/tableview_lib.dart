@@ -1,9 +1,1 @@
-export 'package:flutter_uikit_forzzh/table/tableview.dart';
-export 'package:flutter_uikit_forzzh/table/tableview_extend.dart';
-export 'package:flutter_uikit_forzzh/table/bean/cell_bean.dart';
-export 'package:flutter_uikit_forzzh/table/bean/cell_item.dart';
-export 'package:flutter_uikit_forzzh/table/bean/row_bean.dart';
-export 'package:flutter_uikit_forzzh/table/bean/row_style_param.dart';
-export 'package:flutter_uikit_forzzh/table/interface/callback.dart';
-export 'package:flutter_uikit_forzzh/table/widget/tab_row.dart';
-export 'package:flutter_uikit_forzzh/table/widget/tab_space_text.dart';
+export 'package:flutter_uikit_forzzh/table/table_extend.dart';

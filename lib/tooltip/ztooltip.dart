@@ -97,43 +97,24 @@ class ZTooltip extends StatefulWidget {
 
   //是否激活鼠标响应 tip
   final bool canOnHover;
-
-  // tip尖角位置
-  final BubbleArrowDirection? position;
-
-  // tip 尖角高度
-  final double arrHeight;
-
-  // tip尖角角度
-  final double arrAngle;
-
-  // tip圆角半径
-  final double arrowRadius;
-
-  // tip宽度
-  final double? width;
-
-  // tip高度
-  final double? height;
-
-  // tip边距
-  final double length;
-
-  // tip颜色
-  final Color? color;
-
-  // tip边框颜色
-  final Color borderColor;
-
-  // tip边框宽度
-  final double strokeWidth;
-
-  // tip填充样式
-  final PaintingStyle style;
-
-  // 子 Widget 与起泡间距
-  final double innerPadding;
-
+  //圆角
+  final double tipRadius;
+  //箭头宽
+  final double arrowWidth;
+  //箭头高
+  final double arrowHeight;
+  //位置上的偏移（0-1）
+  final double arrowPositionPercent;
+  // 箭头方向
+  final BubbleArrowDirection direction;
+  // 箭头形状
+  final BubbleArrowShape arrowShape;
+  // 箭头大小是否自适应
+  final bool arrowAdaptive;
+  //气泡装饰器
+  final BoxDecoration? decoration;
+  //裁剪
+  final Clip clipBehavior;
   final GestureTapCallback? onTap;
   final GestureTapDownCallback? onTapDown;
   final GestureTapUpCallback? onTapUp;
@@ -146,7 +127,6 @@ class ZTooltip extends StatefulWidget {
   final GestureTapCallback? onSecondaryTapCancel;
   final ValueChanged<bool>? onHighlightChanged;
   final ValueChanged<bool>? onHover;
-
   final MouseCursor? mouseCursor;
   final bool containedInkWell;
   final BoxShape highlightShape;
@@ -174,19 +154,16 @@ class ZTooltip extends StatefulWidget {
       this.fixedTip = false,
       this.duration = const Duration(seconds: 0),
       this.layout,
-      this.width,
-      this.height,
-      this.color,
-      this.position,
-      this.length = 1,
-      this.arrHeight = 12.0,
-      this.arrAngle = 60.0,
-      this.arrowRadius = 10.0,
-      this.strokeWidth = 4.0,
-      this.style = PaintingStyle.fill,
-      this.borderColor = Colors.transparent,
-      this.innerPadding = 6.0,
       this.canOnHover = true,
+      this.tipRadius = 8,
+      this.arrowWidth = 12,
+      this.arrowHeight = 8,
+      this.arrowPositionPercent = 0.5,
+      this.direction = BubbleArrowDirection.top,
+      this.arrowShape = BubbleArrowShape.triangle,
+      this.arrowAdaptive = true,
+      this.decoration,
+      this.clipBehavior = Clip.none,
       this.onTap,
       this.onTapDown,
       this.onTapUp,
@@ -244,18 +221,15 @@ class ZTooltipState extends State<ZTooltip> {
       builder: (context) {
         final child = widget.enableBubble
             ? Bubble(
-                // width: widget.width ?? 100,
-                // height: widget.height ?? 50,
-                // length: widget.length,
-                // radius: widget.arrowRadius,
-                // color: widget.color ?? Colors.white,
-                // position: widget.position ?? BubbleArrowDirection.top,
-                // arrAngle: widget.arrAngle,
-                // arrHeight: widget.arrHeight,
-                // // borderColor: widget.borderColor,
-                // strokeWidth: widget.strokeWidth,
-                // style: widget.style,
-                // innerPadding: widget.innerPadding,
+                radius: widget.tipRadius,
+                arrowWidth: widget.arrowWidth,
+                arrowHeight: widget.arrowHeight,
+                arrowPositionPercent: widget.arrowPositionPercent,
+                direction: widget.direction,
+                arrowShape: widget.arrowShape,
+                arrowAdaptive: widget.arrowAdaptive,
+                decoration: widget.decoration,
+                clipBehavior: widget.clipBehavior,
                 child: widget.buildTip?.call() ?? const SizedBox())
             : widget.buildTip?.call() ?? const SizedBox();
 

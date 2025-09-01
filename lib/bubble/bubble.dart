@@ -25,15 +25,25 @@ enum BubbleArrowShape {
 
 /// 气泡组件
 class Bubble extends StatelessWidget {
+  //子组件
   final Widget child;
+  //圆角
   final double radius;
+  //箭头宽
   final double arrowWidth;
+  //箭头高
   final double arrowHeight;
+  //位置上的偏移（0-1）
   final double arrowPositionPercent;
+  // 箭头方向
   final BubbleArrowDirection direction;
+  // 箭头形状
   final BubbleArrowShape arrowShape;
-  final bool arrowAdaptive; // 箭头大小是否自适应
+  // 箭头大小是否自适应
+  final bool arrowAdaptive;
+  //气泡装饰器
   final BoxDecoration? decoration;
+  //裁剪
   final Clip clipBehavior;
 
   const Bubble({

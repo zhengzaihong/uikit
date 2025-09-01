@@ -50,29 +50,26 @@ class _TableViewExampleState extends State<TableViewExample> {
                 fontSize: 18,
                 fontWeight: FontWeight.w500))),
             const SizedBox(height: 30),
-            Expanded(child:  TableViewExtend<TestBean>(
+            Expanded(child:  TableExtend<TestBean>(
               enableDivider: true,
               gridDivider: false,
               dividerColor: Colors.grey,
               enableFixHeaderColumn: true,
               enableFixFootColumn: true,
               tableDatas: list,
-              minCellWidth:60,
+              minCellWidth:90,
               shrinkWrap: true,
               fixCellHeaderWidthFlex: const [1,],
               buildFixHeaderTableHeaderStyle: (context,rowStyle){
                 return Container(
                   width: rowStyle.rowWidth,
                   height: 40,
-                  margin: const EdgeInsets.only(top: 1),
                   decoration: const BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
                   child: Row(
                     children: [
-                      _cellBuilder("姓名",rowStyle.cellWidth![0],rowStyle),
-                      // _cellBuilder("姓名1",rowStyle.cellWidth![0],rowStyle),
-                      // _cellBuilder("姓名2",rowStyle.cellWidth![0],rowStyle),
+                      _cellBuilder("操作",rowStyle.cellWidth![0],rowStyle),
                     ],
                   ),
                 );
@@ -84,17 +81,12 @@ class _TableViewExampleState extends State<TableViewExample> {
                     constraints: const BoxConstraints(
                       minHeight: 40,
                     ),
-                    child:Column(
-                      children: [ Expanded(child: Row(
-                        children: [
-                          _cellBuilder("姓名11", rowStyle.cellWidth![0],rowStyle),
-                          // _cellBuilder("姓名22", rowStyle.cellWidth![0],rowStyle),
-                          // _cellBuilder("姓名33", rowStyle.cellWidth![0],rowStyle),
-                          // _cellBuilder(bean.name!+"1", rowStyle.cellWidth![0],rowStyle),
-                          // _cellBuilder(bean.name!+"2", rowStyle.cellWidth![0],rowStyle),
-                        ],
-                      ))],
-                    ),
+                    child:Center(child:  Container(
+                        padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(20),
+                        ), child: const Text("查看"))),
                   ),
                 );
               },
@@ -105,13 +97,12 @@ class _TableViewExampleState extends State<TableViewExample> {
                 return Container(
                   width: rowStyle.rowWidth,
                   height: 40,
-                  margin: const EdgeInsets.only(top: 1),
                   decoration:  const BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
                   child: Row(
                     children: [
-                      _cellBuilder("电话",cellsWidth[0],rowStyle),
+                      _cellBuilder("其他",cellsWidth[0],rowStyle),
                     ],
                   ),
                 );
@@ -147,7 +138,6 @@ class _TableViewExampleState extends State<TableViewExample> {
                 return Container(
                   width: rowWidth,
                   height: 40,
-                  margin: const EdgeInsets.only(top: 1),
                   decoration: const BoxDecoration(
                     color: Colors.lightBlueAccent),
                   child: Row(
@@ -190,105 +180,6 @@ class _TableViewExampleState extends State<TableViewExample> {
                 );
               },
             )),
-
-            const SizedBox(height: 30),
-            const Row(children: [
-              Expanded(child:  Center(child:  Text("放射科检查报告单(垂直滑动表格)",style: TextStyle(color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500))))
-            ]),
-
-            const SizedBox(height: 10),
-
-          Expanded(child:   Padding(
-            padding: const EdgeInsets.only(left: 100,right: 100),
-            child: TableView<int>(
-              enableDivider: true,
-              enableTopDivider: true,
-              enableBottomDivider: true,
-              // tableDatas: [],
-              physics: const NeverScrollableScrollPhysics(),
-              preDealData: (){
-
-                List<RowBean> rowDatas = [
-                     RowBean(
-                         flex: const [2,4,1,1,1,1,4],
-                         cells: [
-                            CellBean(name: "姓名",isTitle: true),
-                            CellBean(name: "张三"),
-                            CellBean(name: "性别"),
-                            CellBean(name: "男"),
-                            CellBean(name: "年龄"),
-                            CellBean(name: "42岁"),
-                            CellBean(name: "病人号： 2434393458u")
-                         ]),
-
-                      RowBean(
-                          flex: const [2,6,2,4],
-                          cells: [
-                            CellBean(name: "医嘱号",isTitle: true),
-                            CellBean(name: "1472923243"),
-                            CellBean(name: "就诊号",isTitle: true),
-                            CellBean(name: ""),
-                      ]),
-
-                      RowBean(
-                          flex: const [2,6,2,4],
-                          cells: [
-                            CellBean(name: "病区",isTitle: true),
-                            CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中"),
-                            CellBean(name: "床位号",isTitle: true),
-                            CellBean(name: "中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，中西医结合科医疗单位，"
-                                "中西医结合科医疗单位中西医结合科医疗单位11111中西医结合科医疗单位,中西医结合科医疗单位,中西医结合科医疗单位，中西医结合科医疗单位，"),
-                          ]),
-
-                      RowBean(
-                          flex: const [2,6,2,4],
-                          cells: [
-                            CellBean(name: "检查日期",isTitle: true),
-                            CellBean(name: "2020.08.23"),
-                            CellBean(name: "报告日期",isTitle: true),
-                            CellBean(name: "2020.08.23"),
-                      ]),
-
-                      RowBean(
-                          flex: const [2,12],
-                          cells: [
-                            CellBean(name: "检查部位",isTitle: true),
-                            CellBean(name: "CT上腹部平扫，CT上腹部平扫，CT上腹部平扫CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫，CT上腹部平扫11"),
-                            CellBean(name: "床位号",isTitle: true),
-                            CellBean(name: "2020.08.23"),
-                      ]),
-                ];
-                return rowDatas;
-              },
-              buildRowStyle: (rowStyle){
-                final data = rowStyle.data as RowBean;
-                return TabRow(
-                    cellWidget: data.flex,
-                    enableDivider: true,
-                    dividerColor: Colors.black,
-                    cellItem:CellItem(
-                        padding: const EdgeInsets.only(top: 10,bottom: 10),
-                        buildCell: (cell,index,width){
-                          if(index==1 ||  index ==6){
-                            cell.alignment = Alignment.centerLeft;
-                            cell.padding = const EdgeInsets.only(left: 10);
-                          }else{
-                            cell.alignment  = Alignment.center;
-                          }
-                          var cellBean =  (data).cells[index];
-                          if(cellBean.isTitle){
-                            return TabSpaceText(
-                                contents: KitMath.parseStr((cellBean.name).toString()),
-                                padding: const EdgeInsets.only(left: 10,right: 10),
-                                style: const TextStyle(fontSize: 14,color: Colors.black));
-                          }
-                          return Text((cellBean.name).toString(),style: const TextStyle(fontSize: 14,color: Colors.black));
-                        }
-                    ));
-              },
-            )))
 
           ],
         ),

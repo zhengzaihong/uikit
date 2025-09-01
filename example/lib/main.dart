@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit_forzzh/uikit_lib.dart';
+import 'package:uikit_example/radar_chart_example.dart';
 import 'date_select_example.dart';
 import 'input_example.dart';
-import 'stack_card_demo.dart';
 import 'infinite_levels_example.dart';
-import 'often_widget_example2.dart';
 import 'pager_example.dart';
 import 'shimmer_example.dart';
 import 'tableview_example.dart';
 import 'city_picker_example.dart';
 import 'input_extend_example.dart';
 import 'often_widget_example.dart';
-import 'progressbar_example.dart';
 import 'selection_menu_example.dart';
 import 'toast_example.dart';
 
@@ -71,10 +69,10 @@ class _MyAppState extends State<MyApp> {
 
   void _createMenus(BuildContext context){
     funList = [
-      createMenu("进度条", context,const ProgressBarExample()),
       createMenu("toast", context,const ToastExample()),
       createMenu("城市选择", context,const CityPickerExample()),
-      createMenu("日历",context, const DateSelectExample()),
+      createMenu("日期选择器",context, const DateSelectExample()),
+      createMenu("多维度雷达组件",context, const RadarChartExample()),
       createMenu("输入框",context,  const InputExample()),
       createMenu("输入框拓展",context, const InputExtendExample()),
       createMenu("表格布局",context, const TableViewExample()),
@@ -82,9 +80,7 @@ class _MyAppState extends State<MyApp> {
       createMenu("仿系统下拉框",context, const SelectionMenuExample()),
       createMenu("分页组件",context, const PagerExample()),
       createMenu("微光加载效果",context, const ShimmerLoadingExample()),
-      createMenu("堆叠卡片", context,const StackCardDemo()),
       createMenu("常用小组件",context, const OftenWidgetExample()),
-      createMenu("常用小组件2",context, const OftenWidgetExample2()),
     ];
   }
 

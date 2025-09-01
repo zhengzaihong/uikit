@@ -54,7 +54,7 @@ class KitCheckBox extends StatefulWidget {
     this.uncheckedIcon,
     this.checkIcon,
     this.mainAxisAlignment = MainAxisAlignment.start,
-    this.mainAxisSize = MainAxisSize.max,
+    this.mainAxisSize = MainAxisSize.min,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.useDefaultStyle = true,
     this.iconLeft = false,

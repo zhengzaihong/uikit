@@ -82,7 +82,7 @@ class _ToastExampleState extends State<ToastExample> {
 
                 InkWell(
                     onTap: (){
-                      Toast.show("常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast常规Toast11111");
+                      Toast.show("这是一条Toast");
                     },
                     child: Container(
                     width: 200,
@@ -97,7 +97,6 @@ class _ToastExampleState extends State<ToastExample> {
 
                 InkWell(
                     onTap: (){
-
 
                       // /自定义样式toast
                       Toast.show( "自定义样式toast",buildToastStyle: (context,msg){
