@@ -36,7 +36,7 @@ dependencies:
 - MarqueeView： 跑马灯组件
 - InfiniteLevelsMenus： 无限层级菜单，简化使用逻辑
 - InputText： 极简输入框,支持实时表单校验,支持 TextField和 TextFormField全部属性，支持联动浮窗。
-- FloatExpendButton： （上下左右可绳索）菜单按钮
+- FloatExpendButton： （上下左右）伸缩菜单按钮
 - InputExtend： 输入框搜索组件，支持Flutter 中 TextField 全部属性
 - Pager：分页组件 .
 - SelectionMenu：选择下拉框菜单不关注数据本身。
