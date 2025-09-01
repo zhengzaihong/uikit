@@ -62,7 +62,7 @@ dependencies:
 
 
 ### Common Widgets:
-![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets1.gif)
 
 ### Radar Components (5-N Dimensions):
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png )
@@ -95,7 +95,7 @@ dependencies:
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
 
 ### Shimmer: Shimmer loading effect：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
+![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer1.gif)
 
 
 
