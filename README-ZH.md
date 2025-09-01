@@ -2,14 +2,30 @@
 
 Language: [English](README.md) | 简体中文
 
-这是一套跨平台的Flutter UI组件库，本库完全采用Dart编写，支持编译到HarmonyOS上（需SDK-3.29以上）此库将会持续更新....
 
-# pubspec.yaml 依赖
-    dependencies:
-      flutter_uikit_forzzh: ^0.3.1
+一套完全基于 **Dart** 的跨平台 **Flutter UI 组件库**，支持编译到 **HarmonyOS (SDK ≥ 3.29)**  提供高质量、易扩展的 UI 组件，让你的项目开发更高效！
+
+---
+
+## 🌟 特性亮点
+- 📦 丰富的 UI 组件：输入框、选择器、表格、菜单、动画效果等
+- 🔗 **零依赖**，完全 Dart 实现，开箱即用
+- 🎨 高度可定制，支持样式扩展与二次封装
+- 🌍 多端支持：**Android / iOS / Web  /Windows / MacOS / Linux / HarmonyOS**
+- 🔥 持续更新，已提供 **20+ 常用组件**
+
+---
+
+## 📦 安装
+在 `pubspec.yaml` 中添加依赖：
+```yaml
+dependencies:
+  flutter_uikit_forzzh: ^0.4.0
+```
 
 
-# flutter 常用组件ui库
+# 📚 组件目录
+
 - LinearProgressBar/CycleProgressBar:进度条组件(条形和圆形)
 - RatingBar：评分组件 RatingBar
 - Toast：可完全自定义提示组件(支持样式定制，定点位置，队列等)等
@@ -43,7 +59,7 @@ Language: [English](README.md) | 简体中文
 
 ## 更多效果请查看源码
 
-
+🎨 组件效果展示
 ## 常用小组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
 
@@ -88,7 +104,6 @@ Language: [English](README.md) | 简体中文
 
 ## 可高度自定义的选择下拉框组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu2.jpg)
-
 
 ## 无限层级菜单
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
