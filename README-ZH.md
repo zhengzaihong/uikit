@@ -20,7 +20,7 @@ Language: [English](README.md) | 简体中文
 在 `pubspec.yaml` 中添加依赖：
 ```yaml
 dependencies:
-  flutter_uikit: ^0.4.0
+  flutter_uikit_forzzh: ^0.4.0
 ```
 
 
@@ -51,7 +51,7 @@ dependencies:
 - Radar5DimensionsChart/RadarChart：5维和N维雷达组件
 - CustomAnimatedBottomBar： 底部动画菜单
 - StackCard：堆叠卡片组件
-- MultiSelector：无限层级折叠选择器
+- MultiSelector：无限层级折叠菜单
 - 在抽屉中实现多级子抽屉或同级内容路由跳转的组件 DrawerRouterStack，需配合DrawerRouter使用
 
   ...持续更新中....
