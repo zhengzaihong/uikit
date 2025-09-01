@@ -20,7 +20,7 @@ Language: [English](README.md) | 简体中文
 在 `pubspec.yaml` 中添加依赖：
 ```yaml
 dependencies:
-  flutter_uikit_forzzh: ^0.4.0
+  flutter_uikit: ^0.4.0
 ```
 
 
@@ -51,69 +51,70 @@ dependencies:
 - Radar5DimensionsChart/RadarChart：5维和N维雷达组件
 - CustomAnimatedBottomBar： 底部动画菜单
 - StackCard：堆叠卡片组件
-- MultiSelector：无限层级折叠菜单
+- MultiSelector：无限层级折叠选择器
 - 在抽屉中实现多级子抽屉或同级内容路由跳转的组件 DrawerRouterStack，需配合DrawerRouter使用
 
   ...持续更新中....
 
 
-## 更多效果请查看源码
 
-🎨 组件效果展示
-## 常用小组件：
+## 🎨 组件效果展---更多效果请查看源码
+
+
+### 常用小组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets.gif)
 
-## 雷达组件 5-N维：
+### 雷达组件 5-N维：
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png ) 
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png)
 
 
-## 日期组件：
+### 日期组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/date_picker.gif)
 
 
-## 极简输入框支持TextField 和TextFormField全部属性，支持实时表单校验
+### 极简输入框支持TextField 和TextFormField全部属性，支持实时表单校验
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text_pop.gif)
 
 
-## 底部导航菜单：
+### 底部导航菜单：
 ![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif) )
 
-## 输入框拓展搜索组件：
+### 输入框拓展搜索组件：
 
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/inputextentd.gif)
 
-## 城市选择器：
+### 城市选择器：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)
 
 
-## 可定制的Toast：
+### 可定制的Toast：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.png)
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
 
-## 微光加载效果：
+### 微光加载效果：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer.gif)
 
 
 
-## 可自定义样式的提示组件
+### 可自定义样式的提示组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/ztooltip.gif)
 
 
-## 可高度自定义的选择下拉框组件
+### 可高度自定义的选择下拉框组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu2.jpg)
 
-## 无限层级菜单
+### 无限层级菜单
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
-## 无限层级多选菜单!
+### 无限层级多选菜单!
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/selector.png)
 
-## 表格组件
+### 表格组件
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/table_scroller.gif)
 
-## 分页组件：
+### 分页组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/pager_image.png)
 
 
