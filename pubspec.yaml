@@ -1,7 +1,7 @@
 name: flutter_uikit_forzzh
 description: This is a Dart-supported, cross-platform UI component library that includes various custom components to help you quickly build projects and focus more on your business development.
 
-version: 0.3.1
+version: 0.4.0
 homepage: https://github.com/zhengzaihong/uikit
 
 platforms:

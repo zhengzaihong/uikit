@@ -40,7 +40,7 @@ dependencies:
 - InputExtend： 输入框搜索组件，支持Flutter 中 TextField 全部属性
 - Pager：分页组件 .
 - SelectionMenu：选择下拉框菜单不关注数据本身。
-- SelectionMenuForm： 可进行实时选择校验的下拉框。
+- SelectionMenuForm： 可进行实时选择校验的下拉框-表单使用。
 - TextExtend： 文本拓展组件，支持web前端js菜单效果，弹性动画效果
 - MousePopupButton： 鼠标右键弹出窗组件，Web端使用
 - Shimmer： 微光加载效果
