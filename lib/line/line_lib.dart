@@ -1,2 +1,2 @@
-export 'package:flutter_uikit_forzzh/line/dashedrect.dart';
-export 'package:flutter_uikit_forzzh/line/separator_view.dart';
+export 'package:uikit/line/dashedrect.dart';
+export 'package:uikit/line/separator_view.dart';

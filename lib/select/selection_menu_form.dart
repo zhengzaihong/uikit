@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_uikit_forzzh/select/select_fun.dart';
+import 'package:uikit/select/select_fun.dart';
 
 import 'drop_position.dart';
 ///

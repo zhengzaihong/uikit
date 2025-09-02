@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uikit_lib.dart';
+import 'package:uikit/uikit_lib.dart';
 
 
 class ToastExample extends StatefulWidget {

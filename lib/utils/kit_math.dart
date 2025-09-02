@@ -1,4 +1,4 @@
-import 'package:flutter_uikit_forzzh/utils/str_utils.dart';
+import 'package:uikit/utils/str_utils.dart';
 
 ///
 /// create_user: zhengzaihong

@@ -1,4 +1,4 @@
-library flutter_uikit_forzzh;
+library uikit;
 
 /// UI组件
 export 'button/button_lib.dart';

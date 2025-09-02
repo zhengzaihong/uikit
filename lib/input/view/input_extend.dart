@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_uikit_forzzh/uikit_lib.dart';
+import 'package:uikit/uikit_lib.dart';
 
 ///
 /// create_user: zhengzaihong

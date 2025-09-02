@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/table/tableview_lib.dart';
-import 'package:flutter_uikit_forzzh/behavior/overscrollbehavior.dart';
+import 'package:uikit/table/tableview_lib.dart';
+import 'package:uikit/behavior/overscrollbehavior.dart';
 
 ///
 /// create_user: zhengzaihong

@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/input/view/input_extend.dart';
-import 'package:flutter_uikit_forzzh/toast/toast_lib.dart';
+import 'package:uikit/input/view/input_extend.dart';
+import 'package:uikit/toast/toast_lib.dart';
 import 'package:uikit_example/utils/font_utils.dart';
 
 class InputExtendExample extends StatefulWidget {

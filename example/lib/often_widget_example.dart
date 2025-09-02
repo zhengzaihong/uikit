@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/uikit_lib.dart';
+import 'package:uikit/uikit_lib.dart';
 import 'package:uikit_example/utils/font_utils.dart';
 
 import 'bean/tab_type_bean.dart';

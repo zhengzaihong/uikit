@@ -18,7 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_uikit_forzzh :
+  uikit :
     # When depending on this package from a real application you should use:
     #   uikit: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints

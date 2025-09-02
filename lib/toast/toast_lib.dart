@@ -1,1 +1,1 @@
-export 'package:flutter_uikit_forzzh/toast/toast_utils.dart';
+export 'package:uikit/toast/toast_utils.dart';

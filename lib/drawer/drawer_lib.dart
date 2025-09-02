@@ -1,1 +1,1 @@
-export 'package:flutter_uikit_forzzh/drawer/smart_drawer.dart';
+export 'package:uikit/drawer/smart_drawer.dart';

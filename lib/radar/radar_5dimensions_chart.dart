@@ -3,7 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit_forzzh/utils/color_utils.dart';
+import 'package:uikit/utils/color_utils.dart';
 
 ///
 /// create_user: zhengzaihong
