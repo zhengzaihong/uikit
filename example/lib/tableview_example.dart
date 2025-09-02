@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/uikit_lib.dart';
+import 'package:uikit_plus/uikit_lib.dart';
 
 class TableViewExample extends StatefulWidget {
   const TableViewExample({Key? key}) : super(key: key);

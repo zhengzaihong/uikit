@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uikit/input/style/inline_style.dart';
-import 'package:uikit/uikit_lib.dart';
+import 'package:uikit_plus/input/style/inline_style.dart';
+import 'package:uikit_plus/input/style/outline_input_text_border.dart';
+import 'package:uikit_plus/input/view/input_text.dart';
+import 'package:uikit_plus/select/selection_menu_form.dart';
+import 'package:uikit_plus/uikit_lib.dart';
 import 'city_picker_example.dart';
 
 class InputExample extends StatefulWidget {

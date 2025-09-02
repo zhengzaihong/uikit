@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:uikit/utils/responsive.dart';
+import 'package:uikit_plus/utils/responsive.dart';
 
 ///
 /// create_user: zhengzaihong

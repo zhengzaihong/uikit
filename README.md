@@ -20,7 +20,7 @@ A fully **Dart-based** cross-platform **Flutter UI component library**, supporti
 Add dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
-  uikit: ^0.4.0   //The old version is not maintained, and the old version last relies on the address： flutter_uikit_forzzh:0.3.1
+  uikit_plus: ^0.4.0   //The old version is not maintained, and the old version last relies on the address： flutter_uikit_forzzh:0.3.1
 ```
 
 

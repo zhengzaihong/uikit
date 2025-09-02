@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:uikit/uikit_lib.dart';
+import 'package:uikit_plus/uikit_lib.dart';
 import 'package:intl/intl.dart';
 
 class DateSelectExample extends StatefulWidget {

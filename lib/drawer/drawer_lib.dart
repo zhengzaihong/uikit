@@ -1,1 +1,1 @@
-export 'package:uikit/drawer/smart_drawer.dart';
+export 'package:uikit_plus/drawer/smart_drawer.dart';

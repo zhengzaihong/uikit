@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/uikit_lib.dart';
+import 'package:uikit_plus/uikit_lib.dart';
 
 class ShimmerLoadingExample extends StatefulWidget {
   const ShimmerLoadingExample({Key? key}) : super(key: key);

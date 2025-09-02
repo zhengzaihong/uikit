@@ -1,4 +1,4 @@
-library uikit;
+library uikit_plus;
 
 /// UI组件
 export 'button/button_lib.dart';

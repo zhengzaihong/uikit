@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/uikit_lib.dart';
+import 'package:uikit_plus/uikit_lib.dart';
 import 'package:uikit_example/radar_chart_example.dart';
 import 'date_select_example.dart';
 import 'input_example.dart';

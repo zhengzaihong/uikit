@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uikit/uikit_lib.dart';
+import 'package:uikit_plus/uikit_lib.dart';
 
 class CityPickerExample extends StatelessWidget {
 

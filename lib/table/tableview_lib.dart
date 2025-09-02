@@ -1,1 +1,1 @@
-export 'package:uikit/table/table_extend.dart';
+export 'package:uikit_plus/table/table_extend.dart';
