@@ -617,14 +617,14 @@ class _RadarPainter extends CustomPainter {
         ..style = PaintingStyle.fill
         ..isAntiAlias = true
         ..colorFilter = ColorFilter.mode(
-            Colors.black.withOpacity(1 - s.fillOpacity), BlendMode.dstOut);
+            Colors.black.withValues(alpha: (1 - s.fillOpacity)), BlendMode.dstOut);
       final path = Path()..addPolygon(pts, true);
       canvas.drawPath(path, paint);
     } else if (s.fillColor != null) {
       final paint = Paint()
         ..style = PaintingStyle.fill
         ..isAntiAlias = true
-        ..color = s.fillColor!.withOpacity(s.fillOpacity);
+        ..color = s.fillColor!.withValues(alpha: s.fillOpacity);
       final path = Path()..addPolygon(pts, true);
       canvas.drawPath(path, paint);
     }
@@ -912,4 +912,4 @@ class _LegendMeasure {
 
 /// ========== 工具函数 ==========
 
-double _deg2rad(double deg) => deg / 180.0 * pi;
+// double _deg2rad(double deg) => deg / 180.0 * pi;

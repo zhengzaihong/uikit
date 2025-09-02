@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uikit/table/tableview_lib.dart';
 import 'package:uikit/behavior/overscrollbehavior.dart';
 
 ///

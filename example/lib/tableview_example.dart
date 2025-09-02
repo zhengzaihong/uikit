@@ -84,7 +84,7 @@ class _TableViewExampleState extends State<TableViewExample> {
                     child:Center(child:  Container(
                         padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 10),
                         decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.grey.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(20),
                         ), child: const Text("查看"))),
                   ),

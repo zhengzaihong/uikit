@@ -24,11 +24,6 @@ String colorToStr(Color color) {
 
 
 extension ColorExtension on Color {
-  ///设置透明度 0.0-1.0 之间
-  @Deprecated("use setAlpha instead")
-  Color setOpacity(double opacity) {
-    return withOpacity(opacity);
-  }
 
   Color setAlpha(double opacity) {
     assert(opacity >= 0.0 && opacity <= 1.0);

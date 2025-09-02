@@ -1,4 +1,5 @@
-
+## 0.4.0
+- A large number of component refactoring and optimizing, removing some components
 
 ## 0.3.1
 - Upgrade Flutter SDK version 3.27.4.

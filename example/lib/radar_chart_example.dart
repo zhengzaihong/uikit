@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:uikit/uikit_lib.dart';
 
 class RadarChartExample extends StatefulWidget {
@@ -88,7 +85,7 @@ class _RadarChartExampleState extends State<RadarChartExample> {
                   duration: const Duration(seconds: 1),
                 ),
               );
-              print('你点击了维度: ${dims[index].name}');
+              debugPrint('你点击了维度: ${dims[index].name}');
             },
           ),
         ),
