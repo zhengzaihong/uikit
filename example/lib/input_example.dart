@@ -40,6 +40,13 @@ class _InputExampleState extends State<InputExample> {
 
   ValueNotifier<FormTips> formTips = ValueNotifier(FormTips.none);
 
+
+  late dynamic debounceInvoker;
+  void testDebounce(String label) {
+    print('label: $label @ ${DateTime.now()}');
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -48,8 +55,10 @@ class _InputExampleState extends State<InputExample> {
     errorBorder = allBorder.copyWith(borderColor: Colors.red);
   }
 
+
   @override
   Widget build(BuildContext context) {
+    debounceInvoker = testDebounce.debounce(milliseconds: 500);
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
@@ -154,7 +163,7 @@ class _InputExampleState extends State<InputExample> {
                         // enableForm: f,
                         obscureText: false,
                         noBorder: true,
-                        hintText: "请输入手机号",
+                        hintText: "请输入手机号-debounce测试",
                         showCursor: true,
                         cursorColor: Colors.red,
                         fillColor: Colors.grey.withAlpha(40),
@@ -162,8 +171,8 @@ class _InputExampleState extends State<InputExample> {
                           LengthLimitingTextInputFormatter(11),
                         ],
                         onChanged: (msg){
-                          debugPrint("----------msg-:$msg");
-                        }.throttle1(milliseconds: 4000),
+                          debounceInvoker(msg);
+                        },
 
                         controller: TextEditingController(),
                         validator: const InputValidation(
