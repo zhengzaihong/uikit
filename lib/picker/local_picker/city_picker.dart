@@ -1,10 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'city_result.dart';
-
 
 ///
 /// create_user: zhengzaihong
@@ -13,322 +11,274 @@ import 'city_result.dart';
 /// create_time: 20:44
 /// describe: 城市picker
 ///
-
-///选择后的回调
-typedef ResultBlock = void Function(CityResult result);
-
-///自定义顶部按钮的样式，确定和取消
-typedef TopMenuStyle = Widget Function(
-    ResultBlock block, _CityPickerViewState pickerViewState);
-
-class CityPickerView extends StatefulWidget {
-  /// json数据可以从外部传入，如果外部有值，取外部值
-  final List? params;
-
-  /// 结果返回
-  final ResultBlock? onResult;
-  final TopMenuStyle? topMenuStyle;
-  final TextStyle? listTextStyle;
-  final double listHeight;
-
-  final Widget sureWidget;
-  final Widget cancelWidget;
-
-  final double buttonBarHeight;
-  final BoxDecoration buttonBarBoxDecoration;
-
-  const CityPickerView({
-    key,
-    this.onResult,
-    this.params,
-    this.topMenuStyle,
-    this.buttonBarHeight = 44,
-    this.listHeight = 200,
-    this.buttonBarBoxDecoration =  const BoxDecoration(
-      border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
-    this.listTextStyle = const TextStyle(color: Colors.black87, fontSize: 16),
-    this.sureWidget = const Text(
-      '确定',
-    ),
-    this.cancelWidget = const Text(
-      '取消',
-    ),
-  }) : super(key: key);
-
-  @override
-  _CityPickerViewState createState() => _CityPickerViewState();
+///
+class PickerHelper {
+  /// 显示通用城市选择器
+  static Future<CityResult?> showPicker(
+      BuildContext context, {
+        List<dynamic>? data,
+        PickerStyle? style,
+        PickerResultCallback? onResult,
+      }) {
+    return showModalBottomSheet<CityResult>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return GeneralPickerView(
+          data: data,
+          style: style,
+          onResult: onResult,
+        );
+      },
+    );
+  }
 }
 
-class _CityPickerViewState extends State<CityPickerView> {
-  List datas = [];
-  int? provinceIndex;
-  int? cityIndex;
-  int? areaIndex;
+/// 回调
+typedef PickerResultCallback = void Function(CityResult result);
 
-  FixedExtentScrollController? provinceScrollController;
-  FixedExtentScrollController? cityScrollController;
-  FixedExtentScrollController? areaScrollController;
+/// 样式配置
+class PickerStyle {
+  final TextStyle? itemTextStyle;
+  final double? itemHeight;
+  final double? pickerHeight;
+  final Widget? confirmWidget;
+  final Widget? cancelWidget;
+  final Color? backgroundColor;
+  final BoxDecoration? buttonBarDecoration;
 
-  CityResult result = CityResult();
+  const PickerStyle({
+    this.itemTextStyle,
+    this.itemHeight,
+    this.pickerHeight,
+    this.confirmWidget,
+    this.cancelWidget,
+    this.backgroundColor,
+    this.buttonBarDecoration,
+  });
+}
 
-  bool isShow = false;
+/// 通用选择器视图
+class GeneralPickerView extends StatefulWidget {
+  final List<dynamic>? data;
+  final PickerStyle? style;
+  final PickerResultCallback? onResult;
 
-  List get provinces {
-    if (datas.isNotEmpty) {
-      if (provinceIndex == null) {
-        provinceIndex = 0;
-        result.province = datas[provinceIndex!]['label'];
-        result.provinceCode = datas[provinceIndex!]['value'].toString();
-      }
-      return datas;
-    }
-    return [];
-  }
-
-  List get citys {
-    if (provinces.isNotEmpty) {
-      return provinces[provinceIndex!]['children'] ?? [];
-    }
-    return [];
-  }
-
-  List get areas {
-    if (citys.isNotEmpty) {
-      if (cityIndex == null) {
-        cityIndex = 0;
-        result.city = citys[cityIndex!]['label'];
-        result.cityCode = citys[cityIndex!]['value'].toString();
-      }
-      List list = citys[cityIndex!]['children'] ?? [];
-      if (list.isNotEmpty) {
-        if (areaIndex == null) {
-          areaIndex = 0;
-          result.area = list[areaIndex!]['label'];
-          result.areaCode = list[areaIndex!]['value'].toString();
-        }
-      }
-      return list;
-    }
-    return [];
-  }
-
-  /// 保存选择结果
-  _saveInfoData() {
-    var prs = provinces;
-    var cts = citys;
-    var ars = areas;
-    if (provinceIndex != null && prs.isNotEmpty) {
-      result.province = prs[provinceIndex!]['label'];
-      result.provinceCode = prs[provinceIndex!]['value'].toString();
-    } else {
-      result.province = '';
-      result.provinceCode = '';
-    }
-
-    if (cityIndex != null && cts.isNotEmpty) {
-      result.city = cts[cityIndex!]['label'];
-      result.cityCode = cts[cityIndex!]['value'].toString();
-    } else {
-      result.city = '';
-      result.cityCode = '';
-    }
-
-    if (areaIndex != null && ars.isNotEmpty) {
-      result.area = ars[areaIndex!]['label'];
-      result.areaCode = ars[areaIndex!]['value'].toString();
-    } else {
-      result.area = '';
-      result.areaCode = '';
-    }
-  }
+  const GeneralPickerView({super.key, this.data, this.style, this.onResult});
 
   @override
-  void dispose() {
-    provinceScrollController?.dispose();
-    cityScrollController?.dispose();
-    areaScrollController?.dispose();
-    super.dispose();
-  }
+  State<GeneralPickerView> createState() => _GeneralPickerViewState();
+}
+
+class _GeneralPickerViewState extends State<GeneralPickerView> {
+  List<dynamic> data = [];
+  int provinceIndex = 0;
+  int cityIndex = 0;
+  int areaIndex = 0;
+
+  FixedExtentScrollController? provinceController;
+  FixedExtentScrollController? cityController;
+  FixedExtentScrollController? areaController;
+
+  CityResult result = CityResult();
 
   @override
   void initState() {
     super.initState();
+    provinceController = FixedExtentScrollController();
+    cityController = FixedExtentScrollController();
+    areaController = FixedExtentScrollController();
 
-    provinceScrollController = FixedExtentScrollController();
-    cityScrollController = FixedExtentScrollController();
-    areaScrollController = FixedExtentScrollController();
-
-    ///读取city.json数据
-    if (widget.params == null) {
-      _loadCitys().then((value) {
-        setState(() {
-          isShow = true;
-        });
-      });
+    if (widget.data != null) {
+      data = widget.data!;
     } else {
-      datas = widget.params!;
-      assert(datas.isNotEmpty);
-      setState(() {
-        isShow = true;
-      });
+      _loadCityData();
     }
+    _updateResult();
   }
 
-  Future _loadCitys() async {
-    var cityStr =
-        await rootBundle.loadString('packages/uikit/assets/citys.json');
-    datas = json.decode(cityStr) as List;
-    return Future.value(true);
+  Future<void> _loadCityData() async {
+    String jsonStr = await rootBundle.loadString('packages/uikit/assets/cityList.json');
+    data = List<Map<String, dynamic>>.from(json.decode(jsonStr));
+    setState(() {});
+    _updateResult();
+  }
+
+  void _updateResult() {
+    if (data.isEmpty) return;
+    result.province = data[provinceIndex]['label'] ?? '';
+    result.provinceCode = data[provinceIndex]['value']?.toString() ?? '';
+
+    var cities = data[provinceIndex]['children'] ?? [];
+    if (cities.isNotEmpty) {
+      cityIndex = cityIndex >= cities.length ? 0 : cityIndex;
+      result.city = cities[cityIndex]['label'] ?? '';
+      result.cityCode = cities[cityIndex]['value']?.toString() ?? '';
+
+      var areas = cities[cityIndex]['children'] ?? [];
+      if (areas.isNotEmpty) {
+        areaIndex = areaIndex >= areas.length ? 0 : areaIndex;
+        result.area = areas[areaIndex]['label'] ?? '';
+        result.areaCode = areas[areaIndex]['value']?.toString() ?? '';
+      } else {
+        result.area = '';
+        result.areaCode = '';
+      }
+    } else {
+      result.city = '';
+      result.cityCode = '';
+      result.area = '';
+      result.areaCode = '';
+    }
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    provinceController?.dispose();
+    cityController?.dispose();
+    areaController?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final style = widget.style ?? const PickerStyle();
     return Material(
+      color: style.backgroundColor ?? Colors.white,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          widget.topMenuStyle == null
-              ? _firstView()
-              : widget.topMenuStyle!.call(widget.onResult!, this),
-          _contentView(),
+        children: [
+          _buildButtonBar(style),
+          SizedBox(
+            height: style.pickerHeight ?? 200,
+            child: Row(
+              children: [
+                _buildPicker(data, provinceController, (index) {
+                  provinceIndex = index;
+                  cityIndex = 0;
+                  areaIndex = 0;
+                  _updateResult();
+                }),
+                _buildPicker(data[provinceIndex]['children'] ?? [], cityController, (index) {
+                  cityIndex = index;
+                  areaIndex = 0;
+                  _updateResult();
+                }),
+                _buildPicker(
+                    (data[provinceIndex]['children']?[cityIndex]?['children'] ?? []), areaController,
+                        (index) {
+                      areaIndex = index;
+                      _updateResult();
+                    }),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _firstView() {
+  Widget _buildButtonBar(PickerStyle style) {
     return Container(
-      height: widget.buttonBarHeight,
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            TextButton(
-              child: widget.cancelWidget,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: widget.sureWidget,
-              onPressed: () {
-                if (widget.onResult != null) {
-                  widget.onResult!(result);
-                }
-                Navigator.pop(context);
-              },
-            ),
-          ]),
-      decoration: widget.buttonBarBoxDecoration,
-    );
-  }
-
-  Widget _contentView() {
-    return SizedBox(
-      height: widget.listHeight,
-      child: isShow
-          ? Row(
-              children: <Widget>[
-                Expanded(child: _provincePickerView()),
-                Expanded(child: _cityPickerView()),
-                Expanded(child: _areaPickerView()),
-              ],
-            )
-          : const Center(
-              child: CupertinoActivityIndicator(
-                animating: true,
-              ),
-            ),
-    );
-  }
-
-  Widget _provincePickerView() {
-    return CupertinoPicker(
-      scrollController: provinceScrollController,
-      children: provinces.map((item) {
-        return Center(
-          child: Text(
-            item['label'],
-            style: widget.listTextStyle,
-            maxLines: 1,
+      height: 44,
+      decoration: style.buttonBarDecoration ??
+          const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
           ),
-        );
-      }).toList(),
-      onSelectedItemChanged: (index) {
-        provinceIndex = index;
-        if (cityIndex != null) {
-          cityIndex = 0;
-          if (cityScrollController!.positions.isNotEmpty) {
-            cityScrollController?.jumpTo(0);
-          }
-        }
-        if (areaIndex != null) {
-          areaIndex = 0;
-          if (areaScrollController!.positions.isNotEmpty) {
-            areaScrollController!.jumpTo(0);
-          }
-        }
-        _saveInfoData();
-        setState(() {});
-      },
-      itemExtent: 36,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          style.cancelWidget == null?TextButton(
+            child: const Text('取消'),
+            onPressed: () => Navigator.pop(context),
+          ):GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: style.cancelWidget,
+          ),
+          style.confirmWidget == null?TextButton(
+            child:const Text('确定'),
+            onPressed: () {
+              widget.onResult?.call(result);
+              Navigator.pop(context, result);
+            },
+          ):GestureDetector(
+            onTap: (){
+              widget.onResult?.call(result);
+              Navigator.pop(context, result);
+            },
+            child: style.confirmWidget,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _cityPickerView() {
-    return Container(
-      child: citys.isEmpty
-          ? Container()
-          : CupertinoPicker(
-              scrollController: cityScrollController,
-              children: citys.map((item) {
-                return Center(
-                  child: Text(
-                    item['label'],
-                    style: widget.listTextStyle,
-                    maxLines: 1,
-                  ),
-                );
-              }).toList(),
-              onSelectedItemChanged: (index) {
-                cityIndex = index;
-                if (areaIndex != null) {
-                  areaIndex = 0;
-                  if (areaScrollController!.positions.isNotEmpty) {
-                    areaScrollController!.jumpTo(0);
-                  }
-                }
-                _saveInfoData();
-                setState(() {});
-              },
-              itemExtent: 36,
-            ),
+  Widget _buildPicker(List items, FixedExtentScrollController? controller, Function(int) onChange) {
+    if (items.isEmpty) return const SizedBox.shrink();
+    final style = widget.style;
+    return Expanded(
+      child: CupertinoPicker(
+        scrollController: controller,
+        itemExtent: style?.itemHeight ?? 36,
+        children: items.map<Widget>((e) {
+          return Center(
+            child: Text(e['label'] ?? '', style: style?.itemTextStyle ?? const TextStyle(fontSize: 16)),
+          );
+        }).toList(),
+        onSelectedItemChanged: onChange,
+      ),
     );
   }
+}
 
-  Widget _areaPickerView() {
-    return SizedBox(
-      width: double.infinity,
-      child: areas.isEmpty
-          ? Container()
-          : CupertinoPicker(
-              scrollController: areaScrollController,
-              children: areas.map((item) {
-                return Center(
-                  child: Text(
-                    item['label'],
-                    style: widget.listTextStyle,
-                    maxLines: 1,
-                  ),
-                );
-              }).toList(),
-              onSelectedItemChanged: (index) {
-                areaIndex = index;
-                _saveInfoData();
-                setState(() {});
-              },
-              itemExtent: 36,
-            ),
-    );
+class CityResult {
+  /// 省市区
+  String? province = '';
+  String? city = '';
+  String? area = '';
+
+  /// 对应的编码
+  String? provinceCode = '';
+  String? cityCode = '';
+  String? areaCode = '';
+
+  CityResult({
+    this.province,
+    this.city,
+    this.area,
+    this.provinceCode,
+    this.cityCode,
+    this.areaCode,
+  });
+
+  CityResult.fromJson(Map<String, dynamic> json) {
+    province = json['province'];
+    city = json['city'];
+    area = json['area'];
+    provinceCode = json['provinceCode'];
+    cityCode = json['cityCode'];
+    areaCode = json['areaCode'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['province'] = province;
+    data['city'] = city;
+    data['area'] = area;
+    data['provinceCode'] = provinceCode;
+    data['cityCode'] = cityCode;
+    data['areaCode'] = areaCode;
+
+    return data;
+  }
+
+  @override
+  String toString() {
+    return 'CityResult{province: $province, city: $city, area: $area, provinceCode: $provinceCode, cityCode: $cityCode, areaCode: $areaCode}';
   }
 }
