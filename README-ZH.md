@@ -121,5 +121,5 @@ dependencies:
 ### 分页组件：
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/pager_image.png)
 
-特别说明：支持编译到HarmonyOS
+### 特别说明：支持编译到HarmonyOS
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/HarmonyOS-example.gif)

@@ -122,5 +122,5 @@ dependencies:
 ### Pagination Component
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/pager_image.png)
 
-Special note: Support compilation to HarmonyOS
+### Special note: Support compilation to HarmonyOS
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/HarmonyOS-example.gif)
