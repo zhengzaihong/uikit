@@ -96,7 +96,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                             interval: const Duration(seconds: 2),
                             animateDuration: const Duration(milliseconds: 500),
                             marqueeItems: const [
-                              "这是flutter 基础 widget 案例展示，更多内容请查看源码!1",
+                              "这是flutter案例展示，更多内容请查看源码!1",
                               "测试代码2",
                               "垂直翻滚效果",
                               "这是flutter 基础 widget 案例展示，更多内容请查看源码!1",

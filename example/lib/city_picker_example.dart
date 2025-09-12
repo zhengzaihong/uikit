@@ -4,10 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 
-class CityPickerExample extends StatelessWidget {
+class CityPickerExample extends StatefulWidget {
 
   const CityPickerExample({Key? key}) : super(key: key);
 
+  @override
+  State<CityPickerExample> createState() => _CityPickerExampleState();
+}
+
+class _CityPickerExampleState extends State<CityPickerExample> {
+
+  var location = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,28 +28,25 @@ class CityPickerExample extends StatelessWidget {
         title: const Text("城市选择器"),
       ),
       body: Column(children: [
-        InkWell(
-            onTap: () async {
+        FilledButton.tonal(
+            onPressed: () async {
               var cityStr = await rootBundle.loadString('assets/city.json');
               PickerHelper.showPicker(context,
                   data: json.decode(cityStr),
                 onResult: (res){
-                  debugPrint("--${res.provinceCode}-----${res.cityCode}---${res.areaCode}");
-                  debugPrint("--${res.province}-----${res.city}---${res.area}");
+                    StringBuffer buffer = StringBuffer("名称：${res.province}-${res.city}-${res.area}");
+                    buffer.write("\n");
+                    buffer.write("编码：${res.provinceCode}-${res.cityCode}-${res.areaCode}");
+                    setState(() {
+                      location = buffer.toString();
+                    });
                 }
               );
-
             },
-            child: Container(
-              color: Colors.blueGrey,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(30),
-              child: const Text("城市选择"),
-            )),
-
-
-        InkWell(
-            onTap: () async {
+            child: const Text("城市选择")),
+        vGap(20),
+        FilledButton.tonal(
+            onPressed: () async {
 
               // await PickerHelper.showPicker(context,
               //     textStyle:
@@ -80,12 +84,10 @@ class CityPickerExample extends StatelessWidget {
               //   debugPrint("----------------------${value.toString()}");
               // });
             },
-            child: Container(
-              color: Colors.white,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(30),
-              child: const Text("自定义样式城市选择"),
-            ))
+            child: const Text("自定义样式城市选择")),
+
+
+        Text(location)
       ]),
     );
   }

@@ -80,65 +80,48 @@ class _ToastExampleState extends State<ToastExample> {
           return Column(
               children: [
 
-                InkWell(
-                    onTap: (){
+                FilledButton.tonal(
+                    onPressed: (){
                       Toast.show("这是一条Toast");
                     },
-                    child: Container(
-                    width: 200,
-                    height: 40,
-                    margin: const EdgeInsets.all(20),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue.withAlpha(200),
-                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    ),
-                    child: const Text("常规Toast",style: TextStyle(color: Colors.white)))),
+                    child: const Text("常规Toast",style: TextStyle(color: Colors.black))),
 
-                InkWell(
-                    onTap: (){
 
+                vGap(10),
+                FilledButton.tonal(
+                    onPressed: (){
                       // /自定义样式toast
                       Toast.show( "自定义样式toast",buildToastStyle: (context,msg){
                         return Container(
                             margin: const EdgeInsets.all(20),
                             width: MediaQuery.of(context).size.width/3,
-                            height: 40,
+                            height: 60,
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.deepOrangeAccent.withAlpha(200),
-                              borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.ac_unit_rounded,size: 20,color: Colors.deepPurple),
+                                  const Icon(Icons.check_circle,size: 20,color: Colors.lightBlueAccent),
                                   const SizedBox(width: 5),
                                   Text(msg,style: const TextStyle(
                                       decoration: TextDecoration.none,
-                                      color: Colors.white,fontSize: 12)),
+                                      color: Colors.black,fontSize: 12)),
                                   const SizedBox(width: 5),
                                 ]));
                       });
                     },
-                    child: Container(
-                        width: 200,
-                        height: 40,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue.withAlpha(200),
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: const Text("自定义样式toast",style: TextStyle(color: Colors.white)))),
+                    child: const Text("自定义样式toast",style: TextStyle(color: Colors.black))),
 
 
-
-                InkWell(
-                    onTap: (){
+                vGap(10),
+                FilledButton.tonal(
+                    onPressed: (){
                       final r = Random().nextInt(2000);
                       Toast.showQueueToast(
                         "消息随机数：${r.toString()}",
-
                         ///内部有默认样式，可自定义设置toast的样式
                           buildStyle: (context,task){
                           return Container(
@@ -149,27 +132,18 @@ class _ToastExampleState extends State<ToastExample> {
                               color: Colors.redAccent,
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                            child: Text(task.msg,style: const TextStyle(color: Colors.white,fontSize: 16)),
+                            child: Text(task.msg,style: const TextStyle(color: Colors.black,fontSize: 16)),
                           );
                         }
                       );
                     },
-                    child: Container(
-                        width: 200,
-                        height: 40,
-                        margin: const EdgeInsets.all(20),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue.withAlpha(200),
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: const Text("支持自定义样式的队列toast",style: TextStyle(color: Colors.white)))),
+                    child: const Text("支持自定义样式的队列toast",style: TextStyle(color:Colors.black))),
 
-
+                vGap(10),
                LayoutBuilder(
                    builder: (context,box){
-                    return  InkWell(
-                     onTap: (){
+                    return   FilledButton.tonal(
+                        onPressed: (){
                        ///自定义位置 任意组件同理
                        RenderBox renderBox = context.findRenderObject() as RenderBox;
                        final offset = renderBox.localToGlobal(Offset.zero);
@@ -187,28 +161,19 @@ class _ToastExampleState extends State<ToastExample> {
                                      BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(2, 2)),
                                    ],
                                  ),
-                                 child:const Text("自定义位置Toast",style: TextStyle(color: Colors.redAccent,fontSize: 16)),
+                                 child:const Text("自定义位置Toast",style: TextStyle(color: Colors.black,fontSize: 16)),
                                ),
                                left: offset.dx, top: offset.dy+60,);
                            });
 
                      },
-                     child: Container(
-                         width: 200,
-                         height: 40,
-                         margin: const EdgeInsets.all(20),
-                         alignment: Alignment.center,
-                         decoration: BoxDecoration(
-                           color: Colors.lightBlue.withAlpha(200),
-                           borderRadius: const BorderRadius.all(Radius.circular(15)),
-                         ),
-                         child: const Text("根据坐标显示Toast",style: TextStyle(color: Colors.white)))
+                     child: const Text("根据坐标显示Toast",style: TextStyle(color: Colors.black))
                  );
                 }),
 
-
-                InkWell(
-                    onTap: () async{
+                vGap(10),
+                FilledButton.tonal(
+                    onPressed: () async{
                      overlayEntryManger = await Toast.show("",
                           showTime: 11*1000,
                           buildToastStyle: (context,_){
@@ -313,16 +278,7 @@ class _ToastExampleState extends State<ToastExample> {
                         );
                       });
                     },
-                    child: Container(
-                        width: 200,
-                        height: 40,
-                        margin: const EdgeInsets.all(20),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlue.withAlpha(200),
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        ),
-                        child: const Text("用Toast仿dialog",style: TextStyle(color: Colors.white)))),
+                    child: const Text("用Toast仿dialog",style: TextStyle(color: Colors.black))),
               ]
           );
         }));

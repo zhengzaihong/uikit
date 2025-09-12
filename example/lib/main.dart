@@ -95,9 +95,12 @@ class _MyAppState extends State<MyApp> {
           pushPage(context, page);
         },
         child: Container(
-          alignment: Alignment.center,
-          color: Colors.lightBlue,
-          child: Text(title),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: Colors.lightBlue,
+            borderRadius: BorderRadius.circular(20)
+          ),
+          child: Center(child: Text(title)),
         ));
   }
 

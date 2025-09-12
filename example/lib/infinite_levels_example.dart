@@ -19,7 +19,7 @@ class InfiniteLevelsExample extends StatefulWidget {
 class _InfiniteLevelsExampleState extends State<InfiniteLevelsExample> {
 
 
- static List<InfiniteMenu> menus = [
+ static List<CustomMenu> menus = [
 
     CustomMenu(
       title: "一级标题A",
