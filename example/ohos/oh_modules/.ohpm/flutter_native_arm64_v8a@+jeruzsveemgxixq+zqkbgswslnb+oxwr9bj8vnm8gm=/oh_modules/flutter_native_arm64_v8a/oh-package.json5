@@ -1,1 +1,0 @@
-{"name":"flutter_native_arm64_v8a","version":"1.0.0-e3905a2a5f","description":"Place so files for flutter on ohos.","main":"Index.ets","author":"","license":"Apache-2.0","dependencies":{},"metadata":{"sourceRoots":["./src/main"],"debug":true,"nativeDebugSymbol":false},"compatibleSdkVersion":12,"compatibleSdkType":"HarmonyOS","obfuscated":false}
