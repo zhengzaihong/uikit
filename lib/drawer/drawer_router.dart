@@ -57,8 +57,9 @@ class DrawerRouter extends RouterDelegate<RouteInformation> with ChangeNotifier,
 
   @override
   RouteInformation get currentConfiguration {
-    return RouteInformation(location: _location ?? '/');
+    return RouteInformation(uri: Uri.parse(_location ?? '/'));
   }
+
 
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
@@ -69,14 +70,24 @@ class DrawerRouter extends RouterDelegate<RouteInformation> with ChangeNotifier,
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: popRoute,
+    return PopScope(
+        canPop: false,
+        onPopInvoked: _onPopInvoked,
         child: Navigator(
           key: navigatorKey,
           pages: List.of(_pages),
           onPopPage: _onPopPage,
         ));
   }
+  void _onPopInvoked(bool didPop) {
+    // 当 canPop 为 false 时, didPop 总是 false.
+    // 我们在此处手动处理返回手势.
+    if (!didPop) {
+      popRoute();
+    }
+  }
+
+
 
   void pop({bool closeDrawer = false,bool endDrawer = true}) async {
     if (canPop()) {
@@ -94,7 +105,7 @@ class DrawerRouter extends RouterDelegate<RouteInformation> with ChangeNotifier,
 
   @override
   Future<void> setNewRoutePath(RouteInformation configuration) async {
-    return popAndPushNamed(name: configuration.location ?? '/');
+    return popAndPushNamed(name: configuration.uri.toString());
   }
 
   @override
@@ -111,7 +122,7 @@ class DrawerRouter extends RouterDelegate<RouteInformation> with ChangeNotifier,
     return Future.value(false);
   }
 
-  bool canPop() => _pages.length > 0;
+  bool canPop() => _pages.isNotEmpty;
 
   bool _onPopPage(Route route, dynamic result) {
     if (!route.didPop(result)) {

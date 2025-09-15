@@ -165,7 +165,7 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
               elevation: 0.5,
               backgroundColor: widget.iconList[i].tabColor,
               onPressed: () {
-                // //点击菜单子选项要求菜单弹缩回去
+                //点击菜单子选项要求菜单弹缩回去
                 floatClick();
                 widget.callback(i);
               },
@@ -218,8 +218,8 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
     );
   }
 
-  //FloatingActionButton的点击事件，用来控制按钮的动画变换
-  floatClick() {
+  ///FloatingActionButton的点击事件，用来控制按钮的动画变换
+  void floatClick() {
     if (!isOpened) {
       _animationController.forward(); //展开动画
     } else {
@@ -230,7 +230,7 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
 
   //页面销毁时，销毁动画控制器
   @override
-  dispose() {
+  void dispose() {
     _animationController.dispose();
     super.dispose();
   }

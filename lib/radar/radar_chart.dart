@@ -305,7 +305,7 @@ class _RadarChartState extends State<RadarChart>
         vsync: this,
         duration: const Duration(milliseconds: 1),
       )..value = 1;
-      _anim = AlwaysStoppedAnimation(1.0);
+      _anim = const AlwaysStoppedAnimation(1.0);
     }
   }
 

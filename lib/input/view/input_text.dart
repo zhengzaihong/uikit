@@ -612,7 +612,7 @@ class InputTextState extends State<InputText> {
         autofillHints: widget.autofillHints,
         clipBehavior: widget.clipBehavior,
         restorationId: widget.restorationId,
-        scribbleEnabled: widget.scribbleEnabled,
+        // scribbleEnabled: widget.scribbleEnabled,
         enableInteractiveSelection: widget.enableInteractiveSelection,
         enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
         onSubmitted: widget.onSubmitted,
