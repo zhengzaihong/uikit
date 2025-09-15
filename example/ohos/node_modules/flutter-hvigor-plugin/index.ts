@@ -1,0 +1,1 @@
+export { flutterHvigorPlugin, injectNativeModules } from './src/plugin/flutter-hvigor-plugin';

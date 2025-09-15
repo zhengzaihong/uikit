@@ -1,6 +1,6 @@
 name: uikit_plus
 description: This is a Dart-supported, cross-platform UI component library that includes various custom components to help you quickly build projects and focus more on your business development. (The old package flutter_uikit_forzzh has been migrated here)
-version: 0.4.0
+version: 0.4.1
 homepage: https://github.com/zhengzaihong/uikit
 
 platforms:

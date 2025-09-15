@@ -1,0 +1,98 @@
+{
+  "lockVersion": "1.0",
+  "settings": {
+    "resolveConflict": true,
+    "resolveConflictStrict": false,
+    "installAll": true
+  },
+  "overrides": {
+    "@ohos/flutter_ohos": "file:E:\\FlutterSDK\\HarmonyFlutter\\flutter_flutter\\bin\\cache\\artifacts\\engine\\ohos-arm64\\flutter_embedding_debug.har",
+    "flutter_native_arm64_v8a": "file:E:\\FlutterSDK\\HarmonyFlutter\\flutter_flutter\\bin\\cache\\artifacts\\engine\\ohos-arm64\\arm64_v8a_debug.har",
+    "flutter_native_x86_64": "file:E:\\FlutterSDK\\HarmonyFlutter\\flutter_flutter\\bin\\cache\\artifacts\\engine\\ohos-x64\\x86_64_debug.har"
+  },
+  "overrideDependencyMap": {
+    "entry": {
+      "dependencies": {
+        "@ohos/flutter_ohos": "",
+        "flutter_native_arm64_v8a": "",
+        "flutter_native_x86_64": ""
+      }
+    },
+    ".": {
+      "dependencies": {},
+      "devDependencies": {
+        "@ohos/hypium": "1.0.6"
+      },
+      "dynamicDependencies": {}
+    }
+  },
+  "modules": {
+    ".": {
+      "name": "",
+      "dependencies": {},
+      "devDependencies": {
+        "@ohos/hypium": {
+          "specifier": "1.0.6",
+          "version": "1.0.6"
+        }
+      },
+      "dynamicDependencies": {},
+      "maskedByOverrideDependencyMap": true
+    },
+    "entry": {
+      "name": "entry",
+      "dependencies": {
+        "@ohos/flutter_ohos": {
+          "specifier": "",
+          "version": "file:../../../../../../FlutterSDK/HarmonyFlutter/flutter_flutter/bin/cache/artifacts/engine/ohos-arm64/flutter_embedding_debug.har"
+        },
+        "flutter_native_arm64_v8a": {
+          "specifier": "",
+          "version": "file:../../../../../../FlutterSDK/HarmonyFlutter/flutter_flutter/bin/cache/artifacts/engine/ohos-arm64/arm64_v8a_debug.har"
+        },
+        "flutter_native_x86_64": {
+          "specifier": "",
+          "version": "file:../../../../../../FlutterSDK/HarmonyFlutter/flutter_flutter/bin/cache/artifacts/engine/ohos-x64/x86_64_debug.har"
+        }
+      },
+      "devDependencies": {},
+      "dynamicDependencies": {},
+      "maskedByOverrideDependencyMap": true
+    }
+  },
+  "packages": {
+    "@ohos/hypium@1.0.6": {
+      "integrity": "sha512-bb3DWeWhYrFqj9mPFV3yZQpkm36kbcK+YYaeY9g292QKSjOdmhEIQR2ULPvyMsgSR4usOBf5nnYrDmaCCXirgQ==",
+      "storePath": "oh_modules/.ohpm/@ohos+hypium@1.0.6",
+      "dependencies": {},
+      "dynamicDependencies": {},
+      "dev": true,
+      "dynamic": false,
+      "maskedByOverrideDependencyMap": false
+    },
+    "@ohos/flutter_ohos@file:../../../../../../FlutterSDK/HarmonyFlutter/flutter_flutter/bin/cache/artifacts/engine/ohos-arm64/flutter_embedding_debug.har": {
+      "storePath": "oh_modules/.ohpm/@ohos+flutter_ohos@mgmg9ns2udoas6cinzhumko0synjp8kuqjmrunfzpam=",
+      "dependencies": {},
+      "dynamicDependencies": {},
+      "dev": false,
+      "dynamic": false,
+      "maskedByOverrideDependencyMap": false
+    },
+    "flutter_native_arm64_v8a@file:../../../../../../FlutterSDK/HarmonyFlutter/flutter_flutter/bin/cache/artifacts/engine/ohos-arm64/arm64_v8a_debug.har": {
+      "storePath": "oh_modules/.ohpm/flutter_native_arm64_v8a@+jeruzsveemgxixq+zqkbgswslnb+oxwr9bj8vnm8gm=",
+      "dependencies": {},
+      "dynamicDependencies": {},
+      "dev": false,
+      "dynamic": false,
+      "maskedByOverrideDependencyMap": false
+    },
+    "flutter_native_x86_64@file:../../../../../../FlutterSDK/HarmonyFlutter/flutter_flutter/bin/cache/artifacts/engine/ohos-x64/x86_64_debug.har": {
+      "storePath": "oh_modules/.ohpm/flutter_native_x86_64@vvhgnxgpkohtzpa7l8f1foclwokjkakhduyht4dbf3g=",
+      "dependencies": {},
+      "dynamicDependencies": {},
+      "dev": false,
+      "dynamic": false,
+      "maskedByOverrideDependencyMap": false
+    }
+  }
+}

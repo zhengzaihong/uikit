@@ -24,7 +24,7 @@ Language: [English](README.md) | 简体中文
 在 `pubspec.yaml` 中添加依赖：
 ```yaml
 dependencies:
-  uikit_plus: ^0.4.0  //旧版本不在维护，旧版本最后依赖地址：flutter_uikit_forzzh:0.3.1
+  uikit_plus: ^0.4.1  //旧版本不在维护，旧版本最后依赖地址：flutter_uikit_forzzh:0.3.1
 ```
 
 
