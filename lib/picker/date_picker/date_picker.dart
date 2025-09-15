@@ -17,17 +17,17 @@ typedef ItemBuilder = Widget Function(DateType type, int value);
 
 enum DateType {
   //年
-  YEAR,
+  year,
   //月
-  MONTH,
+  month,
   //日
-  DAY,
+  day,
   //时
-  HOUR,
+  hour,
   //分
-  MINUTE,
+  minute,
   //秒
-  SECOND,
+  second,
 }
 
 class DatePicker extends StatefulWidget {
@@ -122,11 +122,11 @@ class DatePicker extends StatefulWidget {
     required this.itemBuilder,
     this.startWidget,
     this.showColumn = const [
-      DateType.YEAR,
-      DateType.MONTH,
-      DateType.DAY,
-      DateType.HOUR,
-      DateType.MINUTE
+      DateType.year,
+      DateType.month,
+      DateType.day,
+      DateType.hour,
+      DateType.minute
     ],
     this.endWidget,
     this.initStartDate,
@@ -195,12 +195,12 @@ class DatePicker extends StatefulWidget {
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.easeInOutCubic,
     List<DateType> showColumn = const [
-      DateType.YEAR,
-      DateType.MONTH,
-      DateType.DAY,
-      DateType.HOUR,
-      DateType.MINUTE,
-      DateType.SECOND
+      DateType.year,
+      DateType.month,
+      DateType.day,
+      DateType.hour,
+      DateType.minute,
+      DateType.second
     ],
     DatePickerStrings? datePickerStrings,
     Widget? startTitle,
@@ -261,22 +261,22 @@ class DatePicker extends StatefulWidget {
             itemBuilder: (type, value) {
               String label = '';
               switch (type) { // Using strings for year, month, day, etc.
-                case DateType.YEAR:
+                case DateType.year:
                   label = strings.year;
                   break;
-                case DateType.MONTH:
+                case DateType.month:
                   label = strings.month;
                   break;
-                case DateType.DAY:
+                case DateType.day:
                   label = strings.day;
                   break;
-                case DateType.HOUR:
+                case DateType.hour:
                   label = strings.hour;
                   break;
-                case DateType.MINUTE:
+                case DateType.minute:
                   label = strings.minute;
                   break;
-                case DateType.SECOND:
+                case DateType.second:
                   label = strings.second;
                   break;
               }
@@ -345,12 +345,12 @@ class DatePicker extends StatefulWidget {
         Duration duration = const Duration(milliseconds: 200),
         Curve curve = Curves.easeInOutCubic,
         List<DateType> showColumn = const [
-          DateType.YEAR,
-          DateType.MONTH,
-          DateType.DAY,
-          DateType.HOUR,
-          DateType.MINUTE,
-          DateType.SECOND
+          DateType.year,
+          DateType.month,
+          DateType.day,
+          DateType.hour,
+          DateType.minute,
+          DateType.second
         ],
         DatePickerStrings? datePickerStrings,
         Color? bottomSheetBackgroundColor,
@@ -443,22 +443,22 @@ class DatePicker extends StatefulWidget {
           itemBuilder: (type, value) {
             String label = '';
             switch (type) { // Using strings for year, month, day, etc.
-              case DateType.YEAR:
+              case DateType.year:
                 label = strings.year;
                 break;
-              case DateType.MONTH:
+              case DateType.month:
                 label = strings.month;
                 break;
-              case DateType.DAY:
+              case DateType.day:
                 label = strings.day;
                 break;
-              case DateType.HOUR:
+              case DateType.hour:
                 label = strings.hour;
                 break;
-              case DateType.MINUTE:
+              case DateType.minute:
                 label = strings.minute;
                 break;
-              case DateType.SECOND:
+              case DateType.second:
                 label = strings.second;
                 break;
             }
@@ -528,12 +528,12 @@ class DatePicker extends StatefulWidget {
         Duration duration = const Duration(milliseconds: 200),
         Curve curve = Curves.easeInOutCubic,
         List<DateType> showColumn = const [
-          DateType.YEAR,
-          DateType.MONTH,
-          DateType.DAY,
-          DateType.HOUR,
-          DateType.MINUTE,
-          DateType.SECOND
+          DateType.year,
+          DateType.month,
+          DateType.day,
+          DateType.hour,
+          DateType.minute,
+          DateType.second
         ],
         DatePickerStrings? datePickerStrings,
         Widget? title,
@@ -585,22 +585,22 @@ class DatePicker extends StatefulWidget {
             itemBuilder: (type, value) {
               String label = '';
               switch (type) { // Using strings for year, month, day, etc.
-                case DateType.YEAR:
+                case DateType.year:
                   label = strings.year;
                   break;
-                case DateType.MONTH:
+                case DateType.month:
                   label = strings.month;
                   break;
-                case DateType.DAY:
+                case DateType.day:
                   label = strings.day;
                   break;
-                case DateType.HOUR:
+                case DateType.hour:
                   label = strings.hour;
                   break;
-                case DateType.MINUTE:
+                case DateType.minute:
                   label = strings.minute;
                   break;
-                case DateType.SECOND:
+                case DateType.second:
                   label = strings.second;
                   break;
               }
@@ -669,12 +669,12 @@ class DatePicker extends StatefulWidget {
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.easeInOutCubic,
     List<DateType> showColumn = const [
-      DateType.YEAR,
-      DateType.MONTH,
-      DateType.DAY,
-      DateType.HOUR,
-      DateType.MINUTE,
-      DateType.SECOND
+      DateType.year,
+      DateType.month,
+      DateType.day,
+      DateType.hour,
+      DateType.minute,
+      DateType.second
     ],
     DatePickerStrings? datePickerStrings,
     Color? bottomSheetBackgroundColor,
@@ -757,22 +757,22 @@ class DatePicker extends StatefulWidget {
           itemBuilder: (type, value) {
             String label = '';
             switch (type) {
-              case DateType.YEAR:
+              case DateType.year:
                 label = strings.year;
                 break;
-              case DateType.MONTH:
+              case DateType.month:
                 label = strings.month;
                 break;
-              case DateType.DAY:
+              case DateType.day:
                 label = strings.day;
                 break;
-              case DateType.HOUR:
+              case DateType.hour:
                 label = strings.hour;
                 break;
-              case DateType.MINUTE:
+              case DateType.minute:
                 label = strings.minute;
                 break;
-              case DateType.SECOND:
+              case DateType.second:
                 label = strings.second;
                 break;
             }
@@ -870,20 +870,20 @@ class _DatePickerState extends State<DatePicker> {
   }
 
   void _animateTo() {
-    if(widget.showColumn.contains(DateType.YEAR)) _animateScroll(startYearScrollController, _startDate.year - _startYear);
-    if(widget.showColumn.contains(DateType.MONTH)) _animateScroll(startMonthScrollController, _startDate.month - 1);
-    if(widget.showColumn.contains(DateType.DAY)) _animateScroll(startDayScrollController, _startDate.day - 1);
-    if(widget.showColumn.contains(DateType.HOUR)) _animateScroll(startHourScrollController, _startDate.hour);
-    if(widget.showColumn.contains(DateType.MINUTE)) _animateScroll(startMinuteScrollController, _startDate.minute);
-    if(widget.showColumn.contains(DateType.SECOND)) _animateScroll(startSecondScrollController, _startDate.second);
+    if(widget.showColumn.contains(DateType.year)) _animateScroll(startYearScrollController, _startDate.year - _startYear);
+    if(widget.showColumn.contains(DateType.month)) _animateScroll(startMonthScrollController, _startDate.month - 1);
+    if(widget.showColumn.contains(DateType.day)) _animateScroll(startDayScrollController, _startDate.day - 1);
+    if(widget.showColumn.contains(DateType.hour)) _animateScroll(startHourScrollController, _startDate.hour);
+    if(widget.showColumn.contains(DateType.minute)) _animateScroll(startMinuteScrollController, _startDate.minute);
+    if(widget.showColumn.contains(DateType.second)) _animateScroll(startSecondScrollController, _startDate.second);
 
     if (widget.endWidget != null) {
-      if(widget.showColumn.contains(DateType.YEAR)) _animateScroll(endYearScrollController, _endDate.year - _startYear);
-      if(widget.showColumn.contains(DateType.MONTH)) _animateScroll(endMonthScrollController, _endDate.month - 1);
-      if(widget.showColumn.contains(DateType.DAY)) _animateScroll(endDayScrollController, _endDate.day - 1);
-      if(widget.showColumn.contains(DateType.HOUR)) _animateScroll(endHourScrollController, _endDate.hour);
-      if(widget.showColumn.contains(DateType.MINUTE)) _animateScroll(endMinuteScrollController, _endDate.minute);
-      if(widget.showColumn.contains(DateType.SECOND)) _animateScroll(endSecondScrollController, _endDate.second);
+      if(widget.showColumn.contains(DateType.year)) _animateScroll(endYearScrollController, _endDate.year - _startYear);
+      if(widget.showColumn.contains(DateType.month)) _animateScroll(endMonthScrollController, _endDate.month - 1);
+      if(widget.showColumn.contains(DateType.day)) _animateScroll(endDayScrollController, _endDate.day - 1);
+      if(widget.showColumn.contains(DateType.hour)) _animateScroll(endHourScrollController, _endDate.hour);
+      if(widget.showColumn.contains(DateType.minute)) _animateScroll(endMinuteScrollController, _endDate.minute);
+      if(widget.showColumn.contains(DateType.second)) _animateScroll(endSecondScrollController, _endDate.second);
     }
   }
 
@@ -988,7 +988,7 @@ class _DatePickerState extends State<DatePicker> {
 
   Widget _createColumnItem(DateType type, DateModel dateModel, bool isStart) {
     switch (type) {
-      case DateType.YEAR:
+      case DateType.year:
         return _buildPickerColumn(
           controller:
               isStart ? startYearScrollController : endYearScrollController,
@@ -1002,7 +1002,7 @@ class _DatePickerState extends State<DatePicker> {
           },
           type: type,
         );
-      case DateType.MONTH:
+      case DateType.month:
         return _buildPickerColumn(
           controller:
               isStart ? startMonthScrollController : endMonthScrollController,
@@ -1016,7 +1016,7 @@ class _DatePickerState extends State<DatePicker> {
           },
           type: type,
         );
-      case DateType.DAY:
+      case DateType.day:
         return _buildPickerColumn(
           controller:
               isStart ? startDayScrollController : endDayScrollController,
@@ -1027,7 +1027,7 @@ class _DatePickerState extends State<DatePicker> {
           },
           type: type,
         );
-      case DateType.HOUR:
+      case DateType.hour:
         return _buildPickerColumn(
           controller:
               isStart ? startHourScrollController : endHourScrollController,
@@ -1038,7 +1038,7 @@ class _DatePickerState extends State<DatePicker> {
           },
           type: type,
         );
-      case DateType.MINUTE:
+      case DateType.minute:
         return _buildPickerColumn(
           controller:
               isStart ? startMinuteScrollController : endMinuteScrollController,
@@ -1049,7 +1049,7 @@ class _DatePickerState extends State<DatePicker> {
           },
           type: type,
         );
-      case DateType.SECOND:
+      case DateType.second:
         return _buildPickerColumn(
           controller:
               isStart ? startSecondScrollController : endSecondScrollController,

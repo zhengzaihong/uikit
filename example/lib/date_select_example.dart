@@ -48,7 +48,7 @@ class _DateSelectExampleState extends State<DateSelectExample> {
                     // initEndDate: DateTime(2002, 10, 31), //默认选中的结束时间
                     initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
                     initEndDate:DateTime.tryParse("2023-04-27 14:47:30"), //默认选中的结束时间
-                    showColumn: [DateType.YEAR, DateType.MONTH, DateType.DAY,DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    showColumn: [DateType.year, DateType.month, DateType.day,DateType.hour,DateType.minute,DateType.second],
                     maskColor:  const Color.fromRGBO(242, 242, 244, 0.7),//横向遮罩颜色
                     //设置选中的条目的遮罩色
                     selectionOverlay:  CupertinoPickerDefaultSelectionOverlay(
@@ -89,7 +89,7 @@ class _DateSelectExampleState extends State<DateSelectExample> {
                     // initEndDate: DateTime(2002, 10, 31), //默认选中的结束时间
                     initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
                     initEndDate:DateTime.tryParse("2023-04-27 14:47:30"), //默认选中的结束时间
-                    showColumn: [DateType.YEAR, DateType.MONTH, DateType.DAY,DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    showColumn: [DateType.year, DateType.month, DateType.day,DateType.hour,DateType.minute,DateType.second],
                     maskColor:  const Color.fromRGBO(242, 242, 244, 0.7),//横向遮罩颜色
                     //设置选中的条目的遮罩色
                     selectionOverlay:  CupertinoPickerDefaultSelectionOverlay(
@@ -108,8 +108,8 @@ class _DateSelectExampleState extends State<DateSelectExample> {
                     //magnification: 1.5, //设置放大倍数
                     callBack: (date1,date2){
                       setState(() {
-                        selectDate = "开始时间：${ DateFormat("yyyy-MM-dd HH:mm:ss").format(date1!)} "
-                            " 结束时间：${ DateFormat("yyyy-MM-dd HH:mm:ss").format(date2!)} ";
+                        selectDate = "开始时间：${DateFormat("yyyy-MM-dd HH:mm:ss").format(date1!)} "
+                            " 结束时间：${DateFormat("yyyy-MM-dd HH:mm:ss").format(date2!)} ";
                       });
                     });
               }, child: const Text("ModalBottomSheet时间范围选择")),
@@ -125,7 +125,7 @@ class _DateSelectExampleState extends State<DateSelectExample> {
                     forwardYears: 100,//当前时间的前100年
                     totalYears: 120, //总共120年 [可选时间范围，前100年-后20年]
                     initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
-                    showColumn: [DateType.YEAR, DateType.MONTH, DateType.DAY,DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    showColumn: [DateType.year, DateType.month, DateType.day,DateType.hour,DateType.minute,DateType.second],
                     diameterRatio: 0.9,
                     pickerVisibilityHeight: 200,
                     callBack: (date1,date2){
@@ -144,7 +144,7 @@ class _DateSelectExampleState extends State<DateSelectExample> {
                     height: 280,
                     datePickerStrings: const DatePickerStrings.zh(), //显示的语种
                     initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
-                    showColumn: [DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    showColumn: [DateType.hour,DateType.minute,DateType.second],
                     diameterRatio: 0.9,
                     callBack: (date1,date2){
                       setState(() {
@@ -170,7 +170,7 @@ class _DateSelectExampleState extends State<DateSelectExample> {
                     // initEndDate: DateTime(2002, 10, 31), //默认选中的结束时间
                     initStartDate: DateTime.tryParse("2022-02-27 13:27:00"),//默认选中的开始时间
                     initEndDate:DateTime.tryParse("2023-04-27 14:47:30"), //默认选中的结束时间
-                    showColumn: [DateType.YEAR, DateType.MONTH, DateType.DAY,DateType.HOUR,DateType.MINUTE,DateType.SECOND],
+                    showColumn: [DateType.year, DateType.month, DateType.day,DateType.hour,DateType.minute,DateType.second],
                     maskColor:  const Color.fromRGBO(242, 242, 244, 0.7),//横向遮罩颜色
                     //设置选中的条目的遮罩色
                     selectionOverlay:  CupertinoPickerDefaultSelectionOverlay(

@@ -20,9 +20,7 @@ enum RadarType {
 }
 typedef CustomPosition = Offset Function(Offset,RadarBean);
 
-@Deprecated("Please use a more powerful RadarChart component instead")
 class Radar5DimensionsChart extends StatefulWidget {
-
   ///半径
   final double? radius;
 

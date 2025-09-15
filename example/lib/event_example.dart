@@ -19,7 +19,7 @@ class _EventExampleState extends State<EventExample> with EventSubscriber {
     super.initState();
     // target 通知自动解绑
     listenTargetStream<String?>("login", (v) {
-      debugPrint("---v:${v}");
+      debugPrint("---v:$v");
       setState(() {
         targetValue = v;
       });
@@ -27,7 +27,7 @@ class _EventExampleState extends State<EventExample> with EventSubscriber {
     //手动方式--注意dispose 需要及时： EventNotifier.remove("login");
     //注意这里不会覆盖之前的 target:login,如果有target只是注册监听
     EventNotifier.obtain("login", listener:(v){
-      debugPrint("-1--v:${v}");
+      debugPrint("-1--v:$v");
       setState(() {
         targetValue = v.toString();
       });
