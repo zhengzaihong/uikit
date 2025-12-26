@@ -129,6 +129,13 @@ class StrUtils {
     return phone.replaceRange(start, end, replace * (end - start));
   }
 
+  /// 隐藏身份证码
+  /// Hide part of id card
+  static String hideIdCard(String phone, {int start = 3, int end = 15, String replace = '*'}) {
+    if (phone.length < 18) return phone;
+    return phone.replaceRange(start, end, replace * (end - start));
+  }
+
   /// 隐藏部分邮箱
   /// Hide part of email
   static String hideEmail(String email, {int start = 1, String replace = '*'}) {

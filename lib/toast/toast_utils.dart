@@ -8,11 +8,125 @@ import 'package:uikit_plus/utils/responsive.dart';
 /// create_date: 2021/12/23
 /// create_time: 15:14
 /// describe: toast工具,整体优化，改动较大 0.1.2 之后版本
-///
+//// 初始化样式配置
+// Toast().initStyleConfig(
+//   styleConfig: ToastStyleConfig(
+//     margin: EdgeInsets.all(20),
+//     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+//     decoration: BoxDecoration(
+//       color: Colors.black87,
+//       borderRadius: BorderRadius.circular(10),
+//       boxShadow: [
+//         BoxShadow(
+//           color: Colors.black26,
+//           blurRadius: 10,
+//           offset: Offset(0, 4),
+//         ),
+//       ],
+//     ),
+//   ),
+//   animationConfig: ToastAnimationConfig(
+//     enableAnimation: true,
+//     animationDuration: 300,
+//     enableScaleAnimation: true,
+//   ),
+// );
+//
+// // 显示 Toast
+// Toast.show('提示信息');
+//
+// // 显示 Loading
+// Toast.showLoading(
+//   child: CircularProgressIndicator(),
+//   backgroundColor: Color(0x77000000),
+//   barrierDismissible: false,
+// );
+//
+// // 关闭 Loading
+// Toast.closeLoading();
 
 typedef BuildToastStyle = Widget Function(BuildContext context, String msg);
 typedef BuildToastQueueStyle = Widget Function(BuildContext context, ToastTaskQueue queue);
 typedef BuildOverlayStyle = OverlayEntry Function();
+
+/// Toast 动画配置
+class ToastAnimationConfig {
+  /// 是否启用动画
+  final bool enableAnimation;
+  
+  /// 动画持续时间（毫秒）
+  final int animationDuration;
+  
+  /// 淡入动画曲线
+  final Curve fadeInCurve;
+  
+  /// 淡出动画曲线
+  final Curve fadeOutCurve;
+  
+  /// 缩放动画起始值
+  final double scaleStart;
+  
+  /// 缩放动画结束值
+  final double scaleEnd;
+  
+  /// 是否启用缩放动画
+  final bool enableScaleAnimation;
+  
+  const ToastAnimationConfig({
+    this.enableAnimation = true,
+    this.animationDuration = 300,
+    this.fadeInCurve = Curves.easeOut,
+    this.fadeOutCurve = Curves.easeIn,
+    this.scaleStart = 0.8,
+    this.scaleEnd = 1.0,
+    this.enableScaleAnimation = true,
+  });
+}
+
+/// Toast 样式配置
+class ToastStyleConfig {
+  /// 外边距
+  final EdgeInsetsGeometry margin;
+  
+  /// 内边距
+  final EdgeInsetsGeometry padding;
+  
+  /// 对齐方式
+  final AlignmentGeometry alignment;
+  
+  /// 文本样式
+  final TextStyle textStyle;
+  
+  /// 装饰样式
+  final BoxDecoration decoration;
+  
+  /// 最大宽度（null 表示不限制）
+  final double? maxWidth;
+  
+  /// 最小宽度
+  final double? minWidth;
+  
+  /// 阴影效果
+  final List<BoxShadow>? boxShadow;
+  
+  const ToastStyleConfig({
+    this.margin = const EdgeInsets.only(left: 10, right: 10),
+    this.padding = const EdgeInsets.fromLTRB(10, 15, 10, 15),
+    this.alignment = Alignment.topCenter,
+    this.textStyle = const TextStyle(
+      decoration: TextDecoration.none,
+      color: Colors.white,
+      fontSize: 16,
+    ),
+    this.decoration = const BoxDecoration(
+      color: Colors.black38,
+      borderRadius: BorderRadius.all(Radius.circular(30)),
+    ),
+    this.maxWidth,
+    this.minWidth,
+    this.boxShadow,
+  });
+}
 
 ///toast的显示位置
 enum ToastPosition {
@@ -44,15 +158,22 @@ class Toast {
 
   BuildToastQueueStyle? globalBuildToastQueueStyle;
 
+  /// Toast 全局样式配置
+  ToastStyleConfig globalToastStyleConfig = const ToastStyleConfig();
+
+  /// Toast 全局动画配置
+  ToastAnimationConfig globalAnimationConfig = const ToastAnimationConfig();
+
   /// 开启一个新toast的当前时间，用于对比是否已经展示了足够时间
   DateTime? _startedTime;
 
   factory Toast() => _instance;
   static final Toast _instance = Toast._internal();
 
-  // static Toast get instance => _instance;
-
   static final List<OverlayEntryManger> _overlayEntryMangers = [];
+
+  /// Loading 相关的 OverlayEntry 管理器
+  static OverlayEntryManger? _loadingOverlayManger;
 
   /// 队列方式显示 toast
   static final Queue<ToastTaskQueue> _queueTask = Queue<ToastTaskQueue>();
@@ -61,18 +182,26 @@ class Toast {
 
   ///toast全局样式基础配置，使用内部的方式，外部传参控制
   ///当需要多种样式请使用 globalBuildToastStyle 或者 show时 传入样式
+  ///已废弃，请使用 globalToastStyleConfig
+  @Deprecated('请使用 globalToastStyleConfig')
   static EdgeInsetsGeometry? _globalToastMargin =
       const EdgeInsets.only(left: 10, right: 10);
+  @Deprecated('请使用 globalToastStyleConfig')
   static EdgeInsetsGeometry? _globalToastPadding =
       const EdgeInsets.fromLTRB(10, 15, 10, 15);
+  @Deprecated('请使用 globalToastStyleConfig')
   static AlignmentGeometry? _globalToastAlignment = Alignment.topCenter;
+  @Deprecated('请使用 globalToastStyleConfig')
   static TextStyle? _globalToastTextStyle = const TextStyle(
       decoration: TextDecoration.none, color: Colors.white, fontSize: 16);
+  @Deprecated('请使用 globalToastStyleConfig')
   static BoxDecoration? _globalToastDecoration = const BoxDecoration(
     color: Colors.black38,
     borderRadius: BorderRadius.all(Radius.circular(30)),
   );
 
+  /// 初始化基础样式（已废弃，请使用 initStyleConfig）
+  @Deprecated('请使用 initStyleConfig')
   void initBaseStyle(
       {EdgeInsetsGeometry? globalToastMargin,
       EdgeInsetsGeometry? globalToastPadding,
@@ -86,34 +215,48 @@ class Toast {
     _globalToastDecoration = globalToastDecoration ?? _globalToastDecoration;
   }
 
-  Toast._internal() {
-    globalBuildToastStyle ??= (context, msg) =>_baseStyle(context, msg);
-    globalBuildToastQueueStyle ??= (context, task) =>_baseStyle(context, task.msg);
+  /// 初始化样式配置
+  void initStyleConfig({
+    ToastStyleConfig? styleConfig,
+    ToastAnimationConfig? animationConfig,
+  }) {
+    if (styleConfig != null) {
+      globalToastStyleConfig = styleConfig;
+    }
+    if (animationConfig != null) {
+      globalAnimationConfig = animationConfig;
+    }
   }
 
-  Widget _baseStyle(context, msg){
+  Toast._internal() {
+    globalBuildToastStyle ??= (context, msg) => _baseStyle(context, msg);
+    globalBuildToastQueueStyle ??= (context, task) => _baseStyle(context, task.msg);
+  }
+
+  Widget _baseStyle(context, msg) {
+    final config = globalToastStyleConfig;
+    final screenWidth = MediaQuery.of(context).size.width;
+    
+    Widget buildContainer(double width) {
+      return Container(
+        constraints: BoxConstraints(
+          maxWidth: config.maxWidth ?? width,
+          minWidth: config.minWidth ?? 0,
+        ),
+        margin: config.margin,
+        padding: config.padding,
+        alignment: config.alignment,
+        decoration: config.decoration.copyWith(
+          boxShadow: config.boxShadow ?? config.decoration.boxShadow,
+        ),
+        child: Text(msg, style: config.textStyle),
+      );
+    }
+    
     return Responsive(
-      mobile: Container(
-          width: MediaQuery.of(context).size.width,
-          margin: _globalToastMargin,
-          padding: _globalToastPadding,
-          alignment: _globalToastAlignment,
-          decoration: _globalToastDecoration,
-          child: Text(msg, style: _globalToastTextStyle)),
-      tablet: Container(
-          width: MediaQuery.of(context).size.width / 2,
-          margin: _globalToastMargin,
-          padding: _globalToastPadding,
-          alignment: _globalToastAlignment,
-          decoration: _globalToastDecoration,
-          child: Text(msg, style: _globalToastTextStyle)),
-      desktop: Container(
-          width: MediaQuery.of(context).size.width / 3,
-          margin: _globalToastMargin,
-          padding: _globalToastPadding,
-          alignment: _globalToastAlignment,
-          decoration: _globalToastDecoration,
-          child: Text(msg, style: _globalToastTextStyle)),
+      mobile: buildContainer(screenWidth),
+      tablet: buildContainer(screenWidth / 2),
+      desktop: buildContainer(screenWidth / 3),
     );
   }
 
@@ -126,7 +269,9 @@ class Toast {
     ToastPosition? position,
     int? showTime,
     BuildOverlayStyle? buildOverlayStyle,
-    Color? backgroundColor = Colors.transparent,
+    Color backgroundColor = Colors.transparent,
+    ToastAnimationConfig? animationConfig,
+    ToastStyleConfig? styleConfig,
   }) async {
     ///防止多次弹出，外部设置间隔时间 默认2秒
     if (_instance._startedTime != null &&
@@ -136,28 +281,27 @@ class Toast {
     }
 
     buildToastStyle = buildToastStyle ?? _instance.globalBuildToastStyle;
+    final animConfig = animationConfig ?? _instance.globalAnimationConfig;
+    final styleCfg = styleConfig ?? _instance.globalToastStyleConfig;
+    
     _instance._startedTime = DateTime.now();
-    final _overlayEntry = buildOverlayStyle?.call()?? OverlayEntry(
-        builder: (BuildContext context){
-          Size size = MediaQuery.of(context).size;
+    
+    final _overlayEntry = buildOverlayStyle?.call() ?? OverlayEntry(
+        builder: (BuildContext context) {
+          final size = MediaQuery.of(context).size;
           return SizedBox(
-            width:size.width,
+            width: size.width,
             height: size.height,
             child: Stack(
               children: [
-                Positioned(
-                  top: _calToastPosition(
-                      context, position ?? _instance.globalPosition),
-                  child:Material(
-                    color: backgroundColor,
-                    child: Center(
-                      child:  Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width,
-                          child: buildToastStyle?.call(context, msg)),
-                    ),
-                  ),
-                )
+                _ToastWidget(
+                  msg: msg,
+                  buildToastStyle: buildToastStyle!,
+                  position: position ?? _instance.globalPosition,
+                  backgroundColor: backgroundColor,
+                  animationConfig: animConfig,
+                  styleConfig: styleCfg,
+                ),
               ],
             ),
           );
@@ -179,6 +323,58 @@ class Toast {
       _overlayEntryMangers.remove(value);
     });
     return manger;
+  }
+
+  ///显示加载动画
+  ///[child] 自定义加载组件，如果为 null 则使用默认的 CircularProgressIndicator
+  ///[backgroundColor] 背景颜色，默认半透明黑色
+  ///[barrierDismissible] 点击背景是否可以取消显示，默认 false
+  ///[context] 上下文，如果为 null 则使用 navigatorState
+  ///[enableAnimation] 是否启用淡入淡出动画，默认 true
+  ///[animationDuration] 动画持续时间（毫秒），默认 300
+  static void showLoading({
+    Widget? child,
+    Color? backgroundColor,
+    bool barrierDismissible = false,
+    BuildContext? context,
+    bool enableAnimation = true,
+    int animationDuration = 300,
+  }) {
+    // 如果已经显示，先关闭
+    closeLoading();
+
+    final loadingWidget = child ?? const CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    );
+
+    final bgColor = backgroundColor ?? const Color(0x77000000);
+
+    final overlayEntry = OverlayEntry(
+      builder: (BuildContext ctx) {
+        return _LoadingWidget(
+          loadingWidget: loadingWidget,
+          backgroundColor: bgColor,
+          barrierDismissible: barrierDismissible,
+          enableAnimation: enableAnimation,
+          animationDuration: animationDuration,
+        );
+      },
+    );
+
+    // 插入到 Overlay，确保在 Toast 之上
+    if (context == null) {
+      navigatorState.currentState?.overlay?.insert(overlayEntry);
+    } else {
+      Overlay.of(context).insert(overlayEntry);
+    }
+
+    _loadingOverlayManger = OverlayEntryManger(overlayEntry);
+  }
+
+  ///关闭加载动画
+  static void closeLoading() {
+    _loadingOverlayManger?.cancel();
+    _loadingOverlayManger = null;
   }
 
 
@@ -353,19 +549,6 @@ class Toast {
     }
   }
 
-  ///设置toast位置
-  static double _calToastPosition(context, ToastPosition position) {
-    double backResult;
-    if (position == ToastPosition.top) {
-      backResult = MediaQuery.of(context).size.height * 1 / 4;
-    } else if (position == ToastPosition.center) {
-      backResult = MediaQuery.of(context).size.height * 2 / 5;
-    } else {
-      backResult = MediaQuery.of(context).size.height * 3 / 4;
-    }
-    return backResult;
-  }
-
   ///取消toast 显示
   static void cancelAll() async {
     for (var element in _overlayEntryMangers) {
@@ -375,6 +558,222 @@ class Toast {
 
   static void cancel(OverlayEntryManger? manger) async {
     manger?.cancel();
+  }
+}
+
+/// Loading 动画 Widget
+class _LoadingWidget extends StatefulWidget {
+  final Widget loadingWidget;
+  final Color backgroundColor;
+  final bool barrierDismissible;
+  final bool enableAnimation;
+  final int animationDuration;
+
+  const _LoadingWidget({
+    required this.loadingWidget,
+    required this.backgroundColor,
+    required this.barrierDismissible,
+    required this.enableAnimation,
+    required this.animationDuration,
+  });
+
+  @override
+  State<_LoadingWidget> createState() => _LoadingWidgetState();
+}
+
+class _LoadingWidgetState extends State<_LoadingWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.enableAnimation) {
+      _controller = AnimationController(
+        duration: Duration(milliseconds: widget.animationDuration),
+        vsync: this,
+      );
+      _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+      );
+      _controller.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.enableAnimation) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget content = Material(
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          // 背景层，可以点击取消
+          if (widget.barrierDismissible)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => Toast.closeLoading(),
+                child: Container(color: widget.backgroundColor),
+              ),
+            )
+          else
+            Positioned.fill(
+              child: Container(color: widget.backgroundColor),
+            ),
+          // 加载组件居中显示
+          Center(
+            child: widget.loadingWidget,
+          ),
+        ],
+      ),
+    );
+
+    if (widget.enableAnimation) {
+      content = AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _fadeAnimation.value,
+            child: child!,
+          );
+        },
+        child: content,
+      );
+    }
+
+    return content;
+  }
+}
+
+/// Toast 动画 Widget
+class _ToastWidget extends StatefulWidget {
+  final String msg;
+  final BuildToastStyle buildToastStyle;
+  final ToastPosition position;
+  final Color backgroundColor;
+  final ToastAnimationConfig animationConfig;
+  final ToastStyleConfig styleConfig;
+
+  const _ToastWidget({
+    required this.msg,
+    required this.buildToastStyle,
+    required this.position,
+    required this.backgroundColor,
+    required this.animationConfig,
+    required this.styleConfig,
+  });
+
+  @override
+  State<_ToastWidget> createState() => _ToastWidgetState();
+}
+
+class _ToastWidgetState extends State<_ToastWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    if (widget.animationConfig.enableAnimation) {
+      _controller = AnimationController(
+        duration: Duration(milliseconds: widget.animationConfig.animationDuration),
+        vsync: this,
+      );
+
+      _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: widget.animationConfig.fadeInCurve,
+        ),
+      );
+
+      if (widget.animationConfig.enableScaleAnimation) {
+        _scaleAnimation = Tween<double>(
+          begin: widget.animationConfig.scaleStart,
+          end: widget.animationConfig.scaleEnd,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: widget.animationConfig.fadeInCurve,
+          ),
+        );
+      } else {
+        _scaleAnimation = const AlwaysStoppedAnimation(1.0);
+      }
+
+      _controller.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.animationConfig.enableAnimation) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final top = _calToastPosition(context, widget.position);
+
+    Widget content = Material(
+      color: widget.backgroundColor,
+      child: Center(
+        child: Container(
+          alignment: Alignment.center,
+          width: size.width,
+          child: widget.buildToastStyle.call(context, widget.msg),
+        ),
+      ),
+    );
+
+    // 应用动画
+    if (widget.animationConfig.enableAnimation) {
+      content = AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _fadeAnimation.value,
+            child: Transform.scale(
+              scale: _scaleAnimation.value,
+              child: child!,
+            ),
+          );
+        },
+        child: content,
+      );
+    }
+
+    return Positioned(
+      top: top,
+      left: 0,
+      right: 0,
+      child: content,
+    );
+  }
+
+  double _calToastPosition(BuildContext context, ToastPosition position) {
+    double backResult;
+    if (position == ToastPosition.top) {
+      backResult = MediaQuery.of(context).size.height * 1 / 4;
+    } else if (position == ToastPosition.center) {
+      backResult = MediaQuery.of(context).size.height * 2 / 5;
+    } else {
+      backResult = MediaQuery.of(context).size.height * 3 / 4;
+    }
+    return backResult;
   }
 }
 

@@ -20,38 +20,29 @@ class _ToastExampleState extends State<ToastExample> {
   void initState() {
     super.initState();
 
-    // Toast().initBaseStyle(
-    //     globalToastDecoration: const BoxDecoration(
-    //       color: Colors.lightGreen,
-    //       borderRadius: BorderRadius.all(Radius.circular(30)),
-    //     ),
-    // );
-
-    ///初始化Toast  可选，内部默认有样式
-    // Toast()
-    //   ..globalPosition = ToastPosition.center
-    //   ..intervalTime = 2000
-    //   ..showTime = 5000
-    //   ..globalBuildToastStyle  = (context,msg){
-    //     return Container(
-    //         width: MediaQuery
-    //             .of(context)
-    //             .size
-    //             .width,
-    //         height: 60,
-    //         margin: const EdgeInsets.only(left: 20,right: 20),
-    //         alignment: Alignment.center,
-    //         decoration: const BoxDecoration(
-    //           color: Colors.lightBlueAccent,
-    //           borderRadius: BorderRadius.all(Radius.circular(30)),
-    //         ),
-    //         child: Text(msg,
-    //             style: const TextStyle(
-    //                 decoration: TextDecoration.none,
-    //                 color: Colors.white,
-    //                 fontSize: 14)));
-    //   };
-
+    Toast().initStyleConfig(
+      styleConfig: ToastStyleConfig(
+        margin: const EdgeInsets.all(20),
+        alignment: Alignment.bottomCenter,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: BoxDecoration(
+          color: Colors.black12,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+      ),
+      animationConfig: const ToastAnimationConfig(
+        enableAnimation: true,
+        animationDuration: 300,
+        enableScaleAnimation: true,
+      ),
+    );
   }
 
 
@@ -85,6 +76,54 @@ class _ToastExampleState extends State<ToastExample> {
                       Toast.show("这是一条Toast");
                     },
                     child: const Text("常规Toast",style: TextStyle(color: Colors.black))),
+                vGap(10),
+                FilledButton.tonal(
+                    onPressed: (){
+                      Toast.showLoading(
+                        barrierDismissible: true,
+                        child:  Center(
+                          child: Container(
+                               width: 100,
+                               height: 100,
+                               decoration: const BoxDecoration(
+                                 color: Colors.white,
+                                 borderRadius: BorderRadius.all(Radius.circular(10)),
+                               ),
+                              child: const Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  RotatingView(child: Icon(Icons.refresh_outlined)),
+                                  Text("加载中...",style: TextStyle(fontSize: 16)),
+                                ],
+                              )),
+                        ),
+                      );
+                      Future.delayed(const Duration(seconds: 2),(){
+                        Toast.show("请求失败啦",
+                            position: ToastPosition.bottom,
+                            showTime: 3000,
+                          // // 自定义样式
+                          // buildToastStyle:(context, msg){
+                          //   return Container(
+                          //     width: MediaQuery.of(context).size.width/3,
+                          //     alignment: Alignment.center,
+                          //     height: 40,
+                          //       decoration: const BoxDecoration(
+                          //         color: Colors.white,
+                          //         borderRadius: BorderRadius.all(Radius.circular(15)),
+                          //       ),
+                          //     child: Text(msg),
+                          //   );
+                          // },
+                        );
+                      });
+                      Future.delayed(const Duration(seconds: 5),(){
+                        Toast.closeLoading();
+                      });
+                    },
+                    child: const Text("Toast动画",style: TextStyle(color: Colors.black))),
 
 
                 vGap(10),
@@ -137,7 +176,7 @@ class _ToastExampleState extends State<ToastExample> {
                         }
                       );
                     },
-                    child: const Text("支持自定义样式的队列toast",style: TextStyle(color:Colors.black))),
+                    child: const Text("队列toast",style: TextStyle(color:Colors.black))),
 
                 vGap(10),
                LayoutBuilder(
