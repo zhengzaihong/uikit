@@ -5,18 +5,105 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024/3/11
 /// create_time: 17:30
-/// describe: 实现一个微光加载效果
-/// 全局配置 + 局部覆盖
-/// 微光滑动效果
-/// 占位自动生成 SmartShimmerPlaceholder
-/// Grid/Column/Row 全支持
-/// 支持手动配置占位布局
+/// describe: Shimmer 微光加载效果组件 / Shimmer Loading Effect Component
+///
+/// 实现骨架屏加载效果,支持全局配置和局部覆盖
+/// Implements skeleton screen loading effect with global and local configuration
+///
+/// ## 功能特性 / Features
+/// - ✨ 微光滑动效果 / Shimmer sliding effect
+/// - 🎨 支持自定义渐变色 / Custom gradient colors
+/// - 🔧 全局配置 + 局部覆盖 / Global config + local override
+/// - 🤖 自动生成占位布局 / Auto-generate placeholder
+/// - 📋 支持列表加载 / List loading support
+/// - 🎯 支持 Grid/Column/Row / Grid/Column/Row support
+///
+/// ## 基础示例 / Basic Example
+/// ```dart
+/// // 简单使用
+/// Shimmer(
+///   isLoading: true,
+///   builder: (context) {
+///     return ListTile(
+///       leading: CircleAvatar(),
+///       title: Text('标题'),
+///       subtitle: Text('副标题'),
+///     );
+///   },
+/// )
+///
+/// // 自定义占位
+/// Shimmer(
+///   isLoading: true,
+///   builder: (context) => YourWidget(),
+///   placeholderBuilder: (context) {
+///     return Container(
+///       height: 100,
+///       color: Colors.grey[300],
+///     );
+///   },
+/// )
+///
+/// // 自定义配置
+/// Shimmer(
+///   isLoading: true,
+///   config: ShimmerConfig(
+///     gradient: LinearGradient(
+///       colors: [Colors.grey[300]!, Colors.grey[100]!, Colors.grey[300]!],
+///     ),
+///     period: Duration(milliseconds: 1000),
+///   ),
+///   builder: (context) => YourWidget(),
+/// )
+///
+/// // 列表加载
+/// AutoShimmerList(
+///   isLoading: true,
+///   direction: ShimmerListDirection.vertical,
+///   children: [
+///     ListTile(title: Text('Item 1')),
+///     ListTile(title: Text('Item 2')),
+///     ListTile(title: Text('Item 3')),
+///   ],
+/// )
+///
+/// // Grid 加载
+/// AutoShimmerList(
+///   isLoading: true,
+///   direction: ShimmerListDirection.grid,
+///   crossAxisCount: 2,
+///   children: List.generate(6, (i) => Container(height: 100)),
+/// )
+/// ```
+///
+/// ## 全局配置 / Global Configuration
+/// ```dart
+/// // 在 main.dart 中配置
+/// ShimmerConfig.setGlobal(
+///   ShimmerConfig(
+///     gradient: LinearGradient(
+///       colors: [Color(0xFFEBEBF4), Color(0xFFF4F4F4), Color(0xFFEBEBF4)],
+///     ),
+///     period: Duration(milliseconds: 1500),
+///   ),
+/// );
+/// ```
+///
+/// ## 注意事项 / Notes
+/// - isLoading 为 true 时显示加载效果 / Shows loading when true
+/// - 未提供 placeholderBuilder 时自动生成占位 / Auto-generates placeholder when not provided
+/// - 支持 Text、CircleAvatar、Container 等常见组件 / Supports common widgets
+///
 
-
-/// 全局配置
+/// 全局配置类 / Global Configuration Class
 class ShimmerConfig {
+  /// 渐变色配置 / Gradient configuration
   final LinearGradient gradient;
+
+  /// 动画周期 / Animation period
   final Duration period;
+
+  /// 动画曲线 / Animation curve
   final Curve curve;
 
   const ShimmerConfig({
@@ -37,11 +124,34 @@ class ShimmerConfig {
   static void setGlobal(ShimmerConfig config) => _global = config;
 }
 
-/// 核心组件
+/// Shimmer 核心组件 / Shimmer Core Component
 class Shimmer extends StatefulWidget {
+  /// 是否加载中 / Is loading
+  /// 
+  /// true: 显示加载效果 / Show loading effect
+  /// false: 显示实际内容 / Show actual content
   final bool isLoading;
+
+  /// 内容构建器 / Content builder
+  /// 
+  /// 构建实际要显示的内容
+  /// Builds the actual content to display
   final WidgetBuilder builder;
+
+  /// 占位构建器 / Placeholder builder
+  /// 
+  /// 自定义加载时的占位布局
+  /// Custom placeholder layout when loading
+  /// 
+  /// 不提供时自动生成 / Auto-generates when not provided
   final WidgetBuilder? placeholderBuilder;
+
+  /// Shimmer 配置 / Shimmer configuration
+  /// 
+  /// 局部配置,覆盖全局配置
+  /// Local config, overrides global config
+  /// 
+  /// 不提供时使用全局配置 / Uses global config when not provided
   final ShimmerConfig? config;
 
   const Shimmer({

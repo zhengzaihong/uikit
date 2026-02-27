@@ -283,6 +283,7 @@ class _OftenWidgetExampleState extends State<OftenWidgetExample> {
                   vGap(20),
                   title("自定义开关按钮"),
                   ImageSwitch(
+                    key: UniqueKey(),
                     value: false,
                     width: 70,
                     rotate: true,

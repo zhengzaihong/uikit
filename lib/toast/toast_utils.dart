@@ -7,69 +7,130 @@ import 'package:uikit_plus/utils/responsive.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021/12/23
 /// create_time: 15:14
-/// describe: toast工具,整体优化，改动较大 0.1.2 之后版本
-//// 初始化样式配置
-// Toast().initStyleConfig(
-//   styleConfig: ToastStyleConfig(
-//     margin: EdgeInsets.all(20),
-//     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-//     decoration: BoxDecoration(
-//       color: Colors.black87,
-//       borderRadius: BorderRadius.circular(10),
-//       boxShadow: [
-//         BoxShadow(
-//           color: Colors.black26,
-//           blurRadius: 10,
-//           offset: Offset(0, 4),
-//         ),
-//       ],
-//     ),
-//   ),
-//   animationConfig: ToastAnimationConfig(
-//     enableAnimation: true,
-//     animationDuration: 300,
-//     enableScaleAnimation: true,
-//   ),
-// );
-//
-// // 显示 Toast
-// Toast.show('提示信息');
-//
-// // 显示 Loading
-// Toast.showLoading(
-//   child: CircularProgressIndicator(),
-//   backgroundColor: Color(0x77000000),
-//   barrierDismissible: false,
-// );
-//
-// // 关闭 Loading
-// Toast.closeLoading();
+/// describe: 企业级Toast提示组件 - 支持多种显示模式、动画配置、队列管理
+/// Enterprise-level Toast component - Supports multiple display modes, animation configuration, queue management
+///
+/// ✨ 功能特性 / Features:
+/// • 🎨 灵活的样式配置 - 支持自定义颜色、圆角、阴影等
+/// • 🎬 丰富的动画效果 - 淡入淡出、缩放动画可配置
+/// • 📍 多种显示位置 - 顶部、中间、底部、自定义位置
+/// • ⏱️ 队列管理 - 支持多个Toast排队显示
+/// • 🔄 Loading状态 - 内置加载动画支持
+/// • 🎯 状态提示 - 成功/失败状态样式
+/// • 📱 响应式设计 - 自适应不同屏幕尺寸
+/// • 🌐 全局配置 - 统一管理Toast样式
+///
+/// 📖 使用示例 / Usage Examples:
+///
+/// ```dart
+/// // 示例1: 基础用法 - 显示简单提示
+/// // Example 1: Basic usage - Show simple message
+/// Toast.show('操作成功');
+///
+/// // 示例2: 自定义样式配置
+/// // Example 2: Custom style configuration
+/// Toast().initStyleConfig(
+///   styleConfig: ToastStyleConfig(
+///     margin: EdgeInsets.all(20),
+///     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+///     decoration: BoxDecoration(
+///       color: Colors.black87,
+///       borderRadius: BorderRadius.circular(10),
+///       boxShadow: [
+///         BoxShadow(
+///           color: Colors.black26,
+///           blurRadius: 10,
+///           offset: Offset(0, 4),
+///         ),
+///       ],
+///     ),
+///   ),
+///   animationConfig: ToastAnimationConfig(
+///     enableAnimation: true,
+///     animationDuration: 300,
+///     enableScaleAnimation: true,
+///   ),
+/// );
+///
+/// // 示例3: 显示Loading加载动画
+/// // Example 3: Show loading animation
+/// Toast.showLoading(
+///   child: CircularProgressIndicator(
+///     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+///   ),
+///   backgroundColor: Color(0x77000000),
+///   barrierDismissible: false,
+/// );
+/// // 关闭Loading
+/// Toast.closeLoading();
+///
+/// // 示例4: 显示状态提示(成功/失败)
+/// // Example 4: Show status message (success/failure)
+/// Toast.showStatus(
+///   '保存成功',
+///   status: true,
+///   iconColorSuccess: Colors.green,
+///   iconColorError: Colors.red,
+/// );
+///
+/// // 示例5: 队列方式显示多个Toast
+/// // Example 5: Show multiple toasts in queue
+/// Toast.showQueueToast('消息1');
+/// Toast.showQueueToast('消息2');
+/// Toast.showQueueToast('消息3');
+///
+/// // 示例6: 自定义位置显示
+/// // Example 6: Show at custom position
+/// Toast.show(
+///   '顶部提示',
+///   position: ToastPosition.top,
+///   showTime: 3000,
+/// );
+/// ```
+///
+/// ⚠️ 注意事项 / Notes:
+/// • 需要在MaterialApp中配置navigatorKey: Toast.navigatorState
+/// • 建议在应用启动时初始化全局样式配置
+/// • Loading状态会阻止用户交互,使用时注意及时关闭
+/// • 队列Toast会自动管理显示顺序,无需手动控制
+/// • 自定义样式时注意保持视觉一致性
+///
 
 typedef BuildToastStyle = Widget Function(BuildContext context, String msg);
 typedef BuildToastQueueStyle = Widget Function(BuildContext context, ToastTaskQueue queue);
 typedef BuildOverlayStyle = OverlayEntry Function();
 
-/// Toast 动画配置
+/// Toast 动画配置类
+/// Toast animation configuration class
 class ToastAnimationConfig {
-  /// 是否启用动画
+  /// 是否启用动画 / Enable animation
+  /// 默认值: true
   final bool enableAnimation;
   
-  /// 动画持续时间（毫秒）
+  /// 动画持续时间（毫秒）/ Animation duration (milliseconds)
+  /// 默认值: 300ms
+  /// 范围: 100-1000ms
   final int animationDuration;
   
-  /// 淡入动画曲线
+  /// 淡入动画曲线 / Fade in animation curve
+  /// 默认值: Curves.easeOut
   final Curve fadeInCurve;
   
-  /// 淡出动画曲线
+  /// 淡出动画曲线 / Fade out animation curve
+  /// 默认值: Curves.easeIn
   final Curve fadeOutCurve;
   
-  /// 缩放动画起始值
+  /// 缩放动画起始值 / Scale animation start value
+  /// 默认值: 0.8
+  /// 范围: 0.0-1.0
   final double scaleStart;
   
-  /// 缩放动画结束值
+  /// 缩放动画结束值 / Scale animation end value
+  /// 默认值: 1.0
   final double scaleEnd;
   
-  /// 是否启用缩放动画
+  /// 是否启用缩放动画 / Enable scale animation
+  /// 默认值: true
   final bool enableScaleAnimation;
   
   const ToastAnimationConfig({
@@ -83,30 +144,39 @@ class ToastAnimationConfig {
   });
 }
 
-/// Toast 样式配置
+/// Toast 样式配置类
+/// Toast style configuration class
 class ToastStyleConfig {
-  /// 外边距
+  /// 外边距 / Outer margin
+  /// 默认值: EdgeInsets.only(left: 10, right: 10)
   final EdgeInsetsGeometry margin;
   
-  /// 内边距
+  /// 内边距 / Inner padding
+  /// 默认值: EdgeInsets.fromLTRB(10, 15, 10, 15)
   final EdgeInsetsGeometry padding;
   
-  /// 对齐方式
+  /// 对齐方式 / Alignment
+  /// 默认值: Alignment.topCenter
   final AlignmentGeometry alignment;
   
-  /// 文本样式
+  /// 文本样式 / Text style
+  /// 默认值: TextStyle(color: Colors.white, fontSize: 16)
   final TextStyle textStyle;
   
-  /// 装饰样式
+  /// 装饰样式 / Decoration style
+  /// 默认值: BoxDecoration(color: Colors.black38, borderRadius: 30)
   final BoxDecoration decoration;
   
-  /// 最大宽度（null 表示不限制）
+  /// 最大宽度 / Maximum width
+  /// null 表示不限制 / null means no limit
   final double? maxWidth;
   
-  /// 最小宽度
+  /// 最小宽度 / Minimum width
+  /// 默认值: 0
   final double? minWidth;
   
-  /// 阴影效果
+  /// 阴影效果 / Box shadow
+  /// 可选配置 / Optional configuration
   final List<BoxShadow>? boxShadow;
   
   const ToastStyleConfig({
@@ -128,10 +198,14 @@ class ToastStyleConfig {
   });
 }
 
-///toast的显示位置
+/// Toast的显示位置枚举
+/// Toast display position enum
 enum ToastPosition {
+  /// 居中显示 / Center position
   center,
+  /// 底部显示 / Bottom position
   bottom,
+  /// 顶部显示 / Top position
   top,
 }
 

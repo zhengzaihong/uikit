@@ -5,18 +5,98 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024/4/12
 /// create_time: 15:58
-/// describe: 可在父组件中可拖动的组件
+/// describe: 可拖动组件 / Draggable Box Component
+///
+/// 在父组件范围内可自由拖动的组件
+/// Component that can be freely dragged within parent bounds
+///
+/// ## 功能特性 / Features
+/// - 🖱️ 支持鼠标/触摸拖动 / Mouse/touch drag support
+/// - 📦 自动限制在父组件范围内 / Auto-constrained within parent
+/// - 📍 支持设置初始位置 / Custom start position
+/// - 🎯 拖动过程平滑流畅 / Smooth dragging experience
+///
+/// ## 基础示例 / Basic Example
+/// ```dart
+/// // 简单拖动框
+/// DragBox(
+///   child: Container(
+///     width: 100,
+///     height: 100,
+///     color: Colors.blue,
+///     child: Center(child: Text('拖我')),
+///   ),
+/// )
+///
+/// // 设置初始位置
+/// DragBox(
+///   startOffset: Offset(50, 50),
+///   child: FloatingActionButton(
+///     onPressed: () {},
+///     child: Icon(Icons.add),
+///   ),
+/// )
+///
+/// // 悬浮按钮示例
+/// Stack(
+///   children: [
+///     YourMainContent(),
+///     DragBox(
+///       startOffset: Offset(300, 500),
+///       child: Container(
+///         width: 60,
+///         height: 60,
+///         decoration: BoxDecoration(
+///           color: Colors.blue,
+///           shape: BoxShape.circle,
+///         ),
+///         child: Icon(Icons.chat, color: Colors.white),
+///       ),
+///     ),
+///   ],
+/// )
+///
+/// // 可拖动的工具栏
+/// DragBox(
+///   child: Card(
+///     child: Padding(
+///       padding: EdgeInsets.all(8),
+///       child: Row(
+///         mainAxisSize: MainAxisSize.min,
+///         children: [
+///           IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+///           IconButton(icon: Icon(Icons.delete), onPressed: () {}),
+///         ],
+///       ),
+///     ),
+///   ),
+/// )
+/// ```
+///
+/// ## 注意事项 / Notes
+/// - 拖动范围自动限制在父组件内 / Auto-constrained within parent
+/// - 需要在有明确大小的父组件中使用 / Use within parent with defined size
+/// - 建议在 Stack 中使用以实现悬浮效果 / Recommend using in Stack for floating effect
 ///
 class DragBox extends StatefulWidget {
 
-  ///需要拖到的组件
+  /// 需要拖动的子组件 / Child widget to drag
+  /// 
+  /// 必填参数 / Required
   final Widget child;
+
+  /// 初始位置偏移 / Initial position offset
+  /// 
+  /// 相对于父组件左上角的偏移量
+  /// Offset from parent's top-left corner
+  /// 
+  /// 默认值: Offset.zero / Default: Offset.zero
   final Offset startOffset;
   const DragBox({
     required this.child,
     this.startOffset = Offset.zero,
     Key? key,
-  }):super(key: key);
+  }) : super(key: key);
   @override
   State<DragBox> createState() => _DragBoxState();
 }

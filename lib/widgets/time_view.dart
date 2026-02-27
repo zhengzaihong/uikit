@@ -6,37 +6,136 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021/12/13
 /// create_time: 9:43
-/// describe: 用于倒计时类的控件，
+/// describe: 倒计时组件 / Countdown Timer Component
+///
+/// 用于实现倒计时功能的通用组件
+/// Universal component for countdown timer functionality
+///
+/// ## 功能特性 / Features
+/// - ⏱️ 支持自定义倒计时时长 / Custom countdown duration
+/// - 🎯 支持自定义时间单位 / Custom time unit
+/// - 🔄 支持启动/取消控制 / Start/cancel control
+/// - 📢 支持完成回调 / Completion callback
+/// - 🎨 完全自定义UI / Fully customizable UI
+///
+/// ## 基础示例 / Basic Example
+/// ```dart
+/// // 简单倒计时
+/// TimeView(
+///   countdown: 60,
+///   build: (context, time) {
+///     return Text('剩余 $time 秒');
+///   },
+/// )
+///
+/// // 带控制器的倒计时
+/// final controller = TimeViewController();
+/// TimeView(
+///   countdown: 120,
+///   controller: controller,
+///   build: (context, time) {
+///     return Text('$time');
+///   },
+///   buildCompleter: (context) {
+///     print('倒计时完成');
+///   },
+/// )
+///
+/// // 启动倒计时
+/// controller.startTimer();
+///
+/// // 取消倒计时
+/// controller.cancelTimer();
+///
+/// // 自定义时间单位(毫秒)
+/// TimeView(
+///   countdown: 1000,
+///   duration: Duration(milliseconds: 100),
+///   build: (context, time) {
+///     return Text('${time * 100}ms');
+///   },
+/// )
+///
+/// // 验证码倒计时示例
+/// TimeView(
+///   countdown: 60,
+///   build: (context, time) {
+///     return ElevatedButton(
+///       onPressed: time == 60 ? () {
+///         // 发送验证码
+///       } : null,
+///       child: Text(time == 60 ? '发送验证码' : '${time}秒后重试'),
+///     );
+///   },
+/// )
+/// ```
+///
+/// ## 注意事项 / Notes
+/// - countdown 必须大于 0 / Must be greater than 0
+/// - 使用 controller 可以手动控制倒计时 / Use controller for manual control
+/// - enableCancel 为 true 时可以重复启动 / Can restart when true
+/// - 组件销毁时会自动取消计时器 / Timer auto-cancels on dispose
 ///
 
 typedef _BuildChild = Widget Function(BuildContext context, int time);
 typedef BuildCompleter = void Function(BuildContext context);
 
 class TimeView extends StatefulWidget {
-  /// 倒计时的秒数
+  /// 倒计时秒数 / Countdown seconds
+  /// 
+  /// 倒计时的总时长
+  /// Total duration of countdown
+  /// 
+  /// 必填参数 / Required
+  /// 取值范围: > 0 / Range: > 0
   final int countdown;
 
-  ///返回子控件的回调
+  /// UI构建回调 / UI builder callback
+  /// 
+  /// 返回要显示的子组件,参数 time 为当前剩余时间
+  /// Returns widget to display, parameter time is remaining time
+  /// 
+  /// 必填参数 / Required
   final _BuildChild? build;
 
-  ///时间单位
+  /// 时间单位 / Time unit
+  /// 
+  /// 每次递减的时间间隔
+  /// Time interval for each decrement
+  /// 
+  /// 默认值: Duration(seconds: 1) / Default: Duration(seconds: 1)
   final Duration duration;
 
+  /// 是否允许取消后重启 / Allow restart after cancel
+  /// 
+  /// true: 可以重复启动倒计时 / Can restart countdown
+  /// false: 启动后不能重复启动 / Cannot restart after started
+  /// 
+  /// 默认值: false / Default: false
   final bool enableCancel;
 
+  /// 完成回调 / Completion callback
+  /// 
+  /// 倒计时结束时触发
+  /// Triggered when countdown completes
   final BuildCompleter? buildCompleter;
 
+  /// 控制器 / Controller
+  /// 
+  /// 用于手动控制倒计时的启动和取消
+  /// For manual control of start and cancel
   final TimeViewController? controller;
 
-  const TimeView(
-      {required this.countdown,
-      required this.build,
-      this.controller,
-      this.enableCancel = false,
-      this.duration = const Duration(seconds: 1),
-      this.buildCompleter,
-      Key? key})
-      : super(key: key);
+  const TimeView({
+    required this.countdown,
+    required this.build,
+    this.controller,
+    this.enableCancel = false,
+    this.duration = const Duration(seconds: 1),
+    this.buildCompleter,
+    Key? key,
+  }) : assert(countdown > 0, 'countdown must be greater than 0'),
+       super(key: key);
 
   @override
   State<TimeView> createState() => TimeViewState();

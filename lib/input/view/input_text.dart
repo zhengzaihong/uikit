@@ -164,17 +164,8 @@ class InputText extends StatefulWidget {
   /// 是否使用表单输入框
   final bool enableForm;
 
-  /// 输入框末尾的删除按钮样式 enableClear为真是生效
-  final Widget? clearIcon;
-
   /// 是否开启删除按钮
   final bool enableClear;
-
-  /// 是否固定清空按钮，否则失去焦点则不显示
-  final bool fixClearIcon;
-
-  ///需要额外自定义删除框样式。
-  final ClearBuilder? clearBuilder;
 
   /// 所有边框的样式
   final InputBorder? allLineBorder;
@@ -294,6 +285,7 @@ class InputText extends StatefulWidget {
   final String? prefixText;
   final TextStyle? prefixStyle;
   final Color? prefixIconColor;
+  //clear模式则为删除图标
   final Widget? suffixIcon;
   final Widget? suffix;
   final String? suffixText;
@@ -337,14 +329,11 @@ class InputText extends StatefulWidget {
         this.bgRadius = 10,
         this.enableForm = false,
         this.enableClear = true,
-        this.fixClearIcon = false,
-        this.clearIcon = const Icon(Icons.cancel, size: 20, color: Colors.grey),
-        this.clearBuilder,
         this.allLineBorder = const OutlineInputBorder(
             gapPadding: 0,
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color: Colors.transparent, width: 0)),
-        this.follower = false,
+        this.follower = true,
         this.popFull = false,
         this.width,
         this.padding,
@@ -493,33 +482,34 @@ class InputTextState extends State<InputText> {
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
       widget.focusListener?.call(context, hasFocus);
-      if (widget.inline == InlineStyle.clearStyle) {
-        ///非外部自定义 走内部实现策略，否则外部调用者维护样式
-        if (mounted && widget.clearBuilder == null && !widget.fixClearIcon) {
-          setState(() {
-            if (hasFocus) {
-              inlineStyle = InlineStyle.clearStyle;
-            } else {
-              inlineStyle = InlineStyle.normalStyle;
-            }
-          });
-        }
-      }
-      if (hasFocus && widget.buildPop != null) {
+      
+      // 当获得焦点且配置了 buildPop 时显示弹出层
+      if (hasFocus && widget.buildPop != null && widget.onFocusShowPop) {
         addPop();
         return;
       }
-      // if(!hasFocus){
-      //   removePop();
-      //   return;
-      // }
+      
+      // 失去焦点时延迟关闭弹出层，给按钮点击事件足够的时间执行
+      // 这是关键：延迟时间要足够长，让点击事件先完成
+      if (!hasFocus && _overlayEntry != null) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          // 再次检查焦点状态和 overlay 是否还存在
+          if (!_focusNode.hasFocus && _overlayEntry != null && mounted) {
+            removePop();
+          }
+        });
+      }
     });
   }
 
   @override
   void dispose() {
+    removePop();
     widget.inputController?.dispose();
-    _focusNode.dispose();
+    if (widget.focusNode == null) {
+      // 只有当 focusNode 是内部创建的时候才 dispose
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
@@ -722,23 +712,16 @@ class InputTextState extends State<InputText> {
 
   InputDecoration? buildDefaultInputDecoration() {
     if (widget.decoration == null) {
-      Widget? suffixIcon;
+      Widget? suffixIcon =  widget.suffixIcon;
       if (inlineStyle == InlineStyle.clearStyle) {
-        if (widget.clearBuilder != null) {
-          suffixIcon = widget.clearBuilder!(context);
-        } else {
-          suffixIcon = (widget.enableClear && isEnable() && hasContent())
-              ? GestureDetector(
-            onTap: () {
-              clearText();
-            },
-            child: widget.clearIcon,
-          )
-              : const Text("");
-        }
-      }
-      if (inlineStyle == InlineStyle.normalStyle) {
-        suffixIcon = widget.suffixIcon;
+        suffixIcon = (widget.enableClear && isEnable() && hasContent())
+            ? GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            clearText();
+          },
+          child: widget.suffixIcon??const Icon(Icons.cancel, size: 20, color: Colors.grey),
+        ) : const SizedBox.shrink();
       }
       return InputDecoration(
         suffixIcon: suffixIcon,
@@ -799,76 +782,70 @@ class InputTextState extends State<InputText> {
     return OverlayEntry(
       builder: (overlayContext) {
 
-        final RenderBox overlayBox = Overlay.of(context).context.findRenderObject() as RenderBox;
         final RenderBox targetBox = context.findRenderObject() as RenderBox;
-        final Offset targetInOverlay = targetBox.localToGlobal(Offset.zero, ancestor: overlayBox);
         final Size targetSize = targetBox.size;
-
-        // 弹层位置 = 输入框底部 + marginTop
-        final double top = targetInOverlay.dy + targetSize.height + widget.marginTop;
-        final popView = Material(
-          elevation: widget.popElevation!,
-          shadowColor: widget.popShadowColor,
-          color: widget.popColor,
-          shape: widget.popShape,
-          borderRadius: widget.popBorderRadius,
-          surfaceTintColor: widget.popSurfaceTintColor,
-          textStyle: widget.popChildTextStyle,
-          child: widget.buildPop?.call(context),
-        );
         final popBox = widget.popBox;
-        return Stack(
-          children: [
-            // 背景遮罩：点击关闭
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                if (_focusNode.hasFocus) {
-                  _focusNode.unfocus();
-                }
-                removePop();
-              },
-              child: const SizedBox.expand(),
-            ),
 
-            // 弹层
-            widget.follower?( widget.popFull?Positioned.fill(
-              child: CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: true,
-                offset: Offset(0.0, targetSize.height + widget.marginTop),
-                child: popView,
-              ),
-            ):Positioned(
-              width: popBox?.width??targetSize.width,
-              height:popBox?.height??targetSize.height,
-              child: CompositedTransformFollower(
-                link: _layerLink,
-                showWhenUnlinked: true,
-                offset: Offset(0.0, targetSize.height + widget.marginTop),
-                child: popView,
-              ),
-            )):Positioned.fill(
-                left: 0,
-                right: 0,
-                top: top,
-                child: popView),
-          ],
+        // 使用 Material 并确保设置正确的 type
+        // 关键：使用 MouseRegion 和 Listener 阻止点击时焦点丢失
+        final popContent = MouseRegion(
+          child: Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (event) {
+              // 阻止点击 pop 时输入框失去焦点
+              // 通过请求焦点来保持输入框的焦点状态
+              if (!_focusNode.hasFocus) {
+                _focusNode.requestFocus();
+              }
+            },
+            child: Material(
+              type: MaterialType.card,
+              elevation: widget.popElevation!,
+              shadowColor: widget.popShadowColor,
+              color: widget.popColor ?? Colors.white,
+              shape: widget.popShape,
+              borderRadius: widget.popBorderRadius,
+              surfaceTintColor: widget.popSurfaceTintColor,
+              textStyle: widget.popChildTextStyle,
+              child: widget.buildPop?.call(context),
+            ),
+          ),
+        );
+        
+        // 统一使用 Positioned 定位，不使用 CompositedTransformFollower
+        // 这样可以避免 CompositedTransformFollower 的事件传递问题
+        return Builder(
+          builder: (builderContext) {
+            final RenderBox overlayBox = Overlay.of(builderContext).context.findRenderObject() as RenderBox;
+            final Offset targetInOverlay = targetBox.localToGlobal(Offset.zero, ancestor: overlayBox);
+            final double left = targetInOverlay.dx;
+            final double top = targetInOverlay.dy + targetSize.height + widget.marginTop;
+            
+            return Positioned(
+              left: left,
+              top: top,
+              width: popBox?.width ?? targetSize.width,
+              height: popBox?.height,
+              child: popContent,
+            );
+          },
         );
       },
     );
   }
 
   void addPop() {
-    if (null == _overlayEntry) {
+    if (_overlayEntry == null && mounted) {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context).insert(_overlayEntry!);
     }
   }
 
   void removePop() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+    if (_overlayEntry != null) {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+    }
   }
 
   void notyOverlayDataChange() {
@@ -890,10 +867,12 @@ class InputTextState extends State<InputText> {
   }
 
   void clearText() {
-    setState(() {
-      widget.controller?.text = "";
-      widget.onChanged?.call("");
-    });
+    if (mounted) {
+      setState(() {
+        widget.controller?.text = "";
+        widget.onChanged?.call("");
+      });
+    }
   }
 
   void callSubmit() {

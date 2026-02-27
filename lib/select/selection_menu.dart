@@ -9,47 +9,155 @@ import 'drop_position.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024-02-01
 /// create_time: 14:58
-/// describe: 极简系统下拉框，可高度自定义，且规避系统组件的使用麻烦，SelectionMenu不关心数据。
-/// eg:
-//     SelectionMenu(
-//         popWidth: 200,
-//         buttonBuilder: (show){
-//           return Container(
-//             height: 40,
-//             width: 200,
-//             alignment: Alignment.center,
-//             padding: const EdgeInsets.only(left: 10, right: 10),
-//             decoration: BoxDecoration(
-//               color: Colors.grey.setAlpha(0.2),
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             child: const Text("请选择"),
-//           );
-//         },
-//         selectorBuilder: (context) {
-//           return Container(
-//             height: 200,
-//             margin: const EdgeInsets.only(top: 3),
-//             padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-//             decoration:  BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.circular(5),
-//             ),
-//             child: ListView.separated(
-//               itemCount: 20,
-//               itemBuilder: (context, index) {
-//                 return GestureDetector(
-//                   onTap: (){
-//                     ///todo update ui ...
-//                   },
-//                   child: Text("item $index",style: TextStyle(fontSize: 16,color: Colors.black),),
-//                 );
-//               }, separatorBuilder: (BuildContext context, int index) {
-//               return const Divider();
-//             },),
-//           );
-//         }
-//     )
+/// describe: 企业级下拉选择菜单组件 - 高度可定制的下拉框解决方案
+/// Enterprise-level dropdown selection menu component - Highly customizable dropdown solution
+///
+/// ✨ 功能特性 / Features:
+/// • 🎨 完全自定义 - 按钮和下拉内容完全由开发者控制
+/// • 📍 智能定位 - 自动检测屏幕边界,防止溢出
+/// • 🎭 丰富动画 - 支持自定义过渡动画效果
+/// • 🖱️ 多种触发 - 支持点击、悬停等多种交互方式
+/// • 📏 灵活尺寸 - 支持固定宽度或自适应父组件宽度
+/// • 🎯 精确对齐 - 支持左对齐、右对齐、居中对齐
+/// • 🔒 状态管理 - 提供Controller进行外部控制
+/// • 🎪 Material风格 - 支持阴影、圆角、颜色等Material属性
+///
+/// 📖 使用示例 / Usage Examples:
+///
+/// ```dart
+/// // 示例1: 基础下拉菜单
+/// // Example 1: Basic dropdown menu
+/// SelectionMenu(
+///   popWidth: 200,
+///   buttonBuilder: (show) {
+///     return Container(
+///       height: 40,
+///       width: 200,
+///       alignment: Alignment.center,
+///       padding: const EdgeInsets.only(left: 10, right: 10),
+///       decoration: BoxDecoration(
+///         color: Colors.grey.withOpacity(0.2),
+///         borderRadius: BorderRadius.circular(10),
+///       ),
+///       child: Row(
+///         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+///         children: [
+///           Text("请选择"),
+///           Icon(show ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+///         ],
+///       ),
+///     );
+///   },
+///   selectorBuilder: (context) {
+///     return Container(
+///       height: 200,
+///       margin: const EdgeInsets.only(top: 3),
+///       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+///       decoration: BoxDecoration(
+///         color: Colors.white,
+///         borderRadius: BorderRadius.circular(5),
+///         boxShadow: [
+///           BoxShadow(
+///             color: Colors.black12,
+///             blurRadius: 8,
+///             offset: Offset(0, 2),
+///           ),
+///         ],
+///       ),
+///       child: ListView.separated(
+///         itemCount: 20,
+///         itemBuilder: (context, index) {
+///           return GestureDetector(
+///             onTap: () {
+///               // 处理选择逻辑
+///               print("选择了: item $index");
+///             },
+///             child: Padding(
+///               padding: const EdgeInsets.symmetric(vertical: 8),
+///               child: Text(
+///                 "item $index",
+///                 style: TextStyle(fontSize: 16, color: Colors.black),
+///               ),
+///             ),
+///           );
+///         },
+///         separatorBuilder: (BuildContext context, int index) {
+///           return const Divider();
+///         },
+///       ),
+///     );
+///   },
+/// )
+///
+/// // 示例2: 使用Controller控制下拉菜单
+/// // Example 2: Using controller to control dropdown
+/// final controller = SelectionMenuController();
+/// 
+/// SelectionMenu(
+///   controller: controller,
+///   popWidth: 200,
+///   buttonBuilder: (show) => Text("点击展开"),
+///   selectorBuilder: (context) {
+///     return Container(
+///       child: ElevatedButton(
+///         onPressed: () {
+///           controller.closePop(); // 关闭下拉菜单
+///         },
+///         child: Text("关闭"),
+///       ),
+///     );
+///   },
+/// )
+///
+/// // 示例3: 鼠标悬停触发
+/// // Example 3: Hover trigger
+/// SelectionMenu(
+///   enableOnHover: true,
+///   enableClick: false,
+///   popWidth: 150,
+///   buttonBuilder: (show) => Text("悬停显示"),
+///   selectorBuilder: (context) => Container(
+///     height: 100,
+///     child: Text("悬停内容"),
+///   ),
+/// )
+///
+/// // 示例4: 右对齐下拉菜单
+/// // Example 4: Right-aligned dropdown
+/// SelectionMenu(
+///   alignType: AlignType.right,
+///   popWidth: 200,
+///   buttonBuilder: (show) => Text("右对齐"),
+///   selectorBuilder: (context) => Container(
+///     height: 150,
+///     child: Text("下拉内容"),
+///   ),
+/// )
+///
+/// // 示例5: 自定义Material样式
+/// // Example 5: Custom Material style
+/// SelectionMenu(
+///   popWidth: 200,
+///   elevation: 8.0,
+///   color: Colors.white,
+///   materialBorderRadius: BorderRadius.circular(12),
+///   shadowColor: Colors.blue.withOpacity(0.3),
+///   buttonBuilder: (show) => Text("自定义样式"),
+///   selectorBuilder: (context) => Container(
+///     height: 200,
+///     child: Text("内容"),
+///   ),
+/// )
+/// ```
+///
+/// ⚠️ 注意事项 / Notes:
+/// • SelectionMenu不管理数据状态,需要外部自行管理选中状态
+/// • 下拉内容会自动检测屏幕边界,避免溢出
+/// • 使用Controller可以实现外部控制打开/关闭
+/// • buttonBuilder的show参数表示当前下拉菜单是否展开
+/// • 建议在selectorBuilder中处理选择逻辑并更新UI
+/// • 支持自定义位置布局,使用layoutSelectPop参数
+///
 
 
 
