@@ -9,8 +9,9 @@ import 'package:uikit_plus/behavior/overscrollbehavior.dart';
 /// describe: 支持横向和纵向滚动的表格的组件，使用此组件一定要注意每行的权重比
 /// 此组件用于通用性表格，
 /// 表格存在各种合并的单元格 需根据行号单独处理
-///  2023-02-25 已支持非固定行高，一行中自动适配最高行。
-/// 待优化
+/// TableExtendCells：
+/// - `children.length == 列数`：每个 child 占一列
+/// - 需要合并列：传入 `colSpans`（每个 child 占用的列数），其总和必须等于列数
 ///
 
 typedef HandlerControllerCallBack = void Function(HandlerController handler);
@@ -358,6 +359,8 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
                             RowStyleParam(
                                 enableDivider: widget.enableDivider,
                                 rowWidth: _horizontalTotalWidth,
+                                cellFlex: cellWidthFlex,
+                                minCellWidth: widget.minCellWidth,
                                 cellWidth: cellWidthFlex!
                                     .map((e) => e * widget.minCellWidth)
                                     .toList())
@@ -403,6 +406,8 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
                                     rowWidth: _horizontalTotalWidth,
                                     data: datas[index],
                                     index: index,
+                                    cellFlex: cellWidthFlex,
+                                    minCellWidth: widget.minCellWidth,
                                     cellWidth: cellWidthFlex!
                                         .map((e) =>
                                     e * widget.minCellWidth)
@@ -464,6 +469,8 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
                             RowStyleParam(
                                 enableDivider: widget.enableDivider,
                                 rowWidth: width,
+                                cellFlex: fixWidthFlex,
+                                minCellWidth: widget.minCellWidth,
                                 cellWidth:fixWidthFlex
                                     .map((e) => e * widget.minCellWidth)
                                     .toList())
@@ -506,12 +513,13 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
                           itemBuilder: (context, index) {
                             final rowStyleParam = RowStyleParam(
                                 enableDivider: widget.enableDivider,
-                                rowWidth: _horizontalTotalWidth,
+                                rowWidth: width,
                                 data: datas[index],
                                 index:index,
-                                cellWidth: cellWidthFlex!
-                                    .map((e) =>
-                                e * widget.minCellWidth)
+                                cellFlex: fixWidthFlex,
+                                minCellWidth: widget.minCellWidth,
+                                cellWidth:fixWidthFlex
+                                    .map((e) => e * widget.minCellWidth)
                                     .toList());
                             return rowStyle(rowStyleParam);
                           },
@@ -774,7 +782,15 @@ class TabSpaceText extends StatelessWidget {
 /// 构建每一行的参数
 class RowStyleParam<T>{
 
-  RowStyleParam({this.data,this.rowWidth,this.cellWidth,this.index,this.enableDivider = false});
+  RowStyleParam({
+    this.data,
+    this.rowWidth,
+    this.cellWidth,
+    this.cellFlex,
+    this.minCellWidth,
+    this.index,
+    this.enableDivider = false,
+  });
 
   bool enableDivider;
 
@@ -787,6 +803,139 @@ class RowStyleParam<T>{
   /// 单元格宽度
   List<double>? cellWidth;
 
+  /// 列权重（与 `TableExtend.cellWidthFlex` / `fixCellHeaderWidthFlex` / `fixCellFootWidthFlex` 对应）
+  /// 用于更“Table 风格”的按比例分配宽度。
+  List<double>? cellFlex;
+
+  /// `TableExtend.minCellWidth`（用于兼容旧逻辑/外部计算需要）
+  double? minCellWidth;
+
+  /// 根据当前 `rowWidth` 与列权重计算的“最终展示宽度”（优先按权重占比）。
+  ///
+  /// 规则：
+  /// - 若存在 `cellFlex` 且总和 > 0：按占比分配 \(width_i = rowWidth * flex_i / sumFlex\)
+  /// - 否则退化为 `cellWidth`
+  /// - 当 `rowWidth` 大于 `cellWidth` 之和时，会将 `cellWidth` 等比放大填充整行
+  List<double> get effectiveCellWidth {
+    final base = cellWidth ?? const <double>[];
+    final w = rowWidth;
+    if (w == null || w <= 0) return List<double>.from(base);
+
+    final flex = cellFlex;
+    if (flex != null && flex.isNotEmpty) {
+      final sumFlex = flex.fold<double>(0, (p, e) => p + e);
+      if (sumFlex > 0) {
+        return flex.map((f) => w * (f / sumFlex)).toList();
+      }
+    }
+
+    final sumBase = base.fold<double>(0, (p, e) => p + e);
+    if (sumBase > 0 && w > sumBase) {
+      final scale = w / sumBase;
+      return base.map((e) => e * scale).toList();
+    }
+
+    return List<double>.from(base);
+  }
+}
+
+/// 一个更接近 Flutter `Table` 的单元格行布局：
+/// 你只需要提供每个单元格的 widget，宽度会根据 `RowStyleParam` 自动按列分配。
+///
+/// 常见用法：
+/// - `children.length == 列数`：每个 child 占一列
+/// - 需要合并列：传入 `colSpans`（每个 child 占用的列数），其总和必须等于列数
+class TableExtendCells extends StatelessWidget {
+  final RowStyleParam rowStyle;
+  final List<Widget> children;
+
+  /// 每个 child 占用的列数，默认全部为 1。
+  /// 合并后的宽度 = 其覆盖列的宽度之和。
+  final List<int>? colSpans;
+
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
+  final CrossAxisAlignment crossAxisAlignment;
+  final TextDirection? textDirection;
+  final VerticalDirection verticalDirection;
+
+  const TableExtendCells({
+    super.key,
+    required this.rowStyle,
+    required this.children,
+    this.colSpans,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.mainAxisSize = MainAxisSize.max,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.textDirection,
+    this.verticalDirection = VerticalDirection.down,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final spans = _normalizeSpans(children.length);
+    var widths = rowStyle.effectiveCellWidth;
+
+    // 当外部未配置列宽/权重时，降级为“均分整行宽度”，保证用法更接近 Flutter `Table`。
+    if (widths.isEmpty) {
+      final w = rowStyle.rowWidth;
+      if (w != null && w > 0 && children.isNotEmpty) {
+        final colCount = spans.fold<int>(0, (p, e) => p + e);
+        if (colCount > 0) {
+          widths = List<double>.filled(colCount, w / colCount);
+        }
+      }
+    }
+
+    assert(() {
+      final colCount = widths.length;
+      final spanSum = spans.fold<int>(0, (p, e) => p + e);
+      if (colCount != 0 && spanSum != colCount) {
+        throw FlutterError(
+          'TableExtendCells: colSpans 总和($spanSum)必须等于列数($colCount)。'
+          ' 请调整 children 数量或 colSpans 配置。',
+        );
+      }
+      return true;
+    }());
+
+    int colIndex = 0;
+    final rowChildren = <Widget>[];
+    for (int i = 0; i < children.length; i++) {
+      final span = spans[i];
+      final w = _sumWidth(widths, colIndex, span);
+      rowChildren.add(SizedBox(width: w, child: children[i]));
+      colIndex += span;
+    }
+
+    return Row(
+      mainAxisAlignment: mainAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      crossAxisAlignment: crossAxisAlignment,
+      textDirection: textDirection,
+      verticalDirection: verticalDirection,
+      children: rowChildren,
+    );
+  }
+
+  List<int> _normalizeSpans(int childCount) {
+    final spans = colSpans;
+    if (spans == null || spans.isEmpty || spans.length != childCount) {
+      return List<int>.filled(childCount, 1);
+    }
+    return spans.map((e) => e <= 0 ? 1 : e).toList();
+  }
+
+  double _sumWidth(List<double> widths, int start, int span) {
+    if (widths.isEmpty) return 0;
+    final s = start.clamp(0, widths.length);
+    final e = (start + span).clamp(0, widths.length);
+    double sum = 0;
+    for (int i = s; i < e; i++) {
+      sum += widths[i];
+    }
+    return sum;
+  }
 }
 
 ///通用性单元格实体，只针对非列表数据结构的处理成表格

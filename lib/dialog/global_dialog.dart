@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// create_date: 2025-12-26
 /// create_time: 11:20
-/// describe: 企业级全局对话框组件 - 支持自动消失和单例管理
+/// describe: 全局对话框组件 - 支持自动消失和单例管理
 /// Enterprise-level global dialog component - Supports auto-dismiss and singleton management
 ///
 /// ✨ 功能特性 / Features:

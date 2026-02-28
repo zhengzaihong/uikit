@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 
 class TableViewExample extends StatefulWidget {
@@ -15,25 +16,25 @@ class _TableViewExampleState extends State<TableViewExample> {
   @override
   void initState() {
     super.initState();
+    //横屏
+    SystemChrome.setPreferredOrientations(
+      [
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]
+    );
     for (var i = 0; i < 50; i++) {
       list.add(TestBean(name: "姓名$i", age:"18",phone: "123456$i",address: "这是一段很长很长的地址测试$i",birth: "生日$i",card: 'item$i'));
     }
   }
 
-  Widget _cellBuilder(String title,double flex,RowStyleParam styleParam){
-    return   Container(
-      width: flex*1,
+  Widget _cell(String text) {
+    return Container(
       alignment: Alignment.center,
-      // decoration: styleParam.enableDivider? const BoxDecoration(
-      //   border: Border(left: BorderSide(color: Colors.cyanAccent,width: 1)),
-      // ):null,
-      child:Row(
-        children: [
-          Expanded(child: Center(child: Text(title,style: const TextStyle(fontSize: 14,color: Colors.black)),)),
-        ],
-      )
+      child: Text(text, style: const TextStyle(fontSize: 14, color: Colors.black)),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +68,10 @@ class _TableViewExampleState extends State<TableViewExample> {
                   decoration: const BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
-                  child: Row(
+                  child: TableExtendCells(
+                    rowStyle: rowStyle,
                     children: [
-                      _cellBuilder("操作",rowStyle.cellWidth![0],rowStyle),
+                      _cell("操作"),
                     ],
                   ),
                 );
@@ -93,23 +95,22 @@ class _TableViewExampleState extends State<TableViewExample> {
 
               fixCellFootWidthFlex: const [1,],
               buildFixFootTableHeaderStyle: (context,rowStyle){
-                final cellsWidth = rowStyle.cellWidth!;
                 return Container(
                   width: rowStyle.rowWidth,
                   height: 40,
                   decoration:  const BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
-                  child: Row(
+                  child: TableExtendCells(
+                    rowStyle: rowStyle,
                     children: [
-                      _cellBuilder("其他",cellsWidth[0],rowStyle),
+                      _cell("其他"),
                     ],
                   ),
                 );
               },
               fixFootRowStyle: (rowStyle){
                 TestBean bean = rowStyle.data!;
-                final cellsWidth = rowStyle.cellWidth!;
                 final rowWidth = rowStyle.rowWidth;
                 return IntrinsicHeight(
                   child: Container(
@@ -123,7 +124,12 @@ class _TableViewExampleState extends State<TableViewExample> {
                           onTap: (){
                             debugPrint("-------------bean.phone:${bean.phone}");
                           },
-                          child: _cellBuilder(bean.phone!, cellsWidth[0],rowStyle),
+                          child: TableExtendCells(
+                            rowStyle: rowStyle,
+                            children: [
+                              _cell(bean.phone!),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -133,49 +139,46 @@ class _TableViewExampleState extends State<TableViewExample> {
 
               cellWidthFlex: const [1,3,1,1,2,4],
               buildTableHeaderStyle: (context,rowStyle){
-                final flex = rowStyle.cellWidth!;
                 final rowWidth = rowStyle.rowWidth;
                 return Container(
                   width: rowWidth,
                   height: 40,
                   decoration: const BoxDecoration(
                     color: Colors.lightBlueAccent),
-                  child: Row(
+                  child: TableExtendCells(
+                    rowStyle: rowStyle,
                     children: [
-                      _cellBuilder("姓名",flex[0],rowStyle),
-                      _cellBuilder("年龄",flex[1],rowStyle),
-                      _cellBuilder("生日",flex[2],rowStyle),
-                      _cellBuilder("身份证",flex[3],rowStyle),
-                      _cellBuilder("电话号码",flex[4],rowStyle),
-                      _cellBuilder("住址",flex[5],rowStyle),
-
+                      _cell("姓名"),
+                      _cell("年龄"),
+                      _cell("生日"),
+                      _cell("身份证"),
+                      _cell("电话号码"),
+                      _cell("住址"),
                     ],
-                  ),
+                  )
                 );
               },
               buildRowStyle: (rowStyle){
                 TestBean bean = rowStyle.data!;
-                final flex = rowStyle.cellWidth!;
                 final rowWidth = rowStyle.rowWidth;
                 int index = rowStyle.index!;
-                double sum = flex.reduce((value, element) => value+element);
-                debugPrint("----------rowWidth--$rowWidth---sum--$sum");
                 return IntrinsicHeight(
                   child: Container(
                     width: rowWidth,
                     constraints: const BoxConstraints(
                       minHeight: 40,
                     ),
-                    child:Row(
+                    child: TableExtendCells(
+                      rowStyle: rowStyle,
                       children: [
-                        _cellBuilder(bean.name!, flex[0],rowStyle),
-                        _cellBuilder(bean.age!, flex[1],rowStyle),
-                        _cellBuilder(bean.birth!, flex[2],rowStyle),
-                        _cellBuilder(bean.card!, flex[3],rowStyle),
-                        _cellBuilder(bean.phone!, flex[4],rowStyle),
-                        _cellBuilder(index%2==0?bean.address!:'sssssss', flex[5]-1,rowStyle),
+                        _cell(bean.name!),
+                        _cell(bean.age!),
+                        _cell(bean.birth!),
+                        _cell(bean.card!),
+                        _cell(bean.phone!),
+                        _cell(index%2==0?bean.address!:'sssssss'),
                       ],
-                    ),
+                    )
                   ),
                 );
               },

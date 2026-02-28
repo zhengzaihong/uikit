@@ -7,7 +7,7 @@ import 'package:uikit_plus/utils/responsive.dart';
 /// email:1096877329@qq.com
 /// create_date: 2021/12/23
 /// create_time: 15:14
-/// describe: 企业级Toast提示组件 - 支持多种显示模式、动画配置、队列管理
+/// describe: Toast提示组件 - 支持多种显示模式、动画配置、队列管理
 /// Enterprise-level Toast component - Supports multiple display modes, animation configuration, queue management
 ///
 /// ✨ 功能特性 / Features:

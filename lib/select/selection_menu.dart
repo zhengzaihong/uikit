@@ -9,7 +9,7 @@ import 'drop_position.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024-02-01
 /// create_time: 14:58
-/// describe: 企业级下拉选择菜单组件 - 高度可定制的下拉框解决方案
+/// describe: 下拉选择菜单组件 - 高度可定制的下拉框解决方案
 /// Enterprise-level dropdown selection menu component - Highly customizable dropdown solution
 ///
 /// ✨ 功能特性 / Features:

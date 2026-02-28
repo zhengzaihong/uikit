@@ -6,7 +6,7 @@ import 'package:uikit_plus/utils/color_utils.dart';
 /// email:1096877329@qq.com
 /// create_date: 2024/1/4
 /// create_time: 16:40
-/// describe: 企业级底部导航栏动画组件 - 流畅的切换动画效果
+/// describe: 底部导航栏动画组件 - 流畅的切换动画效果
 /// Enterprise-level animated bottom navigation bar component - Smooth switching animation
 ///
 /// ✨ 功能特性 / Features:
