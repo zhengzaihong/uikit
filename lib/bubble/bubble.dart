@@ -6,44 +6,233 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// create_date: 2022/6/16
 /// create_time: 9:19
-/// describe: 气泡组件
-/// 箭头支持渐变、边框、阴影 → 箭头和气泡保持一致的视觉效果。
-/// 可配置 arrowShape → 支持三角形 / 圆角三角形 / 弧形等扩展。
-/// 箭头大小自适应 → 可选开关 arrowAdaptive，自动缩放避免超过边界或圆角。
-/// 支持 clipBehavior → 控制是否裁剪气泡内容。
-/// 支持 BoxDecoration（颜色、渐变、圆角、阴影、边框）。
+/// describe: 气泡组件 - 支持多种箭头样式和完整的Material装饰
+/// Enterprise-level bubble component - Supports multiple arrow styles and full Material decoration
+///
+/// ✨ 功能特性 / Features:
+/// • 🎨 完整装饰 - 支持颜色、渐变、圆角、阴影、边框
+/// • 🎯 箭头方向 - 支持上下左右四个方向
+/// • 🔺 箭头形状 - 三角形、圆角三角、弧形等多种样式
+/// • 📏 自适应大小 - 箭头大小可自动适配避免超出边界
+/// • 🎪 Material风格 - 箭头和气泡保持一致的视觉效果
+/// • ✂️ 裁剪控制 - 支持clipBehavior控制内容裁剪
+/// • 📍 位置控制 - 箭头位置可通过百分比精确控制
+/// • 🎭 灵活组合 - 可与任意Widget组合使用
+///
+/// 📖 使用示例 / Usage Examples:
+///
+/// ```dart
+/// // 示例1: 基础气泡(顶部箭头)
+/// // Example 1: Basic bubble with top arrow
+/// Bubble(
+///   radius: 8,
+///   arrowWidth: 12,
+///   arrowHeight: 8,
+///   direction: BubbleArrowDirection.top,
+///   decoration: BoxDecoration(
+///     color: Colors.black87,
+///     borderRadius: BorderRadius.circular(8),
+///   ),
+///   child: Padding(
+///     padding: EdgeInsets.all(12),
+///     child: Text(
+///       '这是气泡提示内容',
+///       style: TextStyle(color: Colors.white),
+///     ),
+///   ),
+/// )
+///
+/// // 示例2: 带阴影和边框的气泡
+/// // Example 2: Bubble with shadow and border
+/// Bubble(
+///   radius: 10,
+///   arrowWidth: 15,
+///   arrowHeight: 10,
+///   direction: BubbleArrowDirection.bottom,
+///   decoration: BoxDecoration(
+///     color: Colors.white,
+///     borderRadius: BorderRadius.circular(10),
+///     border: Border.all(color: Colors.blue, width: 2),
+///     boxShadow: [
+///       BoxShadow(
+///         color: Colors.black26,
+///         blurRadius: 8,
+///         offset: Offset(0, 4),
+///       ),
+///     ],
+///   ),
+///   child: Container(
+///     padding: EdgeInsets.all(16),
+///     child: Text('带边框和阴影的气泡'),
+///   ),
+/// )
+///
+/// // 示例3: 渐变色气泡
+/// // Example 3: Gradient bubble
+/// Bubble(
+///   radius: 12,
+///   arrowWidth: 16,
+///   arrowHeight: 12,
+///   direction: BubbleArrowDirection.left,
+///   decoration: BoxDecoration(
+///     gradient: LinearGradient(
+///       colors: [Colors.purple, Colors.blue],
+///       begin: Alignment.topLeft,
+///       end: Alignment.bottomRight,
+///     ),
+///     borderRadius: BorderRadius.circular(12),
+///   ),
+///   child: Padding(
+///     padding: EdgeInsets.all(16),
+///     child: Text(
+///       '渐变色气泡',
+///       style: TextStyle(color: Colors.white),
+///     ),
+///   ),
+/// )
+///
+/// // 示例4: 圆角箭头气泡
+/// // Example 4: Rounded arrow bubble
+/// Bubble(
+///   radius: 8,
+///   arrowWidth: 14,
+///   arrowHeight: 10,
+///   arrowShape: BubbleArrowShape.rounded,
+///   direction: BubbleArrowDirection.right,
+///   decoration: BoxDecoration(
+///     color: Colors.orange,
+///     borderRadius: BorderRadius.circular(8),
+///   ),
+///   child: Padding(
+///     padding: EdgeInsets.all(12),
+///     child: Text('圆角箭头'),
+///   ),
+/// )
+///
+/// // 示例5: 自定义箭头位置
+/// // Example 5: Custom arrow position
+/// Bubble(
+///   radius: 8,
+///   arrowWidth: 12,
+///   arrowHeight: 8,
+///   arrowPositionPercent: 0.8, // 箭头位置在80%处
+///   direction: BubbleArrowDirection.top,
+///   decoration: BoxDecoration(
+///     color: Colors.green,
+///     borderRadius: BorderRadius.circular(8),
+///   ),
+///   child: Padding(
+///     padding: EdgeInsets.all(12),
+///     child: Text('箭头在右侧'),
+///   ),
+/// )
+///
+/// // 示例6: 弧形箭头气泡
+/// // Example 6: Curved arrow bubble
+/// Bubble(
+///   radius: 10,
+///   arrowWidth: 16,
+///   arrowHeight: 12,
+///   arrowShape: BubbleArrowShape.curved,
+///   arrowAdaptive: true,
+///   direction: BubbleArrowDirection.bottom,
+///   decoration: BoxDecoration(
+///     color: Colors.red,
+///     borderRadius: BorderRadius.circular(10),
+///     boxShadow: [
+///       BoxShadow(
+///         color: Colors.red.withOpacity(0.3),
+///         blurRadius: 12,
+///         spreadRadius: 2,
+///       ),
+///     ],
+///   ),
+///   child: Padding(
+///     padding: EdgeInsets.all(16),
+///     child: Text(
+///       '弧形箭头气泡',
+///       style: TextStyle(color: Colors.white, fontSize: 16),
+///     ),
+///   ),
+/// )
+/// ```
+///
+/// ⚠️ 注意事项 / Notes:
+/// • 箭头和气泡会自动保持一致的装饰效果(颜色、渐变、边框、阴影)
+/// • arrowPositionPercent取值范围0.0-1.0,表示箭头在边上的位置百分比
+/// • arrowAdaptive为true时,箭头会自动避开圆角区域
+/// • 支持三种箭头形状: triangle(三角形)、rounded(圆角三角)、curved(弧形)
+/// • clipBehavior控制是否裁剪超出气泡边界的内容
+/// • 建议箭头大小与气泡大小成比例,避免视觉不协调
+/// • 渐变色会同时应用到箭头和气泡主体
+///
 
-/// 箭头方向
-enum BubbleArrowDirection { left, top, right, bottom }
+/// 箭头方向枚举
+/// Arrow direction enum
+enum BubbleArrowDirection {
+  /// 左侧箭头 / Left arrow
+  left,
+  /// 顶部箭头 / Top arrow
+  top,
+  /// 右侧箭头 / Right arrow
+  right,
+  /// 底部箭头 / Bottom arrow
+  bottom
+}
 
-/// 箭头形状
+/// 箭头形状枚举
+/// Arrow shape enum
 enum BubbleArrowShape {
-  triangle,      // 普通三角形
-  rounded,       // 圆角三角
-  curved,        // 弧形
+  /// 普通三角形 / Normal triangle
+  triangle,
+  /// 圆角三角形 / Rounded triangle
+  rounded,
+  /// 弧形箭头 / Curved arrow
+  curved,
 }
 
 /// 气泡组件
+/// Bubble component
 class Bubble extends StatelessWidget {
-  //子组件
+  /// 子组件 / Child widget
   final Widget child;
-  //圆角
+  
+  /// 圆角半径 / Border radius
+  /// 默认值: 8
   final double radius;
-  //箭头宽
+  
+  /// 箭头宽度 / Arrow width
+  /// 默认值: 12
   final double arrowWidth;
-  //箭头高
+  
+  /// 箭头高度 / Arrow height
+  /// 默认值: 8
   final double arrowHeight;
-  //位置上的偏移（0-1）
+  
+  /// 箭头位置偏移百分比 / Arrow position percent (0.0-1.0)
+  /// 默认值: 0.5 (居中)
+  /// 范围: 0.0-1.0
   final double arrowPositionPercent;
-  // 箭头方向
+  
+  /// 箭头方向 / Arrow direction
+  /// 默认值: BubbleArrowDirection.top
   final BubbleArrowDirection direction;
-  // 箭头形状
+  
+  /// 箭头形状 / Arrow shape
+  /// 默认值: BubbleArrowShape.triangle
   final BubbleArrowShape arrowShape;
-  // 箭头大小是否自适应
+  
+  /// 箭头大小是否自适应 / Arrow size adaptive
+  /// 默认值: true
+  /// 为true时箭头会自动避开圆角区域
   final bool arrowAdaptive;
-  //气泡装饰器
+  
+  /// 气泡装饰器 / Bubble decoration
+  /// 支持颜色、渐变、边框、阴影等
   final BoxDecoration? decoration;
-  //裁剪
+  
+  /// 裁剪行为 / Clip behavior
+  /// 默认值: Clip.none
   final Clip clipBehavior;
 
   const Bubble({

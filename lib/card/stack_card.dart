@@ -7,30 +7,183 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// create_date: 2025/1/16
 /// create_time: 15:49
-/// describe: 堆叠卡片组件
+/// describe: 堆叠卡片组件 / Stack Card Component
+///
+/// 支持左右或上下滑动的堆叠卡片效果组件
+/// Stack card component with swipe left/right or up/down support
+///
+/// ## 功能特性 / Features
+/// - 📚 堆叠卡片效果 / Stack card effect
+/// - 👆 支持滑动切换 / Swipe to switch
+/// - 🎨 支持自定义方向 / Custom orientation
+/// - 🎬 平滑的动画过渡 / Smooth animation transition
+/// - 🔄 自动循环播放 / Auto-loop playback
+/// - 📢 支持选择回调 / Selection callback
+///
+/// ## 基础示例 / Basic Example
+/// ```dart
+/// // 简单堆叠卡片
+/// StackCard(
+///   width: 300,
+///   height: 400,
+///   children: [
+///     Card(child: Center(child: Text('卡片1'))),
+///     Card(child: Center(child: Text('卡片2'))),
+///     Card(child: Center(child: Text('卡片3'))),
+///   ],
+/// )
+///
+/// // 带回调的卡片
+/// StackCard(
+///   width: 280,
+///   height: 350,
+///   slideType: SlideType.horizontal,
+///   children: cards,
+///   cardSelected: (isRight, index) {
+///     print('向${isRight ? "右" : "左"}滑动, 当前索引: $index');
+///   },
+/// )
+///
+/// // 垂直滑动
+/// StackCard(
+///   width: 300,
+///   height: 400,
+///   slideType: SlideType.vertical,
+///   orientation: CardOrientation.bottom,
+///   children: [
+///     Image.asset('assets/img1.jpg'),
+///     Image.asset('assets/img2.jpg'),
+///     Image.asset('assets/img3.jpg'),
+///   ],
+/// )
+///
+/// // 自定义动画时长
+/// StackCard(
+///   width: 250,
+///   height: 350,
+///   duration: Duration(milliseconds: 500),
+///   children: cards,
+///   cardSelected: (isRight, index) {
+///     // 处理选择逻辑
+///   },
+/// )
+///
+/// // 探探式卡片
+/// StackCard(
+///   width: 320,
+///   height: 450,
+///   slideType: SlideType.horizontal,
+///   orientation: CardOrientation.bottom,
+///   children: List.generate(10, (i) {
+///     return Container(
+///       decoration: BoxDecoration(
+///         color: Colors.primaries[i % Colors.primaries.length],
+///         borderRadius: BorderRadius.circular(20),
+///       ),
+///       child: Center(
+///         child: Text('用户 ${i + 1}', style: TextStyle(fontSize: 24)),
+///       ),
+///     );
+///   }),
+///   cardSelected: (isRight, index) {
+///     if (isRight) {
+///       print('喜欢');
+///     } else {
+///       print('不喜欢');
+///     }
+///   },
+/// )
+/// ```
+///
+/// ## 注意事项 / Notes
+/// - 至少需要1个子组件 / Requires at least 1 child
+/// - 滑动超过1/4宽度会触发切换 / Swipe over 1/4 width triggers switch
+/// - 卡片会自动循环显示 / Cards auto-loop
+/// - 支持快速滑动手势 / Supports fast swipe gesture
 ///
 
-/// Card左右选择回调
+/// 卡片选择回调 / Card selection callback
+/// [right] true表示向右滑动 / true means swipe right
+/// [index] 当前卡片索引 / Current card index
 typedef StackCardSelected = Function(bool right, int index);
 
+/// 滑动方向 / Swipe direction
 enum Direction {
-  left, //向左滑动
-  right, //向右滑动
-  stay //无需滑动
+  /// 向左滑动 / Swipe left
+  left,
+  /// 向右滑动 / Swipe right
+  right,
+  /// 无滑动 / No swipe
+  stay
 }
 
-//展示方向
-enum CardOrientation { left, right, bottom, top }
+/// 展示方向 / Display orientation
+enum CardOrientation { 
+  /// 向左展开 / Expand left
+  left, 
+  /// 向右展开 / Expand right
+  right, 
+  /// 向下展开 / Expand bottom
+  bottom, 
+  /// 向上展开 / Expand top
+  top 
+}
 
-// 0左右滑动  1上下左右滑动
-enum SlideType { horizontal, vertical }
+/// 滑动类型 / Slide type
+enum SlideType { 
+  /// 左右滑动 / Horizontal slide
+  horizontal, 
+  /// 上下左右滑动 / Vertical slide (all directions)
+  vertical 
+}
+
 class StackCard extends StatefulWidget {
+  /// 子组件列表 / Children list
+  /// 
+  /// 堆叠的卡片组件列表
+  /// List of stacked card widgets
+  /// 
+  /// 默认值: [] / Default: []
   final List<Widget> children;
+
+  /// 卡片选择回调 / Card selection callback
+  /// 
+  /// 滑动选择时触发
+  /// Triggered on swipe selection
   final StackCardSelected? cardSelected;
-  final SlideType slideType; 
+
+  /// 滑动类型 / Slide type
+  /// 
+  /// 水平或垂直滑动
+  /// Horizontal or vertical slide
+  /// 
+  /// 默认值: SlideType.horizontal / Default: SlideType.horizontal
+  final SlideType slideType;
+
+  /// 展示方向 / Display orientation
+  /// 
+  /// 卡片堆叠的方向
+  /// Direction of card stacking
+  /// 
+  /// 默认值: CardOrientation.bottom / Default: CardOrientation.bottom
   final CardOrientation orientation;
+
+  /// 动画时长 / Animation duration
+  /// 
+  /// 切换动画的持续时间
+  /// Duration of switch animation
+  /// 
+  /// 默认值: Duration(milliseconds: 300) / Default: Duration(milliseconds: 300)
   final Duration duration;
+
+  /// 卡片宽度 / Card width
+  /// 
+  /// 默认值: 140 / Default: 140
   final double width;
+
+  /// 卡片高度 / Card height
+  /// 
+  /// 默认值: 140 / Default: 140
   final double height;
 
   const StackCard(

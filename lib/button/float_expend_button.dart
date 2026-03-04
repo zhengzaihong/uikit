@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uikit_plus/button/float_expend_button.dart';
+
 
 ///
 /// create_user: zhengzaihong
@@ -8,7 +10,6 @@ import 'package:flutter/material.dart';
 /// describe: 用于悬浮伸展菜单
 ///
 class FloatExpendButton extends StatefulWidget {
-
   //展开的按钮
   final List<FloatButtonStyle> iconList;
 
@@ -27,8 +28,12 @@ class FloatExpendButton extends StatefulWidget {
   //主菜单卡展开后颜色
   final Color? mainTabAfterColor;
 
-  //主菜单卡变化图标（动画图标）
+  //主菜单卡变化图标（动画图标，保持兼容）
   final AnimatedIconData? mainAnimatedIcon;
+
+  //自定义收起/展开图标（可传入任意Widget）
+  final Widget? mainCollapseWidget;
+  final Widget? mainExpandWidget;
 
   //选项卡类型即展开方向
   final ButtonType? type;
@@ -46,13 +51,15 @@ class FloatExpendButton extends StatefulWidget {
     required this.iconList,
     this.fabHeight = 30,
     this.tabSpace = 10,
-    this.mainTabBeginColor = Colors.red,
+    this.mainTabBeginColor = Colors.transparent,
     this.mainTabAfterColor = Colors.grey,
     this.mainAnimatedIcon = AnimatedIcons.menu_close,
     this.iconSize = 15,
     this.curve = Curves.easeOut,
     this.duration = const Duration(milliseconds: 300),
     this.type = ButtonType.left,
+    this.mainCollapseWidget,
+    this.mainExpandWidget,
     Key? key,
   }) : super(key: key);
 
@@ -61,32 +68,22 @@ class FloatExpendButton extends StatefulWidget {
 }
 
 class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProviderStateMixin {
-  //记录是否打开
   bool isOpened = false;
-
-  //动画控制器
   late AnimationController _animationController;
-
-  //颜色变化取值
   late Animation<Color?> _animateColor;
-
-  //图标变化取值
   late Animation<double> _animateIcon;
-
-  //按钮的位置动画
   late Animation<double> _fabTween;
 
   @override
   initState() {
     super.initState();
-    //初始化动画控制器
     _animationController =
         AnimationController(vsync: this, duration: widget.duration);
-    //添加动画监听
     _animationController.addListener(() {
       setState(() {});
     });
-    _animateIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _animateColor = ColorTween(
       begin: widget.mainTabBeginColor,
       end: widget.mainTabAfterColor,
@@ -98,15 +95,10 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
       end: _getFabTweenAfter(),
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Interval(
-        0.0,
-        0.75,
-        curve: widget.curve!,
-      ),
+      curve: const Interval(0.0, 0.75),
     ));
   }
 
-  //根据类型获取变化结束值
   double _getFabTweenAfter() {
     if (widget.type == ButtonType.right || widget.type == ButtonType.bottom) {
       return widget.fabHeight! + widget.tabSpace!;
@@ -115,7 +107,6 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
     }
   }
 
-  //根据类型获取X轴移动数值
   double _getFabTranslateX(int i) {
     if (widget.type == ButtonType.left || widget.type == ButtonType.right) {
       return _fabTween.value * (i + 1);
@@ -124,7 +115,6 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
     }
   }
 
-  //根据类型获取Y轴移动数值
   double _getFabTranslateY(int i) {
     if (widget.type == ButtonType.top || widget.type == ButtonType.bottom) {
       return _fabTween.value * (i + 1);
@@ -133,7 +123,6 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
     }
   }
 
-  //根据类型获取主菜单位置
   AlignmentGeometry _getAlignment() {
     if (widget.type == ButtonType.top) {
       return Alignment.bottomCenter;
@@ -148,11 +137,9 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    //构建子菜单
     List<Widget> itemList = [];
 
     for (int i = 0; i < widget.iconList.length; i++) {
-      //通过Transform来促成FloatingActionButton的平移
       itemList.add(
         Transform(
           transform: Matrix4.translationValues(
@@ -164,8 +151,8 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
               heroTag: "$i",
               elevation: 0.5,
               backgroundColor: widget.iconList[i].tabColor,
+              shape: const CircleBorder(),
               onPressed: () {
-                //点击菜单子选项要求菜单弹缩回去
                 floatClick();
                 widget.callback(i);
               },
@@ -181,60 +168,72 @@ class _FloatExpendState extends State<FloatExpendButton> with SingleTickerProvid
       children: [
         widget.type == ButtonType.left || widget.type == ButtonType.right
             ? SizedBox(
-                width: (widget.fabHeight! + widget.tabSpace!) *
-                        widget.iconList.length +
-                    widget.fabHeight!)
+            width: (widget.fabHeight! + widget.tabSpace!) *
+                widget.iconList.length +
+                widget.fabHeight!)
             : SizedBox(
-                height: (widget.fabHeight! + widget.tabSpace!) *
-                        widget.iconList.length +
-                    widget.fabHeight!),
-
+            height: (widget.fabHeight! + widget.tabSpace!) *
+                widget.iconList.length +
+                widget.fabHeight!),
         ...itemList,
-
-        Positioned(
-          child: floatButton(),
-        ),
-      ]
+        Positioned(child: floatButton()),
+      ],
     );
   }
 
-  //构建固定旋转菜单按钮
   Widget floatButton() {
     return SizedBox(
       width: widget.fabHeight,
       height: widget.fabHeight,
       child: FloatingActionButton(
-        //通过_animateColor实现背景颜色的过渡
-        backgroundColor: _animateColor.value, // _animateColor.value
+        backgroundColor: _animateColor.value,
         onPressed: floatClick,
         elevation: 0.5,
-        //通过AnimatedIcon实现标签的过渡
-        child: AnimatedIcon(
-          icon: widget.mainAnimatedIcon!,
-          size: widget.iconSize,
-          progress: _animateIcon,
-        ),
+        shape: const CircleBorder(),
+        child: _buildMainIcon(),
       ),
     );
   }
 
-  ///FloatingActionButton的点击事件，用来控制按钮的动画变换
+  Widget _buildMainIcon() {
+    // 优先使用自定义 Widget
+    if (widget.mainCollapseWidget != null &&
+        widget.mainExpandWidget != null) {
+      return AnimatedCrossFade(
+        firstChild: widget.mainCollapseWidget!,
+        secondChild: widget.mainExpandWidget!,
+        crossFadeState:
+        isOpened ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        duration: widget.duration!,
+        firstCurve: widget.curve!,
+        secondCurve: widget.curve!,
+      );
+    }
+
+    // 回退使用 AnimatedIcon
+    return AnimatedIcon(
+      icon: widget.mainAnimatedIcon!,
+      size: widget.iconSize,
+      progress: _animateIcon,
+    );
+  }
+
   void floatClick() {
     if (!isOpened) {
-      _animationController.forward(); //展开动画
+      _animationController.forward();
     } else {
-      _animationController.reverse(); //收回动画
+      _animationController.reverse();
     }
     isOpened = !isOpened;
   }
 
-  //页面销毁时，销毁动画控制器
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
 }
+
 
 enum ButtonType { left, right, top, bottom }
 

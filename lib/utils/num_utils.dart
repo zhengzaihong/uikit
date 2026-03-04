@@ -10,6 +10,7 @@ import 'dart:math';
 // BigInt → 超大整数运算、格式化、Base64
 
 class NumUtils {
+  NumUtils._();
 
   /// 解析字符串为数字（支持保留小数位数）
   static num? parse(String valueStr, {int? fractionDigits}) {

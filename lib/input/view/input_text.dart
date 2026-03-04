@@ -164,17 +164,8 @@ class InputText extends StatefulWidget {
   /// 是否使用表单输入框
   final bool enableForm;
 
-  /// 输入框末尾的删除按钮样式 enableClear为真是生效
-  final Widget? clearIcon;
-
   /// 是否开启删除按钮
   final bool enableClear;
-
-  /// 是否固定清空按钮，否则失去焦点则不显示
-  final bool fixClearIcon;
-
-  ///需要额外自定义删除框样式。
-  final ClearBuilder? clearBuilder;
 
   /// 所有边框的样式
   final InputBorder? allLineBorder;
@@ -200,7 +191,15 @@ class InputText extends StatefulWidget {
   ///输入框弹出层相关控制
   final InputController? inputController;
 
+  ///是否跟随父组件--用于滚动长列表
+  final bool follower;
+
+  ///follower=true popBox生效，否则宽度撑满
   final PopBox? popBox;
+
+  /// pop 宽度高-度是否填充余下的整个屏幕
+  final bool popFull;
+
   final double marginTop;
   final double? popElevation;
   final Color? popColor;
@@ -286,6 +285,7 @@ class InputText extends StatefulWidget {
   final String? prefixText;
   final TextStyle? prefixStyle;
   final Color? prefixIconColor;
+  //clear模式则为删除图标
   final Widget? suffixIcon;
   final Widget? suffix;
   final String? suffixText;
@@ -322,141 +322,140 @@ class InputText extends StatefulWidget {
 
   const InputText(
       {required this.controller,
-      this.inputController,
-      this.inline = InlineStyle.clearStyle,
-      this.title,
-      this.noBorder = false,
-      this.bgRadius = 10,
-      this.enableForm = false,
-      this.enableClear = true,
-      this.fixClearIcon = false,
-      this.clearIcon = const Icon(Icons.cancel, size: 20, color: Colors.grey),
-      this.clearBuilder,
-      this.allLineBorder = const OutlineInputBorder(
-          gapPadding: 0,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.transparent, width: 0)),
-      this.width,
-      this.padding,
-      this.margin,
-      this.alignment = Alignment.centerLeft,
-      this.buildPop,
-      this.onFocusShowPop = false,
-      this.focusListener,
-      this.popBox,
-      this.marginTop = 0,
-      this.popElevation = 0.0,
-      this.popColor = Colors.transparent,
-      this.popShadowColor,
-      this.popSurfaceTintColor,
-      this.popChildTextStyle,
-      this.popBorderRadius,
-      this.popShape,
-      this.cursorEnd = false,
-      this.focusNode,
-      this.decoration,
-      this.keyboardType = TextInputType.text,
-      this.textInputAction = TextInputAction.done,
-      this.textCapitalization = TextCapitalization.none,
-      this.style = const TextStyle(fontSize: 14, color: Color(0xff222222)),
-      this.strutStyle,
-      this.textAlign = TextAlign.start,
-      this.textAlignVertical,
-      this.textDirection,
-      this.readOnly = false,
-      this.contextMenuBuilder,
-      this.showCursor,
-      this.autofocus = false,
-      this.obscuringCharacter = '•',
-      this.obscureText = false,
-      this.autocorrect = true,
-      this.enableSuggestions = true,
-      this.maxLines = 1,
-      this.minLines,
-      this.expands = false,
-      this.maxLength,
-      this.maxLengthEnforcement,
-      this.onChanged,
-      this.onEditingComplete,
-      this.onSubmitted,
-      this.onAppPrivateCommand,
-      this.inputFormatters,
-      this.enabled = true,
-      this.cursorWidth = 2.0,
-      this.cursorHeight,
-      this.cursorRadius,
-      this.cursorColor,
-      this.keyboardAppearance,
-      this.scrollPadding = const EdgeInsets.all(20.0),
-      this.selectionControls,
-      this.onTap,
-      this.mouseCursor,
-      this.buildCounter,
-      this.scrollController,
-      this.scrollPhysics,
-      this.autofillHints = const <String>[],
-      this.clipBehavior = Clip.hardEdge,
-      this.restorationId,
-      this.scribbleEnabled = true,
-      this.enableInteractiveSelection = true,
-      this.enableIMEPersonalizedLearning = true,
-      this.icon,
-      this.iconColor,
-      this.label,
-      this.labelText,
-      this.labelStyle,
-      this.floatingLabelStyle,
-      this.helperText,
-      this.helperStyle,
-      this.helperMaxLines,
-      this.hintText,
-      this.hintStyle = const TextStyle(fontSize: 14, color: Color(0xff999999)),
-      this.hintTextDirection,
-      this.hintMaxLines,
-      this.errorText,
-      this.errorStyle,
-      this.errorMaxLines,
-      this.floatingLabelBehavior,
-      this.floatingLabelAlignment,
-      this.isCollapsed = true,
-      this.isDense,
-      this.contentPadding = const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
-      this.prefixIcon,
-      this.prefixIconConstraints,
-      this.prefix,
-      this.prefixText,
-      this.prefixStyle,
-      this.prefixIconColor,
-      this.suffixIcon,
-      this.suffix,
-      this.suffixText,
-      this.suffixStyle,
-      this.suffixIconColor,
-      this.suffixIconConstraints,
-      this.counter,
-      this.counterText,
-      this.counterStyle,
-      this.filled = true,
-      this.fillColor = Colors.transparent,
-      this.focusColor,
-      this.hoverColor = Colors.transparent,
-      this.errorBorder,
-      this.focusedBorder,
-      this.focusedErrorBorder,
-      this.disabledBorder,
-      this.enabledBorder,
-      this.border = const OutlineInputBorder(borderSide: BorderSide.none),
-      this.semanticCounterText,
-      this.alignLabelWithHint,
-      this.constraints,
-      this.onFieldSubmitted,
-      this.onSaved,
-      this.validator,
-      // this.initialValue,
-      this.mainAxisAlignment = MainAxisAlignment.start,
-      this.mainAxisSize = MainAxisSize.min,
-      this.crossAxisAlignment = CrossAxisAlignment.center,
-      Key? key})
+        this.inputController,
+        this.inline = InlineStyle.clearStyle,
+        this.title,
+        this.noBorder = false,
+        this.bgRadius = 10,
+        this.enableForm = false,
+        this.enableClear = true,
+        this.allLineBorder = const OutlineInputBorder(
+            gapPadding: 0,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: Colors.transparent, width: 0)),
+        this.follower = true,
+        this.popFull = false,
+        this.width,
+        this.padding,
+        this.margin,
+        this.alignment = Alignment.centerLeft,
+        this.buildPop,
+        this.onFocusShowPop = false,
+        this.focusListener,
+        this.popBox,
+        this.marginTop = 0,
+        this.popElevation = 0.0,
+        this.popColor = Colors.transparent,
+        this.popShadowColor,
+        this.popSurfaceTintColor,
+        this.popChildTextStyle,
+        this.popBorderRadius,
+        this.popShape,
+        this.cursorEnd = false,
+        this.focusNode,
+        this.decoration,
+        this.keyboardType = TextInputType.text,
+        this.textInputAction = TextInputAction.done,
+        this.textCapitalization = TextCapitalization.none,
+        this.style = const TextStyle(fontSize: 14, color: Color(0xff222222)),
+        this.strutStyle,
+        this.textAlign = TextAlign.start,
+        this.textAlignVertical,
+        this.textDirection,
+        this.readOnly = false,
+        this.contextMenuBuilder,
+        this.showCursor,
+        this.autofocus = false,
+        this.obscuringCharacter = '•',
+        this.obscureText = false,
+        this.autocorrect = true,
+        this.enableSuggestions = true,
+        this.maxLines = 1,
+        this.minLines,
+        this.expands = false,
+        this.maxLength,
+        this.maxLengthEnforcement,
+        this.onChanged,
+        this.onEditingComplete,
+        this.onSubmitted,
+        this.onAppPrivateCommand,
+        this.inputFormatters,
+        this.enabled = true,
+        this.cursorWidth = 2.0,
+        this.cursorHeight,
+        this.cursorRadius,
+        this.cursorColor,
+        this.keyboardAppearance,
+        this.scrollPadding = const EdgeInsets.all(20.0),
+        this.selectionControls,
+        this.onTap,
+        this.mouseCursor,
+        this.buildCounter,
+        this.scrollController,
+        this.scrollPhysics,
+        this.autofillHints = const <String>[],
+        this.clipBehavior = Clip.hardEdge,
+        this.restorationId,
+        this.scribbleEnabled = true,
+        this.enableInteractiveSelection = true,
+        this.enableIMEPersonalizedLearning = true,
+        this.icon,
+        this.iconColor,
+        this.label,
+        this.labelText,
+        this.labelStyle,
+        this.floatingLabelStyle,
+        this.helperText,
+        this.helperStyle,
+        this.helperMaxLines,
+        this.hintText,
+        this.hintStyle = const TextStyle(fontSize: 14, color: Color(0xff999999)),
+        this.hintTextDirection,
+        this.hintMaxLines,
+        this.errorText,
+        this.errorStyle,
+        this.errorMaxLines,
+        this.floatingLabelBehavior,
+        this.floatingLabelAlignment,
+        this.isCollapsed = true,
+        this.isDense,
+        this.contentPadding = const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+        this.prefixIcon,
+        this.prefixIconConstraints,
+        this.prefix,
+        this.prefixText,
+        this.prefixStyle,
+        this.prefixIconColor,
+        this.suffixIcon,
+        this.suffix,
+        this.suffixText,
+        this.suffixStyle,
+        this.suffixIconColor,
+        this.suffixIconConstraints,
+        this.counter,
+        this.counterText,
+        this.counterStyle,
+        this.filled = true,
+        this.fillColor = Colors.transparent,
+        this.focusColor,
+        this.hoverColor = Colors.transparent,
+        this.errorBorder,
+        this.focusedBorder,
+        this.focusedErrorBorder,
+        this.disabledBorder,
+        this.enabledBorder,
+        this.border = const OutlineInputBorder(borderSide: BorderSide.none),
+        this.semanticCounterText,
+        this.alignLabelWithHint,
+        this.constraints,
+        this.onFieldSubmitted,
+        this.onSaved,
+        this.validator,
+        // this.initialValue,
+        this.mainAxisAlignment = MainAxisAlignment.start,
+        this.mainAxisSize = MainAxisSize.min,
+        this.crossAxisAlignment = CrossAxisAlignment.center,
+        Key? key})
       : super(key: key);
 
   @override
@@ -464,7 +463,6 @@ class InputText extends StatefulWidget {
 }
 
 class InputTextState extends State<InputText> {
-  // bool _hasContent = false;
 
   ///关联输入框，处理在组价在列表中跟随滚动
   final LayerLink _layerLink = LayerLink();
@@ -484,33 +482,34 @@ class InputTextState extends State<InputText> {
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
       widget.focusListener?.call(context, hasFocus);
-      if (widget.inline == InlineStyle.clearStyle) {
-        ///非外部自定义 走内部实现策略，否则外部调用者维护样式
-        if (mounted && widget.clearBuilder == null && !widget.fixClearIcon) {
-          setState(() {
-            if (hasFocus) {
-              inlineStyle = InlineStyle.clearStyle;
-            } else {
-              inlineStyle = InlineStyle.normalStyle;
-            }
-          });
-        }
-      }
-      if (hasFocus && widget.buildPop != null) {
+      
+      // 当获得焦点且配置了 buildPop 时显示弹出层
+      if (hasFocus && widget.buildPop != null && widget.onFocusShowPop) {
         addPop();
         return;
       }
-      // if(!hasFocus){
-      //   removePop();
-      //   return;
-      // }
+      
+      // 失去焦点时延迟关闭弹出层，给按钮点击事件足够的时间执行
+      // 这是关键：延迟时间要足够长，让点击事件先完成
+      if (!hasFocus && _overlayEntry != null) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          // 再次检查焦点状态和 overlay 是否还存在
+          if (!_focusNode.hasFocus && _overlayEntry != null && mounted) {
+            removePop();
+          }
+        });
+      }
     });
   }
 
   @override
   void dispose() {
+    removePop();
     widget.inputController?.dispose();
-    _focusNode.dispose();
+    if (widget.focusNode == null) {
+      // 只有当 focusNode 是内部创建的时候才 dispose
+      _focusNode.dispose();
+    }
     super.dispose();
   }
 
@@ -539,25 +538,25 @@ class InputTextState extends State<InputText> {
           widget.title ?? const SizedBox.shrink(),
           widget.noBorder
               ? Theme(
-                  data: ThemeData(
-                    primaryColor: Colors.transparent,
-                    inputDecorationTheme: InputDecorationTheme(
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(widget.bgRadius)),
-                            borderSide:
-                                const BorderSide(color: Colors.transparent)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(widget.bgRadius)),
-                            borderSide:
-                                const BorderSide(color: Colors.transparent))),
-                  ),
-                  child:
-                      widget.enableForm ? _createInputForm() : _createInput())
+              data: ThemeData(
+                primaryColor: Colors.transparent,
+                inputDecorationTheme: InputDecorationTheme(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(widget.bgRadius)),
+                        borderSide:
+                        const BorderSide(color: Colors.transparent)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(widget.bgRadius)),
+                        borderSide:
+                        const BorderSide(color: Colors.transparent))),
+              ),
+              child:
+              widget.enableForm ? _createInputForm() : _createInput())
               : widget.enableForm
-                  ? _createInputForm()
-                  : _createInput(),
+              ? _createInputForm()
+              : _createInput(),
         ],
       ),
     );
@@ -625,8 +624,8 @@ class InputTextState extends State<InputText> {
     return widget.width != null
         ? input
         : Row(
-            children: [Expanded(child: input)],
-          );
+      children: [Expanded(child: input)],
+    );
   }
 
   Widget _createInputForm() {
@@ -697,8 +696,8 @@ class InputTextState extends State<InputText> {
     return widget.width != null
         ? inputForm
         : Row(
-            children: [Expanded(child: inputForm)],
-          );
+      children: [Expanded(child: inputForm)],
+    );
   }
 
   InputBorder? _buildBorder(InputBorder? inputBorderType) {
@@ -713,23 +712,16 @@ class InputTextState extends State<InputText> {
 
   InputDecoration? buildDefaultInputDecoration() {
     if (widget.decoration == null) {
-      Widget? suffixIcon;
+      Widget? suffixIcon =  widget.suffixIcon;
       if (inlineStyle == InlineStyle.clearStyle) {
-        if (widget.clearBuilder != null) {
-          suffixIcon = widget.clearBuilder!(context);
-        } else {
-          suffixIcon = (widget.enableClear && getIsEnable() && getHasContent())
-              ? GestureDetector(
-                  onTap: () {
-                    clearContent();
-                  },
-                  child: widget.clearIcon,
-                )
-              : const Text("");
-        }
-      }
-      if (inlineStyle == InlineStyle.normalStyle) {
-        suffixIcon = widget.suffixIcon;
+        suffixIcon = (widget.enableClear && isEnable() && hasContent())
+            ? GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            clearText();
+          },
+          child: widget.suffixIcon??const Icon(Icons.cancel, size: 20, color: Colors.grey),
+        ) : const SizedBox.shrink();
       }
       return InputDecoration(
         suffixIcon: suffixIcon,
@@ -785,88 +777,75 @@ class InputTextState extends State<InputText> {
     return widget.decoration;
   }
 
-  // ignore: unused_element
-  List<double?> _setPopSize() {
-    List<double?> sizeInfo = [];
-    if (widget.popBox != null) {
-      var boxSize = widget.popBox;
-
-      ///允许无线延伸
-      bool? isLimit = boxSize?.limitSize;
-      if (null != isLimit && isLimit) {
-        ///不限制宽高
-        sizeInfo.add(null);
-        sizeInfo.add(null);
-      } else {
-        ///设置约束条件
-        sizeInfo.add(boxSize?.width);
-        sizeInfo.add(boxSize?.height);
-      }
-    }
-    return sizeInfo;
-  }
-
   ///创建搜索弹窗
   OverlayEntry _createOverlayEntry() {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    var size = renderBox.size;
-    var popBox = widget.popBox;
     return OverlayEntry(
-        builder: (context) => Stack(
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    if (_focusNode.hasFocus) {
-                      _focusNode.unfocus();
-                      return;
-                    }
-                    if (!_focusNode.hasFocus) {
-                      removePop();
-                    }
-                  },
-                  child: const SizedBox(
-                    height: double.infinity,
-                    width: double.infinity,
-                  ),
-                ),
-                Positioned(
-                  width: popBox == null
-                      ? size.width
-                      : popBox.limitSize
-                          ? null
-                          : popBox.width,
-                  height: popBox?.height,
-                  child: CompositedTransformFollower(
-                    link: _layerLink,
-                    showWhenUnlinked: false,
-                    offset: Offset(0.0, size.height + widget.marginTop),
-                    child: Material(
-                      elevation: widget.popElevation!,
-                      shadowColor: widget.popShadowColor,
-                      color: widget.popColor,
-                      shape: widget.popShape,
-                      borderRadius: widget.popBorderRadius,
-                      surfaceTintColor: widget.popSurfaceTintColor,
-                      textStyle: widget.popChildTextStyle,
-                      child: widget.buildPop?.call(context),
-                    ),
-                  ),
-                ),
-              ],
-            ));
+      builder: (overlayContext) {
+
+        final RenderBox targetBox = context.findRenderObject() as RenderBox;
+        final Size targetSize = targetBox.size;
+        final popBox = widget.popBox;
+
+        // 使用 Material 并确保设置正确的 type
+        // 关键：使用 MouseRegion 和 Listener 阻止点击时焦点丢失
+        final popContent = MouseRegion(
+          child: Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (event) {
+              // 阻止点击 pop 时输入框失去焦点
+              // 通过请求焦点来保持输入框的焦点状态
+              if (!_focusNode.hasFocus) {
+                _focusNode.requestFocus();
+              }
+            },
+            child: Material(
+              type: MaterialType.card,
+              elevation: widget.popElevation!,
+              shadowColor: widget.popShadowColor,
+              color: widget.popColor ?? Colors.white,
+              shape: widget.popShape,
+              borderRadius: widget.popBorderRadius,
+              surfaceTintColor: widget.popSurfaceTintColor,
+              textStyle: widget.popChildTextStyle,
+              child: widget.buildPop?.call(context),
+            ),
+          ),
+        );
+        
+        // 统一使用 Positioned 定位，不使用 CompositedTransformFollower
+        // 这样可以避免 CompositedTransformFollower 的事件传递问题
+        return Builder(
+          builder: (builderContext) {
+            final RenderBox overlayBox = Overlay.of(builderContext).context.findRenderObject() as RenderBox;
+            final Offset targetInOverlay = targetBox.localToGlobal(Offset.zero, ancestor: overlayBox);
+            final double left = targetInOverlay.dx;
+            final double top = targetInOverlay.dy + targetSize.height + widget.marginTop;
+            
+            return Positioned(
+              left: left,
+              top: top,
+              width: popBox?.width ?? targetSize.width,
+              height: popBox?.height,
+              child: popContent,
+            );
+          },
+        );
+      },
+    );
   }
 
   void addPop() {
-    if (null == _overlayEntry) {
+    if (_overlayEntry == null && mounted) {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context).insert(_overlayEntry!);
     }
   }
 
   void removePop() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+    if (_overlayEntry != null) {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+    }
   }
 
   void notyOverlayDataChange() {
@@ -887,18 +866,28 @@ class InputTextState extends State<InputText> {
     }
   }
 
-  void clearContent() {
-    setState(() {
-      widget.controller?.text = "";
-      widget.onChanged?.call("");
-    });
+  void clearText() {
+    if (mounted) {
+      setState(() {
+        widget.controller?.text = "";
+        widget.onChanged?.call("");
+      });
+    }
   }
 
-  bool getIsEnable() {
+  void callSubmit() {
+    widget.onSubmitted?.call(widget.controller?.text??"");
+  }
+  void callChange() {
+    widget.onChanged?.call(widget.controller?.text??"");
+  }
+
+
+  bool isEnable() {
     return widget.enabled ?? true;
   }
 
-  bool getHasContent() {
+  bool hasContent() {
     return StrUtils.isNotEmpty(widget.controller?.text);
   }
 
@@ -940,13 +929,20 @@ class InputController {
     _state?.notyUiChange();
   }
 
-  void clearContent() {
-    _state?.clearContent();
+  void clearText() {
+    _state?.clearText();
+  }
+
+  void callSubmit() {
+    _state?.callSubmit();
+  }
+  void callChange() {
+    _state?.callChange();
   }
 
   bool isFocus() => _state?.isFocus() ?? false;
 
-  bool hasContent() => _state?.getHasContent() ?? false;
+  bool hasContent() => _state?.hasContent() ?? false;
 
   void setText(String text) {
     _state?.setText(text);
@@ -967,6 +963,7 @@ class InputController {
   }
 
   void dispose() {
+     removePop();
     _state = null;
   }
 }

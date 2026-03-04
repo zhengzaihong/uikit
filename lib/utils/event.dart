@@ -280,7 +280,8 @@ mixin EventSubscriber<T extends StatefulWidget> on State<T> {
       dynamic target,
       void Function(V value) listener,
       ) {
-    EventNotifier.addListener(target, listener);
+    // EventNotifier.addListener(target, listener);
+    EventNotifier.obtain(target,listener: listener);
     _subscriptions.add(EventSubscription(() {
       // 移除包装后的 lambda
       EventNotifier.removeListener(target, listener);

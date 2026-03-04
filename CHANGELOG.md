@@ -1,3 +1,6 @@
+## 0.4.2
+- A lot of component optimizations, and add example instructions
+
 ## 0.4.0
 - A large number of component refactoring and optimizing, removing some components
 
