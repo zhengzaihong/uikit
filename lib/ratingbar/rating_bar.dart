@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 /// Rating Bar Component - Supports full star, half star, and precise rating modes
 ///
 /// ## 功能特性 / Features
-/// - ⭐ 支持自定义星星数量和大小 / Custom star count and size
-/// - 📏 支持步长控制(整星/半星/任意精度) / Step control (full/half/any precision)
-/// - 🔒 支持只读模式 / Read-only mode support
-/// - 🎨 完全自定义星星样式 / Fully customizable star appearance
-/// - 🚫 可配置是否允许0分 / Configurable zero rating
-/// - 📱 支持触摸和滑动交互 / Touch and swipe interaction
+/// - 支持自定义星星数量和大小 / Custom star count and size
+/// - 支持步长控制(整星/半星/任意精度) / Step control (full/half/any precision)
+/// - 支持只读模式 / Read-only mode support
+/// - 完全自定义星星样式 / Fully customizable star appearance
+/// - 可配置是否允许0分 / Configurable zero rating
+/// -  持触摸和滑动交互 / Touch and swipe interaction
 ///
 /// ## 使用场景 / Use Cases
 /// - 商品评价 / Product reviews

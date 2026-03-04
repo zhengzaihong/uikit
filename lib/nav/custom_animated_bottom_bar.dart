@@ -9,17 +9,17 @@ import 'package:uikit_plus/utils/color_utils.dart';
 /// describe: 底部导航栏动画组件 - 流畅的切换动画效果
 /// Enterprise-level animated bottom navigation bar component - Smooth switching animation
 ///
-/// ✨ 功能特性 / Features:
-/// • 🎬 流畅动画 - 选中项平滑展开/收缩动画
-/// • 🎨 高度自定义 - 支持自定义图标、颜色、尺寸
-/// • 📱 响应式设计 - 自适应不同屏幕尺寸
-/// • 🎯 灵活布局 - 支持多种对齐方式
-/// • 🔄 状态管理 - 自动管理选中状态
-/// • 🎪 Material风格 - 支持阴影、圆角等Material属性
-/// • 📏 尺寸可控 - 支持自定义容器高度、图标大小
-/// • 🌈 多彩主题 - 每个项可配置独立的激活颜色
+/// 功能特性 / Features:
+/// • 流畅动画 - 选中项平滑展开/收缩动画
+/// • 高度自定义 - 支持自定义图标、颜色、尺寸
+/// • 响应式设计 - 自适应不同屏幕尺寸
+/// • 灵活布局 - 支持多种对齐方式
+/// • 状态管理 - 自动管理选中状态
+/// • Material风格 - 支持阴影、圆角等Material属性
+/// • 尺寸可控 - 支持自定义容器高度、图标大小
+/// • 多彩主题 - 每个项可配置独立的激活颜色
 ///
-/// 📖 使用示例 / Usage Examples:
+///  使用示例 / Usage Examples:
 ///
 /// ```dart
 /// // 示例1: 基础底部导航栏
