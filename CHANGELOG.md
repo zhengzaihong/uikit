@@ -1,4 +1,7 @@
 ## 0.4.2
+- Partial component refactoring and code optimization
+- 
+## 0.4.1
 - A lot of component optimizations, and add example instructions
 
 ## 0.4.0

@@ -19,9 +19,6 @@ class DrawerRouterStack extends BaseStackWidget {
     this.child,
   }) : super(key: key, listenable: listenable);
 
-  @override
-  Listenable get listenable => super.listenable;
-
   final TransitionBuilder builder;
   final Function(BuildContext) bind;
 

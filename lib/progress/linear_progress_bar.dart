@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uikit_plus/utils/color_utils.dart';
 
-/// 线性进度条组件 - 支持动画、渐变、自定义样式
-///
-/// Linear Progress Bar Component - Supports animation, gradient, and custom styles
+
 ///
 /// ## 功能特性 / Features
 /// - 📊 支持水平进度显示 / Horizontal progress display
@@ -71,7 +69,8 @@ extension ExtDouble on double {
 /// email:1096877329@qq.com
 /// create_date: 2026-02-11
 /// create_time: 17:26
-/// describe: 优化更新
+/// describe: 线性进度条组件 - 支持动画、渐变、自定义样式
+/// Linear Progress Bar Component - Supports animation, gradient, and custom styles
 ///
 class LinearProgressBar extends StatefulWidget {
 

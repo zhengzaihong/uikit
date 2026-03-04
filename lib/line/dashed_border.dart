@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
 ///
 /// create_user: zhengzaihong
 /// email:1096877329@qq.com
