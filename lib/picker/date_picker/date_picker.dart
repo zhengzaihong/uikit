@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../../ext/top_view.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/12/4
-/// create_time: 11:09
+/// date: 2024/12/4
+/// time: 11:09
 /// describe: 1.支持范围日期选择，
 /// 2，支持具体某天选择，
 /// 3，支持可配置列时间选择.

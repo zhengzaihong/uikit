@@ -5,10 +5,10 @@ import 'package:uikit_plus/select/select_fun.dart';
 import 'drop_position.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024-02-01
-/// create_time: 14:58
+/// date: 2024-02-01
+/// time: 14:58
 /// describe: 下拉选择菜单组件 - 高度可定制的下拉框解决方案
 /// Enterprise-level dropdown selection menu component - Highly customizable dropdown solution
 ///

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/10/8
-/// create_time: 9:36
+/// date: 2022/10/8
+/// time: 9:36
 /// describe: 纵向无限层级菜单
 ///
 typedef BuildMenuItem = Widget Function(

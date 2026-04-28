@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025/1/16
-/// create_time: 15:49
+/// date: 2025/1/16
+/// time: 15:49
 /// describe: 堆叠卡片组件 / Stack Card Component
 ///
 /// 支持左右或上下滑动的堆叠卡片效果组件

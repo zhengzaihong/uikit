@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025/2/6
-/// create_time: 15:26
+/// date: 2025/2/6
+/// time: 15:26
 /// describe: 基于 flutter_router_forzzh 路由
 /// 需配合 DrawerRouterStack 组件使用实现抽屉路由栈，使用请先绑定正确的 context
 /// bindDrawerNavigatorContext(),通常为 Scaffold 子组件的上下文，非根 context
@@ -72,14 +72,14 @@ class DrawerRouter extends RouterDelegate<RouteInformation> with ChangeNotifier,
   Widget build(BuildContext context) {
     return PopScope(
         canPop: false,
-        onPopInvoked: _onPopInvoked,
+        onPopInvokedWithResult: _onPopInvokedWithResult,
         child: Navigator(
           key: navigatorKey,
           pages: List.of(_pages),
           onPopPage: _onPopPage,
         ));
   }
-  void _onPopInvoked(bool didPop) {
+  void _onPopInvokedWithResult(bool didPop, dynamic result) {
     // 当 canPop 为 false 时, didPop 总是 false.
     // 我们在此处手动处理返回手势.
     if (!didPop) {

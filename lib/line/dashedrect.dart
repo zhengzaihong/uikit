@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/5/20
-/// create_time: 10:38
+/// date: 2022/5/20
+/// time: 10:38
 /// describe:绘制虚线view
 ///
 class DashedRect extends StatelessWidget {

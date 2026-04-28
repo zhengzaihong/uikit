@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021/11/12
-/// create_time: 13:54
+/// date: 2021/11/12
+/// time: 13:54
 /// describe: 智能侧边栏组件 - 灵活的抽屉式导航
 /// Enterprise-level smart drawer component - Flexible drawer navigation
 ///

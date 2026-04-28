@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'str_utils.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/11/3
-/// create_time: 16:45
+/// date: 2022/11/3
+/// time: 16:45
 /// describe: 测量相关工具
 ///
 class MeasureUtils{

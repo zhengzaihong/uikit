@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025-12-26
-/// create_time: 17:24
+/// date: 2025-12-26
+/// time: 17:24
 /// describe: 可控角度旋转组件 / Controllable Angle Rotation Component
 ///
 /// 支持配置旋转角度并带动画过渡的组件

@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021/12/13
-/// create_time: 18:07
+/// date: 2021/12/13
+/// time: 18:07
 /// describe: 输入框拓展带自动检索组件
 ///
 
@@ -685,10 +685,10 @@ class InputExtendState<T> extends State<InputExtend> {
 
 
 
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/11/26
-/// create_time: 11:15
+/// date: 2024/11/26
+/// time: 11:15
 /// describe:控制器
 ///
 class InputExtendController {

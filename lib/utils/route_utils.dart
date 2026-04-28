@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uikit_plus/utils/keyboard.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021/11/23
-/// create_time: 10:37
+/// date: 2021/11/23
+/// time: 10:37
 /// describe: 路由工具
 ///
 class RouteUtils {

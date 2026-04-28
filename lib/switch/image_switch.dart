@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/4/19
-/// create_time: 16:53
+/// date: 2024/4/19
+/// time: 16:53
 /// describe: 自定义开关组件
 /// 简单示例 eg：
 // ImageSwitch(

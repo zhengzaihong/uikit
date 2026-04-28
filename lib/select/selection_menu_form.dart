@@ -5,10 +5,10 @@ import 'package:uikit_plus/select/select_fun.dart';
 
 import 'drop_position.dart';
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024-02-01
-/// create_time: 14:58
+/// date: 2024-02-01
+/// time: 14:58
 /// describe: 极简系统下拉框，可高度自定义，且规避系统组件的使用麻烦，SelectionMenuForm不关心数据。
 /// eg: 此组件可配合 Form 表单进行校验工作，如不需要此功能，可使用 [SelectionMenu]
 //  如需实时校验请配合：controller.validator();

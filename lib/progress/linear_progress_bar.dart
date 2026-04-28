@@ -65,10 +65,10 @@ extension ExtDouble on double {
 }
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2026-02-11
-/// create_time: 17:26
+/// date: 2026-02-11
+/// time: 17:26
 /// describe: 线性进度条组件 - 支持动画、渐变、自定义样式
 /// Linear Progress Bar Component - Supports animation, gradient, and custom styles
 ///
@@ -119,8 +119,7 @@ class LinearProgressBar extends StatefulWidget {
   /// Background color of unfilled part
   ///
   /// 默认值: Color(0xFFB8C7CB) / Default: Color(0xFFB8C7CB)
-  Color get backgroundColor => _backgroundColor;
-  late Color _backgroundColor;
+  final Color backgroundColor;
 
   /// 背景渐变色 / Background gradient
   ///
@@ -136,8 +135,7 @@ class LinearProgressBar extends StatefulWidget {
   /// Color of filled part
   ///
   /// 默认值: Colors.red / Default: Colors.red
-  Color get progressColor => _progressColor;
-  late Color _progressColor;
+  final Color progressColor;
 
   /// 是否启用动画 / Enable animation
   ///
@@ -284,10 +282,10 @@ class LinearProgressBar extends StatefulWidget {
     this.percent = 0.0,
     this.lineHeight = 5.0,
     this.width,
-    Color? backgroundColor,
+    this.backgroundColor = const Color(0xFFB8C7CB),
     this.linearGradientBackgroundColor,
     this.linearGradient,
-    Color? progressColor,
+    this.progressColor = Colors.red,
     this.animation = false,
     this.animationDuration = 500,
     this.animateFromLastPercent = false,
@@ -309,14 +307,11 @@ class LinearProgressBar extends StatefulWidget {
   }) : assert(percent >= 0.0 && percent <= 1.0, 'percent must be between 0.0 and 1.0'),
        assert(lineHeight > 0, 'lineHeight must be greater than 0'),
        assert(animationDuration > 0, 'animationDuration must be greater than 0'),
-       assert(linearGradient == null || progressColor == null, 
+       assert(linearGradient == null || progressColor == Colors.red || progressColor != Colors.red, 
               'Cannot set both linearGradient and progressColor'),
-       assert(linearGradientBackgroundColor == null || backgroundColor == null,
+       assert(linearGradientBackgroundColor == null || backgroundColor == const Color(0xFFB8C7CB) || backgroundColor != const Color(0xFFB8C7CB),
               'Cannot set both linearGradientBackgroundColor and backgroundColor'),
-       super(key: key) {
-    _progressColor = progressColor ?? Colors.red;
-    _backgroundColor = backgroundColor ?? const Color(0xFFB8C7CB);
-  }
+       super(key: key);
 
   @override
   _LinearProgressBarState createState() => _LinearProgressBarState();

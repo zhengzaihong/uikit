@@ -3,10 +3,10 @@ import 'dart:math' as math;
 
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021/12/26
-/// create_time: 17:26
+/// date: 2021/12/26
+/// time: 17:26
 /// describe: 圆形进度条 / Circular Progress Bar
 ///
 /// 支持完整圆形、半圆、反向等多种样式的进度条组件

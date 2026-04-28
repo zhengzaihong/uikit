@@ -30,6 +30,8 @@ export 'card/stack_card.dart';
 export 'textview/marquee_view.dart';
 export 'infinite/infinite_levels_menus.dart';
 
+export 'animation/splash_bobble_animation.dart';
+
 
 /// 工具包
 export 'utils/utils_lib.dart';

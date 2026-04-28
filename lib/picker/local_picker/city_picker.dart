@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021/11/18
-/// create_time: 20:44
+/// date: 2021/11/18
+/// time: 20:44
 /// describe: 城市picker
 ///
 ///

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2023/5/12
-/// create_time: 9:35
+/// date: 2023/5/12
+/// time: 9:35
 /// describe: 颜色工具
 ///
 

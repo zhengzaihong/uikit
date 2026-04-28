@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 /// - 支持只读模式 / Read-only mode support
 /// - 完全自定义星星样式 / Fully customizable star appearance
 /// - 可配置是否允许0分 / Configurable zero rating
-/// -  持触摸和滑动交互 / Touch and swipe interaction
+/// - 支持触摸和滑动交互 / Touch and swipe interaction
+/// - 支持评分值格式化显示 / Rating value formatting support
 ///
 /// ## 使用场景 / Use Cases
 /// - 商品评价 / Product reviews
@@ -202,6 +203,17 @@ class RatingBar extends StatefulWidget {
   /// 默认值: false / Default: false
   final bool readOnly;
 
+  /// 评分值格式化器 / Rating value formatter
+  ///
+  /// 用于格式化显示评分值,例如保留小数位数
+  /// Used to format rating value display, e.g., decimal places
+  ///
+  /// 示例 / Example:
+  /// ```dart
+  /// valueFormatter: (value) => value.toStringAsFixed(1)
+  /// ```
+  final String Function(double value)? valueFormatter;
+
   const RatingBar({
     this.maxRating = 10.0,
     this.count = 5,
@@ -215,6 +227,7 @@ class RatingBar extends StatefulWidget {
     this.allowZero = true,
     this.readOnly = false,
     this.onRatingUpdate,
+    this.valueFormatter,
     Key? key,
   }) : assert(count > 0, 'count must be greater than 0'),
        assert(maxRating > 0, 'maxRating must be greater than 0'),

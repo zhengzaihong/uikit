@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/5/8
-/// create_time: 9:15
+/// date: 2024/5/8
+/// time: 9:15
 /// describe: 持续旋转动画组件 / Continuous Rotating Animation Component
 ///
 /// 让子组件持续旋转的动画组件

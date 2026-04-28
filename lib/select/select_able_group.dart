@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025-10-23
-/// create_time: 17:59
+/// date: 2025-10-23
+/// time: 17:59
 /// describe:
 // 🔸 单选 / 多选
 // 🔸 互斥选项（如“全选”）

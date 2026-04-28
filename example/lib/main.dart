@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uikit_example/event_example.dart';
+import 'package:uikit_example/splash_bobble_demo.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 import 'package:uikit_example/radar_chart_example.dart';
 import 'date_select_example.dart';
@@ -82,6 +83,7 @@ class _MyAppState extends State<MyApp> {
       createMenu("分页组件",context, const PagerExample()),
       createMenu("微光加载效果",context, const ShimmerLoadingExample()),
       createMenu("常用小组件",context, const OftenWidgetExample()),
+      createMenu("动画组件",context, const SplashBobbleDemo()),
       createMenu("事件工具-非UI",context, const EventExample()),
     ];
   }

@@ -6,10 +6,10 @@ import '../../utils/str_utils.dart';
 import '../style/inline_style.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/12/30
-/// create_time: 16:28
+/// date: 2022/12/30
+/// time: 16:28
 /// describe: 通用文本输入框，可内置样式，外部定义等。支持系统全部属性 ,默认自带删除按钮。
 /// 使用此组件一定要注意使用规范：输入框的高度应该由输入框自身大小所决定。当使用
 /// 于较多文本编辑时高度通过 maxLines 设置填充。而非外部容器设置虚拟高度和背景来包裹输入框（TextField）

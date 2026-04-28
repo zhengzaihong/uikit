@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/7/6
-/// create_time: 14:45
+/// date: 2022/7/6
+/// time: 14:45
 /// describe: 去除列表类的波纹效果
 ///
 class OverScrollBehavior extends ScrollBehavior {

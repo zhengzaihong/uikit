@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'switch_lib.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/11/17
-/// create_time: 17:44
+/// date: 2022/11/17
+/// time: 17:44
 /// describe: 开关按钮组件 / Switch Component
 ///
 /// 支持 iOS 和 Android 两种风格的开关按钮
@@ -22,6 +23,7 @@ import 'switch_lib.dart';
 /// - 📍 支持标签左右位置 / Label position (left/right)
 /// - 📏 支持缩放 / Scale support
 /// - 🎯 支持初始化回调 / Initial callback support
+/// - 📳 支持触觉反馈 / Haptic feedback support
 ///
 /// ## 基础示例 / Basic Example
 /// ```dart
@@ -74,12 +76,24 @@ import 'switch_lib.dart';
 ///   label: Text("深色模式"),
 ///   onChange: (value) => print(value),
 /// )
+///
+/// // 带触觉反馈
+/// KitSwitch(
+///   isOpen: false,
+///   enableHapticFeedback: true,
+///   label: Text("震动反馈"),
+///   activeColor: Colors.green,
+///   onChange: (value) {
+///     print('开关状态: $value');
+///   },
+/// )
 /// ```
 ///
 /// ## 注意事项 / Notes
 /// - isInnerStyle 为 true 时使用 iOS 风格 / iOS style when true
 /// - isInnerStyle 为 false 时使用 Android 风格 / Android style when false
 /// - enableFirstCallBack 为 true 时会在初始化时触发回调 / Triggers callback on init when true
+/// - enableHapticFeedback 为 true 时切换会有轻微震动反馈 / Light haptic feedback when true
 ///
 
 class KitSwitch extends StatefulWidget {
@@ -128,6 +142,11 @@ class KitSwitch extends StatefulWidget {
   /// 是否在初始化时触发回调 / Enable first callback
   /// 默认值: false / Default: false
   final bool? enableFirstCallBack;
+
+  /// 是否启用触觉反馈 / Enable haptic feedback
+  /// 默认值: false / Default: false
+  final bool enableHapticFeedback;
+
   const KitSwitch({
     this.isOpen=true,
     this.onChange,
@@ -135,6 +154,7 @@ class KitSwitch extends StatefulWidget {
     this.isInnerStyle = false,
     this.label = const SizedBox(),
     this.enableFirstCallBack = false,
+    this.enableHapticFeedback = false,
     this.margin = 0,
     this.scale=1,
     this.activeColor,
@@ -176,18 +196,23 @@ class _KitSwitchState extends State<KitSwitch> {
         ]);
   }
 
+  void _handleChange(bool v) {
+    if (widget.enableHapticFeedback) {
+      HapticFeedback.lightImpact();
+    }
+    widget.onChange?.call(v);
+    setState(() {
+      isOpen = !isOpen;
+    });
+  }
+
   Widget buildStyleSwitch(){
     if(widget.isInnerStyle!){
       return  Transform.scale(
         scale: widget.scale,
         child: CupertinoSwitch(
           value: isOpen,
-          onChanged: (v){
-            widget.onChange?.call(v);
-            setState(() {
-              isOpen = !isOpen;
-            });
-          },
+          onChanged: _handleChange,
           activeTrackColor: widget.activeColor,
           inactiveTrackColor: widget.inactiveTrackColor,
           thumbColor: widget.inactiveThumbColor,
@@ -199,12 +224,7 @@ class _KitSwitchState extends State<KitSwitch> {
       scale: widget.scale,
       child: Switch(
         value:isOpen,
-        onChanged: (v){
-          widget.onChange?.call(v);
-          setState(() {
-            isOpen = !isOpen;
-          });
-        },
+        onChanged: _handleChange,
         activeColor: widget.activeColor,
         inactiveTrackColor: widget.inactiveTrackColor,
         inactiveThumbColor: widget.inactiveThumbColor,

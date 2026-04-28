@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021-12-11
-/// create_time: 17:59
+/// date: 2021-12-11
+/// time: 17:59
 /// describe: 路由
 ///
 class PopRoute extends PopupRoute {

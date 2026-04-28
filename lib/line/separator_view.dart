@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/10/20
-/// create_time: 18:10
+/// date: 2022/10/20
+/// time: 18:10
 /// describe: 绘制分割线 横轴纵轴
 ///
 class SeparatorView extends StatelessWidget {

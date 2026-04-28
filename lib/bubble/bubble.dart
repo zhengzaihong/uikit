@@ -2,10 +2,10 @@ import 'dart:math' show max, min;
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/6/16
-/// create_time: 9:19
+/// date: 2022/6/16
+/// time: 9:19
 /// describe: 气泡组件 - 支持多种箭头样式和完整的Material装饰
 /// Enterprise-level bubble component - Supports multiple arrow styles and full Material decoration
 ///

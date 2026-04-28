@@ -3,10 +3,10 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/7/30
-/// create_time: 16:13
+/// date: 2024/7/30
+/// time: 16:13
 /// describe: 示例：
 ///
 // class EventExample extends StatefulWidget {

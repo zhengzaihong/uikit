@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2021/12/13
-/// create_time: 9:43
+/// date: 2021/12/13
+/// time: 9:43
 /// describe: 倒计时组件 / Countdown Timer Component
 ///
 /// 用于实现倒计时功能的通用组件
@@ -14,9 +14,11 @@ import 'package:flutter/material.dart';
 /// ## 功能特性 / Features
 /// - ⏱️ 支持自定义倒计时时长 / Custom countdown duration
 /// - 🎯 支持自定义时间单位 / Custom time unit
-/// - 🔄 支持启动/取消控制 / Start/cancel control
-/// - 📢 支持完成回调 / Completion callback
+/// - 🔄 支持启动/取消/暂停/恢复控制 / Start/cancel/pause/resume control
+/// - 📢 支持完成回调和进度回调 / Completion and progress callbacks
 /// - 🎨 完全自定义UI / Fully customizable UI
+/// - 📊 支持进度追踪 / Progress tracking support
+/// - 🔁 支持自动重启 / Auto-restart support
 ///
 /// ## 基础示例 / Basic Example
 /// ```dart
@@ -68,6 +70,57 @@ import 'package:flutter/material.dart';
 ///     );
 ///   },
 /// )
+///
+/// // 带暂停/恢复的倒计时
+/// final controller = TimeViewController();
+/// TimeView(
+///   countdown: 300,
+///   controller: controller,
+///   build: (context, time) {
+///     return Column(
+///       children: [
+///         Text('剩余: ${time}秒'),
+///         Row(
+///           children: [
+///             ElevatedButton(
+///               onPressed: () => controller.pauseTimer(),
+///               child: Text('暂停'),
+///             ),
+///             ElevatedButton(
+///               onPressed: () => controller.resumeTimer(),
+///               child: Text('恢复'),
+///             ),
+///           ],
+///         ),
+///       ],
+///     );
+///   },
+/// )
+///
+/// // 带进度回调的倒计时
+/// TimeView(
+///   countdown: 100,
+///   onProgress: (current, total, progress) {
+///     print('进度: ${(progress * 100).toStringAsFixed(1)}%');
+///   },
+///   build: (context, time) {
+///     return LinearProgressIndicator(
+///       value: (100 - time) / 100,
+///     );
+///   },
+/// )
+///
+/// // 自动重启的倒计时
+/// TimeView(
+///   countdown: 10,
+///   autoRestart: true,
+///   onComplete: (context) {
+///     print('倒计时完成,即将重启');
+///   },
+///   build: (context, time) {
+///     return Text('循环倒计时: $time');
+///   },
+/// )
 /// ```
 ///
 /// ## 注意事项 / Notes
@@ -75,10 +128,15 @@ import 'package:flutter/material.dart';
 /// - 使用 controller 可以手动控制倒计时 / Use controller for manual control
 /// - enableCancel 为 true 时可以重复启动 / Can restart when true
 /// - 组件销毁时会自动取消计时器 / Timer auto-cancels on dispose
+/// - pauseTimer() 暂停后可以用 resumeTimer() 恢复 / Can resume after pause
+/// - autoRestart 为 true 时倒计时会自动循环 / Auto loops when true
+/// - onProgress 回调在每次时间变化时触发 / onProgress triggers on each tick
+/// - onComplete 优先级高于 buildCompleter / onComplete has higher priority
 ///
 
 typedef _BuildChild = Widget Function(BuildContext context, int time);
 typedef BuildCompleter = void Function(BuildContext context);
+typedef OnProgressCallback = void Function(int current, int total, double progress);
 
 class TimeView extends StatefulWidget {
   /// 倒计时秒数 / Countdown seconds
@@ -120,10 +178,35 @@ class TimeView extends StatefulWidget {
   /// Triggered when countdown completes
   final BuildCompleter? buildCompleter;
 
+  /// 完成回调(新) / Completion callback (new)
+  /// 
+  /// 倒计时结束时触发,优先级高于buildCompleter
+  /// Triggered when countdown completes, higher priority than buildCompleter
+  final BuildCompleter? onComplete;
+
+  /// 进度回调 / Progress callback
+  /// 
+  /// 每次时间变化时触发
+  /// Triggered on each time change
+  /// 
+  /// 参数 / Parameters:
+  /// - current: 当前剩余时间 / Current remaining time
+  /// - total: 总时长 / Total duration
+  /// - progress: 进度(0.0-1.0) / Progress (0.0-1.0)
+  final OnProgressCallback? onProgress;
+
+  /// 是否自动重启 / Auto restart
+  /// 
+  /// 倒计时结束后自动重新开始
+  /// Automatically restart after countdown completes
+  /// 
+  /// 默认值: false / Default: false
+  final bool autoRestart;
+
   /// 控制器 / Controller
   /// 
-  /// 用于手动控制倒计时的启动和取消
-  /// For manual control of start and cancel
+  /// 用于手动控制倒计时的启动、取消、暂停、恢复
+  /// For manual control of start, cancel, pause, resume
   final TimeViewController? controller;
 
   const TimeView({
@@ -133,6 +216,9 @@ class TimeView extends StatefulWidget {
     this.enableCancel = false,
     this.duration = const Duration(seconds: 1),
     this.buildCompleter,
+    this.onComplete,
+    this.onProgress,
+    this.autoRestart = false,
     Key? key,
   }) : assert(countdown > 0, 'countdown must be greater than 0'),
        super(key: key);
@@ -148,13 +234,20 @@ class TimeViewState extends State<TimeView> {
   /// 当前倒计时的时间
   int _currentTime = 0;
 
+  /// 是否暂停
+  bool _isPaused = false;
+
+  /// 暂停时的剩余时间
+  int _pausedTime = 0;
+
   @override
   void initState() {
     super.initState();
     widget.controller?.bind(this);
     _currentTime = widget.countdown;
-    if (widget.buildCompleter != null) {
+    if (widget.buildCompleter != null || widget.onComplete != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        widget.onComplete?.call(context);
         widget.buildCompleter?.call(context);
       });
     }
@@ -162,6 +255,16 @@ class TimeViewState extends State<TimeView> {
 
   bool isStart() {
     return _timer != null && _currentTime != 0;
+  }
+
+  bool isPaused() {
+    return _isPaused;
+  }
+
+  /// 获取当前进度 / Get current progress
+  double getProgress() {
+    if (widget.countdown == 0) return 1.0;
+    return 1.0 - (_currentTime / widget.countdown);
   }
 
   /// 启动倒计时的计时器。
@@ -174,22 +277,84 @@ class TimeViewState extends State<TimeView> {
     if (_timer != null) {
       return;
     }
+    _isPaused = false;
     _currentTime = widget.countdown - 1;
+    _notifyProgress();
     notyChange();
 
     _timer = Timer.periodic(widget.duration, (timer) {
       if (_currentTime == 1) {
-        cancelTimer();
+        _handleComplete();
+        return;
       }
       _currentTime = widget.countdown - timer.tick - 1;
+      _notifyProgress();
       notyChange();
     });
+  }
+
+  /// 暂停倒计时 / Pause timer
+  void pauseTimer() {
+    if (_timer == null || _isPaused) return;
+    _isPaused = true;
+    _pausedTime = _currentTime;
+    _timer?.cancel();
+    _timer = null;
+    notyChange();
+  }
+
+  /// 恢复倒计时 / Resume timer
+  void resumeTimer() {
+    if (!_isPaused) return;
+    _isPaused = false;
+    
+    if (_pausedTime <= 0) {
+      _handleComplete();
+      return;
+    }
+
+    _currentTime = _pausedTime;
+    int elapsedTicks = widget.countdown - _pausedTime;
+    
+    _timer = Timer.periodic(widget.duration, (timer) {
+      if (_currentTime == 1) {
+        _handleComplete();
+        return;
+      }
+      _currentTime = widget.countdown - (elapsedTicks + timer.tick) - 1;
+      _notifyProgress();
+      notyChange();
+    });
+    notyChange();
+  }
+
+  /// 处理完成事件 / Handle completion
+  void _handleComplete() {
+    cancelTimer();
+    if (widget.autoRestart) {
+      // 自动重启
+      Future.delayed(Duration.zero, () {
+        if (mounted) {
+          startTimer();
+        }
+      });
+    }
+  }
+
+  /// 通知进度变化 / Notify progress change
+  void _notifyProgress() {
+    if (widget.onProgress != null) {
+      final progress = getProgress();
+      widget.onProgress!(_currentTime, widget.countdown, progress);
+    }
   }
 
   /// 取消倒计时的计时器。
   void cancelTimer() {
     _timer?.cancel();
     _timer = null;
+    _isPaused = false;
+    _pausedTime = 0;
     _currentTime = widget.countdown;
     notyChange();
   }
@@ -243,15 +408,44 @@ class TimeViewController {
     return null;
   }
 
+  /// 启动倒计时 / Start timer
   void startTimer() {
     _state?.startTimer();
   }
 
+  /// 取消倒计时 / Cancel timer
   void cancelTimer() {
     _state?.cancelTimer();
   }
 
+  /// 暂停倒计时 / Pause timer
+  void pauseTimer() {
+    _state?.pauseTimer();
+  }
+
+  /// 恢复倒计时 / Resume timer
+  void resumeTimer() {
+    _state?.resumeTimer();
+  }
+
+  /// 是否正在运行 / Is running
   bool isStart() {
     return _state?.isStart() ?? false;
+  }
+
+  /// 是否已暂停 / Is paused
+  bool isPaused() {
+    return _state?.isPaused() ?? false;
+  }
+
+  /// 获取当前进度 / Get current progress
+  /// 返回值范围: 0.0-1.0 / Return range: 0.0-1.0
+  double getProgress() {
+    return _state?.getProgress() ?? 0.0;
+  }
+
+  /// 获取当前剩余时间 / Get current remaining time
+  int getCurrentTime() {
+    return _state?._currentTime ?? 0;
   }
 }

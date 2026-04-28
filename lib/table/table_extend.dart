@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uikit_plus/behavior/overscrollbehavior.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/6/20
-/// create_time: 9:51
+/// date: 2022/6/20
+/// time: 9:51
 /// describe: 支持横向和纵向滚动的表格的组件，使用此组件一定要注意每行的权重比
 /// 此组件用于通用性表格，
 /// 表格存在各种合并的单元格 需根据行号单独处理

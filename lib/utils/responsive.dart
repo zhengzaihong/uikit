@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/7/8
-/// create_time: 14:58
+/// date: 2022/7/8
+/// time: 14:58
 /// describe: 响应式布局 基类
 ///
 // Widget build(BuildContext context) {

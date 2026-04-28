@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025-12-26
-/// create_time: 16:13
+/// date: 2025-12-26
+/// time: 16:13
 /// describe: 虚线边框容器
 /// eg:
 //   DashedBorder(

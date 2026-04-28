@@ -1,11 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/11/18
-/// create_time: 10:29
+/// date: 2022/11/18
+/// time: 10:29
 /// describe: 复选框组件 / Checkbox Component
 ///
 /// 支持系统默认样式和完全自定义样式的复选框
@@ -18,6 +19,8 @@ import 'package:flutter/material.dart';
 /// - 📝 支持选中/未选中不同文本 / Different text for checked/unchecked
 /// - 🎯 支持初始化回调 / Initial callback support
 /// - 📏 支持缩放 / Scale support
+/// - ➖ 支持不确定状态 / Indeterminate state support
+/// - 📳 支持触觉反馈 / Haptic feedback support
 ///
 /// ## 基础示例 / Basic Example
 /// ```dart
@@ -62,12 +65,39 @@ import 'package:flutter/material.dart';
 ///   activeColor: Colors.purple,
 ///   onChange: (checked) => print(checked),
 /// )
+///
+/// // 三态复选框(不确定状态)
+/// KitCheckBox(
+///   tristate: null, // null表示不确定状态
+///   text: Text("全选"),
+///   enableHapticFeedback: true,
+///   onChange: (checked) {
+///     // checked为false表示未选中,true表示选中
+///     // 三态循环: null -> false -> true -> null
+///     print('状态: $checked');
+///   },
+/// )
+///
+/// // 自定义三态图标
+/// KitCheckBox(
+///   useDefaultStyle: false,
+///   tristate: null,
+///   checkIcon: Icon(Icons.check_box, color: Colors.green),
+///   uncheckedIcon: Icon(Icons.check_box_outline_blank, color: Colors.grey),
+///   indeterminateIcon: Icon(Icons.indeterminate_check_box, color: Colors.orange),
+///   text: Text("三态复选框"),
+///   enableHapticFeedback: true,
+///   onChange: (checked) => print(checked),
+/// )
 /// ```
 ///
 /// ## 注意事项 / Notes
 /// - useDefaultStyle 为 true 时使用系统样式 / Use system style when true
 /// - useDefaultStyle 为 false 时必须提供 checkIcon 和 uncheckedIcon / Must provide icons when false
 /// - enableFirstCallBack 为 true 时会在初始化时触发回调 / Triggers callback on init when true
+/// - tristate 不为 null 时启用三态模式,状态循环为: null -> false -> true -> null
+/// - 三态模式下 onChange 回调的参数: null时返回false, false返回false, true返回true
+/// - enableHapticFeedback 为 true 时点击会有轻微震动反馈 / Light haptic feedback when true
 ///
 
 class KitCheckBox extends StatefulWidget {
@@ -145,6 +175,20 @@ class KitCheckBox extends StatefulWidget {
   /// 仅在 useDefaultStyle 为 true 时生效 / Only works when useDefaultStyle is true
   final double? splashRadius;
 
+  /// 是否启用触觉反馈 / Enable haptic feedback
+  /// 默认值: false / Default: false
+  final bool enableHapticFeedback;
+
+  /// 不确定状态图标 / Indeterminate state icon
+  /// useDefaultStyle 为 false 时使用 / Used when useDefaultStyle is false
+  final Widget? indeterminateIcon;
+
+  /// 是否为不确定状态 / Is indeterminate state
+  /// 三态复选框: null(不确定), false(未选中), true(选中)
+  /// Tri-state checkbox: null(indeterminate), false(unchecked), true(checked)
+  /// 默认值: null / Default: null
+  final bool? tristate;
+
   const KitCheckBox({
     this.text,
     this.checkedText,
@@ -164,6 +208,9 @@ class KitCheckBox extends StatefulWidget {
     this.fillColor,
     this.side,
     this.splashRadius,
+    this.enableHapticFeedback = false,
+    this.indeterminateIcon,
+    this.tristate,
     Key? key}) : super(key: key);
 
   @override
@@ -173,12 +220,12 @@ class KitCheckBox extends StatefulWidget {
 
 class _KitCheckBoxState extends State<KitCheckBox> {
 
-  late bool isChecked;
+  late bool? isChecked;
 
   @override
   void initState() {
     super.initState();
-    isChecked = widget.isChecked!;
+    isChecked = widget.tristate != null ? widget.tristate : widget.isChecked!;
     if(widget.enableFirstCallBack){
       callBack(false);
     }
@@ -187,9 +234,23 @@ class _KitCheckBoxState extends State<KitCheckBox> {
   void callBack(bool click) {
     if (widget.onChange!=null) {
       if (click) {
-        isChecked = !isChecked;
+        if (widget.tristate != null) {
+          // 三态循环: null -> false -> true -> null
+          if (isChecked == null) {
+            isChecked = false;
+          } else if (isChecked == false) {
+            isChecked = true;
+          } else {
+            isChecked = null;
+          }
+        } else {
+          isChecked = !(isChecked ?? false);
+        }
+        if (widget.enableHapticFeedback) {
+          HapticFeedback.lightImpact();
+        }
       }
-      widget.onChange?.call(isChecked);
+      widget.onChange?.call(isChecked ?? false);
     }
   }
 
@@ -198,12 +259,21 @@ class _KitCheckBoxState extends State<KitCheckBox> {
     return buildCheckBoxStyle();
   }
 
+  void _handleCheckboxChange(bool? val) {
+    if (widget.enableHapticFeedback) {
+      HapticFeedback.lightImpact();
+    }
+    setState(() {
+      isChecked = val;
+      widget.onChange?.call(isChecked ?? false);
+    });
+  }
+
   Widget buildCheckBoxStyle(){
     if(widget.useDefaultStyle!){
       return GestureDetector(
         onTap: (){
-          isChecked = !isChecked;
-          widget.onChange?.call(isChecked);
+          callBack(true);
           setState(() {});
         },
         child: widget.iconLeft! ?Row(
@@ -217,15 +287,11 @@ class _KitCheckBoxState extends State<KitCheckBox> {
                   activeColor: widget.activeColor,
                   checkColor: widget.checkColor,
                   value: isChecked,
+                  tristate: widget.tristate != null,
                   side: widget.side,
                   fillColor: widget.fillColor,
                   splashRadius: widget.splashRadius,
-                  onChanged: (val) {
-                    isChecked = val??isChecked;
-                    widget.onChange?.call(isChecked);
-                    setState(() {});
-
-                  }),
+                  onChanged: _handleCheckboxChange),
             ),
             _buildTitle()??const SizedBox(),
           ],
@@ -242,19 +308,22 @@ class _KitCheckBoxState extends State<KitCheckBox> {
                   activeColor: widget.activeColor,
                   checkColor: widget.checkColor,
                   value: isChecked,
+                  tristate: widget.tristate != null,
                   side: widget.side,
                   fillColor: widget.fillColor,
                   splashRadius: widget.splashRadius,
-                  onChanged: (val) {
-                    isChecked = val??isChecked;
-                    widget.onChange?.call(isChecked);
-                    setState(() {});
-
-                  }),
+                  onChanged: _handleCheckboxChange),
             )
           ],
         ),
       );
+    }
+
+    Widget _getIcon() {
+      if (isChecked == null && widget.indeterminateIcon != null) {
+        return widget.indeterminateIcon!;
+      }
+      return (isChecked == true ? widget.checkIcon : widget.uncheckedIcon) ?? const SizedBox();
     }
 
     return GestureDetector(
@@ -271,7 +340,7 @@ class _KitCheckBoxState extends State<KitCheckBox> {
             crossAxisAlignment: widget.crossAxisAlignment,
             mainAxisSize: widget.mainAxisSize,
             children: [
-              (isChecked ? widget.checkIcon : widget.uncheckedIcon)??const SizedBox(),
+              _getIcon(),
               _buildTitle()??const SizedBox(),
             ]) : Row(
             mainAxisAlignment: widget.mainAxisAlignment,
@@ -279,7 +348,7 @@ class _KitCheckBoxState extends State<KitCheckBox> {
             mainAxisSize: widget.mainAxisSize,
             children: [
               _buildTitle()??const SizedBox(),
-              (isChecked ? widget.checkIcon : widget.uncheckedIcon)??const SizedBox(),
+              _getIcon(),
             ]));
   }
 
@@ -287,7 +356,7 @@ class _KitCheckBoxState extends State<KitCheckBox> {
     if(widget.checkedText==null){
       return widget.text;
     }
-    if(isChecked){
+    if(isChecked == true){
       return widget.checkedText;
     }
     return widget.text;

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024-02-01
-/// create_time: 21:58
+/// date: 2024-02-01
+/// time: 21:58
 /// describe: 仿系统下拉框，满足其他需求场景
 ///
 class SelectionMenuExample extends StatefulWidget {

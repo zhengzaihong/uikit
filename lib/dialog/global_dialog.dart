@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025-12-26
-/// create_time: 11:20
+/// date: 2025-12-26
+/// time: 11:20
 /// describe: 全局对话框组件 - 支持自动消失和单例管理
 /// Enterprise-level global dialog component - Supports auto-dismiss and singleton management
 ///

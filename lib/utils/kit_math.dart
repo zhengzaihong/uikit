@@ -1,10 +1,10 @@
 import 'package:uikit_plus/utils/str_utils.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/7/5
-/// create_time: 14:17
+/// date: 2022/7/5
+/// time: 14:17
 /// describe: 本库的一些计算工具类
 ///
 class KitMath {

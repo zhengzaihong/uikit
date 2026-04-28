@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:uikit_plus/utils/color_utils.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/7/21
-/// create_time: 9:09
+/// date: 2022/7/21
+/// time: 9:09
 /// describe: 高斯模糊
 ///
 class Blur extends StatelessWidget {

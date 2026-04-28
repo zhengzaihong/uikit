@@ -1,7 +1,7 @@
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/7/4
-/// create_time: 17:34
+/// date: 2022/7/4
+/// time: 17:34
 /// describe: 文本处理工具
 /// text processing tools
 // 格式验证：增加了邮箱、手机号、URL、身份证等常见格式验证

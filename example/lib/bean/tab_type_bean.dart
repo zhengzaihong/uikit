@@ -1,8 +1,8 @@
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/7/8
-/// create_time: 16:16
+/// date: 2022/7/8
+/// time: 16:16
 /// describe: 通用类型实体
 ///
 class TabTypeBean<T> {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/2/2
-/// create_time: 16:51
+/// date: 2024/2/2
+/// time: 16:51
 /// describe: 仿前端 js 鼠标事件可修改文字样式的文本组件
 ///
 // 基础示例：

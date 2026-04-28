@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'bean/multi_selector_entity.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2025/6/24
-/// create_time: 10:35
+/// date: 2025/6/24
+/// time: 10:35
 /// describe: 此组件为无限层级多级选择组件（支持多选，自动跟踪到选择的末节点）
 /// 如果你要单选，请从业务层处理，保留 defaultSelected 最多只有一个值即可
 ///This component is an infinite hierarchical and multi-level selection component (supports multiple selection and automatically tracks to the selected end node)

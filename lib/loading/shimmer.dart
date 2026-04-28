@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/3/11
-/// create_time: 17:30
+/// date: 2024/3/11
+/// time: 17:30
 /// describe: Shimmer 微光加载效果组件 / Shimmer Loading Effect Component
 ///
 /// 实现骨架屏加载效果,支持全局配置和局部覆盖

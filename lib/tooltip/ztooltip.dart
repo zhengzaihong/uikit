@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024-04-30
-/// create_time: 14:37
+/// date: 2024-04-30
+/// time: 14:37
 /// describe: 自定义Tooltip提示组件 - 支持任意响应式提示内容
 /// Enterprise-level custom Tooltip component - Supports any responsive tooltip content
 ///

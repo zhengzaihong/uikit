@@ -2,10 +2,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/5/29
-/// create_time: 14:42
+/// date: 2024/5/29
+/// time: 14:42
 /// describe: N维度雷达图
 ///
 // 基础示例：

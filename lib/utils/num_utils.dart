@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/4/12
-/// create_time: 9:59
+/// date: 2024/4/12
+/// time: 9:59
 /// describe: 数字转化工具
 // num (int/double) → 基础运算、格式化、Base64
 // BigInt → 超大整数运算、格式化、Base64

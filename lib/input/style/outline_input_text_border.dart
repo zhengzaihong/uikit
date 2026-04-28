@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2023/2/1
-/// create_time: 16:05
+/// date: 2023/2/1
+/// time: 16:05
 /// describe: 简化边框样式
 ///
 class OutlineInputTextBorder extends OutlineInputBorder{

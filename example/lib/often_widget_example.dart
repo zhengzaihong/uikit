@@ -5,10 +5,10 @@ import 'package:uikit_example/utils/font_utils.dart';
 import 'bean/tab_type_bean.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/1/4
-/// create_time: 16:02
+/// date: 2022/1/4
+/// time: 16:02
 /// describe: 一些常用小组件
 ///
 class OftenWidgetExample extends StatefulWidget {

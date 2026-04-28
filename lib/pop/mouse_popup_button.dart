@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/2/5
-/// create_time: 16:53
+/// date: 2024/2/5
+/// time: 16:53
 /// describe: 鼠标右键弹出窗
 /// 防止移动端误入使用鼠标右键弹出窗，这里外部推荐方 1方式处理
 ///

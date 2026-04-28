@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2022/9/26
-/// create_time: 15:20
+/// date: 2022/9/26
+/// time: 15:20
 /// describe: 跑马灯组件 / Marquee Component
 ///
 /// 支持垂直和横向滚动的跑马灯效果组件
@@ -19,6 +19,7 @@ import 'package:flutter/scheduler.dart';
 /// - 🎨 支持渐变边缘 / Fade edge support
 /// - ⚙️ 可自定义速度和间隔 / Customizable speed and interval
 /// - 📢 支持索引变化回调 / Index change callback
+/// - ⏸️ 支持暂停/恢复控制 / Pause/resume control support
 ///
 /// ## 基础示例 / Basic Example
 /// ```dart
@@ -83,6 +84,32 @@ import 'package:flutter/scheduler.dart';
 ///   loop: false,
 ///   buildItem: (context, data) => Text(data),
 /// )
+///
+/// // 使用Controller控制暂停/恢复
+/// final controller = MarqueeViewController();
+/// 
+/// Column(
+///   children: [
+///     MarqueeView(
+///       controller: controller,
+///       marqueeItems: ['消息1', '消息2', '消息3'],
+///       direction: MarqueeDirection.vertical,
+///       buildItem: (context, data) => Text(data),
+///     ),
+///     Row(
+///       children: [
+///         ElevatedButton(
+///           onPressed: () => controller.pause(),
+///           child: Text('暂停'),
+///         ),
+///         ElevatedButton(
+///           onPressed: () => controller.resume(),
+///           child: Text('恢复'),
+///         ),
+///       ],
+///     ),
+///   ],
+/// )
 /// ```
 ///
 /// ## 注意事项 / Notes
@@ -90,6 +117,7 @@ import 'package:flutter/scheduler.dart';
 /// - 横向模式下 itemExtent 为容器高度 / itemExtent is container height in horizontal mode
 /// - speed 越大横向滚动越快 / Larger speed means faster horizontal scrolling
 /// - 数据为空时显示空白占位 / Shows blank placeholder when data is empty
+/// - 使用 controller 可以外部控制暂停和恢复 / Use controller to control pause/resume from outside
 ///
 
 /// 跑马灯方向 / Marquee Direction
@@ -102,6 +130,35 @@ enum MarqueeDirection {
 
 typedef BuildItem = Widget Function(BuildContext context, dynamic data);
 
+/// 跑马灯控制器 / Marquee View Controller
+/// 
+/// 用于外部控制跑马灯的暂停和恢复
+/// Used to control pause and resume from outside
+class MarqueeViewController {
+  _MarqueeViewState? _state;
+
+  void _bind(_MarqueeViewState state) {
+    _state = state;
+  }
+
+  void _unbind() {
+    _state = null;
+  }
+
+  /// 暂停滚动 / Pause scrolling
+  void pause() {
+    _state?.pause();
+  }
+
+  /// 恢复滚动 / Resume scrolling
+  void resume() {
+    _state?.resume();
+  }
+
+  /// 是否正在运行 / Is running
+  bool get isRunning => _state?._isRunning ?? false;
+}
+
 class MarqueeView extends StatefulWidget {
   /// 数据源 / Data source
   /// 
@@ -110,6 +167,14 @@ class MarqueeView extends StatefulWidget {
   /// 
   /// 必填参数 / Required
   final List marqueeItems;
+
+  /// 控制器 / Controller
+  /// 
+  /// 用于外部控制暂停和恢复
+  /// Used to control pause and resume from outside
+  /// 
+  /// 可选参数 / Optional
+  final MarqueeViewController? controller;
 
   /// 条目构建器 / Item builder
   /// 
@@ -209,6 +274,7 @@ class MarqueeView extends StatefulWidget {
     Key? key,
     required this.marqueeItems,
     required this.buildItem,
+    this.controller,
     this.direction = MarqueeDirection.horizontal,
     this.itemExtent = 40,
     this.interval = const Duration(seconds: 2),
@@ -230,6 +296,7 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
   int _currentIndex = 0;
   int? _nextIndex;
   bool _isAnimating = false;
+  bool _isRunning = true;
 
   ScrollController? _scrollController;
   Ticker? _ticker;
@@ -247,6 +314,31 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
     if (!_isHorizontal) _initVerticalController();
     if (!_isHorizontal) WidgetsBinding.instance.addPostFrameCallback((_) => _startVerticalLoop());
   }
+
+  /// 暂停滚动 / Pause scrolling
+  void pause() {
+    if (!_isRunning) return;
+    _isRunning = false;
+    if (_isHorizontal) {
+      _ticker?.stop();
+    } else {
+      _vController?.stop();
+    }
+  }
+
+  /// 恢复滚动 / Resume scrolling
+  void resume() {
+    if (_isRunning) return;
+    _isRunning = true;
+    if (_isHorizontal) {
+      _ticker?.start();
+    } else {
+      if (_isAnimating) {
+        _vController?.forward();
+      }
+    }
+  }
+
 
   void _initVerticalController() {
     _vController ??= AnimationController(
@@ -283,9 +375,9 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
 
   Future<void> _startVerticalLoop() async {
     if (widget.marqueeItems.length <= 1) return;
-    while (mounted) {
+    while (mounted && _isRunning) {
       await Future.delayed(widget.interval);
-      if (!mounted) break;
+      if (!mounted || !_isRunning) break;
       if (_isAnimating) continue;
 
       final next = (_currentIndex + 1) % widget.marqueeItems.length;
@@ -294,7 +386,9 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
         _isAnimating = true;
       });
 
-      await _vController!.forward(from: 0.0);
+      if (_isRunning) {
+        await _vController!.forward(from: 0.0);
+      }
       if (!mounted) break;
 
       setState(() {
@@ -311,6 +405,7 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
 
   @override
   void dispose() {
+    widget.controller?._unbind();
     _stopHorizontal();
     _vController?.dispose();
     super.dispose();

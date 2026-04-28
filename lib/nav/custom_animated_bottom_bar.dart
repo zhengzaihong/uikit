@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uikit_plus/utils/color_utils.dart';
 
 ///
-/// create_user: zhengzaihong
+/// author:郑再红
 /// email:1096877329@qq.com
-/// create_date: 2024/1/4
-/// create_time: 16:40
+/// date: 2024/1/4
+/// time: 16:40
 /// describe: 底部导航栏动画组件 - 流畅的切换动画效果
 /// Enterprise-level animated bottom navigation bar component - Smooth switching animation
 ///
@@ -18,6 +19,8 @@ import 'package:uikit_plus/utils/color_utils.dart';
 /// • Material风格 - 支持阴影、圆角等Material属性
 /// • 尺寸可控 - 支持自定义容器高度、图标大小
 /// • 多彩主题 - 每个项可配置独立的激活颜色
+/// • 徽章支持 - 支持显示未读消息数量徽章
+/// • 触觉反馈 - 支持点击触觉反馈
 ///
 ///  使用示例 / Usage Examples:
 ///
@@ -151,6 +154,45 @@ import 'package:uikit_plus/utils/color_utils.dart';
 ///     ),
 ///   ],
 /// )
+///
+/// // 示例6: 带徽章的导航栏
+/// // Example 6: Navigation bar with badges
+/// CustomAnimatedBottomBar(
+///   containerHeight: 56,
+///   selectedIndex: currentIndex,
+///   enableHapticFeedback: true,
+///   onItemSelected: (index) => setState(() => currentIndex = index),
+///   items: [
+///     MyBottomNavigationBarItem(
+///       checkedIcon: Icon(Icons.home, color: Colors.blue),
+///       unCheckedIcon: Icon(Icons.home_outlined, color: Colors.grey),
+///       title: Text('首页'),
+///       activeColor: Colors.blue,
+///     ),
+///     MyBottomNavigationBarItem(
+///       checkedIcon: Icon(Icons.message, color: Colors.green),
+///       unCheckedIcon: Icon(Icons.message_outlined, color: Colors.grey),
+///       title: Text('消息'),
+///       activeColor: Colors.green,
+///       showBadge: true,
+///       badgeCount: 5, // 显示5条未读消息
+///     ),
+///     MyBottomNavigationBarItem(
+///       checkedIcon: Icon(Icons.notifications, color: Colors.orange),
+///       unCheckedIcon: Icon(Icons.notifications_outlined, color: Colors.grey),
+///       title: Text('通知'),
+///       activeColor: Colors.orange,
+///       showBadge: true,
+///       badgeCount: 99, // 显示99条通知
+///     ),
+///     MyBottomNavigationBarItem(
+///       checkedIcon: Icon(Icons.person, color: Colors.purple),
+///       unCheckedIcon: Icon(Icons.person_outline, color: Colors.grey),
+///       title: Text('我的'),
+///       activeColor: Colors.purple,
+///     ),
+///   ],
+/// )
 /// ```
 ///
 /// ⚠️ 注意事项 / Notes:
@@ -160,6 +202,9 @@ import 'package:uikit_plus/utils/color_utils.dart';
 /// • 建议使用状态管理(如Provider)管理currentIndex
 /// • 动画时长建议在200-500ms之间,过长会影响体验
 /// • 容器高度建议在48-72之间,过高或过低都会影响美观
+/// • showBadge为true时显示徽章,badgeCount为徽章数量
+/// • badgeCount超过99时显示"99+"
+/// • enableHapticFeedback为true时点击会有轻微震动反馈
 ///
 
 class CustomAnimatedBottomBar extends StatelessWidget {
@@ -177,6 +222,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
     required this.items,
     required this.onItemSelected,
     this.curve = Curves.easeInOut,
+    this.enableHapticFeedback = false,
   }):assert(items.length >= 2 && items.length <= 5),
    super(key: key);
 
@@ -191,6 +237,10 @@ class CustomAnimatedBottomBar extends StatelessWidget {
   final double itemCornerRadius;
   final double containerHeight;
   final Curve curve;
+
+  /// 是否启用触觉反馈 / Enable haptic feedback
+  /// 默认值: false / Default: false
+  final bool enableHapticFeedback;
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +265,12 @@ class CustomAnimatedBottomBar extends StatelessWidget {
             children: items.map((item) {
               final index = items.indexOf(item);
               return GestureDetector(
-                onTap: () => onItemSelected(index),
+                onTap: () {
+                  if (enableHapticFeedback) {
+                    HapticFeedback.lightImpact();
+                  }
+                  onItemSelected(index);
+                },
                 child: _ItemWidget(
                   item: item,
                   iconSize: iconSize,
@@ -277,7 +332,37 @@ class _ItemWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: <Widget>[
-                if (isSelected) item.checkedIcon else item.unCheckedIcon,
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    if (isSelected) item.checkedIcon else item.unCheckedIcon,
+                    if (item.showBadge && item.badgeCount != null && item.badgeCount! > 0)
+                      Positioned(
+                        right: -6,
+                        top: -6,
+                        child: Container(
+                          padding: EdgeInsets.all(item.badgeCount! > 99 ? 2 : 4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            item.badgeCount! > 99 ? '99+' : '${item.badgeCount}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
                 if (isSelected)
                   Expanded(
                     child: Container(
@@ -309,6 +394,8 @@ class MyBottomNavigationBarItem {
     required this.title,
     this.activeColor = Colors.blue,
     this.textAlign,
+    this.badgeCount,
+    this.showBadge = false,
   });
 
   final Widget checkedIcon;
@@ -316,5 +403,13 @@ class MyBottomNavigationBarItem {
   final Widget title;
   final Color activeColor;
   final TextAlign? textAlign;
+
+  /// 徽章数量 / Badge count
+  /// 显示未读消息数量等 / Display unread message count, etc.
+  final int? badgeCount;
+
+  /// 是否显示徽章 / Show badge
+  /// 默认值: false / Default: false
+  final bool showBadge;
 
 }
