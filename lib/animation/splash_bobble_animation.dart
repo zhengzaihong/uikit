@@ -260,8 +260,8 @@ class _LauncherViewState extends State<SplashBobbleAnimation> with SingleTickerP
       final centerY = mHeight / 2;
       
       // 根据角度计算控制点和终点
-      final controlX = centerX + motionCurveRadius * (config.startAngle == 90 || config.startAngle == 270 ? 1 : 0) * (config.startAngle == 270 ? -1 : 1);
-      final controlY = centerY + motionCurveRadius * (config.startAngle == 0 || config.startAngle == 180 ? 1 : 0) * (config.startAngle == 0 ? -1 : 1);
+      // final controlX = centerX + motionCurveRadius * (config.startAngle == 90 || config.startAngle == 270 ? 1 : 0) * (config.startAngle == 270 ? -1 : 1);
+      // final controlY = centerY + motionCurveRadius * (config.startAngle == 0 || config.startAngle == 180 ? 1 : 0) * (config.startAngle == 0 ? -1 : 1);
       
       path.moveTo(centerX, centerY);
       

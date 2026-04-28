@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// email:1096877329@qq.com
 /// date: 2025/2/6
 /// time: 15:26
-/// describe: 基于 flutter_router_forzzh 路由
+/// describe: 基于 router_pro 路由
 /// 需配合 DrawerRouterStack 组件使用实现抽屉路由栈，使用请先绑定正确的 context
 /// bindDrawerNavigatorContext(),通常为 Scaffold 子组件的上下文，非根 context
 /// 针对抽屉中包含很多同层级或子层级的抽屉的解决方案 通常用于 Web端
