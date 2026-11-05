@@ -135,6 +135,13 @@ class _Radar5DimensionsChartState extends State<Radar5DimensionsChart> with Sing
   }
 
   @override
+  void dispose() {
+    animationController.dispose();
+    values.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: RadarMapPainter(

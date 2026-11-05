@@ -17,7 +17,7 @@ A fully **Dart-based** cross-platform **Flutter UI component library**, supporti
 - 🔗 **Zero dependencies**, fully implemented in Dart, ready to use out of the box.
 - 🎨 Highly customizable, supporting style extensions and secondary encapsulation.
 - 🌍 Multi-platform support: **Android / iOS / Web / Windows / MacOS / Linux / HarmonyOS**
-- 🔥 Continuously updated, already providing **20+ commonly used components**
+- 🔥 Continuously updated, already providing **30+ commonly used components**
 
 ---
 
@@ -25,11 +25,17 @@ A fully **Dart-based** cross-platform **Flutter UI component library**, supporti
 Add dependency in `pubspec.yaml`:
 ```yaml
 dependencies:
-  uikit_plus: ^0.4.3   //The old version is not maintained, and the old version last relies on the address： flutter_uikit_forzzh:0.3.1
+  uikit_plus: ^0.4.4
 ```
 
+```dart
+import 'package:uikit_plus/uikit_lib.dart';
+```
 
-# 📚 Component Catalog
+> The old version is not maintained; the last release of the old package is `flutter_uikit_forzzh: 0.3.1`.
+
+
+## 📚 Component Catalog
 
 ## Input & Form Components
 - **InputText**: Minimal input field with real-time validation, supports all TextField/TextFormField properties
@@ -89,7 +95,7 @@ dependencies:
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets1.gif)
 
 ### Radar Components (5-N Dimensions):
-![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png )
+![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png)
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png)
 
 
@@ -103,7 +109,7 @@ dependencies:
 
 
 ### Bottom Navigation Menu:
-![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif) )
+![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif)
 
 ### Input Field Extension with Search:
 

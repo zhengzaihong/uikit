@@ -54,7 +54,8 @@ import 'bean/multi_selector_entity.dart';
 //                     )
 
 
-final Map<String, MultiSelectorEntity?> _accordionExpandedMap = {};
+final Map<String, WeakReference<MultiSelectorEntity>>
+    _accordionExpandedMap = {};
 
 class MultiSelector extends StatefulWidget {
 
@@ -167,16 +168,18 @@ class MultiSelectorState extends State<MultiSelector> with TickerProviderStateMi
                 if (widget.accordionKey != null) {
                   // 全局手风琴逻辑
                   // global accordion logic
-                  final expandedNow = _accordionExpandedMap[widget.accordionKey];
+                  final expandedNow =
+                      _accordionExpandedMap[widget.accordionKey]?.target;
                   if (expandedNow != node) {
-                    _accordionExpandedMap[widget.accordionKey!] = node;
+                    _accordionExpandedMap[widget.accordionKey!] =
+                        WeakReference(node);
                     for (var s in siblings) {
                       _expandedNodes[s] = (s == node);
                     }
                   } else {
                     // 再次点击当前展开项 => 收起
                     // Click the current expansion item again => Close
-                    _accordionExpandedMap[widget.accordionKey!] = null;
+                    _accordionExpandedMap.remove(widget.accordionKey!);
                     _expandedNodes[node] = false;
                   }
                 } else {

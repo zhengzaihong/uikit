@@ -245,12 +245,7 @@ class TimeViewState extends State<TimeView> {
     super.initState();
     widget.controller?.bind(this);
     _currentTime = widget.countdown;
-    if (widget.buildCompleter != null || widget.onComplete != null) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        widget.onComplete?.call(context);
-        widget.buildCompleter?.call(context);
-      });
-    }
+
   }
 
   bool isStart() {
@@ -278,16 +273,21 @@ class TimeViewState extends State<TimeView> {
       return;
     }
     _isPaused = false;
-    _currentTime = widget.countdown - 1;
+    _currentTime = widget.countdown;
     _notifyProgress();
     notyChange();
 
     _timer = Timer.periodic(widget.duration, (timer) {
-      if (_currentTime == 1) {
+      if (!mounted) {
+        timer.cancel();
+        _timer = null;
+        return;
+      }
+      if (_currentTime <= 1) {
         _handleComplete();
         return;
       }
-      _currentTime = widget.countdown - timer.tick - 1;
+      _currentTime -= 1;
       _notifyProgress();
       notyChange();
     });
@@ -307,30 +307,44 @@ class TimeViewState extends State<TimeView> {
   void resumeTimer() {
     if (!_isPaused) return;
     _isPaused = false;
-    
+
     if (_pausedTime <= 0) {
       _handleComplete();
       return;
     }
 
     _currentTime = _pausedTime;
-    int elapsedTicks = widget.countdown - _pausedTime;
-    
+    _notifyProgress();
+    notyChange();
+
     _timer = Timer.periodic(widget.duration, (timer) {
-      if (_currentTime == 1) {
+      if (!mounted) {
+        timer.cancel();
+        _timer = null;
+        return;
+      }
+      if (_currentTime <= 1) {
         _handleComplete();
         return;
       }
-      _currentTime = widget.countdown - (elapsedTicks + timer.tick) - 1;
+      _currentTime -= 1;
       _notifyProgress();
       notyChange();
     });
-    notyChange();
   }
 
   /// 处理完成事件 / Handle completion
   void _handleComplete() {
-    cancelTimer();
+    _timer?.cancel();
+    _timer = null;
+    _isPaused = false;
+    _pausedTime = 0;
+    _currentTime = 0;
+    if (!mounted) return;
+    _notifyProgress();
+    notyChange();
+    widget.onComplete?.call(context);
+    widget.buildCompleter?.call(context);
     if (widget.autoRestart) {
       // 自动重启
       Future.delayed(Duration.zero, () {
@@ -378,6 +392,14 @@ class TimeViewState extends State<TimeView> {
     if (widget.controller != null &&
         oldWidget.controller != widget.controller) {
       widget.controller?.bind(this);
+    }
+    if (oldWidget.countdown != widget.countdown) {
+      _timer?.cancel();
+      _timer = null;
+      _isPaused = false;
+      _pausedTime = 0;
+      _currentTime = widget.countdown;
+
     }
   }
 

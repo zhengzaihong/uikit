@@ -11,4 +11,8 @@ ios/Runner/GeneratedPluginRegistrant.*
 pubspec.lock
 .vscode/launch.json
 coverage/
-
+*.iml
+.codeartsdoer/
+.flutter-plugins-dependencies
+example/.metadataexample/.dart_tool/
+example/build/

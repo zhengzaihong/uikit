@@ -136,7 +136,7 @@ class InfiniteLevelsMenusState extends State<InfiniteLevelsMenus> {
       children: [
         ListView.separated(
             shrinkWrap: true,
-            controller: ScrollController(),
+
             physics: const NeverScrollableScrollPhysics(),
             itemCount: currentData.length,
             itemBuilder: (context, index) {

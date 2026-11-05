@@ -244,10 +244,10 @@ class Toast {
   factory Toast() => _instance;
   static final Toast _instance = Toast._internal();
 
-  static final List<OverlayEntryManger> _overlayEntryMangers = [];
+  static final List<OverlayEntryManager> _overlayEntryMangers = [];
 
   /// Loading 相关的 OverlayEntry 管理器
-  static OverlayEntryManger? _loadingOverlayManger;
+  static OverlayEntryManager? _loadingOverlayManger;
 
   /// 队列方式显示 toast
   static final Queue<ToastTaskQueue> _queueTask = Queue<ToastTaskQueue>();
@@ -336,7 +336,7 @@ class Toast {
 
 
   ///显示一个吐司
-  static Future<OverlayEntryManger?> show(
+  static Future<OverlayEntryManager?> show(
     String msg, {
     BuildContext? context,
     BuildToastStyle? buildToastStyle,
@@ -389,7 +389,7 @@ class Toast {
       var overlayState = Overlay.of(context);
       overlayState.insert(_overlayEntry);
     }
-    var manger = OverlayEntryManger(_overlayEntry);
+    var manger = OverlayEntryManager(_overlayEntry);
     _overlayEntryMangers.add(manger);
     manger
         .start(showTime ?? _instance.showTime, _instance._startedTime!)
@@ -442,7 +442,7 @@ class Toast {
       Overlay.of(context).insert(overlayEntry);
     }
 
-    _loadingOverlayManger = OverlayEntryManger(overlayEntry);
+    _loadingOverlayManger = OverlayEntryManager(overlayEntry);
   }
 
   ///关闭加载动画
@@ -507,7 +507,7 @@ class Toast {
   }
 
   ///显示自定义坐标的吐司
-  static Future<OverlayEntryManger?> showCustomPoint({
+  static Future<OverlayEntryManager?> showCustomPoint({
     BuildContext? context,
     BuildToastStyle? buildToastStyle,
     required BuildToastPoint buildToastPoint,
@@ -534,7 +534,7 @@ class Toast {
       var overlayState = Overlay.of(context);
       overlayState.insert(_overlayEntry);
     }
-    var manger = OverlayEntryManger(_overlayEntry);
+    var manger = OverlayEntryManager(_overlayEntry);
     _overlayEntryMangers.add(manger);
     manger
         .start(showTime ?? _instance.showTime, _instance._startedTime!)
@@ -630,7 +630,7 @@ class Toast {
     }
   }
 
-  static void cancel(OverlayEntryManger? manger) async {
+  static void cancel(OverlayEntryManager? manger) async {
     manger?.cancel();
   }
 }
@@ -851,12 +851,12 @@ class _ToastWidgetState extends State<_ToastWidget>
   }
 }
 
-class OverlayEntryManger {
+class OverlayEntryManager {
   OverlayEntry? overlayEntry;
 
-  OverlayEntryManger(this.overlayEntry);
+  OverlayEntryManager(this.overlayEntry);
 
-  Future<OverlayEntryManger> start(int showTime, DateTime startedTime) async {
+  Future<OverlayEntryManager> start(int showTime, DateTime startedTime) async {
     await Future.delayed(Duration(milliseconds: showTime));
 
     ///移除浮层
@@ -869,6 +869,9 @@ class OverlayEntryManger {
     overlayEntry = null;
   }
 }
+
+@Deprecated('Use OverlayEntryManager instead.')
+typedef OverlayEntryManger = OverlayEntryManager;
 
 ///在屏幕上的缩放比例
 class ScalingFactor{

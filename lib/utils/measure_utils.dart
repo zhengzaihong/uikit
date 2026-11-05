@@ -16,7 +16,7 @@ class MeasureUtils{
 
   /// 测量文本宽高
   static Size measureTextSize(String text, TextStyle style,
-      {int maxLines = 2^31, double maxWidth = double.infinity}) {
+      {int? maxLines, double maxWidth = double.infinity}) {
     if (StrUtils.isEmpty(text)) {
       return Size.zero;
     }

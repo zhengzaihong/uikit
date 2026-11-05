@@ -220,7 +220,8 @@ class CustomAnimatedBottomBar extends StatelessWidget {
     this.animationDuration = const Duration(milliseconds: 200),
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     required this.items,
-    required this.onItemSelected,
+    this.onItemSelected,
+    this.onChanged,
     this.curve = Curves.easeInOut,
     this.enableHapticFeedback = false,
   }):assert(items.length >= 2 && items.length <= 5),
@@ -232,7 +233,8 @@ class CustomAnimatedBottomBar extends StatelessWidget {
   final bool showElevation;
   final Duration animationDuration;
   final List<MyBottomNavigationBarItem> items;
-  final ValueChanged<int> onItemSelected;
+  final ValueChanged<int>? onItemSelected;
+  final ValueChanged<int>? onChanged;
   final MainAxisAlignment mainAxisAlignment;
   final double itemCornerRadius;
   final double containerHeight;
@@ -269,7 +271,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
                   if (enableHapticFeedback) {
                     HapticFeedback.lightImpact();
                   }
-                  onItemSelected(index);
+                  (onChanged ?? onItemSelected)?.call(index);
                 },
                 child: _ItemWidget(
                   item: item,

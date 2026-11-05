@@ -99,10 +99,16 @@ class _GeneralPickerViewState extends State<GeneralPickerView> {
   }
 
   Future<void> _loadCityData() async {
-    String jsonStr = await rootBundle.loadString('packages/uikit/assets/cityList.json');
-    data = List<Map<String, dynamic>>.from(json.decode(jsonStr));
-    setState(() {});
-    _updateResult();
+    try {
+      final jsonStr = await rootBundle.loadString('packages/uikit_plus/assets/citys.json');
+      final cityData = List<Map<String, dynamic>>.from(json.decode(jsonStr));
+      if (!mounted) return;
+      data = cityData;
+      setState(() {});
+      _updateResult();
+    } catch (e, stack) {
+      debugPrint('CityPickerView load city data failed: $e\n$stack');
+    }
   }
 
   void _updateResult() {

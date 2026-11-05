@@ -107,6 +107,8 @@ import 'package:flutter/material.dart';
 class EventNotifier {
   static final Map<dynamic, ValueNotifier<dynamic>> _notifiers = HashMap();
   static final Map<dynamic, Set<void Function(dynamic)>> _listeners = HashMap();
+  static final Map<dynamic, Map<Function, void Function(dynamic)>> _wrappers =
+      HashMap();
 
   EventNotifier._();
 
@@ -137,7 +139,7 @@ class EventNotifier {
     }
 
     if (listener != null) {
-      _listeners[target]!.add((value) => listener(value as T));
+      addListener<T>(target, listener);
     }
 
     return _notifiers[target]! as ValueNotifier<T>;
@@ -145,17 +147,21 @@ class EventNotifier {
 
   /// 添加监听
   static void addListener<T>(dynamic target, void Function(T value) listener) {
-    if (_listeners.containsKey(target)) {
-      _listeners[target]!.add((value) => listener(value as T));
-    }
+    final listeners = _listeners[target];
+    if (listeners == null) return;
+    void wrapper(dynamic value) => listener(value as T);
+    _wrappers.putIfAbsent(
+        target, () => <Function, void Function(dynamic)>{})[listener] = wrapper;
+    listeners.add(wrapper);
   }
 
   /// 移除监听（不推荐手动，建议使用自动解绑或 Stream）
   static void removeListener<T>(dynamic target, void Function(T value) listener) {
-    // 手动 removeListener 时无法移除包装 lambda
-    // 推荐使用 EventSubscriber 自动解绑
-    if(_listeners.containsKey(target)){
-      _listeners.remove(listener);
+    final listeners = _listeners[target];
+    if (listeners == null) return;
+    final wrapper = _wrappers[target]?.remove(listener);
+    if (wrapper != null) {
+      listeners.remove(wrapper);
     }
   }
 
@@ -181,6 +187,7 @@ class EventNotifier {
     _notifiers[target]?.dispose();
     _notifiers.remove(target);
     _listeners.remove(target);
+    _wrappers.remove(target);
   }
 
   /// 清空所有
@@ -190,6 +197,7 @@ class EventNotifier {
     }
     _notifiers.clear();
     _listeners.clear();
+    _wrappers.clear();
   }
 
   /// --------------------
@@ -201,8 +209,8 @@ class EventNotifier {
     // 推送当前值
     if (notifier.value != null) controller.add(notifier.value);
     void listener(dynamic value) => controller.add(value as T);
-    addListener(target, listener);
-    controller.onCancel = () => _listeners[target]?.remove(listener);
+    addListener<dynamic>(target, listener);
+    controller.onCancel = () => removeListener<dynamic>(target, listener);
     return controller.stream;
   }
 }
@@ -317,11 +325,9 @@ mixin EventSubscriber<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
-    for (var sub in _subscriptions) {
+    for (var sub in _subscriptions.toList()) {
       sub.cancel();
     }
-    EventNotifier.clear();
-    EventBus.clear();
     _subscriptions.clear();
     super.dispose();
   }

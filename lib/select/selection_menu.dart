@@ -1,8 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:uikit_plus/select/select_fun.dart';
 import 'drop_position.dart';
+import 'selection_popup_layout.dart';
 
 ///
 /// author:郑再红
@@ -331,7 +330,7 @@ class SelectionMenuState extends State<SelectionMenu>{
     }
   }
   void closePop(){
-    if(mounted){
+    if (mounted && _popShowIng) {
       Navigator.pop(context);
     }
   }
@@ -422,7 +421,7 @@ class SelectionMenuState extends State<SelectionMenu>{
     double centerX = 0;
     if (widget.alignType == AlignType.center) {
       centerX = customWidth / 2 - buttonWidth / 2;
-      if(centerX < 0) centerX==0;
+      if(centerX < 0) centerX = 0;
    }
 
 
@@ -542,7 +541,7 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
       removeLeft: true,
       removeRight: true,
       child: CustomSingleChildLayout(
-        delegate: _CustomPopupRouteLayout(position, padding),
+        delegate: SelectionPopupRouteLayout(position, padding),
         child: AnimatedBuilder(
           animation: animation,
           builder: (context, child) {
@@ -552,7 +551,7 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
                 shadowColor: shadowColor,
                 shape: shape,
                 borderRadius: materialBorderRadius,
-                child: _HeightFactorBox(
+                child: SelectionHeightFactorBox(
                 heightFactor: heightFactorTween.evaluate(animation),
                 child: child,
             ));
@@ -568,109 +567,8 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
   }
 }
 
-class _CustomPopupRouteLayout extends SingleChildLayoutDelegate {
-  final RelativeRect position;
-  EdgeInsets padding;
-  double childHeightMax = 0;
 
-  _CustomPopupRouteLayout(this.position, this.padding);
 
-  @override
-  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    Size buttonSize = position.toSize(constraints.biggest);
-
-    double constraintsWidth = buttonSize.width;
-    double constraintsHeight = max(
-        position.top - buttonSize.height - padding.top - kToolbarHeight,
-        constraints.biggest.height - position.top - padding.bottom);
-
-    return BoxConstraints.loose(Size(constraintsWidth, constraintsHeight));
-  }
-
-  @override
-  Offset getPositionForChild(Size size, Size childSize) {
-    double x = position.left;
-    double y = position.top;
-    final double buttonHeight = size.height - position.top - position.bottom;
-    double constraintsHeight = max(
-        position.top - buttonHeight - padding.top - kToolbarHeight,
-        size.height - position.top - padding.bottom);
-    if (position.top + constraintsHeight > size.height - padding.bottom) {
-      y = position.top - childSize.height - buttonHeight;
-    }
-
-    return Offset(x, y);
-  }
-
-  @override
-  bool shouldRelayout(covariant _CustomPopupRouteLayout oldDelegate) {
-    return position != oldDelegate.position || padding != oldDelegate.padding;
-  }
-}
-
-class _RenderHeightFactorBox extends RenderShiftedBox {
-  double _heightFactor;
-
-  _RenderHeightFactorBox({
-    RenderBox? child,
-    double? heightFactor,
-  })  : _heightFactor = heightFactor ?? 1.0,
-        super(child);
-
-  double get heightFactor => _heightFactor;
-
-  set heightFactor(double value) {
-    if (_heightFactor == value) {
-      return;
-    }
-    _heightFactor = value;
-    markNeedsLayout();
-  }
-
-  @override
-  void performLayout() {
-    final BoxConstraints constraints = this.constraints;
-
-    if (child == null) {
-      size = constraints.constrain(Size.zero);
-      return;
-    }
-
-    child!.layout(constraints, parentUsesSize: true);
-
-    size = constraints.constrain(Size(
-      child!.size.width,
-      child!.size.height,
-    ));
-
-    child!.layout(
-        constraints.copyWith(
-            maxWidth: size.width, maxHeight: size.height * heightFactor),
-        parentUsesSize: true);
-
-    size = constraints.constrain(Size(
-      child!.size.width,
-      child!.size.height,
-    ));
-  }
-}
-
-class _HeightFactorBox extends SingleChildRenderObjectWidget {
-  final double? heightFactor;
-
-  const _HeightFactorBox({this.heightFactor, Widget? child, Key? key})
-      : super(child: child, key: key);
-
-  @override
-  RenderObject createRenderObject(BuildContext context) =>
-      _RenderHeightFactorBox(heightFactor: heightFactor);
-
-  @override
-  void updateRenderObject(
-      BuildContext context, _RenderHeightFactorBox renderObject) {
-    renderObject.heightFactor = heightFactor ?? 1.0;
-  }
-}
 
 
 class SelectionMenuController{

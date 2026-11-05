@@ -252,39 +252,25 @@ class _LauncherViewState extends State<SplashBobbleAnimation> with SingleTickerP
     _bubblePaths = [];
     
     for (var config in _bubbleConfigs) {
-      final path = Path();
       final angle = config.startAngle * 3.14159 / 180; // 转换为弧度
       
       // 计算起始和结束位置
       final centerX = mWidth / 2;
       final centerY = mHeight / 2;
       
-      // 根据角度计算控制点和终点
-      // final controlX = centerX + motionCurveRadius * (config.startAngle == 90 || config.startAngle == 270 ? 1 : 0) * (config.startAngle == 270 ? -1 : 1);
-      // final controlY = centerY + motionCurveRadius * (config.startAngle == 0 || config.startAngle == 180 ? 1 : 0) * (config.startAngle == 0 ? -1 : 1);
-      
-      path.moveTo(centerX, centerY);
-      
-      // 根据角度创建不同的贝塞尔曲线
-      if (config.startAngle == 0) {
-        // 上
-        path.quadraticBezierTo(centerX - motionCurveRadius, centerY - motionCurveRadius, centerX, centerY - motionCurveRadius);
-        path.quadraticBezierTo(centerX + motionCurveRadius, centerY - motionCurveRadius, centerX, centerY);
-      } else if (config.startAngle == 90) {
-        // 右
-        path.quadraticBezierTo(centerX + motionCurveRadius, centerY - motionCurveRadius, centerX + motionCurveRadius, centerY);
-        path.quadraticBezierTo(centerX + motionCurveRadius, centerY + motionCurveRadius, centerX, centerY);
-      } else if (config.startAngle == 180) {
-        // 下
-        path.quadraticBezierTo(centerX + motionCurveRadius, centerY + motionCurveRadius, centerX, centerY + motionCurveRadius);
-        path.quadraticBezierTo(centerX - motionCurveRadius, centerY + motionCurveRadius, centerX, centerY);
-      } else if (config.startAngle == 270) {
-        // 左
-        path.quadraticBezierTo(centerX - motionCurveRadius, centerY + motionCurveRadius, centerX - motionCurveRadius, centerY);
-        path.quadraticBezierTo(centerX - motionCurveRadius, centerY - motionCurveRadius, centerX, centerY);
-      }
-      
-      _bubblePaths.add(path);
+      // 以起始角度旋转统一的贝塞尔曲线，支持任意角度
+      final basePath = Path()
+        ..moveTo(centerX, centerY)
+        ..quadraticBezierTo(centerX - motionCurveRadius,
+            centerY - motionCurveRadius, centerX, centerY - motionCurveRadius)
+        ..quadraticBezierTo(centerX + motionCurveRadius,
+            centerY - motionCurveRadius, centerX, centerY);
+
+      final matrix = Matrix4.translationValues(centerX, centerY, 0)
+        ..multiply(Matrix4.rotationZ(angle))
+        ..multiply(Matrix4.translationValues(-centerX, -centerY, 0));
+
+      _bubblePaths.add(basePath.transform(matrix.storage));
     }
   }
 

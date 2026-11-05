@@ -310,6 +310,7 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
+    widget.controller?._bind(this);
     if (_isHorizontal) _startHorizontal();
     if (!_isHorizontal) _initVerticalController();
     if (!_isHorizontal) WidgetsBinding.instance.addPostFrameCallback((_) => _startVerticalLoop());

@@ -163,7 +163,7 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
 
     _titleController =  ScrollController();
     _contentHorizontalController = ScrollController();
-    _contentVerticalController =  ScrollController();
+    _contentVerticalController = widget.controller ?? ScrollController();
 
     handlerController.titleController = _titleController;
     handlerController.contentHorizontalController = _contentHorizontalController;
@@ -282,7 +282,20 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
 
 
   @override
+  void didUpdateWidget(covariant TableExtend<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.tableDatas, widget.tableDatas) ||
+        oldWidget.preDealData != widget.preDealData) {
+      datas = widget.preDealData?.call() ?? widget.tableDatas ?? [];
+      _itemCount = datas.length;
+    }
+  }
+
+  @override
   void dispose() {
+    if (widget.controller != null) {
+      handlerController.contentVerticalController = null;
+    }
     handlerController.dispose();
     super.dispose();
   }
@@ -393,13 +406,23 @@ class _TableExtendState<T> extends State<TableExtend<T>> {
                       child: SizedBox(
                         width: _horizontalTotalWidth,
                         height: box.maxHeight,
-                        child:ScrollConfiguration(
-                          behavior:OverScrollBehavior() ,
+                        child: ScrollConfiguration(
+                          behavior: widget.behavior ?? OverScrollBehavior(),
                           child:  ListView.separated(
                               itemCount: _itemCount,
                               controller: _contentVerticalController,
-                              // physics: ClampingScrollPhysics(),
-                              // physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: widget.shrinkWrap,
+                              reverse: widget.reverse,
+                              scrollDirection: widget.scrollDirection,
+                              padding: widget.padding,
+                              addAutomaticKeepAlives:
+                                  widget.addAutomaticKeepAlive,
+                              addRepaintBoundaries:
+                                  widget.addRepaintBoundaries,
+                              addSemanticIndexes: widget.addSemanticIndexes,
+                              cacheExtent: widget.cacheExtent,
+                              physics: widget.physics ??
+                                  const AlwaysScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 final rowStyleParam = RowStyleParam(
                                     enableDivider: widget.enableDivider,

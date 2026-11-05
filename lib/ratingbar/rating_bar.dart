@@ -170,6 +170,9 @@ class RatingBar extends StatefulWidget {
   /// ```
   final ValueChanged<double>? onRatingUpdate;
 
+  /// 评分变化回调（推荐）/ Rating change callback (recommended)
+  final ValueChanged<double>? onChanged;
+
   /// 评分步长 / Rating step
   ///
   /// 评分变化的最小单位
@@ -227,6 +230,7 @@ class RatingBar extends StatefulWidget {
     this.allowZero = true,
     this.readOnly = false,
     this.onRatingUpdate,
+    this.onChanged,
     this.valueFormatter,
     Key? key,
   }) : assert(count > 0, 'count must be greater than 0'),
@@ -341,7 +345,7 @@ class _RatingBarState extends State<RatingBar> {
       });
       
       // 触发回调 / Trigger callback
-      widget.onRatingUpdate?.call(_currentValue);
+      (widget.onChanged ?? widget.onRatingUpdate)?.call(_currentValue);
     }
   }
 

@@ -307,10 +307,7 @@ class LinearProgressBar extends StatefulWidget {
   }) : assert(percent >= 0.0 && percent <= 1.0, 'percent must be between 0.0 and 1.0'),
        assert(lineHeight > 0, 'lineHeight must be greater than 0'),
        assert(animationDuration > 0, 'animationDuration must be greater than 0'),
-       assert(linearGradient == null || progressColor == Colors.red || progressColor != Colors.red, 
-              'Cannot set both linearGradient and progressColor'),
-       assert(linearGradientBackgroundColor == null || backgroundColor == const Color(0xFFB8C7CB) || backgroundColor != const Color(0xFFB8C7CB),
-              'Cannot set both linearGradientBackgroundColor and backgroundColor'),
+
        super(key: key);
 
   @override

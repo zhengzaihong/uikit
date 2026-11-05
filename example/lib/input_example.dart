@@ -93,6 +93,7 @@ class _InputExampleState extends State<InputExample> {
               fillColor: Colors.grey.withAlpha(40),
               cursorEnd: true,
               onChanged: (msg){
+                debugPrint(msg);
               },
               controller: textController,
               inputController: inputController,
@@ -100,7 +101,7 @@ class _InputExampleState extends State<InputExample> {
               marginTop: 5,
               follower: true,
               popBox: PopBox(
-                height: 300,
+                // height: 300,
                 width: 300,
               ),
               buildPop: (context){
@@ -124,6 +125,7 @@ class _InputExampleState extends State<InputExample> {
                             label: Text(e),
                             onPressed: () {
                               inputController.setText(e);
+                              inputController.removePop();
                             },
                           )).toList()
                         ],
@@ -140,6 +142,7 @@ class _InputExampleState extends State<InputExample> {
                             label: Text(e),
                             onPressed: () {
                               inputController.setText(e);
+                              inputController.removePop();
                             },
                           )).toList()
                         ],

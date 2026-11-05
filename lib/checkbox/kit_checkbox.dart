@@ -128,6 +128,9 @@ class KitCheckBox extends StatefulWidget {
   /// 状态改变回调 / Change callback
   final Function(bool value)? onChange;
 
+  /// 状态改变回调（推荐）/ Change callback (recommended)
+  final ValueChanged<bool>? onChanged;
+
   /// 是否在初始化时触发回调 / Enable first callback
   /// 默认值: false / Default: false
   final bool enableFirstCallBack;
@@ -201,6 +204,7 @@ class KitCheckBox extends StatefulWidget {
     this.iconLeft = false,
     this.isChecked = false,
     this.onChange,
+    this.onChanged,
     this.enableFirstCallBack=false,
     this.activeColor,
     this.checkColor,
@@ -225,14 +229,28 @@ class _KitCheckBoxState extends State<KitCheckBox> {
   @override
   void initState() {
     super.initState();
-    isChecked = widget.tristate != null ? widget.tristate : widget.isChecked!;
+    isChecked = widget.tristate ?? widget.isChecked ?? false;
     if(widget.enableFirstCallBack){
       callBack(false);
     }
   }
 
+  @override
+  void didUpdateWidget(covariant KitCheckBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldValue = oldWidget.tristate ?? oldWidget.isChecked ?? false;
+    final newValue = widget.tristate ?? widget.isChecked ?? false;
+    if (oldValue != newValue) {
+      isChecked = newValue;
+    }
+  }
+
+  void _notifyChanged(bool value) {
+    (widget.onChanged ?? widget.onChange)?.call(value);
+  }
+
   void callBack(bool click) {
-    if (widget.onChange!=null) {
+    if (widget.onChanged != null || widget.onChange != null) {
       if (click) {
         if (widget.tristate != null) {
           // 三态循环: null -> false -> true -> null
@@ -250,7 +268,7 @@ class _KitCheckBoxState extends State<KitCheckBox> {
           HapticFeedback.lightImpact();
         }
       }
-      widget.onChange?.call(isChecked ?? false);
+      _notifyChanged(isChecked ?? false);
     }
   }
 
@@ -265,18 +283,18 @@ class _KitCheckBoxState extends State<KitCheckBox> {
     }
     setState(() {
       isChecked = val;
-      widget.onChange?.call(isChecked ?? false);
     });
+    _notifyChanged(isChecked ?? false);
   }
 
   Widget buildCheckBoxStyle(){
-    if(widget.useDefaultStyle!){
+    if(widget.useDefaultStyle ?? true){
       return GestureDetector(
         onTap: (){
           callBack(true);
           setState(() {});
         },
-        child: widget.iconLeft! ?Row(
+        child: widget.iconLeft ?? false ?Row(
           mainAxisAlignment: widget.mainAxisAlignment,
           crossAxisAlignment: widget.crossAxisAlignment,
           mainAxisSize: widget.mainAxisSize,
@@ -334,7 +352,7 @@ class _KitCheckBoxState extends State<KitCheckBox> {
             });
           }
         },
-        child: widget.iconLeft! ?
+        child: widget.iconLeft ?? false ?
         Row(
             mainAxisAlignment: widget.mainAxisAlignment,
             crossAxisAlignment: widget.crossAxisAlignment,

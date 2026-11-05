@@ -139,6 +139,9 @@ class Pager extends StatefulWidget {
   /// 当前所在页的回调 点击和输入
   final PageChangeCallback? pageChange;
 
+  /// 当前所在页的回调（推荐）/ Page change callback (recommended)
+  final PageChangeCallback? onPageChanged;
+
   /// 错误输入
   final Function()? errorInputCallback;
 
@@ -167,13 +170,13 @@ class Pager extends StatefulWidget {
 
   final EdgeInsetsGeometry? inputContentPadding;
   final double inputHeight;
-  final double inputWidth;
+  final double? inputWidth;
   final Color? prevColor;
   final Color? nextColor;
   final Color? ellipsisColor;
 
   final TextEditingController? inputController;
-  final OutlineInputTextBorder outlineInputTextBorder;
+  final OutlineInputTextBorder? outlineInputTextBorder;
 
   final Color? inputBgColor;
 
@@ -183,12 +186,12 @@ class Pager extends StatefulWidget {
   final String? inputHintText;
 
   final BoxBorder? focusBorder;
-  final double borderRadius;
-  final Color pageIndicatorColor;
-  final Color pageIndicatorActiveColor;
-  final double pageTextSize;
-  final double pageIndicatorHeight;
-  final Color checkedPageColor;
+  final double? borderRadius;
+  final Color? pageIndicatorColor;
+  final Color? pageIndicatorActiveColor;
+  final double? pageTextSize;
+  final double? pageIndicatorHeight;
+  final Color? checkedPageColor;
   final BoxDecoration? checkedPageBoxDecoration;
 
   /// 主题配置 / Theme configuration
@@ -209,6 +212,7 @@ class Pager extends StatefulWidget {
     this.totalText = '共%s条',
     this.pagerInputType = PagerInputType.input,
     this.pageChange,
+    this.onPageChanged,
     this.currentPage = 1,
     this.errorInputCallback,
     this.isEnterCallback = false,
@@ -223,24 +227,21 @@ class Pager extends StatefulWidget {
     this.inputContentPadding =
         const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
     this.inputHeight = 30,
-    this.inputWidth = 50,
+    this.inputWidth,
     this.inputController,
-    this.outlineInputTextBorder = const OutlineInputTextBorder(
-      borderSide: BorderSide(color: Colors.grey, width: 1.0),
-      childBorderRadius: BorderRadius.all(Radius.circular(20)),
-    ),
+    this.outlineInputTextBorder,
     this.inputBgColor,
     this.inputTextStyle,
     this.inputHintTextStyle,
     this.inputHintText,
     this.focusBorder,
-    this.borderRadius = 10,
-    this.pageIndicatorColor = Colors.grey,
-    this.pageIndicatorActiveColor = Colors.black,
-    this.checkedPageColor = Colors.black,
+    this.borderRadius,
+    this.pageIndicatorColor,
+    this.pageIndicatorActiveColor,
+    this.checkedPageColor,
     this.checkedPageBoxDecoration,
-    this.pageTextSize = 14,
-    this.pageIndicatorHeight = 30,
+    this.pageTextSize,
+    this.pageIndicatorHeight,
     this.theme,
   }) : super(key: key);
 
@@ -261,6 +262,10 @@ class _PagerState extends State<Pager> {
   int currentPageIndex = 1;
 
   late TextEditingController pageInputController;
+  bool _ownsInputController = false;
+
+  PageChangeCallback? get _pageChange =>
+      widget.onPageChanged ?? widget.pageChange;
 
   @override
   void initState() {
@@ -271,15 +276,45 @@ class _PagerState extends State<Pager> {
       currentPageIndex = 0;
     }
     initData();
+    if (widget.isEnterCallback) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) executeCallback();
+      });
+    }
   }
 
   void initData() {
+    _ownsInputController = widget.inputController == null;
     pageInputController = widget.inputController ?? TextEditingController();
     totalPages = (widget.totalCount / pageEach).ceil();
   }
 
+  @override
+  void didUpdateWidget(covariant Pager oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    pageEach = widget.pageEach;
+    totalPages = (widget.totalCount / pageEach).ceil();
+    final maxIndex = totalPages > 0 ? totalPages - 1 : 0;
+    if (oldWidget.currentPage != widget.currentPage) {
+      currentPageIndex = (widget.currentPage - 1).clamp(0, maxIndex).toInt();
+    } else if (currentPageIndex > maxIndex) {
+      currentPageIndex = maxIndex;
+    }
+    if (oldWidget.inputController != widget.inputController) {
+      if (_ownsInputController) pageInputController.dispose();
+      _ownsInputController = widget.inputController == null;
+      pageInputController = widget.inputController ?? TextEditingController();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_ownsInputController) pageInputController.dispose();
+    super.dispose();
+  }
+
   void executeCallback() {
-    if (widget.pageChange != null) {
+    if (_pageChange != null) {
       if ((lastTotalPages == null || lastCurrentPageIndex == null) ||
           (lastTotalPages != totalPages ||
               lastCurrentPageIndex != currentPageIndex)) {
@@ -289,7 +324,7 @@ class _PagerState extends State<Pager> {
           pageInputController.text = '';
           return;
         }
-        widget.pageChange!(totalPages, currentPageIndex + 1);
+        _pageChange!(totalPages, currentPageIndex + 1);
       }
     }
   }
@@ -382,9 +417,7 @@ class _PagerState extends State<Pager> {
         type: PagerItemTypes.next,
         index:
             currentPageIndex < totalPages - 1 ? currentPageIndex + 1 : null)));
-    if (widget.isEnterCallback) {
-      executeCallback();
-    }
+
     return pageItems;
   }
 
@@ -397,13 +430,17 @@ class _PagerState extends State<Pager> {
         type: type,
         index: index,
         isFocused: isFocused,
-        pageIndicatorActiveColor: widget.pageIndicatorActiveColor,
-        pageIndicatorColor: widget.pageIndicatorColor,
+        pageIndicatorActiveColor: widget.pageIndicatorActiveColor ??
+            effectiveTheme.pageIndicatorActiveColor,
+        pageIndicatorColor:
+            widget.pageIndicatorColor ?? effectiveTheme.pageIndicatorColor,
         focusBorder: widget.focusBorder ?? effectiveTheme.focusBorder,
-        borderRadius: widget.borderRadius,
-        pageTextSize: widget.pageTextSize,
-        pageIndicatorHeight: widget.pageIndicatorHeight,
-        checkedPageColor: widget.checkedPageColor,
+        borderRadius: widget.borderRadius ?? effectiveTheme.borderRadius,
+        pageTextSize: widget.pageTextSize ?? effectiveTheme.pageTextSize,
+        pageIndicatorHeight:
+            widget.pageIndicatorHeight ?? effectiveTheme.pageIndicatorHeight,
+        checkedPageColor:
+            widget.checkedPageColor ?? effectiveTheme.checkedPageColor,
         checkedPageBoxDecoration: widget.checkedPageBoxDecoration ?? effectiveTheme.checkedPageBoxDecoration,
         currentPageIndex: currentPageIndex);
   }
@@ -443,11 +480,12 @@ class _PagerState extends State<Pager> {
   Widget _buildPageInputType(PagerTheme effectiveTheme, TextStyle? effectiveTextStyle) {
     if (widget.pagerInputType == PagerInputType.input) {
       // 使用主题或单独配置的值
-      final inputWidth = widget.inputWidth;
+      final inputWidth = widget.inputWidth ?? effectiveTheme.inputWidth;
       final inputTextStyle = widget.inputTextStyle ?? effectiveTheme.inputTextStyle;
       final inputHintTextStyle = widget.inputHintTextStyle ?? effectiveTheme.inputHintTextStyle;
       final inputBgColor = widget.inputBgColor ?? effectiveTheme.inputBgColor;
-      final outlineInputTextBorder = widget.outlineInputTextBorder;
+      final outlineInputTextBorder =
+          widget.outlineInputTextBorder ?? effectiveTheme.outlineInputTextBorder;
       final inputContentPadding = widget.inputContentPadding ?? effectiveTheme.inputContentPadding;
       
       return Row(
@@ -482,7 +520,7 @@ class _PagerState extends State<Pager> {
                     index = 1;
                   }
                   currentPageIndex = index - 1;
-                  widget.pageChange?.call(totalPages, index);
+                  _pageChange?.call(totalPages, index);
                 });
               } catch (e) {
                 widget.errorInputCallback?.call();
@@ -691,7 +729,7 @@ class PagerTheme {
   static const PagerTheme defaultTheme = PagerTheme();
 
   /// 蓝色主题 / Blue theme
-  static PagerTheme blueTheme = PagerTheme(
+  static final PagerTheme blueTheme = PagerTheme(
     pageIndicatorActiveColor: Colors.blue,
     checkedPageColor: Colors.white,
     checkedPageBoxDecoration: BoxDecoration(
@@ -706,7 +744,7 @@ class PagerTheme {
   );
 
   /// 绿色主题 / Green theme
-  static PagerTheme greenTheme = PagerTheme(
+  static final PagerTheme greenTheme = PagerTheme(
     pageIndicatorActiveColor: Colors.green,
     checkedPageColor: Colors.white,
     checkedPageBoxDecoration: BoxDecoration(
@@ -721,7 +759,7 @@ class PagerTheme {
   );
 
   /// 暗色主题 / Dark theme
-  static PagerTheme darkTheme = PagerTheme(
+  static final PagerTheme darkTheme = PagerTheme(
     textStyle: const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,

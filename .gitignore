@@ -10,4 +10,6 @@ ios/Runner/GeneratedPluginRegistrant.*
 pubspec.lock
 .vscode/launch.json
 coverage/
-
+*.iml
+.codeartsdoer/
+.flutter-plugins-dependencies

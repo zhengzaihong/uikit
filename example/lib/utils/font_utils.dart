@@ -9,10 +9,14 @@ class FontIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      IconData(codePoint, fontFamily: "iconfont", matchTextDirection: true),
-      color: color ?? Colors.white,
-      size: size ?? 20,
+    return Text(
+      String.fromCharCode(codePoint),
+      textDirection: TextDirection.ltr,
+      style: TextStyle(
+        fontFamily: 'iconfont',
+        fontSize: size ?? 20,
+        color: color ?? Colors.white,
+      ),
     );
   }
 }

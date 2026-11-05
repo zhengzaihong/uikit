@@ -37,15 +37,26 @@ class MultiSelectorEntity {
     this.children,
   });
 
-  factory MultiSelectorEntity.formJson(Map<String, dynamic> json) {
+  factory MultiSelectorEntity.fromJson(Map<String, dynamic> json) {
+    final rawChildren = json['children'];
     return MultiSelectorEntity(
-      id: json['id'],
-      name: json['name'],
-      isSelected: json['isSelected'],
+      id: json['id']?.toString(),
+      name: json['name']?.toString(),
+      isSelected: json['isSelected'] as bool? ?? false,
       extra: json['extra'],
-      children: json['children'],
+      children: rawChildren is List
+          ? rawChildren
+              .whereType<Map>()
+              .map((e) =>
+                  MultiSelectorEntity.fromJson(Map<String, dynamic>.from(e)))
+              .toList()
+          : null,
     );
   }
+
+  @Deprecated('Use MultiSelectorEntity.fromJson instead.')
+  factory MultiSelectorEntity.formJson(Map<String, dynamic> json) =>
+      MultiSelectorEntity.fromJson(json);
 
   Map<String, dynamic> toJson() {
     return {

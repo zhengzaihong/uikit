@@ -105,6 +105,9 @@ class KitSwitch extends StatefulWidget {
   /// 状态改变回调 / Change callback
   final ValueChanged<bool>? onChange;
 
+  /// 状态改变回调（推荐）/ Change callback (recommended)
+  final ValueChanged<bool>? onChanged;
+
   /// 标签是否在右侧 / Label on right side
   /// 默认值: false (左侧) / Default: false (left side)
   final bool labelRight;
@@ -150,6 +153,7 @@ class KitSwitch extends StatefulWidget {
   const KitSwitch({
     this.isOpen=true,
     this.onChange,
+    this.onChanged,
     this.labelRight=false,
     this.isInnerStyle = false,
     this.label = const SizedBox(),
@@ -174,9 +178,13 @@ class _KitSwitchState extends State<KitSwitch> {
   void initState() {
     super.initState();
     isOpen = widget.isOpen;
-    if(widget.enableFirstCallBack!){
-      widget.onChange?.call(isOpen);
+    if(widget.enableFirstCallBack ?? false){
+      _notifyChanged(isOpen);
     }
+  }
+
+  void _notifyChanged(bool value) {
+    (widget.onChanged ?? widget.onChange)?.call(value);
   }
   @override
   Widget build(BuildContext context) {
@@ -196,18 +204,26 @@ class _KitSwitchState extends State<KitSwitch> {
         ]);
   }
 
+  @override
+  void didUpdateWidget(covariant KitSwitch oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isOpen != widget.isOpen) {
+      isOpen = widget.isOpen;
+    }
+  }
+
   void _handleChange(bool v) {
     if (widget.enableHapticFeedback) {
       HapticFeedback.lightImpact();
     }
-    widget.onChange?.call(v);
+    _notifyChanged(v);
     setState(() {
-      isOpen = !isOpen;
+      isOpen = v;
     });
   }
 
   Widget buildStyleSwitch(){
-    if(widget.isInnerStyle!){
+    if(widget.isInnerStyle ?? false){
       return  Transform.scale(
         scale: widget.scale,
         child: CupertinoSwitch(

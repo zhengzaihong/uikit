@@ -260,6 +260,11 @@ class InputExtendState<T> extends State<InputExtend> {
   late  ScrollController _scrollController;
   late  ScrollController _inputScrollController;
 
+  bool _ownsEditingController = false;
+  bool _ownsScrollController = false;
+  bool _ownsInputScrollController = false;
+  bool _ownsFocusNode = false;
+
   int oldSize = 0;
 
   ///关联输入框，处理在组价在列表中跟随滚动
@@ -276,6 +281,10 @@ class InputExtendState<T> extends State<InputExtend> {
     widget.controller?.bind(this);
      widget.onCreate?.call();
 
+    _ownsEditingController = widget.textEditingController == null;
+    _ownsScrollController = widget.scrollController == null;
+    _ownsInputScrollController = widget.inputScrollController == null;
+    _ownsFocusNode = widget.focusNode == null;
     _editingController = widget.textEditingController?? TextEditingController();
     _scrollController = widget.scrollController?? ScrollController();
     _inputScrollController = widget.inputScrollController?? ScrollController();
@@ -524,10 +533,12 @@ class InputExtendState<T> extends State<InputExtend> {
 
   @override
   void dispose() {
-    // _editingController.dispose();
-    // _inputScrollController.dispose();
-    // _focusNode.dispose();
-    // _scrollController.dispose();
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    if (_ownsEditingController) _editingController.dispose();
+    if (_ownsScrollController) _scrollController.dispose();
+    if (_ownsInputScrollController) _inputScrollController.dispose();
+    if (_ownsFocusNode) _focusNode.dispose();
     super.dispose();
   }
 

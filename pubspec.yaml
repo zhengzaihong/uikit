@@ -1,7 +1,9 @@
 name: uikit_plus
 description: Cross-platform UI component library, including various customized components, helps you build projects quickly and focus more on business development.
-version: 0.4.3
+version: 0.4.4
 homepage: https://github.com/zhengzaihong/uikit
+repository: https://github.com/zhengzaihong/uikit
+issue_tracker: https://github.com/zhengzaihong/uikit/issues
 
 platforms:
   windows:
@@ -11,9 +13,16 @@ platforms:
   ios:
   macos:
 
+topics:
+  - flutter
+  - ui
+  - widgets
+  - component-library
+  - dart
+
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
 
 dependencies:
   flutter:
@@ -22,28 +31,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.4
+  flutter_lints: ^5.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-  # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
-  # adding or updating assets for this project.
-  plugin:
-    platforms:
-    # This plugin project was generated without specifying any
-    # platforms with the `--platform` argument. If you see the `some_platform` map below, remove it and
-    # then add platforms following the instruction here:
-    # https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms
-    # -------------------
-      some_platform:
-        pluginClass: somePluginClass
-    # -------------------
 
-  # To add assets to your plugin package, add an assets section, like this:
   assets:
     - assets/citys.json
   #

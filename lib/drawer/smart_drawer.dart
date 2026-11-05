@@ -221,22 +221,7 @@ class SmartDrawer extends StatefulWidget {
 
 class _SmartDrawerState extends State<SmartDrawer> {
   @override
-  void initState() {
-    if (widget.callback != null) {
-      widget.callback!(true);
-    }
-    super.initState();
-  }
 
-  @override
-  void dispose() {
-    if (widget.callback != null) {
-      widget.callback!(false);
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
     String? label = widget.semanticLabel ?? MaterialLocalizations.of(context).drawerLabel;

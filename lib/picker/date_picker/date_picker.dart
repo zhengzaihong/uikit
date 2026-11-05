@@ -208,6 +208,7 @@ class DatePicker extends StatefulWidget {
     TextStyle? itemTextStyle,
     Widget? actions,
     Function(DateTime? startDate, DateTime? endDate)? callBack,
+    Function(DateTime? startDate, DateTime? endDate)? onChanged,
   }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
     return showDialog(
@@ -294,7 +295,7 @@ class DatePicker extends StatefulWidget {
               onTap: () {
                 final startDate = controller.getStartDate();
                 final endDate = controller.getEndDate();
-                callBack?.call(startDate, endDate);
+                (onChanged ?? callBack)?.call(startDate, endDate);
                 Navigator.pop(context, [startDate, endDate]);
               },
               child: Center(
@@ -376,6 +377,7 @@ class DatePicker extends StatefulWidget {
         TextStyle? itemTextStyle,
         Widget? actions,
     Function(DateTime? startDate, DateTime? endDate)? callBack,
+    Function(DateTime? startDate, DateTime? endDate)? onChanged,
       }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
     return showModalBottomSheet(
@@ -387,10 +389,10 @@ class DatePicker extends StatefulWidget {
       clipBehavior: clipBehavior,
       constraints: constraints ?? BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       barrierColor: barrierColor,
-      isScrollControlled: true,
+      isScrollControlled: isScrollControlled,
       scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
       useRootNavigator: useRootNavigator,
-      isDismissible: isDismissible,
+      isDismissible: isDismissible && barrierDismissible,
       enableDrag: enableDrag,
       showDragHandle: showDragHandle,
       useSafeArea: useSafeArea,
@@ -476,7 +478,7 @@ class DatePicker extends StatefulWidget {
             onTap: () {
               final startDate = controller.getStartDate();
               final endDate = controller.getEndDate();
-              callBack?.call(startDate, endDate);
+              (onChanged ?? callBack)?.call(startDate, endDate);
               Navigator.pop(context, [startDate, endDate]);
             },
             child: Center(
@@ -540,6 +542,7 @@ class DatePicker extends StatefulWidget {
         TextStyle? itemTextStyle,
         Widget? actions,
         Function(DateTime? startDate, DateTime? endDate)? callBack,
+        Function(DateTime? startDate, DateTime? endDate)? onChanged,
       }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
     return showDialog(
@@ -618,7 +621,7 @@ class DatePicker extends StatefulWidget {
               onTap: () {
                 final startDate = controller.getStartDate();
                 final endDate = controller.getEndDate();
-                callBack?.call(startDate, endDate);
+                (onChanged ?? callBack)?.call(startDate, endDate);
                 Navigator.pop(context, [startDate, endDate]);
               },
               child: Center(
@@ -698,6 +701,7 @@ class DatePicker extends StatefulWidget {
     TextStyle? itemTextStyle,
     Widget? actions,
     Function(DateTime? startDate, DateTime? endDate)? callBack,
+    Function(DateTime? startDate, DateTime? endDate)? onChanged,
   }) {
     final strings = datePickerStrings ?? DatePickerStrings.fromLocale(Localizations.localeOf(context));
     return showModalBottomSheet(
@@ -709,10 +713,10 @@ class DatePicker extends StatefulWidget {
       clipBehavior: clipBehavior,
       constraints: constraints ?? BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       barrierColor: barrierColor,
-      isScrollControlled: true,
+      isScrollControlled: isScrollControlled,
       scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
       useRootNavigator: useRootNavigator,
-      isDismissible: isDismissible,
+      isDismissible: isDismissible && barrierDismissible,
       enableDrag: enableDrag,
       showDragHandle: showDragHandle,
       useSafeArea: useSafeArea,
@@ -790,7 +794,7 @@ class DatePicker extends StatefulWidget {
             onTap: () {
               final startDate = controller.getStartDate();
               final endDate = controller.getEndDate();
-              callBack?.call(startDate, endDate);
+              (onChanged ?? callBack)?.call(startDate, endDate);
               Navigator.pop(context, [startDate, endDate]);
             },
             child: Center(
@@ -910,7 +914,7 @@ class _DatePickerState extends State<DatePicker> {
     endMinuteScrollController.dispose();
     endSecondScrollController.dispose();
 
-    widget.controller.dispose();
+
     super.dispose();
   }
 

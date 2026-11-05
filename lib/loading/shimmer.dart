@@ -181,9 +181,27 @@ class _ShimmerState extends State<Shimmer>
     _controller = AnimationController(
       vsync: this,
       duration: _config.period,
-    )..repeat();
+    );
 
     _animation = CurvedAnimation(parent: _controller, curve: _config.curve);
+    if (widget.isLoading) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant Shimmer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.config != oldWidget.config) {
+      _config = widget.config ?? ShimmerConfig.global;
+      _controller.duration = _config.period;
+      _animation = CurvedAnimation(parent: _controller, curve: _config.curve);
+    }
+    if (widget.isLoading && !_controller.isAnimating) {
+      _controller.repeat();
+    } else if (!widget.isLoading && _controller.isAnimating) {
+      _controller.stop();
+    }
   }
 
   @override

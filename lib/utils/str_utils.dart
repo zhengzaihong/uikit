@@ -286,7 +286,7 @@ class StrUtils {
   }
 }
 
-extension StringExtension on Object? {
+extension StringExtension on String? {
 
   String str() => this == null ? "" : toString();
 

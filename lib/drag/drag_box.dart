@@ -173,4 +173,10 @@ class _DragBoxState extends State<DragBox> {
       },
     );
   }
+
+  @override
+  void dispose() {
+    _offset.dispose();
+    super.dispose();
+  }
 }

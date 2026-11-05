@@ -159,7 +159,7 @@ class _ImageSwitchState extends State<ImageSwitch>
     if(widget.activeBorderColor != null && widget.inactiveBorderColor != null){
       _borderColorAnimation = ColorTween(
         begin: widget.value ? widget.activeBorderColor : widget.inactiveBorderColor,
-        end: !widget.value ? widget.activeBorderColor : widget.inactiveTrackColor,
+        end: !widget.value ? widget.activeBorderColor : widget.inactiveBorderColor,
       ).animate(_controller);
     }
 
@@ -174,6 +174,19 @@ class _ImageSwitchState extends State<ImageSwitch>
     ).animate(_controller);
 
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ImageSwitch oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      _value = widget.value;
+      if (widget.value) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    }
   }
 
   @override
@@ -197,6 +210,7 @@ class _ImageSwitchState extends State<ImageSwitch>
           _controller.reverse();
         }
         _value = !_value;
+        setState(() {});
         widget.onChanged?.call(_value);
       },
       child: AnimatedBuilder(

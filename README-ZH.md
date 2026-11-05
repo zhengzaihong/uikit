@@ -16,7 +16,7 @@ Language: [English](README.md) | 简体中文
 - 🔗 **零依赖**，完全 Dart 实现，开箱即用
 - 🎨 高度可定制，支持样式扩展与二次封装
 - 🌍 多端支持：**Android / iOS / Web  /Windows / MacOS / Linux / HarmonyOS**
-- 🔥 持续更新，已提供 **20+ 常用组件**
+- 🔥 持续更新，已提供 **30+ 常用组件**
 
 ---
 
@@ -24,11 +24,17 @@ Language: [English](README.md) | 简体中文
 在 `pubspec.yaml` 中添加依赖：
 ```yaml
 dependencies:
-  uikit_plus: ^0.4.3  //旧版本不在维护，旧版本最后依赖地址：flutter_uikit_forzzh:0.3.1
+  uikit_plus: ^0.4.4
 ```
 
+```dart
+import 'package:uikit_plus/uikit_lib.dart';
+```
 
-# 📚 组件目录
+> 旧版本不再维护，旧包最后版本为 `flutter_uikit_forzzh: 0.3.1`。
+
+
+## 📚 组件目录
 
 ## 输入与表单组件
 - **InputText**: 极简输入框，支持实时校验和 TextField/TextFormField 全部属性
@@ -88,7 +94,7 @@ dependencies:
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets1.gif)
 
 ### 雷达组件 5-N维：
-![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png ) 
+![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png) 
 ![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png)
 
 
@@ -102,7 +108,7 @@ dependencies:
 
 
 ### 底部导航菜单：
-![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif) )
+![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif)
 
 ### 输入框拓展搜索组件：
 
