@@ -14,6 +14,15 @@ class _EventExampleState extends State<EventExample> with EventSubscriber {
 
   String? targetValue;
   UserLoggedIn? currentUser;
+
+  void _manualLoginListener(String? value) {
+    debugPrint("-1--v:$value");
+    if (!mounted) return;
+    setState(() {
+      targetValue = value;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,14 +33,8 @@ class _EventExampleState extends State<EventExample> with EventSubscriber {
         targetValue = v;
       });
     });
-    //手动方式--注意dispose 需要及时： EventNotifier.remove("login");
-    //注意这里不会覆盖之前的 target:login,如果有target只是注册监听
-    EventNotifier.obtain("login", listener:(v){
-      debugPrint("-1--v:$v");
-      setState(() {
-        targetValue = v.toString();
-      });
-    });
+    //手动方式--需要在 dispose 中手动移除
+    EventNotifier.obtain<String?>("login", listener: _manualLoginListener);
 
     // 全局 EventBus 自动解绑
     listenEventStream<UserLoggedIn>((e) {
@@ -46,6 +49,7 @@ class _EventExampleState extends State<EventExample> with EventSubscriber {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(),
         title: const Text("事件工具"),
       ),
       body: Center(
@@ -87,8 +91,7 @@ class _EventExampleState extends State<EventExample> with EventSubscriber {
   }
   @override
   void dispose() {
-    //手动移除，推荐使用自动方式
-    // EventNotifier.remove("login");
+    // EventNotifier.removeListener<String?>("login", _manualLoginListener);
     super.dispose();
   }
 }

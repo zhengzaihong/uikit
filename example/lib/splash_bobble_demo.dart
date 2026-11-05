@@ -8,6 +8,7 @@ class SplashBobbleDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(),
         title: const Text('SplashBobbleAnimation 演示'),
       ),
       body: ListView(

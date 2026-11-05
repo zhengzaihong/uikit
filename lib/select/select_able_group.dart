@@ -192,9 +192,20 @@ class _SelectableGroupState extends State<SelectableGroup> {
   void initState() {
     super.initState();
     widget.controller?.bind(this);
-    _selected = widget.multiple
-        ? List<int>.from(widget.defaultValue ?? [])
-        : <int>[widget.defaultValue ?? -1];
+    final defaultValue = widget.defaultValue;
+    if (widget.multiple) {
+      _selected = defaultValue is Iterable
+          ? List<int>.from(defaultValue)
+          : <int>[];
+    } else if (defaultValue is Iterable) {
+      _selected = defaultValue.isEmpty
+          ? <int>[]
+          : <int>[defaultValue.first as int];
+    } else if (defaultValue is int) {
+      _selected = <int>[defaultValue];
+    } else {
+      _selected = <int>[];
+    }
 
     widget.controller?._bindInternal(
       initialSelected: _selected,
@@ -204,6 +215,7 @@ class _SelectableGroupState extends State<SelectableGroup> {
 
     if (widget.enableFirstTrigger && widget.onSelectionChanged != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
         setState(() {
           widget.onSelectionChanged!(_selected);
         });

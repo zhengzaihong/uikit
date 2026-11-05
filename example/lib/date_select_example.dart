@@ -26,6 +26,7 @@ class _DateSelectExampleState extends State<DateSelectExample> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(),
         title: const Text("日历选择器"),
       ),
       body: LayoutBuilder(

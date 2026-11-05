@@ -177,9 +177,18 @@ class EventNotifier {
 
   /// 发送通知
   static void sendNotification<T>(dynamic target, T? object) {
-    if (_notifiers.containsKey(target)) {
-      (_notifiers[target]! as ValueNotifier<T?>).value = object;
+    final notifier = _notifiers[target];
+    if (notifier == null) return;
+
+    // ValueNotifier 对相同值不会重复通知，事件总线需要保持每次发送都可见
+    if (notifier.value == object) {
+      for (var listener in _listeners[target]?.toList() ?? const []) {
+        listener(object);
+      }
+      return;
     }
+
+    (notifier as ValueNotifier<T?>).value = object;
   }
 
   /// 移除某个 target
@@ -204,13 +213,27 @@ class EventNotifier {
   /// 转为 Stream
   /// --------------------
   static Stream<T> stream<T>(dynamic target) {
-    final controller = StreamController<T>.broadcast();
     final notifier = obtain<T>(target);
-    // 推送当前值
-    if (notifier.value != null) controller.add(notifier.value);
-    void listener(dynamic value) => controller.add(value as T);
-    addListener<dynamic>(target, listener);
-    controller.onCancel = () => removeListener<dynamic>(target, listener);
+    late StreamController<T> controller;
+
+    void listener(dynamic value) {
+      if (!controller.isClosed) {
+        controller.add(value as T);
+      }
+    }
+
+    controller = StreamController<T>.broadcast(
+      onListen: () {
+        addListener<dynamic>(target, listener);
+        final value = notifier.value;
+        if (value != null && !controller.isClosed) {
+          controller.add(value as T);
+        }
+      },
+      onCancel: () {
+        removeListener<dynamic>(target, listener);
+      },
+    );
     return controller.stream;
   }
 }

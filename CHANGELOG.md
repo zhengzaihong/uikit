@@ -28,6 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `Shimmer` continuing to animate after loading finished.
 - Fixed `MeasureUtils.measureTextSize` limiting text to 29 lines.
 - Fixed `PagerTheme` values not being applied.
+- Fixed `CityPickerView` throwing a range error before built-in city data finished loading.
+- Fixed `EventNotifier` not delivering identical values and not restoring stream listeners after re-subscribing.
+- Fixed `SelectableGroup` single-select initialization when `defaultValue` is a list.
+- Fixed the selection showcase page failing on an unbounded `MultiSelector` list.
+- Fixed `SelectionMenu` popup content overflowing during the open height animation.
+- Fixed `MarqueeView` leaving a pending timer after the widget was disposed.
 
 ### Changed
 - Clarified the package SDK constraints (`Dart >=3.6.0`, `Flutter >=3.27.0`).
@@ -35,6 +41,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Aligned the example project SDK constraints and lint version.
 - Updated README installation snippets and fixed broken image links.
 - Expanded the example app into a categorized component gallery covering basic controls, progress bars, buttons and popups, multi-selection, drag, navigation, responsive layout and rotation animations.
+- Redesigned the dropdown demo with Bubble-based single-select, gradient multi-select, grouped and custom-trigger popups.
+- Polished the navigation, Toast and multi-selection demos, added more bottom navigation styles, and removed the rotation demos from the navigation page.
+- Added a consistent back button to all demo subpages.
+- Rebuilt the infinite-level menu demo as a tree/detail split view with expansion controls, path breadcrumbs and a node preview.
+- Rebuilt the Shimmer demo with switchable skeleton list, grid and custom placeholder layouts.
+- Modernized the table demo with a fixed action column, themed header and alternating rows.
+- Polished the pager and radar demos with live page previews, a theme preset and multi-series comparison.
+- Rebuilt the common-widgets demo with a unified card layout, offline icon-based assets, interactive marquee, stack cards, Bubble/ZTooltip, progress, rating, switches, rotation, floating menu, TextExtend tabs, context menu and countdown.
 
 ## [0.4.3]
 ### Added

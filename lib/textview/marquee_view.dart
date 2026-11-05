@@ -304,6 +304,7 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
 
   AnimationController? _vController;
   Animation<double>? _vCurve;
+  Timer? _verticalTimer;
 
   bool get _isHorizontal => widget.direction == MarqueeDirection.horizontal;
 
@@ -324,6 +325,8 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
       _ticker?.stop();
     } else {
       _vController?.stop();
+      _verticalTimer?.cancel();
+      _verticalTimer = null;
     }
   }
 
@@ -336,6 +339,8 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
     } else {
       if (_isAnimating) {
         _vController?.forward();
+      } else {
+        _startVerticalLoop();
       }
     }
   }
@@ -374,38 +379,51 @@ class _MarqueeViewState extends State<MarqueeView> with SingleTickerProviderStat
     _scrollController = null;
   }
 
-  Future<void> _startVerticalLoop() async {
+  void _startVerticalLoop() {
     if (widget.marqueeItems.length <= 1) return;
-    while (mounted && _isRunning) {
-      await Future.delayed(widget.interval);
-      if (!mounted || !_isRunning) break;
-      if (_isAnimating) continue;
+    _verticalTimer?.cancel();
+    _verticalTimer = Timer(widget.interval, _handleVerticalTick);
+  }
 
-      final next = (_currentIndex + 1) % widget.marqueeItems.length;
-      setState(() {
-        _nextIndex = next;
-        _isAnimating = true;
-      });
+  Future<void> _handleVerticalTick() async {
+    if (!mounted || !_isRunning) return;
+    if (_isAnimating) {
+      _startVerticalLoop();
+      return;
+    }
 
-      if (_isRunning) {
-        await _vController!.forward(from: 0.0);
-      }
-      if (!mounted) break;
+    final next = (_currentIndex + 1) % widget.marqueeItems.length;
+    setState(() {
+      _nextIndex = next;
+      _isAnimating = true;
+    });
 
-      setState(() {
-        _currentIndex = next;
-        widget.onIndexChange?.call(_currentIndex);
-        _nextIndex = null;
-        _isAnimating = false;
-        _vController!.reset();
-      });
+    if (_isRunning) {
+      await _vController!.forward(from: 0.0);
+    }
+    if (!mounted) return;
 
-      if (!widget.loop && _currentIndex == widget.marqueeItems.length - 1) break;
+    setState(() {
+      _currentIndex = next;
+      widget.onIndexChange?.call(_currentIndex);
+      _nextIndex = null;
+      _isAnimating = false;
+      _vController!.reset();
+    });
+
+    if (!widget.loop && _currentIndex == widget.marqueeItems.length - 1) {
+      return;
+    }
+    if (_isRunning) {
+      _startVerticalLoop();
     }
   }
 
   @override
   void dispose() {
+    _isRunning = false;
+    _verticalTimer?.cancel();
+    _verticalTimer = null;
     widget.controller?._unbind();
     _stopHorizontal();
     _vController?.dispose();

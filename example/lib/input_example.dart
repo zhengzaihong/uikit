@@ -74,6 +74,7 @@ class _InputExampleState extends State<InputExample> {
     debounceInvoker = testDebounce.debounce(milliseconds: 500);
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(),
         title: GestureDetector(
           onTap: (){
             RouteUtils.push(context, const CityPickerExample(),hide: false);

@@ -83,6 +83,9 @@ class _GeneralPickerViewState extends State<GeneralPickerView> {
 
   CityResult result = CityResult();
 
+  bool _loading = false;
+  bool _loadFailed = false;
+
   @override
   void initState() {
     super.initState();
@@ -92,10 +95,11 @@ class _GeneralPickerViewState extends State<GeneralPickerView> {
 
     if (widget.data != null) {
       data = widget.data!;
+      _updateResult();
     } else {
+      _loading = true;
       _loadCityData();
     }
-    _updateResult();
   }
 
   Future<void> _loadCityData() async {
@@ -103,11 +107,19 @@ class _GeneralPickerViewState extends State<GeneralPickerView> {
       final jsonStr = await rootBundle.loadString('packages/uikit_plus/assets/citys.json');
       final cityData = List<Map<String, dynamic>>.from(json.decode(jsonStr));
       if (!mounted) return;
-      data = cityData;
-      setState(() {});
+      setState(() {
+        data = cityData;
+        _loading = false;
+        _loadFailed = false;
+      });
       _updateResult();
     } catch (e, stack) {
       debugPrint('CityPickerView load city data failed: $e\n$stack');
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
     }
   }
 
@@ -151,6 +163,20 @@ class _GeneralPickerViewState extends State<GeneralPickerView> {
   @override
   Widget build(BuildContext context) {
     final style = widget.style ?? const PickerStyle();
+    if (_loading || data.isEmpty) {
+      return Material(
+        color: style.backgroundColor ?? Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+        child: SizedBox(
+          height: (style.pickerHeight ?? 200) + 44,
+          child: Center(
+            child: _loadFailed
+                ? const Text('城市数据加载失败')
+                : const CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
     return Material(
       color: style.backgroundColor ?? Colors.white,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),

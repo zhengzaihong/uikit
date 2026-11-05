@@ -17,6 +17,7 @@ class _InputExtendExampleState extends State<InputExtendExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(),
         title: const Text("输入搜索框扩展"),
       ),
       backgroundColor: Colors.teal,

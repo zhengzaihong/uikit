@@ -551,10 +551,12 @@ class _CustomPopupRoute<T> extends PopupRoute<T> {
                 shadowColor: shadowColor,
                 shape: shape,
                 borderRadius: materialBorderRadius,
-                child: SelectionHeightFactorBox(
-                heightFactor: heightFactorTween.evaluate(animation),
-                child: child,
-            ));
+child: ClipRect(
+                  child: SelectionHeightFactorBox(
+                    heightFactor: heightFactorTween.evaluate(animation),
+                    child: child,
+                  ),
+                ));
           },
           child: SizedBox(
             width: popWidth,

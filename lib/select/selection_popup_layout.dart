@@ -72,20 +72,20 @@ class SelectionHeightFactorRenderBox extends RenderShiftedBox {
 
     child!.layout(constraints, parentUsesSize: true);
 
-    size = constraints.constrain(Size(
-      child!.size.width,
-      child!.size.height,
-    ));
+    final childSize = child!.size;
+    size = constraints.constrain(
+      Size(childSize.width, childSize.height * heightFactor),
+    );
 
     child!.layout(
-        constraints.copyWith(
-            maxWidth: size.width, maxHeight: size.height * heightFactor),
-        parentUsesSize: true);
-
-    size = constraints.constrain(Size(
-      child!.size.width,
-      child!.size.height,
-    ));
+      constraints.copyWith(
+        minWidth: childSize.width,
+        maxWidth: childSize.width,
+        minHeight: childSize.height,
+        maxHeight: childSize.height,
+      ),
+      parentUsesSize: true,
+    );
   }
 }
 

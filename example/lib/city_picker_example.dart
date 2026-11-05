@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:uikit_plus/uikit_lib.dart';
 
 class CityPickerExample extends StatefulWidget {
@@ -19,20 +16,17 @@ class _CityPickerExampleState extends State<CityPickerExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: (){
-            RouteUtils.pop(context);
-          },
-          child: const Icon(Icons.arrow_back_ios,color: Colors.red,),
-        ),
+        leading: const BackButton(),
         title: const Text("城市选择器"),
       ),
       body: Column(children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('不传入 data 时自动加载组件内置城市数据'),
+        ),
         FilledButton.tonal(
-            onPressed: () async {
-              var cityStr = await rootBundle.loadString('assets/city.json');
+            onPressed: () {
               PickerHelper.showPicker(context,
-                  // data: json.decode(cityStr),
                 onResult: (res){
                     StringBuffer buffer = StringBuffer("名称：${res.province}-${res.city}-${res.area}");
                     buffer.write("\n");

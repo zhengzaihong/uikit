@@ -181,13 +181,13 @@ class _ComponentsBasicExampleState extends State<ComponentsBasicExample> {
                 child: Blur(
                   blur: 6,
                   borderRadius: BorderRadius.circular(12),
-                  child: const SizedBox(),
                   overlay: const Center(
                     child: Text(
                       '毛玻璃效果',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
+                  child: const SizedBox(),
                 ),
               ),
             ],
