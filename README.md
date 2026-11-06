@@ -12,6 +12,12 @@ A fully **Dart-based** cross-platform **Flutter UI component library**, supporti
 
 ---
 
+## 🌐 Live Demo
+
+Open the interactive component gallery: **[zhengzaihong.github.io/uikit](https://zhengzaihong.github.io/uikit/)**
+
+---
+
 ## 🌟 Highlights
 - 📦 Rich UI components: input fields, pickers, tables, menus, animation effects, etc.
 - 🔗 **Zero dependencies**, fully implemented in Dart, ready to use out of the box.

@@ -11,6 +11,13 @@ Language: [English](README.md) | 简体中文
 
 ---
 
+## 🌐 在线交互示例
+
+直接打开组件画廊：**[zhengzaihong.github.io/uikit](https://zhengzaihong.github.io/uikit/)**
+
+
+---
+
 ## 🌟 特性亮点
 - 📦 丰富的 UI 组件：输入框、选择器、表格、菜单、动画效果等
 - 🔗 **零依赖**，完全 Dart 实现，开箱即用
@@ -85,66 +92,6 @@ import 'package:uikit_plus/uikit_lib.dart';
 
   ...持续更新中....
 
-
-
-## 🎨 组件效果展---更多效果请查看源码
-
-
-### 常用小组件：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/widgets1.gif)
-
-### 雷达组件 5-N维：
-![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n.png) 
-![radar](https://github.com/zhengzaihong/uikit/blob/master/images/radar-n2.png)
-
-
-### 日期组件：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/date_picker.gif)
-
-
-### 极简输入框支持TextField 和TextFormField全部属性，支持实时表单校验
-![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text.gif)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/input_text_pop.gif)
-
-
-### 底部导航菜单：
-![CustomAnimatedBottomBar](https://github.com/zhengzaihong/uikit/blob/master/images/bottom_bar.gif)
-
-### 输入框拓展搜索组件：
-
-![](https://github.com/zhengzaihong/uikit/blob/master/images/inputextentd.gif)
-
-### 城市选择器：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/citypicker.gif)
-
-
-### 可定制的Toast：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/toast.gif)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_point.png)
-![](https://github.com/zhengzaihong/uikit/blob/master/images/toast_queue.gif)
-
-### 微光加载效果：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/shimmer1.gif)
-
-
-
-### 可自定义样式的提示组件
-![](https://github.com/zhengzaihong/uikit/blob/master/images/ztooltip.gif)
-
-
-### 可高度自定义的选择下拉框组件
-![](https://github.com/zhengzaihong/uikit/blob/master/images/SelectionMenu2.jpg)
-
-### 无限层级菜单
-![](https://github.com/zhengzaihong/uikit/blob/master/images/one_expand.gif)
-### 无限层级多选菜单!
-![](https://github.com/zhengzaihong/uikit/blob/master/images/selector.png)
-
-### 表格组件
-![](https://github.com/zhengzaihong/uikit/blob/master/images/table_scroller.gif)
-
-### 分页组件：
-![](https://github.com/zhengzaihong/uikit/blob/master/images/pager_image.png)
 
 ### 特别说明：支持编译到HarmonyOS
 ![](https://github.com/zhengzaihong/uikit/blob/master/images/HarmonyOS-example.gif)

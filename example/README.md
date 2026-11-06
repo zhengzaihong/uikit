@@ -20,6 +20,17 @@ flutter pub get
 flutter run
 ```
 
+## Web 交互演示
+
+```bash
+flutter run -d chrome
+# 构建静态站点
+flutter build web --release --base-href /
+```
+
+在线版本（GitHub Pages）：<https://zhengzaihong.github.io/uikit/>  
+发布流程由仓库根目录的 `.github/workflows/deploy-web.yml` 自动完成。
+
 ## 平台
 
 - Android / iOS / Web / Windows / macOS / Linux

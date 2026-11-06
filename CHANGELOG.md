@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added recommended `onChanged` aliases to `KitSwitch`, `KitCheckBox`, `Pager`, `RatingBar`, `CustomAnimatedBottomBar` and the `DatePicker` static helpers.
 - Added a shared popup layout implementation for `SelectionMenu` and `SelectionMenuForm`.
 - Added unit and widget tests, plus GitHub Actions CI.
+- Added an interactive Flutter Web component gallery and a GitHub Pages deployment workflow.
 
 ### Fixed
 - Fixed the built-in city data asset path in `CityPickerView`.
@@ -49,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modernized the table demo with a fixed action column, themed header and alternating rows.
 - Polished the pager and radar demos with live page previews, a theme preset and multi-series comparison.
 - Rebuilt the common-widgets demo with a unified card layout, offline icon-based assets, interactive marquee, stack cards, Bubble/ZTooltip, progress, rating, switches, rotation, floating menu, TextExtend tabs, context menu and countdown.
+- Reworked the input-field demo with search suggestions, responsive grouped validation, password visibility toggling, debounce feedback and advanced conditional validators.
 
 ## [0.4.3]
 ### Added

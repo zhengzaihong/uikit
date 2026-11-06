@@ -1,12 +1,12 @@
 {
-    "name": "uikit",
-    "short_name": "uikit",
+    "name": "uikit_plus 组件示例",
+    "short_name": "uikit_plus",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#F8F7FF",
+    "theme_color": "#4F46E5",
+    "description": "uikit_plus 纯 Dart Flutter 组件库交互示例",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

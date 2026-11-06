@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:uikit_example/components_navigation_example.dart';
 import 'package:uikit_example/components_selection_example.dart';
 import 'package:uikit_example/infinite_levels_example.dart';
+import 'package:uikit_example/input_example.dart';
 import 'package:uikit_example/often_widget_example.dart';
 import 'package:uikit_example/pager_example.dart';
 import 'package:uikit_example/radar_chart_example.dart';
@@ -140,5 +141,36 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
     await tester.pump();
+  });
+
+  testWidgets('input page supports suggestions and password visibility',
+      (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: InputExample()));
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('搜索联想'), findsOneWidget);
+
+    await tester.tap(find.byType(TextField).first);
+    await tester.pumpAndSettle();
+    expect(find.text('热门歌手'), findsOneWidget);
+
+    await tester.tap(find.text('周杰伦'));
+    await tester.pumpAndSettle();
+    expect(find.text('当前输入：周杰伦'), findsOneWidget);
+
+    await tester.drag(
+      find.byType(ListView).first,
+      const Offset(0, -300),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.visibility_off_outlined).first);
+    await tester.pump();
+    expect(find.byIcon(Icons.visibility_outlined), findsWidgets);
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(milliseconds: 300));
   });
 }
